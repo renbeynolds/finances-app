@@ -1,8 +1,8 @@
 import express from 'express';
-import TagRoutes from './TagRoutes';
+import TagController from './TagController';
 
 const router: express.Router = express.Router();
 
-router.use('/tags', TagRoutes);
+router.use('/tags', TagController);
 
 export default router;

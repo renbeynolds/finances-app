@@ -1,4 +1,5 @@
 {
+   "name": "default",
    "type": "mysql",
    "host": "localhost",
    "port": 3306,
@@ -13,9 +14,7 @@
    "migrations": [
       "migration/**/*.ts"
    ],
-   "subscribers": [
-      "src/subscriber/**/*.ts"
-   ],
+   "subscribers": [ ],
    "cli": {
       "entitiesDir": "src/entity",
       "migrationsDir": "src/migration",
