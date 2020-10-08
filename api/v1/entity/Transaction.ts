@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, JoinTable, ManyToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Tag } from './Tag';
 
 @Entity()
 export class Transaction {
@@ -11,5 +12,12 @@ export class Transaction {
 
     @Column("text")
     description: string;
+
+    @Column("double")
+    amount: number;
+
+    @ManyToMany(type => Tag)
+    @JoinTable()
+    tags: Tag[];
 
 }
