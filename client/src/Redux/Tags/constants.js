@@ -1,3 +1,3 @@
 export default {
-    FETCH_TAGS: 'GET /tags'
+  FETCH_TAGS: 'GET /tags'
 };

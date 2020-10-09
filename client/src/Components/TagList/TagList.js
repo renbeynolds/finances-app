@@ -6,25 +6,25 @@ import { selectTagsArray } from '../../Redux/Tags/selectors';
 
 function TagList() {
 
-    const dispatch = useDispatch();
-    const tags = useSelector(selectTagsArray);
+  const dispatch = useDispatch();
+  const tags = useSelector(selectTagsArray);
 
-    useEffect(() => {
-        dispatch(requestFetchTags());
-    }, [dispatch]);
+  useEffect(() => {
+    dispatch(requestFetchTags());
+  }, [dispatch]);
 
-    return (
-        <List
-            header={<div>Tags</div>}
-            bordered
-            dataSource={tags}
-            renderItem={item => (
-                <List.Item>
-                    <Typography.Text mark>[ITEM]</Typography.Text> {item.name}
-                </List.Item>
-            )}
-        />
-    );
-};
+  return (
+    <List
+      header={<div>Tags</div>}
+      bordered
+      dataSource={tags}
+      renderItem={item => (
+        <List.Item>
+          <Typography.Text mark>[ITEM]</Typography.Text> {item.name}
+        </List.Item>
+      )}
+    />
+  );
+}
 
 export default TagList;

@@ -1,3 +1,3 @@
 export const selectAccountsArray = (state) => {
-    return Object.values(state.accounts);
-}
+  return Object.values(state.accounts);
+};

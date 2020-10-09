@@ -1,23 +1,22 @@
 .App__layout {
-    height: 100%;
+  height: 100%;
 
-    .App__header {
-        background-color: #f0f2f5;
-    }
+  .App__header {
+    background-color: #f0f2f5;
+  }
 
-    .App__content {
-        background-color: white;
-        padding: 30px;
-    }
-    
-    .App__footer {
-        text-align: center;
-    }
+  .App__content {
+    background-color: white;
+    padding: 30px;
+  }
 
-    .App__logo {
-        height: 32px;
-        background: rgba(255, 255, 255, 0.2);
-        margin: 16px;
-    }
+  .App__footer {
+    text-align: center;
+  }
+
+  .App__logo {
+    height: 32px;
+    background: rgba(255, 255, 255, 0.2);
+    margin: 16px;
+  }
 }
-
