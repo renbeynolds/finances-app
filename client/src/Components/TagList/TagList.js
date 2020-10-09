@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { requestFetchTags } from '../../Redux/Tags/actions';
 import { selectTagsArray } from '../../Redux/Tags/selectors';
 
-function TagManager() {
+function TagList() {
 
     const dispatch = useDispatch();
     const tags = useSelector(selectTagsArray);
@@ -27,4 +27,4 @@ function TagManager() {
     );
 };
 
-export default TagManager;
+export default TagList;

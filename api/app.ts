@@ -1,3 +1,4 @@
+import bodyParser from 'body-parser';
 import cors from 'cors';
 import express from 'express';
 import fileUpload from 'express-fileupload';
@@ -9,6 +10,7 @@ createConnection().then(async connection => {
   const app = express();
 
   app.use(cors());
+  app.use(bodyParser.json());
   app.use(fileUpload());
 
   app.use('/v1', v1controller);
