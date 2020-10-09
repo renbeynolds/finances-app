@@ -8,13 +8,13 @@ export class Transaction {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column("date")
+    @Column('date')
     date: Date;
 
-    @Column("text")
+    @Column('text')
     description: string;
 
-    @Column("double")
+    @Column('double')
     amount: number;
 
     @ManyToOne(() => Account, account => account.transactions)

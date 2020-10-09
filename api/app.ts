@@ -15,8 +15,10 @@ createConnection().then(async connection => {
 
   app.use('/v1', v1controller);
 
-  app.listen(3001, function () {
+  app.listen(3001, function() {
+    // eslint-disable-next-line no-console
     console.log('Finances app listening on port 3001!');
   });
 
-}).catch(error => console.log("TypeORM connection error: ", error));
+// eslint-disable-next-line no-console
+}).catch(error => console.log('TypeORM connection error: ', error));
