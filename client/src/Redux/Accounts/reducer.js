@@ -1,4 +1,3 @@
-// Reducer Template
 import { createSlice } from '@reduxjs/toolkit';
 import { requestCreateAccount, requestFetchAccounts } from './actions';
 

@@ -1,4 +1,5 @@
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, JoinColumn, OneToMany, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { AccountSettings } from './AccountSettings';
 import { Transaction } from './Transaction';
 
 @Entity()
@@ -12,5 +13,9 @@ export class Account {
 
     @OneToMany(() => Transaction, transaction => transaction.account)
     transactions: Transaction[];
+
+    @OneToOne(type => AccountSettings)
+    @JoinColumn()
+    settings: AccountSettings;
 
 }

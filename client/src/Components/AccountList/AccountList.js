@@ -1,20 +1,33 @@
-import { PlusCircleOutlined } from '@ant-design/icons';
-import { Button, List, Typography } from 'antd';
-import React, { useEffect } from 'react';
+import { FileAddOutlined, PlusCircleOutlined } from '@ant-design/icons';
+import { Button, List } from 'antd';
+import React, { useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router';
 import { requestFetchAccounts } from '../../Redux/Accounts/actions';
 import { selectAccountsArray } from '../../Redux/Accounts/selectors';
+import { requestUploadTransactions } from '../../Redux/Transactions/actions';
+import './styles.scss';
 
 function AccountList() {
 
   const dispatch = useDispatch();
   const history = useHistory();
   const accounts = useSelector(selectAccountsArray);
+  const fileInputRef = useRef();
 
   useEffect(() => {
     dispatch(requestFetchAccounts());
   }, [dispatch]);
+
+  const onFileUploadClick = () => {
+    fileInputRef.current.click();
+  };
+
+  const handleUploadedFile = (event, accountId) => {
+    const file = event.target.files[0];
+    dispatch(requestUploadTransactions({ accountId: accountId, file: file }));
+    history.push('/transactions');
+  };
 
   return (
     <List
@@ -29,7 +42,20 @@ function AccountList() {
       dataSource={accounts}
       renderItem={item => (
         <List.Item>
-          <Typography.Text mark>[ITEM]</Typography.Text> {item.name}
+          <div className='AccountList__list-item-content'>
+            <div className='AccountList__account-name'>{item.name}</div>
+            <Button
+              type='primary' shape='round'
+              icon={<FileAddOutlined />} size='default'
+              onClick={onFileUploadClick}
+            >Upload Transactions</Button>
+            <input
+              type='file'
+              ref={fileInputRef}
+              onChange={(e) => handleUploadedFile(e, item.id)}
+              style={{ display: 'none' }}
+            />
+          </div>
         </List.Item>
       )}
     />

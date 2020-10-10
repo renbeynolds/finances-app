@@ -1,4 +1,4 @@
-import { Button, Form, Input } from 'antd';
+import { Button, Checkbox, Form, Input } from 'antd';
 import React from 'react';
 import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router';
@@ -6,7 +6,7 @@ import { requestCreateAccount } from '../../Redux/Accounts/actions';
 
 const layout = {
   labelCol: {
-    span: 4,
+    span: 8,
   },
   wrapperCol: {
     span: 8,
@@ -15,7 +15,7 @@ const layout = {
 
 const tailLayout = {
   wrapperCol: {
-    offset: 4,
+    offset: 8,
     span: 8,
   },
 };
@@ -51,10 +51,50 @@ function CreateAccountForm() {
       >
         <Input />
       </Form.Item>
+      <Form.Item
+        label='Date Header'
+        name='dateHeader'
+        rules={[
+          {
+            required: true,
+            message: 'Please input Date Header!',
+          },
+        ]}
+      >
+        <Input />
+      </Form.Item>
+      <Form.Item
+        label='Description Header'
+        name='descriptionHeader'
+        rules={[
+          {
+            required: true,
+            message: 'Please input Description Header!',
+          },
+        ]}
+      >
+        <Input />
+      </Form.Item>
+      <Form.Item
+        label='Amount Header'
+        name='amountHeader'
+        rules={[
+          {
+            required: true,
+            message: 'Please input Amount Header!',
+          },
+        ]}
+      >
+        <Input />
+      </Form.Item>
+      <Form.Item
+        {...tailLayout}
+        name='amountsInverted'
+        valuePropName='checked'>
+        <Checkbox>Amounts Inverted</Checkbox>
+      </Form.Item>
       <Form.Item {...tailLayout}>
-        <Button type='primary' htmlType='submit'>
-                    Submit
-        </Button>
+        <Button type='primary' htmlType='submit'>Submit</Button>
       </Form.Item>
     </Form>
   );

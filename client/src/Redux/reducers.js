@@ -1,8 +1,10 @@
 import { combineReducers } from 'redux';
-import accountReducer from './Accounts/reducer.js';
-import tagReducer from './Tags/reducer.js';
+import accountReducer from './Accounts/reducer';
+import tagReducer from './Tags/reducer';
+import transactionReducer from './Transactions/reducer';
 
 export const rootReducer = combineReducers({
   tags: tagReducer,
-  accounts: accountReducer
+  accounts: accountReducer,
+  transactions: transactionReducer
 });
