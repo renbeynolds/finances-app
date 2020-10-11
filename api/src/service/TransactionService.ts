@@ -5,7 +5,7 @@ import { Account } from '../entity/Account';
 import { Transaction } from '../entity/Transaction';
 
 export const getAllTransactions = async(req: Request, res: Response) => {
-  const transactions = await getRepository(Transaction).find();
+  const transactions = await getRepository(Transaction).find({ relations: ['tags'] });
   res.send(transactions);
 };
 

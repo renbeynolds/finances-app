@@ -1,6 +1,6 @@
 // Reducer Template
 import { createSlice } from '@reduxjs/toolkit';
-import { requestFetchTags } from './actions';
+import { requestCreateTag, requestFetchTags } from './actions';
 
 const tagsSlice = createSlice({
   name: 'tags',
@@ -9,6 +9,9 @@ const tagsSlice = createSlice({
   extraReducers: {
     [requestFetchTags.fulfilled]: (state, action) => {
       action.payload.forEach((t) => { state[t.id] = t; });
+    },
+    [requestCreateTag.fulfilled]: (state, action) => {
+      state[action.payload.id] = action.payload;
     }
   }
 });

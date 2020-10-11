@@ -19,3 +19,18 @@ export const requestFetchTags = createAsyncThunk(
   }
 );
 
+export const requestCreateTag = createAsyncThunk(
+  Constants.CREATE_TAG,
+  (tag, { rejectWithValue }) => {
+    const request = createRequest('/api/tags', 'POST', tag);
+    return Axios(request).then((response) => {
+      return response.data;
+    }).catch((error) => {
+      if (error.reponse.data.errors) {
+        return rejectWithValue(error.reponse.data.errors);
+      } else {
+        return rejectWithValue(error.response.data.message);
+      }
+    });
+  }
+);

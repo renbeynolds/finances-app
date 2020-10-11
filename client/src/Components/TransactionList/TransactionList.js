@@ -1,4 +1,4 @@
-import { Table } from 'antd';
+import { Table, Tag } from 'antd';
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { requestFetchTransactions } from '../../Redux/Transactions/actions';
@@ -27,6 +27,22 @@ function TransactionList() {
       title: 'Amount',
       dataIndex: 'amount',
       className: 'TransactionList__amount'
+    },
+    {
+      title: 'Tags',
+      key: 'tags',
+      dataIndex: 'tags',
+      render: tags => ( // eslint-disable-line react/display-name
+        <>
+          {tags.map(tag => {
+            return (
+              <Tag color={tag.color} key={tag.id}>
+                {tag.name.toUpperCase()}
+              </Tag>
+            );
+          })}
+        </>
+      ),
     }
   ];
 
