@@ -3,7 +3,7 @@ import cors from 'cors';
 import express from 'express';
 import fileUpload from 'express-fileupload';
 import { createConnection } from 'typeorm';
-import v1controller from './v1/controller';
+import controller from './controller';
 
 createConnection().then(async connection => {
 
@@ -13,7 +13,7 @@ createConnection().then(async connection => {
   app.use(bodyParser.json());
   app.use(fileUpload());
 
-  app.use('/v1', v1controller);
+  app.use('/api', controller);
 
   app.listen(3001, function() {
     // eslint-disable-next-line no-console

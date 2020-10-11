@@ -9,10 +9,10 @@
    "synchronize": true,
    "logging": false,
    "entities": [
-      "v1/entity/**/*.ts"
+      "src/entity/**/*.ts"
    ],
    "migrations": [
-      "migration/**/*.ts"
+      "src/migration/**/*.ts"
    ],
    "subscribers": [ ],
    "cli": {

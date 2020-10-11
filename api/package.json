@@ -4,8 +4,8 @@
    "description": "",
    "scripts": {
       "test": "echo \"Error: no test specified\" && exit 1",
-      "start": "ts-node App.ts",
-      "eslint": "eslint App.ts v1/. --ext .ts --fix"
+      "start": "nodemon --watch 'src/**/*.ts' --ignore 'src/**/*.spec.ts' --exec 'ts-node' src/index.ts",
+      "eslint": "eslint src/. --ext .ts --fix"
    },
    "keywords": [],
    "author": "",

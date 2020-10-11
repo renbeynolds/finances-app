@@ -7,7 +7,7 @@ import Constants from './constants';
 export const requestFetchTransactions = createAsyncThunk(
   Constants.FETCH_TRANSACTIONS,
   (_, { rejectWithValue }) => {
-    const request = createRequest('/v1/transactions', 'GET', {});
+    const request = createRequest('/api/transactions', 'GET', {});
     return Axios(request).then((response) => {
       return response.data;
     }).catch((error) => {
@@ -26,7 +26,7 @@ export const requestUploadTransactions = createAsyncThunk(
     const formData = new FormData();
     formData.append('accountId', accountId);
     formData.append('file', file);
-    const request = createFormDataRequest('/v1/transactions', 'POST', formData);
+    const request = createFormDataRequest('/api/transactions', 'POST', formData);
     return Axios(request).then((response) => {
       return response.data;
     }).catch((error) => {

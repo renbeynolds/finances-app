@@ -6,7 +6,7 @@ import Constants from './constants';
 export const requestFetchAccounts = createAsyncThunk(
   Constants.FETCH_ACCOUNTS,
   (_, { rejectWithValue }) => {
-    const request = createRequest('/v1/accounts', 'GET', {});
+    const request = createRequest('/api/accounts', 'GET', {});
     return Axios(request).then((response) => {
       return response.data;
     }).catch((error) => {
@@ -22,7 +22,7 @@ export const requestFetchAccounts = createAsyncThunk(
 export const requestCreateAccount = createAsyncThunk(
   Constants.CREATE_ACCOUNT,
   (account, { rejectWithValue }) => {
-    const request = createRequest('/v1/accounts', 'POST', account);
+    const request = createRequest('/api/accounts', 'POST', account);
     return Axios(request).then((response) => {
       return response.data;
     }).catch((error) => {

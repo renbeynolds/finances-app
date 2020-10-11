@@ -6,7 +6,7 @@ import Constants from './constants';
 export const requestFetchTags = createAsyncThunk(
   Constants.FETCH_TAGS,
   (_, { rejectWithValue }) => {
-    const request = createRequest('/v1/tags', 'GET', {});
+    const request = createRequest('/api/tags', 'GET', {});
     return Axios(request).then((response) => {
       return response.data;
     }).catch((error) => {
