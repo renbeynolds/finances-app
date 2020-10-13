@@ -46,7 +46,8 @@ function CreateTagForm() {
   const [colorValue, setColorValue] = useState('');
 
   const onFinish = (tag) => {
-    dispatch(requestCreateTag(tag));
+    // TODO: Figure out how to make `color` included in form values
+    dispatch(requestCreateTag({...tag, color: colorValue}));
     history.push('/tags');
   };
 
