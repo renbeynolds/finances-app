@@ -1,9 +1,9 @@
 import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
 import { Button, Form, Input, Tag } from 'antd';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { useHistory } from 'react-router';
-import { requestCreateTag } from '../../Redux/Tags/actions';
+import { useHistory, useRouteMatch } from 'react-router';
+import { requestCreateTag, requestFetchTag, requestUpdateTag } from '../../Redux/Tags/actions';
 import './styles.scss';
 
 const layout = {
@@ -39,26 +39,47 @@ const tailLayout = {
 };
 
 
-function CreateTagForm() {
+function TagForm() {
 
   const dispatch = useDispatch();
   const history = useHistory();
-  const [colorValue, setColorValue] = useState('');
+  const tagIdToEdit = useRouteMatch().params.tagId;
+  const [values, setValues] = useState({});
+  const [form] = Form.useForm();
+
+  useEffect(() => {
+    const getTagToEdit = async() => {
+      const request = await dispatch(requestFetchTag(tagIdToEdit));
+      const initialValues = {
+        name: request.payload.name,
+        color: request.payload.color,
+        regexes: request.payload.regexes.map(r => r.regex)
+      };
+      form.setFieldsValue(initialValues);
+      setValues(initialValues);
+    };
+    if (tagIdToEdit) {
+      getTagToEdit();
+    }
+  }, [dispatch, form, tagIdToEdit]);
 
   const onFinish = (tag) => {
-    // TODO: Figure out how to make `color` included in form values
-    dispatch(requestCreateTag({...tag, color: colorValue}));
+    if (tagIdToEdit) {
+      dispatch(requestUpdateTag(tag));
+    } else {
+      dispatch(requestCreateTag(tag));
+    }
     history.push('/tags');
   };
 
   return (
     <Form
       {...layout}
-      name='basic'
-      initialValues={{
-        remember: true,
-      }}
+      form={form}
       onFinish={onFinish}
+      onValuesChange={(updated, all) => {
+        setValues(all);
+      }}
     >
       <Form.Item
         label='Name'
@@ -69,19 +90,19 @@ function CreateTagForm() {
             message: 'Please input tag name!',
           },
         ]}
+        normalize={value => (value || '').toUpperCase()}
       >
         <Input />
       </Form.Item>
       <Form.Item
-        className='CreateTagForm__color'
+        className='TagForm__color'
         label='Color'
-        name='color'
         rules={[]}
       >
-        <Input placeholder='#2db7f5' onChange={(e) => setColorValue(e.target.value)}/>
-        { colorValue &&
-          <Tag color={colorValue}>Tag Preview</Tag>
-        }
+        <Form.Item name='color'>
+          <Input placeholder='#2db7f5' />
+        </Form.Item>
+        <Tag color={values.color}>{values.name}</Tag>
       </Form.Item>
       <Form.List
         name='regexes'
@@ -135,4 +156,4 @@ function CreateTagForm() {
   );
 }
 
-export default CreateTagForm;
+export default TagForm;

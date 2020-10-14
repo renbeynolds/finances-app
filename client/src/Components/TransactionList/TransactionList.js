@@ -30,14 +30,13 @@ function TransactionList() {
     },
     {
       title: 'Tags',
-      key: 'tags',
       dataIndex: 'tags',
       render: tags => ( // eslint-disable-line react/display-name
         <>
           {tags.map(tag => {
             return (
               <Tag color={tag.color} key={tag.id}>
-                {tag.name.toUpperCase()}
+                {tag.name}
               </Tag>
             );
           })}
@@ -50,6 +49,7 @@ function TransactionList() {
     <Table
       columns={columns}
       dataSource={transactions}
+      rowKey='id'
       rowClassName={(record, index) => { // eslint-disable-line no-unused-vars
         if (record.amount < 0) { return 'TransactionList__expense'; } else { return 'TransactionList__allowance'; }
       }}

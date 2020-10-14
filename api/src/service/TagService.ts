@@ -22,7 +22,17 @@ export const createTag = async(req: Request, res: Response) => {
   res.send(tag);
 };
 
+export const updateTag = async(req: Request, res: Response) => {
+  console.log(req.body);
+  res.sendStatus(200);
+};
+
+export const getTag = async(req: Request, res: Response) => {
+  const tag = await getRepository(Tag).findOne(req.params.tagId, { relations: ['regexes'] });
+  res.send(tag);
+};
+
 export const getAllTags = async(req: Request, res: Response) => {
-  const tags = await getRepository(Tag).find();
+  const tags = await getRepository(Tag).find({ relations: ['regexes'] });
   res.send(tags);
 };

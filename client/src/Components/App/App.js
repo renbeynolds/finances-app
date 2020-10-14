@@ -4,7 +4,7 @@ import React from 'react';
 import { Route, useHistory } from 'react-router-dom';
 import { AccountList } from '../AccountList';
 import { CreateAccountForm } from '../CreateAccountForm';
-import { CreateTagForm } from '../CreateTagForm';
+import { TagForm } from '../TagForm';
 import { TagList } from '../TagList';
 import { TransactionList } from '../TransactionList';
 import { Welcome } from '../Welcome';
@@ -33,7 +33,8 @@ function App() {
           <Route exact path='/accounts'><AccountList /></Route>
           <Route exact path='/accounts/create'><CreateAccountForm /></Route>
           <Route exact path='/tags'><TagList /></Route>
-          <Route exact path='/tags/create'><CreateTagForm /></Route>
+          <Route exact path='/tags/create'><TagForm /></Route>
+          <Route exact path='/tags/edit/:tagId'><TagForm /></Route>
           <Route exact path='/transactions'><TransactionList /></Route>
         </Content>
         <Footer className='App__footer'>Finances App ©2020 Ben Reynolds</Footer>

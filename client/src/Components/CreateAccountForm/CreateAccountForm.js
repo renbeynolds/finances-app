@@ -33,10 +33,6 @@ function CreateAccountForm() {
   return (
     <Form
       {...layout}
-      name='basic'
-      initialValues={{
-        remember: true,
-      }}
       onFinish={onFinish}
     >
       <Form.Item

@@ -11,7 +11,7 @@ export const getAllTransactions = async(req: Request, res: Response) => {
 };
 
 export const createTransactions = async(req: Request, res: Response) => {
-  const tags = await getRepository(Tag).find();
+  const tags = await getRepository(Tag).find({ relations: ['regexes'] });
   const account = await getRepository(Account).findOne(req.body.accountId, { relations: ['settings'] });
   const csvData = req.files['file'].data.toString('utf8');
   return csvtojson({ flatKeys: true }).fromString(csvData).then(async json => {
@@ -19,6 +19,7 @@ export const createTransactions = async(req: Request, res: Response) => {
     for (let i = 0; i < json.length; i++) {
       const obj = json[i];
       const transaction = new Transaction();
+      transaction.tags = [];
       transaction.account = account;
       transaction.date = new Date(obj[account.settings.dateHeader]);
       transaction.description = obj[account.settings.descriptionHeader];
@@ -27,7 +28,7 @@ export const createTransactions = async(req: Request, res: Response) => {
 
       tags.forEach((tag) => {
         tag.regexes.forEach((regex) => {
-          if(transaction.description.match(new RegExp(regex.regex))) {
+          if (transaction.description.match(new RegExp(regex.regex))) {
             transaction.tags.push(tag);
           }
         });
