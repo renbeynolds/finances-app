@@ -7,13 +7,15 @@ export class Tag {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column()
+    @Column({
+      unique: true
+    })
     name: string;
 
     @Column()
     color: string;
 
-    @OneToMany(() => TagRegex, tagRegex => tagRegex.tag)
+    @OneToMany(() => TagRegex, tagRegex => tagRegex.tag, { cascade: true })
     regexes: TagRegex[];
 
 }

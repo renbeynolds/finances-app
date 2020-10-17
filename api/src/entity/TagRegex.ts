@@ -4,11 +4,15 @@ import { Tag } from './Tag';
 @Entity()
 export class TagRegex {
 
+  constructor(pattern: string) {
+    this.pattern = pattern;
+  }
+
     @PrimaryGeneratedColumn()
     id: number;
 
     @Column()
-    regex: string;
+    pattern: string;
 
     @ManyToOne(() => Tag, tag => tag.regexes)
     tag: Tag;

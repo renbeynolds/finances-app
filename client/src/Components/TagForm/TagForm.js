@@ -53,7 +53,7 @@ function TagForm() {
       const initialValues = {
         name: request.payload.name,
         color: request.payload.color,
-        regexes: request.payload.regexes.map(r => r.regex)
+        regexes: request.payload.regexes.map(r => r.pattern)
       };
       form.setFieldsValue(initialValues);
       setValues(initialValues);
@@ -65,7 +65,7 @@ function TagForm() {
 
   const onFinish = (tag) => {
     if (tagIdToEdit) {
-      dispatch(requestUpdateTag(tag));
+      dispatch(requestUpdateTag({ id: tagIdToEdit, tag: tag }));
     } else {
       dispatch(requestCreateTag(tag));
     }

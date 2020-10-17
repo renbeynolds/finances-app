@@ -3,7 +3,7 @@ import { getRepository } from 'typeorm';
 import { Account } from '../entity/Account';
 import { AccountSettings } from '../entity/AccountSettings';
 
-export const createAccount = async(req: Request, res: Response) => {
+export const createAccount = async(req: Request, res: Response): Promise<void> => {
   const accountRepository = getRepository(Account);
   const accountSettingsRepository = getRepository(AccountSettings);
 
@@ -22,7 +22,7 @@ export const createAccount = async(req: Request, res: Response) => {
   res.send(account);
 };
 
-export const getAllAccounts = async(req: Request, res: Response) => {
+export const getAllAccounts = async(req: Request, res: Response): Promise<void> => {
   const accounts = await getRepository(Account).find();
   res.send(accounts);
 };

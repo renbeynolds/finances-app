@@ -53,8 +53,8 @@ export const requestCreateTag = createAsyncThunk(
 
 export const requestUpdateTag = createAsyncThunk(
   Constants.UPDATE_TAG,
-  (tag, { rejectWithValue }) => {
-    const request = createRequest(`/api/tags/${tag.id}`, 'PUT', tag);
+  ({ id, tag }, { rejectWithValue }) => {
+    const request = createRequest(`/api/tags/${id}`, 'PUT', tag);
     return Axios(request).then((response) => {
       return response.data;
     }).catch((error) => {
