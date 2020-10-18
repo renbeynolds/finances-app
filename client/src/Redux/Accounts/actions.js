@@ -10,10 +10,10 @@ export const requestFetchAccounts = createAsyncThunk(
     return Axios(request).then((response) => {
       return response.data;
     }).catch((error) => {
-      if (error.reponse.data.errors) {
-        return rejectWithValue(error.reponse.data.errors);
+      if (error.response.data.errors) {
+        return rejectWithValue(error.response.data.errors);
       } else {
-        return rejectWithValue(error.response.data.message);
+        return rejectWithValue([error.response.statusText]);
       }
     });
   }
@@ -26,10 +26,10 @@ export const requestCreateAccount = createAsyncThunk(
     return Axios(request).then((response) => {
       return response.data;
     }).catch((error) => {
-      if (error.reponse.data.errors) {
-        return rejectWithValue(error.reponse.data.errors);
+      if (error.response.data.errors) {
+        return rejectWithValue(error.response.data.errors);
       } else {
-        return rejectWithValue(error.response.data.message);
+        return rejectWithValue([error.response.statusText]);
       }
     });
   }

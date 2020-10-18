@@ -10,10 +10,10 @@ export const requestFetchTag = createAsyncThunk(
     return Axios(request).then((response) => {
       return response.data;
     }).catch((error) => {
-      if (error.reponse.data.errors) {
-        return rejectWithValue(error.reponse.data.errors);
+      if (error.response.data.errors) {
+        return rejectWithValue(error.response.data.errors);
       } else {
-        return rejectWithValue(error.response.data.message);
+        return rejectWithValue([error.response.statusText]);
       }
     });
   }
@@ -26,10 +26,10 @@ export const requestFetchTags = createAsyncThunk(
     return Axios(request).then((response) => {
       return response.data;
     }).catch((error) => {
-      if (error.reponse.data.errors) {
-        return rejectWithValue(error.reponse.data.errors);
+      if (error.response.data.errors) {
+        return rejectWithValue(error.response.data.errors);
       } else {
-        return rejectWithValue(error.response.data.message);
+        return rejectWithValue([error.response.statusText]);
       }
     });
   }
@@ -42,10 +42,10 @@ export const requestCreateTag = createAsyncThunk(
     return Axios(request).then((response) => {
       return response.data;
     }).catch((error) => {
-      if (error.reponse.data.errors) {
-        return rejectWithValue(error.reponse.data.errors);
+      if (error.response.data.errors) {
+        return rejectWithValue(error.response.data.errors);
       } else {
-        return rejectWithValue(error.response.data.message);
+        return rejectWithValue([error.response.statusText]);
       }
     });
   }
@@ -58,10 +58,10 @@ export const requestUpdateTag = createAsyncThunk(
     return Axios(request).then((response) => {
       return response.data;
     }).catch((error) => {
-      if (error.reponse.data.errors) {
-        return rejectWithValue(error.reponse.data.errors);
+      if (error.response.data.errors) {
+        return rejectWithValue(error.response.data.errors);
       } else {
-        return rejectWithValue(error.response.data.message);
+        return rejectWithValue([error.response.statusText]);
       }
     });
   }

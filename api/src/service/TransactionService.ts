@@ -6,8 +6,11 @@ import { Tag } from '../entity/Tag';
 import { Transaction } from '../entity/Transaction';
 
 export const getAllTransactions = async(req: Request, res: Response): Promise<void> => {
-  const transactions = await getRepository(Transaction).find({ relations: ['tags'] });
-  res.send(transactions);
+  const [transactions, total] = await getRepository(Transaction).findAndCount({ relations: ['tags'], skip: req.pagination.offset, take: req.pagination.limit });
+  res.send({
+    data: transactions,
+    pagination: { ...req.pagination, total: total }
+  });
 };
 
 export const createTransactions = async(req: Request, res: Response): Promise<void> => {

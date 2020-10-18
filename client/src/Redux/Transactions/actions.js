@@ -6,15 +6,15 @@ import Constants from './constants';
 
 export const requestFetchTransactions = createAsyncThunk(
   Constants.FETCH_TRANSACTIONS,
-  (_, { rejectWithValue }) => {
-    const request = createRequest('/api/transactions', 'GET', {});
+  ({limit, offset}, { rejectWithValue }) => {
+    const request = createRequest(`/api/transactions?limit=${limit}&offset=${offset}`, 'GET', {});
     return Axios(request).then((response) => {
       return response.data;
     }).catch((error) => {
-      if (error.reponse.data.errors) {
-        return rejectWithValue(error.reponse.data.errors);
+      if (error.response.data.errors) {
+        return rejectWithValue(error.response.data.errors);
       } else {
-        return rejectWithValue(error.response.data.message);
+        return rejectWithValue([error.response.statusText]);
       }
     });
   }
@@ -30,10 +30,10 @@ export const requestUploadTransactions = createAsyncThunk(
     return Axios(request).then((response) => {
       return response.data;
     }).catch((error) => {
-      if (error.reponse.data.errors) {
-        return rejectWithValue(error.reponse.data.errors);
+      if (error.response.data.errors) {
+        return rejectWithValue(error.response.data.errors);
       } else {
-        return rejectWithValue(error.response.data.message);
+        return rejectWithValue([error.response.statusText]);
       }
     });
   }

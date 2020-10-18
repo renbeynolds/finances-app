@@ -4,6 +4,7 @@ import express from 'express';
 import fileUpload from 'express-fileupload';
 import { createConnection } from 'typeorm';
 import controller from './controller';
+import pagination from './middleware/Pagination';
 
 createConnection().then(async connection => {
 
@@ -12,6 +13,7 @@ createConnection().then(async connection => {
   app.use(cors());
   app.use(bodyParser.json());
   app.use(fileUpload());
+  app.use(pagination);
 
   app.use('/api', controller);
 
