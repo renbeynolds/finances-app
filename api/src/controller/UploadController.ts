@@ -1,8 +1,8 @@
 import express from 'express';
-import { getTransactions } from '../service/TransactionService';
+import { createUpload } from '../service/UploadService';
 
 const router: express.Router = express.Router({ mergeParams: true });
 
-router.get('/', getTransactions);
+router.post('/', createUpload);
 
 export default router;

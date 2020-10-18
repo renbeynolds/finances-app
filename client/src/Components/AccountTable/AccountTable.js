@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router';
 import { requestFetchAccounts } from '../../Redux/Accounts/actions';
 import { selectAccountsArray } from '../../Redux/Accounts/selectors';
-import { requestUploadTransactions } from '../../Redux/Transactions/actions';
+import { requestCreateUpload } from '../../Redux/Uploads/actions';
 import './styles.scss';
 
 function AccountTable() {
@@ -23,10 +23,13 @@ function AccountTable() {
     fileInputRef.current.click();
   };
 
-  const handleUploadedFile = (event, accountId) => {
+  const handleUploadedFile = async(event, accountId) => {
     const file = event.target.files[0];
-    dispatch(requestUploadTransactions({ accountId: accountId, file: file }));
-    history.push('/transactions');
+    const request = await dispatch(requestCreateUpload({ accountId: accountId, file: file }));
+    history.push({
+      pathname: '/transactions',
+      state: { uploadId: request.payload.id }
+    });
   };
 
   const columns = [

@@ -1,6 +1,6 @@
 import { Column, Entity, JoinTable, ManyToMany, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
-import { Account } from './Account';
 import { Tag } from './Tag';
+import { Upload } from './Upload';
 
 @Entity()
 export class Transaction {
@@ -17,8 +17,8 @@ export class Transaction {
     @Column('double')
     amount: number;
 
-    @ManyToOne(() => Account, account => account.transactions)
-    account: Account;
+    @ManyToOne(() => Upload, upload => upload.transactions)
+    upload: Upload;
 
     @ManyToMany(type => Tag)
     @JoinTable()

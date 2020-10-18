@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { requestFetchTransactions, requestUploadTransactions } from './actions';
+import { requestFetchTransactions } from './actions';
 
 const transactionsSlide = createSlice({
   name: 'transactions',
@@ -11,9 +11,6 @@ const transactionsSlide = createSlice({
         result[transaction.id] = transaction;
         return result;
       }, {});
-    },
-    [requestUploadTransactions.fulfilled]: (state, action) => {
-      action.payload.forEach((t) => { state[t.id] = t; });
     }
   }
 });

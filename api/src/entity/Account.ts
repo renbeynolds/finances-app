@@ -1,6 +1,6 @@
 import { Column, Entity, JoinColumn, OneToMany, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { AccountSettings } from './AccountSettings';
-import { Transaction } from './Transaction';
+import { Upload } from './Upload';
 
 @Entity()
 export class Account {
@@ -13,11 +13,11 @@ export class Account {
     })
     name: string;
 
-    @OneToMany(() => Transaction, transaction => transaction.account)
-    transactions: Transaction[];
-
     @OneToOne(type => AccountSettings)
     @JoinColumn()
     settings: AccountSettings;
+
+    @OneToMany(() => Upload, upload => upload.account)
+    uploads: Upload[];
 
 }

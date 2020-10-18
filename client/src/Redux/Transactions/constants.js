@@ -1,4 +1,3 @@
 export default {
-  FETCH_TRANSACTIONS: 'GET /transactions',
-  UPLOAD_TRANSACTIONS: 'POST /transactions'
+  FETCH_TRANSACTIONS: 'GET /transactions'
 };
