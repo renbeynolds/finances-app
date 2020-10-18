@@ -1,5 +1,16 @@
 .App__layout {
-  height: 100%;
+  min-height: 100% !important;
+  
+  .App__sider {
+    overflow: auto;
+    height: 100vh;
+    position: fixed;
+    left: 0;
+  }
+
+  .App__content-layout {
+    margin-left: 200px;
+  }
 
   .App__header {
     background-color: #f0f2f5;

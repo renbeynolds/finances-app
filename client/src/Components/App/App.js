@@ -27,7 +27,7 @@ function App() {
           <Menu.Item key='/transactions' icon={<DollarOutlined />} onClick={() => history.push('/transactions')}>Transactions</Menu.Item>
         </Menu>
       </Sider>
-      <Layout>
+      <Layout className='App__content-layout'>
         <Header className='App__header'/>
         <Content className='App__content'>
           <Route exact path='/'><Welcome /></Route>
