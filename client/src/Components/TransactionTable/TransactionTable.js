@@ -10,7 +10,7 @@ import './styles.scss';
 const DEFAULT_PAGE_SIZE = 10;
 const DEFAULT_CURRENT_PAGE = 1;
 
-function TransactionList() {
+function TransactionTable() {
 
   const dispatch = useDispatch();
   const requestStatus = useSelector(state => selectRequestStatus(state, TransactionConstants.FETCH_TRANSACTIONS));
@@ -35,7 +35,7 @@ function TransactionList() {
     {
       title: 'Amount',
       dataIndex: 'amount',
-      className: 'TransactionList__amount'
+      className: 'TransactionTable__amount'
     },
     {
       title: 'Tags',
@@ -67,7 +67,7 @@ function TransactionList() {
       dataSource={transactions}
       rowKey='id'
       rowClassName={(record, index) => { // eslint-disable-line no-unused-vars
-        if (record.amount < 0) { return 'TransactionList__expense'; } else { return 'TransactionList__allowance'; }
+        if (record.amount < 0) { return 'TransactionTable__expense'; } else { return 'TransactionTable__allowance'; }
       }}
       pagination={{
         ...requestStatus.pagination,
@@ -80,4 +80,4 @@ function TransactionList() {
   );
 }
 
-export default TransactionList;
+export default TransactionTable;

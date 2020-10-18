@@ -8,7 +8,7 @@ import { selectTagsArray } from '../../Redux/Tags/selectors';
 import { RegexesList } from '../RegexesList';
 import './styles.scss';
 
-function TagList() {
+function TagTable() {
 
   const dispatch = useDispatch();
   const history = useHistory();
@@ -34,7 +34,7 @@ function TagList() {
           type='primary' shape='circle'
           icon={<EditOutlined />} size='default'
           onClick={() => history.push(`/tags/edit/${id}`)}
-          className='TagList__edit-button'
+          className='TagTable__edit-button'
         />
       )
     }
@@ -46,7 +46,7 @@ function TagList() {
         type='primary' shape='round'
         icon={<PlusCircleOutlined />} size='default'
         onClick={() => history.push('/tags/create')}
-        className='TagList__create-button'
+        className='TagTable__create-button'
       >Add Tag</Button>
       <Table
         columns={columns}
@@ -60,4 +60,4 @@ function TagList() {
   );
 }
 
-export default TagList;
+export default TagTable;

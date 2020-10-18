@@ -1,5 +1,5 @@
 import { FileAddOutlined, PlusCircleOutlined } from '@ant-design/icons';
-import { Button, List } from 'antd';
+import { Button, Table } from 'antd';
 import React, { useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router';
@@ -8,7 +8,7 @@ import { selectAccountsArray } from '../../Redux/Accounts/selectors';
 import { requestUploadTransactions } from '../../Redux/Transactions/actions';
 import './styles.scss';
 
-function AccountList() {
+function AccountTable() {
 
   const dispatch = useDispatch();
   const history = useHistory();
@@ -29,37 +29,46 @@ function AccountList() {
     history.push('/transactions');
   };
 
+  const columns = [
+    {
+      title: 'Name',
+      dataIndex: 'name'
+    },
+    {
+      dataIndex: 'id',
+      render: (id) => (
+        <>
+          <Button
+            type='primary' shape='round'
+            icon={<FileAddOutlined />} size='default'
+            onClick={onFileUploadClick}
+          >Upload Transactions</Button>
+          <input
+            type='file'
+            ref={fileInputRef}
+            onChange={(e) => handleUploadedFile(e, id)}
+            style={{ display: 'none' }}
+          />
+        </>
+      )
+    }
+  ];
+
   return (
-    <List
-      header={
-        <Button
-          type='primary' shape='round'
-          icon={<PlusCircleOutlined />} size='default'
-          onClick={() => history.push('/accounts/create')}
-        >Add Account</Button>
-      }
-      bordered
-      dataSource={accounts}
-      renderItem={item => (
-        <List.Item>
-          <div className='AccountList__list-item-content'>
-            <div className='AccountList__account-name'>{item.name}</div>
-            <Button
-              type='primary' shape='round'
-              icon={<FileAddOutlined />} size='default'
-              onClick={onFileUploadClick}
-            >Upload Transactions</Button>
-            <input
-              type='file'
-              ref={fileInputRef}
-              onChange={(e) => handleUploadedFile(e, item.id)}
-              style={{ display: 'none' }}
-            />
-          </div>
-        </List.Item>
-      )}
-    />
+    <>
+      <Button
+        type='primary' shape='round'
+        icon={<PlusCircleOutlined />} size='default'
+        onClick={() => history.push('/accounts/create')}
+        className='AccountTable__create-button'
+      >Add Account</Button>
+      <Table
+        columns={columns}
+        dataSource={accounts}
+        rowKey='id'
+      />
+    </>
   );
 }
 
-export default AccountList;
+export default AccountTable;
