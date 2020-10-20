@@ -1,5 +1,6 @@
 import express from 'express';
 import AccountController from './AccountController';
+import ChartController from './ChartController';
 import TagController from './TagController';
 import TransactionController from './TransactionController';
 import UploadController from './UploadController';
@@ -10,5 +11,6 @@ router.use('/tags', TagController);
 router.use('/transactions', TransactionController);
 router.use('/accounts', AccountController);
 router.use('/uploads', UploadController);
+router.use('/charts', ChartController);
 
 export default router;
