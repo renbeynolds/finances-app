@@ -10,7 +10,7 @@ function RegexesList(props) {
       dataSource={props.regexes}
       renderItem={regex => (
         <List.Item>
-          {regex.regex}
+          {regex.pattern}
         </List.Item>
       )}
     />
@@ -19,7 +19,7 @@ function RegexesList(props) {
 
 RegexesList.propTypes = {
   regexes: PropTypes.arrayOf(PropTypes.shape({
-    regex: PropTypes.string.isRequired
+    pattern: PropTypes.string.isRequired
   })).isRequired
 };
 
