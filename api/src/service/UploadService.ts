@@ -34,7 +34,7 @@ export const createUpload = async(req: Request, res: Response): Promise<void> =>
         });
         transactions.push(transaction);
       }
-      getRepository(Transaction).save(transactions);
+      await getRepository(Transaction).save(transactions);
       return res.send(upload);
     });
   };

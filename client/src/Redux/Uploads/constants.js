@@ -1,3 +1,3 @@
 export default {
-    CREATE_UPLOAD: 'POST /uploads'
+  CREATE_UPLOAD: 'POST /uploads'
 };

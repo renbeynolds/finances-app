@@ -52,6 +52,7 @@ module.exports = {
                 ]
             }
         ],
+        'react/display-name': 'off',
         'react/jsx-uses-react': 'error',
         'react/jsx-uses-vars': 'error',
         'react/forbid-prop-types': [

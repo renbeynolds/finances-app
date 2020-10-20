@@ -1,4 +1,4 @@
-import { Table, Tag } from 'antd';
+import { Table } from 'antd';
 import React, { useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation } from 'react-router';
@@ -6,6 +6,7 @@ import { selectRequestStatus } from '../../Redux/Requests/selectors';
 import { requestFetchTransactions } from '../../Redux/Transactions/actions';
 import TransactionConstants from '../../Redux/Transactions/constants';
 import { selectTransactionsArray } from '../../Redux/Transactions/selectors';
+import { EditableTagGroup } from '../EditableTagGroup';
 import './styles.scss';
 
 const DEFAULT_PAGE_SIZE = 10;
@@ -20,11 +21,12 @@ function TransactionTable() {
 
   const getSearch = useCallback(() => {
     if (location.state && location.state.uploadId) {
-      return `{"upload": {"id": ${location.state.uploadId} }}`
+      return `{"upload": {"id": ${location.state.uploadId} }}`;
     }
     return undefined;
   }, [location]);
 
+  // Fetch initial transactions to display
   useEffect(() => {
     dispatch(requestFetchTransactions({
       limit: DEFAULT_PAGE_SIZE,
@@ -50,34 +52,31 @@ function TransactionTable() {
     {
       title: 'Tags',
       dataIndex: 'tags',
-      render: tags => ( // eslint-disable-line react/display-name
-        <>
-          {tags.map(tag => {
-            return (
-              <Tag color={tag.color} key={tag.id}>
-                {tag.name}
-              </Tag>
-            );
-          })}
-        </>
-      ),
+      className: 'TransactionTable__tags',
+      // (tags, transaction, index)
+      render: (...args) => {
+        const [, transaction] = args;
+        return (<EditableTagGroup transaction={transaction}/>);
+      },
     }
   ];
-  
-  const handleTableChange = (pagination, filters, sorter) => {
+
+  // (pagination, filters, sorter)
+  const handleTableChange = (...args) => {
+    const [pagination] = args;
     dispatch(requestFetchTransactions({
       limit: pagination.pageSize,
       offset: pagination.pageSize * (pagination.current - 1),
       search: getSearch()
     }));
   };
-  
+
   return (
     <Table
       columns={columns}
       dataSource={transactions}
       rowKey='id'
-      rowClassName={(record, index) => { // eslint-disable-line no-unused-vars
+      rowClassName={(record) => {
         if (record.amount < 0) { return 'TransactionTable__expense'; } else { return 'TransactionTable__allowance'; }
       }}
       pagination={{

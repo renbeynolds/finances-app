@@ -1,12 +1,12 @@
 export const selectRequestStatus = (state, name) => {
-    const status = state.requests[name];
-    if (!status) { return { loading: true, errors: [] }; }
-    return status;
+  const status = state.requests[name];
+  if (!status) { return { loading: true, errors: [] }; }
+  return status;
 };
 
 export const createLoadingSelector = (actions) => (state) => {
-    const actionsLoading = actions.map((action) => {
-        return selectRequestStatus(state, `${action}`).loading;
-    });
-    return actionsLoading.includes(true);
+  const actionsLoading = actions.map((action) => {
+    return selectRequestStatus(state, `${action}`).loading;
+  });
+  return actionsLoading.includes(true);
 };
