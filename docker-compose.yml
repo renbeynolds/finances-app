@@ -18,6 +18,6 @@ services:
   adminer:
     image: adminer
     restart: always
-    container_name: radd-db-adminer
+    container_name: finances-app-adminer
     ports:
       - 8181:8080

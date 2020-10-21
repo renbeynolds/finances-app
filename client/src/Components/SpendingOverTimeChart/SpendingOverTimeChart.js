@@ -1,16 +1,20 @@
 import React, { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { CartesianGrid, Line, LineChart, Tooltip, XAxis, YAxis } from 'recharts';
 import { requestFetchSpendingOverTimeData } from '../../Redux/Charts/actions';
+import { selectTransactionFilters } from '../../Redux/Filters/selectors';
 
 function SpendingOverTimeChart() {
 
     const dispatch = useDispatch();
     const [data, setData] = useState([]);
+    const search = useSelector(selectTransactionFilters);
 
     useEffect(() => {
         const fetchData = async() => {
-            const request = await dispatch(requestFetchSpendingOverTimeData());
+            const request = await dispatch(requestFetchSpendingOverTimeData({
+                search: search
+            }));
             setData(request.payload);
         };
         fetchData();
@@ -24,7 +28,7 @@ function SpendingOverTimeChart() {
             margin={{top: 5, right: 30, left: 20, bottom: 5}}
         >
             <XAxis dataKey="month"/>
-            <YAxis/>
+            <YAxis tickFormatter={(value) => ("$" + value.toFixed(0))}/>
             <CartesianGrid strokeDasharray="3 3"/>
             <Tooltip formatter={(value) => ("$" + value.toFixed(2))}/>
             <Line type="monotone" dataKey="total" stroke="#8884d8" activeDot={{r: 8}}/>

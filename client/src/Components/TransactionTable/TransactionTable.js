@@ -1,7 +1,7 @@
 import { Table } from 'antd';
-import React, { useCallback, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useLocation } from 'react-router';
+import { selectTransactionFilters } from '../../Redux/Filters/selectors';
 import { selectRequestStatus } from '../../Redux/Requests/selectors';
 import { requestFetchTransactions } from '../../Redux/Transactions/actions';
 import TransactionConstants from '../../Redux/Transactions/constants';
@@ -14,26 +14,19 @@ const DEFAULT_CURRENT_PAGE = 1;
 
 function TransactionTable() {
 
-  const location = useLocation();
   const dispatch = useDispatch();
   const requestStatus = useSelector(state => selectRequestStatus(state, TransactionConstants.FETCH_TRANSACTIONS));
   const transactions = useSelector(selectTransactionsArray);
-
-  const getSearch = useCallback(() => {
-    if (location.state && location.state.uploadId) {
-      return `{"upload": {"id": ${location.state.uploadId} }}`;
-    }
-    return undefined;
-  }, [location]);
+  const search = useSelector(selectTransactionFilters);
 
   // Fetch initial transactions to display
   useEffect(() => {
     dispatch(requestFetchTransactions({
       limit: DEFAULT_PAGE_SIZE,
       offset: DEFAULT_PAGE_SIZE * (DEFAULT_CURRENT_PAGE - 1),
-      search: getSearch()
+      search: search
     }));
-  }, [dispatch, getSearch]);
+  }, [dispatch]);
 
   const columns = [
     {
@@ -67,7 +60,7 @@ function TransactionTable() {
     dispatch(requestFetchTransactions({
       limit: pagination.pageSize,
       offset: pagination.pageSize * (pagination.current - 1),
-      search: getSearch()
+      search: search
     }));
   };
 
