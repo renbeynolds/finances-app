@@ -7,6 +7,8 @@ const filtersSlice = createSlice({
       transactions: {}
   },
   reducers: {
+    
+    // Upload
     setTransactionUploadFilter: {
       reducer: (state, action) => {
         if (state.transactions.upload) {
@@ -18,13 +20,19 @@ const filtersSlice = createSlice({
       prepare: (uploadId) => {
         return { payload: uploadId }
       }
+    },
+    clearTransactionUploadFilter(state) {
+      delete state.transactions.upload;
     }
+
+
   },
   extraReducers: {}
 });
 
 export const {
-    setTransactionUploadFilter
+    setTransactionUploadFilter,
+    clearTransactionUploadFilter
 } = filtersSlice.actions;
 
 export default filtersSlice.reducer;

@@ -15,7 +15,7 @@ export class AccountSettings {
     @Column()
     amountHeader: string;
 
-    @Column()
+    @Column({default: false})
     amountsInverted: boolean;
 
 }

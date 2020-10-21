@@ -23,7 +23,7 @@ function App() {
     <Layout className='App__layout'>
       <Menu
         theme='dark' mode='horizontal'
-        defaultSelectedKeys={[pathname]}
+        selectedKeys={[pathname]}
       >
         <Menu.Item key='/accounts' icon={<BankOutlined />} onClick={() => history.push('/accounts')}>Accounts</Menu.Item>
         <Menu.Item key='/tags' icon={<TagsOutlined />} onClick={() => history.push('/tags')}>Tags</Menu.Item>

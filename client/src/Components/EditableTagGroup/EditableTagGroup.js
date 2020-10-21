@@ -65,7 +65,7 @@ function EditableTagGroup(props) {
 
       {!addVisible && (
         <Tag className='EditableTagGroup__add-button' onClick={() => setAddVisible(true)}>
-          <PlusOutlined /> Add Tag
+          <PlusOutlined /> Add
         </Tag>
       )}
 

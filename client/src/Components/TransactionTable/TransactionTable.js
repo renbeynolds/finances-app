@@ -1,4 +1,4 @@
-import { Table } from 'antd';
+import { Space, Table } from 'antd';
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectTransactionFilters } from '../../Redux/Filters/selectors';
@@ -7,6 +7,7 @@ import { requestFetchTransactions } from '../../Redux/Transactions/actions';
 import TransactionConstants from '../../Redux/Transactions/constants';
 import { selectTransactionsArray } from '../../Redux/Transactions/selectors';
 import { EditableTagGroup } from '../EditableTagGroup';
+import { TransactionFilterCard } from '../TransactionFilterCard';
 import './styles.scss';
 
 const DEFAULT_PAGE_SIZE = 10;
@@ -26,7 +27,7 @@ function TransactionTable() {
       offset: DEFAULT_PAGE_SIZE * (DEFAULT_CURRENT_PAGE - 1),
       search: search
     }));
-  }, [dispatch]);
+  }, [dispatch, search]);
 
   const columns = [
     {
@@ -65,21 +66,24 @@ function TransactionTable() {
   };
 
   return (
-    <Table
-      columns={columns}
-      dataSource={transactions}
-      rowKey='id'
-      rowClassName={(record) => {
-        if (record.amount < 0) { return 'TransactionTable__expense'; } else { return 'TransactionTable__allowance'; }
-      }}
-      pagination={{
-        ...requestStatus.pagination,
-        defaultCurrent: DEFAULT_CURRENT_PAGE,
-        defaultPageSize: DEFAULT_PAGE_SIZE
-      }}
-      loading={requestStatus.loading}
-      onChange={handleTableChange}
-    />
+    <Space direction='vertical' style={{width: '100%'}}>
+      <TransactionFilterCard />
+      <Table
+        columns={columns}
+        dataSource={transactions}
+        rowKey='id'
+        rowClassName={(record) => {
+          if (record.amount < 0) { return 'TransactionTable__expense'; } else { return 'TransactionTable__allowance'; }
+        }}
+        pagination={{
+          ...requestStatus.pagination,
+          defaultCurrent: DEFAULT_CURRENT_PAGE,
+          defaultPageSize: DEFAULT_PAGE_SIZE
+        }}
+        loading={requestStatus.loading}
+        onChange={handleTableChange}
+      />
+    </Space>
   );
 }
 
