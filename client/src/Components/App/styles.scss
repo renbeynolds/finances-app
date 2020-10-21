@@ -1,21 +1,6 @@
 .App__layout {
   min-height: 100% !important;
 
-  .App__sider {
-    overflow: auto;
-    height: 100vh;
-    position: fixed;
-    left: 0;
-  }
-
-  .App__content-layout {
-    margin-left: 200px;
-  }
-
-  .App__header {
-    background-color: #f0f2f5;
-  }
-
   .App__content {
     background-color: white;
     padding: 30px;
@@ -25,9 +10,4 @@
     text-align: center;
   }
 
-  .App__logo {
-    height: 32px;
-    background: rgba(255, 255, 255, 0.2);
-    margin: 16px;
-  }
 }

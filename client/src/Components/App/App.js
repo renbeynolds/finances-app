@@ -21,22 +21,18 @@ function App() {
 
   return (
     <Layout className='App__layout'>
-      <Sider className='App__sider'>
-        <div className='App__logo' />
-        <Menu
-          theme='dark' mode='inline'
-          defaultSelectedKeys={[pathname]}
-        >
-          <Menu.Item key='/accounts' icon={<BankOutlined />} onClick={() => history.push('/accounts')}>Accounts</Menu.Item>
-          <Menu.Item key='/tags' icon={<TagsOutlined />} onClick={() => history.push('/tags')}>Tags</Menu.Item>
-          <SubMenu key='/trasactions' icon={<DollarOutlined />} title='Transactions'>
-            <Menu.Item key='/transactions/table' onClick={() => history.push('/transactions/table')}>Table</Menu.Item>
-            <Menu.Item key='/transactions/charts' onClick={() => history.push('/transactions/charts')}>Charts</Menu.Item>
-          </SubMenu>
-        </Menu>
-      </Sider>
-      <Layout className='App__content-layout'>
-        <Header className='App__header'/>
+      <Menu
+        theme='dark' mode='horizontal'
+        defaultSelectedKeys={[pathname]}
+      >
+        <Menu.Item key='/accounts' icon={<BankOutlined />} onClick={() => history.push('/accounts')}>Accounts</Menu.Item>
+        <Menu.Item key='/tags' icon={<TagsOutlined />} onClick={() => history.push('/tags')}>Tags</Menu.Item>
+        <SubMenu key='/trasactions' icon={<DollarOutlined />} title='Transactions'>
+          <Menu.Item key='/transactions/table' onClick={() => history.push('/transactions/table')}>Table</Menu.Item>
+          <Menu.Item key='/transactions/charts' onClick={() => history.push('/transactions/charts')}>Charts</Menu.Item>
+        </SubMenu>
+      </Menu>
+      <Layout>
         <Content className='App__content'>
           <Route exact path='/'><Welcome /></Route>
           <Route exact path='/accounts'><AccountTable /></Route>
