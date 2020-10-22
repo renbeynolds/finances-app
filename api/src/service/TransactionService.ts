@@ -3,15 +3,16 @@ import { getRepository } from 'typeorm';
 import { Tag } from '../entity/Tag';
 import { Transaction } from '../entity/Transaction';
 
-
-
 export const getTransactions = async(req: Request, res: Response): Promise<void> => {
 
   const uploadId = Number(req.query.uploadId);
 
   const qb = getRepository(Transaction).createQueryBuilder('trans')
     .leftJoinAndSelect('trans.tags', 'tag')
-    .where(uploadId ? 'trans.uploadId = :uploadId' : '1=1', { uploadId });
+    .where(uploadId ? 'trans.uploadId = :uploadId' : '1=1', { uploadId })
+    .orderBy('trans.date', 'DESC')
+    .skip(req.pagination.offset)
+    .take(req.pagination.limit);
 
   const [result, total] = await qb.getManyAndCount();
 

@@ -1,3 +1,5 @@
+import _ from 'lodash';
+
 export const selectTransactionsArray = (state) => {
-  return Object.values(state.transactions);
+  return _.reverse(_.sortBy(Object.values(state.transactions), ['date']));
 };
