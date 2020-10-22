@@ -1,7 +1,7 @@
 import { Space, Table } from 'antd';
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { selectTransactionFilters } from '../../Redux/Filters/selectors';
+import { selectTransactionSearch } from '../../Redux/Filters/selectors';
 import { selectRequestStatus } from '../../Redux/Requests/selectors';
 import { requestFetchTransactions } from '../../Redux/Transactions/actions';
 import TransactionConstants from '../../Redux/Transactions/constants';
@@ -18,7 +18,7 @@ function TransactionTable() {
   const dispatch = useDispatch();
   const requestStatus = useSelector(state => selectRequestStatus(state, TransactionConstants.FETCH_TRANSACTIONS));
   const transactions = useSelector(selectTransactionsArray);
-  const search = useSelector(selectTransactionFilters);
+  const search = useSelector(selectTransactionSearch);
 
   // Fetch initial transactions to display
   useEffect(() => {

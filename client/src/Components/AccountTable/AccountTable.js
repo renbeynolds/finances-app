@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router';
 import { requestFetchAccounts } from '../../Redux/Accounts/actions';
 import { selectAccountsArray } from '../../Redux/Accounts/selectors';
-import { setTransactionUploadFilter } from '../../Redux/Filters/reducer';
+import { setTransactionUploadIdFilter } from '../../Redux/Filters/reducer';
 import { requestCreateUpload } from '../../Redux/Uploads/actions';
 import './styles.scss';
 
@@ -27,7 +27,7 @@ function AccountTable() {
   const handleUploadedFile = async(event, accountId) => {
     const file = event.target.files[0];
     const request = await dispatch(requestCreateUpload({ accountId: accountId, file: file }));
-    dispatch(setTransactionUploadFilter(request.payload.id));
+    dispatch(setTransactionUploadIdFilter(request.payload.id));
     history.push('/transactions/table');
   };
 

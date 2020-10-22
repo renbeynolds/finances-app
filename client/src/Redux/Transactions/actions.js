@@ -1,6 +1,5 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import Axios from 'axios';
-import _ from 'lodash';
 import createRequest from '../../Utils/createRequest';
 import Constants from './constants';
 
@@ -8,7 +7,7 @@ export const requestFetchTransactions = createAsyncThunk(
   Constants.FETCH_TRANSACTIONS,
   ({ limit, offset, search }, { rejectWithValue }) => {
     let url = `/api/transactions?limit=${limit}&offset=${offset}`;
-    if (search && !_.isEmpty(search)) { url += `&search=${JSON.stringify(search)}`; }
+    if (search) { url += `&${search}`; }
     const request = createRequest(url, 'GET', {});
     return Axios(request).then((response) => {
       return response.data;

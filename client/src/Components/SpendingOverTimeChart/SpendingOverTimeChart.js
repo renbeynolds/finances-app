@@ -2,13 +2,13 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { CartesianGrid, Line, LineChart, Tooltip, XAxis, YAxis } from 'recharts';
 import { requestFetchSpendingOverTimeData } from '../../Redux/Charts/actions';
-import { selectTransactionFilters } from '../../Redux/Filters/selectors';
+import { selectTransactionSearch } from '../../Redux/Filters/selectors';
 
 function SpendingOverTimeChart() {
 
     const dispatch = useDispatch();
     const [data, setData] = useState([]);
-    const search = useSelector(selectTransactionFilters);
+    const search = useSelector(selectTransactionSearch);
 
     useEffect(() => {
         const fetchData = async() => {

@@ -3,17 +3,20 @@ import { getRepository } from 'typeorm';
 import { Tag } from '../entity/Tag';
 import { Transaction } from '../entity/Transaction';
 
+
+
 export const getTransactions = async(req: Request, res: Response): Promise<void> => {
-  const findConfig = {
-    relations: ['tags'],
-    skip: req.pagination.offset,
-    take: req.pagination.limit,
-    where: {}
-  };
-  if (req.query.search) { findConfig.where = JSON.parse(req.query.search as string); }
-  const [transactions, total] = await getRepository(Transaction).findAndCount(findConfig);
-  res.send({
-    data: transactions,
+
+  const uploadId = Number(req.query.uploadId);
+
+  const qb = getRepository(Transaction).createQueryBuilder('trans')
+    .leftJoinAndSelect('trans.tags', 'tag')
+    .where(uploadId ? 'trans.uploadId = :uploadId' : '1=1', { uploadId });
+
+  const [result, total] = await qb.getManyAndCount();
+
+  res.status(200).send({
+    data: result,
     pagination: { ...req.pagination, total: total }
   });
 };

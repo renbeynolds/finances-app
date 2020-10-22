@@ -1,7 +1,10 @@
-export const selectTransactionFilters = (state) => {
-    return state.filters.transactions;
+export const selectTransactionSearch = (state) => {
+    if (state.filters.transactions.uploadId) {
+        return `uploadId=${state.filters.transactions.uploadId}`;
+    }
+    return null;
 };
 
-export const selectTransactionUploadFilter = (state) => {
-    return state.filters.transactions.upload ? state.filters.transactions.upload.id : undefined;
+export const selectTransactionUploadIdFilter = (state) => {
+    return state.filters.transactions.uploadId;
 }
