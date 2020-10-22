@@ -5,7 +5,8 @@ const filtersSlice = createSlice({
   name: 'filters',
   initialState: {
       transactions: {
-        uploadId: null
+        uploadId: null,
+        tags: []
       }
   },
   reducers: {
@@ -15,14 +16,25 @@ const filtersSlice = createSlice({
       reducer: (state, action) => {
         state.transactions.uploadId = action.payload;
       },
-      prepare: (uploadId) => {
-        return { payload: uploadId }
-      }
+      prepare: (uploadId) => ({ payload: uploadId })
     },
     clearTransactionUploadIdFilter(state) {
       state.transactions.uploadId = null;
-    }
+    },
 
+    // Tags
+    addTransactionTagFilter: {
+      reducer: (state, action) => {
+        state.transactions.tags.push(action.payload);
+      },
+      prepare: (tag) => ({ payload: tag })
+    },
+    removeTransactionTagFilter: {
+      reducer: (state, action) => {
+        state.transactions.tags = state.transactions.tags.filter(t => t.id !== action.payload.id)
+      },
+      prepare: (tag) => ({ payload: tag })
+    }
 
   },
   extraReducers: {}
@@ -30,7 +42,9 @@ const filtersSlice = createSlice({
 
 export const {
     setTransactionUploadIdFilter,
-    clearTransactionUploadIdFilter
+    clearTransactionUploadIdFilter,
+    addTransactionTagFilter,
+    removeTransactionTagFilter
 } = filtersSlice.actions;
 
 export default filtersSlice.reducer;
