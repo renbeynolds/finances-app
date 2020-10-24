@@ -16,7 +16,6 @@ export const getTransactions = async(req: Request, res: Response): Promise<void>
     .skip(req.pagination.offset)
     .take(req.pagination.limit);
 
-  console.log(qb.getQuery());
   const [result, total] = await qb.getManyAndCount();
 
   res.status(200).send({

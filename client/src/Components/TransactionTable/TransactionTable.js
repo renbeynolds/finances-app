@@ -66,7 +66,7 @@ function TransactionTable() {
   };
 
   return (
-    <Space direction='vertical' style={{width: '100%'}}>
+    <Space direction='vertical' style={{ width: '100%' }}>
       <TransactionFilterCard />
       <Table
         columns={columns}

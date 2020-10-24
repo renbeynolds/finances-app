@@ -1,12 +1,11 @@
 import { FileAddOutlined, PlusCircleOutlined } from '@ant-design/icons';
 import { Button, Table } from 'antd';
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router';
 import { requestFetchAccounts } from '../../Redux/Accounts/actions';
 import { selectAccountsArray } from '../../Redux/Accounts/selectors';
-import { setTransactionUploadIdFilter } from '../../Redux/Filters/reducer';
-import { requestCreateUpload } from '../../Redux/Uploads/actions';
+import { CreateUploadForm } from '../CreateUploadForm';
 import './styles.scss';
 
 function AccountTable() {
@@ -14,22 +13,11 @@ function AccountTable() {
   const dispatch = useDispatch();
   const history = useHistory();
   const accounts = useSelector(selectAccountsArray);
-  const fileInputRef = useRef();
+  const [createUploadFormVisible, setCreateUploadFormVisible] = useState(false);
 
   useEffect(() => {
     dispatch(requestFetchAccounts());
   }, [dispatch]);
-
-  const onFileUploadClick = () => {
-    fileInputRef.current.click();
-  };
-
-  const handleUploadedFile = async(event, accountId) => {
-    const file = event.target.files[0];
-    const request = await dispatch(requestCreateUpload({ accountId: accountId, file: file }));
-    dispatch(setTransactionUploadIdFilter(request.payload.id));
-    history.push('/transactions/table');
-  };
 
   const columns = [
     {
@@ -43,13 +31,13 @@ function AccountTable() {
           <Button
             type='primary' shape='round'
             icon={<FileAddOutlined />} size='default'
-            onClick={onFileUploadClick}
+            onClick={() => setCreateUploadFormVisible(true)}
           >Upload Transactions</Button>
-          <input
-            type='file'
-            ref={fileInputRef}
-            onChange={(e) => handleUploadedFile(e, id)}
-            style={{ display: 'none' }}
+          <CreateUploadForm
+            isVisible={createUploadFormVisible}
+            accountId={id}
+            onCancel={() => setCreateUploadFormVisible(false)}
+            onOk={() => setCreateUploadFormVisible(false)}
           />
         </>
       )

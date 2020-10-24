@@ -11,7 +11,7 @@ import { TransactionTable } from '../TransactionTable';
 import { Welcome } from '../Welcome';
 import './styles.scss';
 
-const { Header, Content, Footer, Sider } = Layout;
+const { Content, Footer } = Layout;
 const { SubMenu } = Menu;
 
 function App() {

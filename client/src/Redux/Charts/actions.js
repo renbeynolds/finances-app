@@ -5,7 +5,7 @@ import Constants from './constants';
 
 export const requestFetchSpendingOverTimeData = createAsyncThunk(
   Constants.FETCH_SPENDING_OVER_TIME_DATA,
-  ({search}, { rejectWithValue }) => {
+  ({ search }, { rejectWithValue }) => {
     let url = '/api/charts/spending_over_time';
     if (search) { url += `?${search}`; }
     const request = createRequest(url, 'GET', {});

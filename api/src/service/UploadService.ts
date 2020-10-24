@@ -1,6 +1,6 @@
 import csvtojson from 'csvtojson';
 import { Request, Response } from 'express';
-import { getRepository } from 'typeorm';
+import { getManager, getRepository } from 'typeorm';
 import { Account } from '../entity/Account';
 import { Tag } from '../entity/Tag';
 import { Transaction } from '../entity/Transaction';
@@ -11,9 +11,9 @@ export const createUpload = async(req: Request, res: Response): Promise<void> =>
     const account = await getRepository(Account).findOne(req.body.accountId, { relations: ['settings'] });
     const upload = new Upload();
     upload.account = account;
-    await getRepository(Upload).save(upload);
     const csvData = req.files['file'].data.toString('utf8');
     csvtojson({ flatKeys: true }).fromString(csvData).then(async json => {
+
       const transactions: Transaction[] = [];
       for (let i = 0; i < json.length; i++) {
         const obj = json[i];
@@ -34,7 +34,14 @@ export const createUpload = async(req: Request, res: Response): Promise<void> =>
         });
         transactions.push(transaction);
       }
-      await getRepository(Transaction).save(transactions);
-      return res.send(upload);
+
+      await getManager().transaction(async transactionalEntityManager => {
+        await transactionalEntityManager.save(upload);
+        await transactionalEntityManager.save(transactions);
+        return res.send(upload);
+      }).catch(error => {
+        return res.status(400).send({ errors: [error.message] })
+      });
+
     });
   };

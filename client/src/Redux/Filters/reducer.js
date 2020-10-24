@@ -4,13 +4,13 @@ import { createSlice } from '@reduxjs/toolkit';
 const filtersSlice = createSlice({
   name: 'filters',
   initialState: {
-      transactions: {
-        uploadId: null,
-        tags: []
-      }
+    transactions: {
+      uploadId: null,
+      tags: []
+    }
   },
   reducers: {
-    
+
     // Upload
     setTransactionUploadIdFilter: {
       reducer: (state, action) => {
@@ -31,7 +31,7 @@ const filtersSlice = createSlice({
     },
     removeTransactionTagFilter: {
       reducer: (state, action) => {
-        state.transactions.tags = state.transactions.tags.filter(t => t.id !== action.payload.id)
+        state.transactions.tags = state.transactions.tags.filter(t => t.id !== action.payload.id);
       },
       prepare: (tag) => ({ payload: tag })
     }
@@ -41,10 +41,10 @@ const filtersSlice = createSlice({
 });
 
 export const {
-    setTransactionUploadIdFilter,
-    clearTransactionUploadIdFilter,
-    addTransactionTagFilter,
-    removeTransactionTagFilter
+  setTransactionUploadIdFilter,
+  clearTransactionUploadIdFilter,
+  addTransactionTagFilter,
+  removeTransactionTagFilter
 } = filtersSlice.actions;
 
 export default filtersSlice.reducer;

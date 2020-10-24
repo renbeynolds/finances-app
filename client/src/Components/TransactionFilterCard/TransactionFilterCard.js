@@ -7,28 +7,29 @@ import { selectTransactionTagsFilter, selectTransactionUploadIdFilter } from '..
 
 function TransactionFilterCard() {
 
-    const dispatch = useDispatch();
-    const uploadId = useSelector(selectTransactionUploadIdFilter);
-    const tags = useSelector(selectTransactionTagsFilter);
+  const dispatch = useDispatch();
+  const uploadId = useSelector(selectTransactionUploadIdFilter);
+  const tags = useSelector(selectTransactionTagsFilter);
 
-    return (
-        <Card bordered={true} style={{width: '100%'}}>
-            { uploadId &&
-                <Button
-                    icon={<CloseOutlined/>}
-                    onClick={() => dispatch(clearTransactionUploadIdFilter())}
-                >Just Uploaded</Button>
-            }
+  return (
+    <Card bordered={true} style={{ width: '100%' }}>
+      { uploadId &&
+        <Button
+          icon={<CloseOutlined/>}
+          onClick={() => dispatch(clearTransactionUploadIdFilter())}
+        >Just Uploaded</Button>
+      }
 
-            { tags.length > 0 && tags.map(tag => (
-                <Tag
-                    closable={true}
-                    onClose={() => dispatch(removeTransactionTagFilter(tag))}
-                    color={tag.color}
-                >{tag.name}</Tag>
-            ))}
-        </Card>
-    );
-};
+      { tags.length > 0 && tags.map((tag, idx) => (
+        <Tag
+          key={idx}
+          closable={true}
+          onClose={() => dispatch(removeTransactionTagFilter(tag))}
+          color={tag.color}
+        >{tag.name}</Tag>
+      ))}
+    </Card>
+  );
+}
 
 export default TransactionFilterCard;

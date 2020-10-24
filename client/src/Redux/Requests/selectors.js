@@ -1,6 +1,6 @@
 export const selectRequestStatus = (state, name) => {
   const status = state.requests[name];
-  if (!status) { return { loading: true, errors: [] }; }
+  if (!status) { return { loading: false, errors: [] }; }
   return status;
 };
 
