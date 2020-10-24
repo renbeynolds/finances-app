@@ -4,18 +4,20 @@ import { TagRegex } from './TagRegex';
 @Entity()
 export class Tag {
 
-    @PrimaryGeneratedColumn()
-    id: number;
+  @PrimaryGeneratedColumn()
+  id: number;
 
-    @Column({
-      unique: true
-    })
-    name: string;
+  @Column({
+    unique: true
+  })
+  name: string;
 
-    @Column()
-    color: string;
+  @Column({
+    default: '#999999'
+  })
+  color: string;
 
-    @OneToMany(() => TagRegex, tagRegex => tagRegex.tag, { cascade: true })
-    regexes: TagRegex[];
+  @OneToMany(() => TagRegex, tagRegex => tagRegex.tag, { cascade: true })
+  regexes: TagRegex[];
 
 }

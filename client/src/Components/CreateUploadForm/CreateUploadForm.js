@@ -1,5 +1,5 @@
 import { UploadOutlined } from '@ant-design/icons';
-import { Alert, Button, Form, Modal, Spin, Upload } from 'antd';
+import { Alert, Button, Checkbox, Form, Input, Modal, Spin, Upload } from 'antd';
 import PropTypes from 'prop-types';
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -23,7 +23,12 @@ function CreateUploadForm(props) {
 
   const onSubmit = async() => {
     form.validateFields().then(async(values) => {
-      dispatch(requestCreateUpload({ accountId: accountId, file: values.fileUploader.file })).then(request => {
+      dispatch(requestCreateUpload({
+        accountId: accountId,
+        file: values.fileUploader.file,
+        preTagged: values.preTagged,
+        tagHeader: values.tagHeader
+      })).then(request => {
         if (!request.error) {
           onOk();
           form.resetFields();
@@ -36,6 +41,12 @@ function CreateUploadForm(props) {
     });
   };
 
+  const onAbort = () => {
+    form.resetFields();
+    dispatch(resetRequest(UploadConstants.CREATE_UPLOAD));
+    onCancel();
+  };
+
   const disableUpload = (values.fileUploader && values.fileUploader.fileList.length > 0);
 
   return (
@@ -44,7 +55,7 @@ function CreateUploadForm(props) {
       title='Upload Transactions'
       okText='Submit'
       cancelText='Cancel'
-      onCancel={onCancel}
+      onCancel={onAbort}
       onOk={onSubmit}
     >
       { isSubmitting ?
@@ -53,6 +64,7 @@ function CreateUploadForm(props) {
         <Form
           form={form}
           onValuesChange={(updated, all) => {
+            console.log(all);
             setValues(all);
             dispatch(resetRequest(UploadConstants.CREATE_UPLOAD));
           }}
@@ -71,6 +83,23 @@ function CreateUploadForm(props) {
               <Button disabled={disableUpload} icon={<UploadOutlined />}>Choose File</Button>
             </Upload>
           </Form.Item>
+          <Form.Item name='preTagged' valuePropName='checked'>
+              <Checkbox>Pre-Tagged</Checkbox>
+          </Form.Item>
+          { values.preTagged &&
+            <Form.Item
+                name='tagHeader'
+                label='Tag Header'
+                rules={[
+                    {
+                    required: true,
+                    message: 'Please input Tag Header!',
+                    },
+                ]}
+            >
+                <Input></Input>
+            </Form.Item>
+          }
         </Form>
 
       }

@@ -8,7 +8,7 @@ export const createTag = async(req: Request, res: Response): Promise<void> => {
 
   const tag = new Tag();
   tag.name = req.body.name;
-  tag.color = req.body.color ? req.body.color : '#999999';
+  tag.color = req.body.color;
   if (req.body.regexes) {
     tag.regexes = req.body.regexes.map(p => new TagRegex(p));
   }
