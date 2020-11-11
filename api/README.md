@@ -6,3 +6,8 @@
 ```
 > npm start
 ```
+
+### Generating Database Migration
+```
+> npm run typeorm -- migration:generate -n CreateDatabase
+```

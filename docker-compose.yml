@@ -6,8 +6,9 @@ services:
     restart: unless-stopped
     container_name: finances-app-db
     environment:
-      POSTGRES_USER: test
-      POSTGRES_PASSWORD: test
+      POSTGRES_USER: financesAppUser
+      POSTGRES_PASSWORD: financesAppPassword
+      POSTGRES_DB: financesAppDB
     ports:
     - 5432:5432
 
