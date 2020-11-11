@@ -10,7 +10,7 @@ export const getTransactions = async(req: Request, res: Response): Promise<void>
 
   const qb = getRepository(Transaction).createQueryBuilder('trans')
     .leftJoinAndSelect('trans.tags', 'tag')
-    .where(uploadId ? 'trans.uploadId = :uploadId' : '1=1', { uploadId })
+    .where(uploadId ? 'trans.upload = :uploadId' : '1=1', { uploadId })
     .andWhere(tagIds ? 'tag.id IN (:...tagIds)' : '1=1', { tagIds })
     .orderBy('trans.date', 'DESC')
     .skip(req.pagination.offset)
