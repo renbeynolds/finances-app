@@ -28,7 +28,7 @@ export const updateTransaction = async(req: Request, res: Response): Promise<voi
   const transactionRepository = getRepository(Transaction);
   const tagRepository = getRepository(Tag);
 
-  const transaction = await transactionRepository.findOne(req.params.transactionId, {relations: ['tags']});
+  const transaction = await transactionRepository.findOne(req.params.transactionId, { relations: ['tags'] });
   transaction.tags = await tagRepository.findByIds(req.body.tags.map(t => t.id));
 
   await transactionRepository.save(transaction);

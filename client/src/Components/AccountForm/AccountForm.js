@@ -2,7 +2,7 @@ import { Button, Checkbox, Form, Input } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useHistory, useRouteMatch } from 'react-router';
-import { requestCreateAccount, requestFetchAccount } from '../../Redux/Accounts/actions';
+import { requestCreateAccount, requestFetchAccount, requestUpdateAccount } from '../../Redux/Accounts/actions';
 
 const layout = {
   labelCol: {
@@ -36,7 +36,8 @@ function AccountForm() {
         dateHeader: request.payload.dateHeader,
         descriptionHeader: request.payload.descriptionHeader,
         amountHeader: request.payload.amountHeader,
-        amountsInverted: request.payload.amountsInverted
+        amountsInverted: request.payload.amountsInverted,
+        startingAmount: request.payload.startingAmount
       };
       form.setFieldsValue(initialValues);
       setValues(initialValues);
@@ -44,10 +45,14 @@ function AccountForm() {
     if (accountIdToEdit) {
       getAccountToEdit();
     }
-  }, [dispatch, form, accountIdToEdit])
+  }, [dispatch, form, accountIdToEdit]);
 
   const onFinish = (account) => {
-    dispatch(requestCreateAccount(account));
+    if (accountIdToEdit) {
+      dispatch(requestUpdateAccount({ id: accountIdToEdit, account: account }));
+    } else {
+      dispatch(requestCreateAccount(account));
+    }
     history.push('/accounts');
   };
 

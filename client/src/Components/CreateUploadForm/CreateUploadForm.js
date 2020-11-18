@@ -84,20 +84,20 @@ function CreateUploadForm(props) {
             </Upload>
           </Form.Item>
           <Form.Item name='preTagged' valuePropName='checked'>
-              <Checkbox>Pre-Tagged</Checkbox>
+            <Checkbox>Pre-Tagged</Checkbox>
           </Form.Item>
           { values.preTagged &&
             <Form.Item
-                name='tagHeader'
-                label='Tag Header'
-                rules={[
-                    {
-                    required: true,
-                    message: 'Please input Tag Header!',
-                    },
-                ]}
+              name='tagHeader'
+              label='Tag Header'
+              rules={[
+                {
+                  required: true,
+                  message: 'Please input Tag Header!',
+                },
+              ]}
             >
-                <Input></Input>
+              <Input></Input>
             </Form.Item>
           }
         </Form>

@@ -50,3 +50,19 @@ export const requestCreateAccount = createAsyncThunk(
     });
   }
 );
+
+export const requestUpdateAccount = createAsyncThunk(
+  Constants.UPDATE_ACCOUNT,
+  ({ id, account }, { rejectWithValue }) => {
+    const request = createRequest(`/api/accounts/${id}`, 'PUT', account);
+    return Axios(request).then((response) => {
+      return response.data;
+    }).catch((error) => {
+      if (error.response.data.errors) {
+        return rejectWithValue(error.response.data.errors);
+      } else {
+        return rejectWithValue([error.response.statusText]);
+      }
+    });
+  }
+);

@@ -27,7 +27,7 @@ export class Account {
   @Column('double precision')
   balance: number;
 
-  @Column({default: false})
+  @Column({ default: false })
   amountsInverted: boolean;
 
   @OneToMany(() => Upload, upload => upload.account)
