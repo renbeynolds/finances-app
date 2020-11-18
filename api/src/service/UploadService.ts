@@ -9,23 +9,26 @@ import { Upload } from '../entity/Upload';
 
 export const createUpload = async(req: Request, res: Response): Promise<void> => {
     const tags = await getRepository(Tag).find({ relations: ['regexes'] });
-    const account = await getRepository(Account).findOne(req.body.accountId, { relations: ['settings'] });
+    const account = await getRepository(Account).findOne(req.body.accountId);
     const upload = new Upload();
     upload.account = account;
     const csvData = req.files['file'].data.toString('utf8');
     csvtojson({ flatKeys: true }).fromString(csvData).then(async json => {
       await getManager().transaction(async transactionalEntityManager => {
         const transactions: Transaction[] = [];
-        for (let i = 0; i < json.length; i++) {
+        for (let i = json.length - 1; i >= 0; i--) {
           const obj = json[i];
           const transaction = new Transaction();
           transaction.tags = [];
           transaction.upload = upload;
-          transaction.date = new Date(obj[account.settings.dateHeader]);
-          transaction.description = obj[account.settings.descriptionHeader];
-          transaction.amount = obj[account.settings.amountHeader];
-          if (account.settings.amountsInverted) { transaction.amount = -1 * transaction.amount; }
-          if (req.body.preTagged) {
+          transaction.date = new Date(obj[account.dateHeader]);
+          transaction.description = obj[account.descriptionHeader];
+          transaction.amount = obj[account.amountHeader];
+          if (account.amountsInverted) { transaction.amount = -1 * transaction.amount; }
+          transaction.balance = Number(account.balance) + Number(transaction.amount);
+          account.balance = Number(account.balance) + Number(transaction.amount);
+          
+          if (req.body.preTagged === true) {
             const tag = _.find(tags, { name: obj[req.body.tagHeader].toUpperCase() });
             if (tag) { transaction.tags.push(tag); }
             else {
@@ -50,6 +53,7 @@ export const createUpload = async(req: Request, res: Response): Promise<void> =>
         
         await transactionalEntityManager.save(upload);
         await transactionalEntityManager.save(transactions);
+        await transactionalEntityManager.save(account);
         return res.send(upload);
       }).catch(error => {
         return res.status(400).send({ errors: [error.message] })

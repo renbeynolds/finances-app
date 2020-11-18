@@ -2,8 +2,8 @@ import { BankOutlined, DollarOutlined, TagsOutlined } from '@ant-design/icons';
 import { Layout, Menu } from 'antd';
 import React from 'react';
 import { Route, useHistory, useLocation } from 'react-router-dom';
+import { AccountForm } from '../AccountForm';
 import { AccountTable } from '../AccountTable';
-import { CreateAccountForm } from '../CreateAccountForm';
 import { SpendingOverTimeChart } from '../SpendingOverTimeChart';
 import { TagForm } from '../TagForm';
 import { TagTable } from '../TagTable';
@@ -36,7 +36,8 @@ function App() {
         <Content className='App__content'>
           <Route exact path='/'><Welcome /></Route>
           <Route exact path='/accounts'><AccountTable /></Route>
-          <Route exact path='/accounts/create'><CreateAccountForm /></Route>
+          <Route exact path='/accounts/create'><AccountForm /></Route>
+          <Route exact path='/accounts/edit/:accountId'><AccountForm /></Route>
           <Route exact path='/tags'><TagTable /></Route>
           <Route exact path='/tags/create'><TagForm /></Route>
           <Route exact path='/tags/edit/:tagId'><TagForm /></Route>

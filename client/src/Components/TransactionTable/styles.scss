@@ -9,3 +9,15 @@
     color: green;
   }
 }
+
+.TransactionTable__negative-balance {
+  .TransactionTable__balance {
+    color: red;
+  }
+}
+
+.TransactionTable__positive-balance {
+  .TransactionTable__balance {
+    color: green;
+  }
+}

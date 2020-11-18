@@ -1,4 +1,5 @@
 import { Space, Table } from 'antd';
+import cx from 'classnames';
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectTransactionSearch } from '../../Redux/Filters/selectors';
@@ -46,6 +47,12 @@ function TransactionTable() {
       render: (text) => numberToCurrency(text)
     },
     {
+      title: 'Balance',
+      dataIndex: 'balance',
+      className: 'TransactionTable__balance',
+      render: (text) => numberToCurrency(text)
+    },
+    {
       title: 'Tags',
       dataIndex: 'tags',
       className: 'TransactionTable__tags',
@@ -74,9 +81,12 @@ function TransactionTable() {
         columns={columns}
         dataSource={transactions}
         rowKey='id'
-        rowClassName={(record) => {
-          if (record.amount < 0) { return 'TransactionTable__expense'; } else { return 'TransactionTable__allowance'; }
-        }}
+        rowClassName={(record) => cx({
+          'TransactionTable__expense': record.amount < 0,
+          'TransactionTable__allowance': record.amount > 0,
+          'TransactionTable__positive-balance': record.balance > 0,
+          'TransactionTable__negative-balance': record.balance < 0
+        })}
         pagination={{
           ...requestStatus.pagination,
           defaultCurrent: DEFAULT_CURRENT_PAGE,

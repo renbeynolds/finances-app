@@ -17,6 +17,9 @@ export class Transaction {
     @Column('double precision')
     amount: number;
 
+    @Column('double precision')
+    balance: number;
+
     @ManyToOne(() => Upload, upload => upload.transactions)
     upload: Upload;
 

@@ -3,6 +3,22 @@ import Axios from 'axios';
 import createRequest from '../../Utils/createRequest';
 import Constants from './constants';
 
+export const requestFetchAccount = createAsyncThunk(
+  Constants.FETCH_ACCOUNT,
+  (accountId, { rejectWithValue }) => {
+    const request = createRequest(`/api/accounts/${accountId}`, 'GET', {});
+    return Axios(request).then((response) => {
+      return response.data;
+    }).catch((error) => {
+      if (error.response.data.errors) {
+        return rejectWithValue(error.response.data.errors);
+      } else {
+        return rejectWithValue([error.response.statusText]);
+      }
+    });
+  }
+);
+
 export const requestFetchAccounts = createAsyncThunk(
   Constants.FETCH_ACCOUNTS,
   (_, { rejectWithValue }) => {

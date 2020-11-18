@@ -12,7 +12,7 @@ export const getTransactions = async(req: Request, res: Response): Promise<void>
     .leftJoinAndSelect('trans.tags', 'tag')
     .where(uploadId ? 'trans.upload = :uploadId' : '1=1', { uploadId })
     .andWhere(tagIds ? 'tag.id IN (:...tagIds)' : '1=1', { tagIds })
-    .orderBy('trans.date', 'DESC')
+    .orderBy('trans.id', 'DESC')
     .skip(req.pagination.offset)
     .take(req.pagination.limit);
 

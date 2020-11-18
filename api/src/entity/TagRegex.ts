@@ -8,13 +8,13 @@ export class TagRegex {
     this.pattern = pattern;
   }
 
-    @PrimaryGeneratedColumn()
-    id: number;
+  @PrimaryGeneratedColumn()
+  id: number;
 
-    @Column()
-    pattern: string;
+  @Column()
+  pattern: string;
 
-    @ManyToOne(() => Tag, tag => tag.regexes)
-    tag: Tag;
+  @ManyToOne(() => Tag, tag => tag.regexes)
+  tag: Tag;
 
 }

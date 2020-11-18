@@ -1,23 +1,36 @@
-import { Column, Entity, JoinColumn, OneToMany, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
-import { AccountSettings } from './AccountSettings';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { Upload } from './Upload';
 
 @Entity()
 export class Account {
 
-    @PrimaryGeneratedColumn()
-    id: number;
+  @PrimaryGeneratedColumn()
+  id: number;
 
-    @Column({
-      unique: true
-    })
-    name: string;
+  @Column({
+    unique: true
+  })
+  name: string;
 
-    @OneToOne(type => AccountSettings)
-    @JoinColumn()
-    settings: AccountSettings;
+  @Column()
+  dateHeader: string;
 
-    @OneToMany(() => Upload, upload => upload.account)
-    uploads: Upload[];
+  @Column()
+  descriptionHeader: string;
+
+  @Column()
+  amountHeader: string;
+
+  @Column('double precision', { default: 0 })
+  startingAmount: number;
+
+  @Column('double precision')
+  balance: number;
+
+  @Column({default: false})
+  amountsInverted: boolean;
+
+  @OneToMany(() => Upload, upload => upload.account)
+  uploads: Upload[];
 
 }

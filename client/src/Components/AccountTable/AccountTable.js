@@ -1,4 +1,4 @@
-import { FileAddOutlined, PlusCircleOutlined } from '@ant-design/icons';
+import { EditOutlined, FileAddOutlined, PlusCircleOutlined } from '@ant-design/icons';
 import { Button, Table } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -40,6 +40,18 @@ function AccountTable() {
             onOk={() => setCreateUploadFormVisible(false)}
           />
         </>
+      )
+    },
+    {
+      title: 'Edit',
+      dataIndex: 'id',
+      render: (id) => (
+        <Button
+          type='primary' shape='circle'
+          icon={<EditOutlined />} size='default'
+          onClick={() => history.push(`/accounts/edit/${id}`)}
+          className='TagTable__edit-button'
+        />
       )
     }
   ];

@@ -1,8 +1,8 @@
 import { Button, Checkbox, Form, Input } from 'antd';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { useHistory } from 'react-router';
-import { requestCreateAccount } from '../../Redux/Accounts/actions';
+import { useHistory, useRouteMatch } from 'react-router';
+import { requestCreateAccount, requestFetchAccount } from '../../Redux/Accounts/actions';
 
 const layout = {
   labelCol: {
@@ -20,10 +20,31 @@ const tailLayout = {
   },
 };
 
-function CreateAccountForm() {
+function AccountForm() {
 
   const dispatch = useDispatch();
   const history = useHistory();
+  const accountIdToEdit = useRouteMatch().params.accountId;
+  const [values, setValues] = useState({});
+  const [form] = Form.useForm();
+
+  useEffect(() => {
+    const getAccountToEdit = async() => {
+      const request = await dispatch(requestFetchAccount(accountIdToEdit));
+      const initialValues = {
+        name: request.payload.name,
+        dateHeader: request.payload.dateHeader,
+        descriptionHeader: request.payload.descriptionHeader,
+        amountHeader: request.payload.amountHeader,
+        amountsInverted: request.payload.amountsInverted
+      };
+      form.setFieldsValue(initialValues);
+      setValues(initialValues);
+    };
+    if (accountIdToEdit) {
+      getAccountToEdit();
+    }
+  }, [dispatch, form, accountIdToEdit])
 
   const onFinish = (account) => {
     dispatch(requestCreateAccount(account));
@@ -33,7 +54,11 @@ function CreateAccountForm() {
   return (
     <Form
       {...layout}
+      form={form}
       onFinish={onFinish}
+      onValuesChange={(updated, all) => {
+        setValues(all);
+      }}
     >
       <Form.Item
         label='Name'
@@ -84,6 +109,12 @@ function CreateAccountForm() {
         <Input />
       </Form.Item>
       <Form.Item
+        label='Starting Amount'
+        name='startingAmount'
+      >
+        <Input prefix='$' type='number' />
+      </Form.Item>
+      <Form.Item
         {...tailLayout}
         name='amountsInverted'
         valuePropName='checked'>
@@ -96,4 +127,4 @@ function CreateAccountForm() {
   );
 }
 
-export default CreateAccountForm;
+export default AccountForm;

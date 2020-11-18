@@ -26,7 +26,7 @@ function CreateUploadForm(props) {
       dispatch(requestCreateUpload({
         accountId: accountId,
         file: values.fileUploader.file,
-        preTagged: values.preTagged,
+        preTagged: values.preTagged || false,
         tagHeader: values.tagHeader
       })).then(request => {
         if (!request.error) {
