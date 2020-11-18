@@ -1,3 +1,15 @@
 .AccountTable__create-button {
   margin-bottom: 10px;
 }
+
+.AccountTable__negative-balance {
+  .AccountTable__balance {
+    color: red;
+  }
+}
+
+.AccountTable__positive-balance {
+  .AccountTable__balance {
+    color: green;
+  }
+}

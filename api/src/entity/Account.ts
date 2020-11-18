@@ -21,10 +21,10 @@ export class Account {
   @Column()
   amountHeader: string;
 
-  @Column('double precision', { default: 0 })
+  @Column('double precision', { default: 0, scale: 2 })
   startingAmount: number;
 
-  @Column('double precision')
+  @Column('double precision', { scale: 2 })
   balance: number;
 
   @Column({ default: false })

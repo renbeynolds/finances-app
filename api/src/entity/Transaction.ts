@@ -14,10 +14,10 @@ export class Transaction {
     @Column('text')
     description: string;
 
-    @Column('double precision')
+    @Column('double precision', { scale: 2 })
     amount: number;
 
-    @Column('double precision')
+    @Column('double precision', { scale: 2 })
     balance: number;
 
     @ManyToOne(() => Upload, upload => upload.transactions)
