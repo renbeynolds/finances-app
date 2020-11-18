@@ -35,6 +35,22 @@ export const requestFetchAccounts = createAsyncThunk(
   }
 );
 
+export const requestFetchAccountOptions = createAsyncThunk(
+  Constants.FETCH_ACCOUNT_OPTIONS,
+  (_, { rejectWithValue }) => {
+    const request = createRequest('/api/accounts/options', 'GET', {});
+    return Axios(request).then((response) => {
+      return response.data;
+    }).catch((error) => {
+      if (error.response.data.errors) {
+        return rejectWithValue(error.response.data.errors);
+      } else {
+        return rejectWithValue([error.response.statusText]);
+      }
+    });
+  }
+);
+
 export const requestCreateAccount = createAsyncThunk(
   Constants.CREATE_ACCOUNT,
   (account, { rejectWithValue }) => {

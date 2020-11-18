@@ -1,3 +1,4 @@
+import accounting from 'accounting-js';
 import csvtojson from 'csvtojson';
 import { Request, Response } from 'express';
 import _ from 'lodash';
@@ -23,7 +24,7 @@ export const createUpload = async(req: Request, res: Response): Promise<void> =>
         transaction.upload = upload;
         transaction.date = new Date(obj[account.dateHeader]);
         transaction.description = obj[account.descriptionHeader];
-        transaction.amount = obj[account.amountHeader];
+        transaction.amount = accounting.unformat(obj[account.amountHeader]);
         if (account.amountsInverted) { transaction.amount = -1 * transaction.amount; }
         transaction.balance = Number(account.balance) + Number(transaction.amount);
         account.balance = Number(account.balance) + Number(transaction.amount);

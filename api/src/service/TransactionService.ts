@@ -6,11 +6,14 @@ import { Transaction } from '../entity/Transaction';
 export const getTransactions = async(req: Request, res: Response): Promise<void> => {
 
   const uploadId = Number(req.query.uploadId);
+  const accountId = Number(req.query.accountId);
   const tagIds = req.query.tagIds ? JSON.parse(req.query.tagIds as string) : null;
 
   const qb = getRepository(Transaction).createQueryBuilder('trans')
     .leftJoinAndSelect('trans.tags', 'tag')
+    .leftJoin('trans.upload', 'upload')
     .where(uploadId ? 'trans.upload = :uploadId' : '1=1', { uploadId })
+    .andWhere(accountId ? 'upload.account = :accountId' : '1=1', { accountId })
     .andWhere(tagIds ? 'tag.id IN (:...tagIds)' : '1=1', { tagIds })
     .orderBy('trans.id', 'DESC')
     .skip(req.pagination.offset)

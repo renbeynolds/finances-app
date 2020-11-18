@@ -1,3 +1,4 @@
+import accounting from 'accounting-js';
 import { Space, Table } from 'antd';
 import cx from 'classnames';
 import React, { useEffect } from 'react';
@@ -7,7 +8,6 @@ import { selectRequestStatus } from '../../Redux/Requests/selectors';
 import { requestFetchTransactions } from '../../Redux/Transactions/actions';
 import TransactionConstants from '../../Redux/Transactions/constants';
 import { selectTransactionsArray } from '../../Redux/Transactions/selectors';
-import { numberToCurrency } from '../../Utils/numberToCurrency';
 import { EditableTagGroup } from '../EditableTagGroup';
 import { TransactionFilterCard } from '../TransactionFilterCard';
 import './styles.scss';
@@ -44,13 +44,13 @@ function TransactionTable() {
       title: 'Amount',
       dataIndex: 'amount',
       className: 'TransactionTable__amount',
-      render: (text) => numberToCurrency(text)
+      render: (text) => accounting.formatMoney(text)
     },
     {
       title: 'Balance',
       dataIndex: 'balance',
       className: 'TransactionTable__balance',
-      render: (text) => numberToCurrency(text)
+      render: (text) => accounting.formatMoney(text)
     },
     {
       title: 'Tags',

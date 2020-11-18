@@ -6,6 +6,7 @@ const filtersSlice = createSlice({
   initialState: {
     transactions: {
       uploadId: null,
+      accountId: null,
       tags: []
     }
   },
@@ -20,6 +21,17 @@ const filtersSlice = createSlice({
     },
     clearTransactionUploadIdFilter(state) {
       state.transactions.uploadId = null;
+    },
+
+    // Account
+    setTransactionAccountIdFilter: {
+      reducer: (state, action) => {
+        state.transactions.accountId = action.payload;
+      },
+      prepare: (accountId) => ({ payload: accountId })
+    },
+    clearTransactionUploadIdFilter(state) {
+      state.transactions.accountId = null;
     },
 
     // Tags
@@ -43,6 +55,8 @@ const filtersSlice = createSlice({
 export const {
   setTransactionUploadIdFilter,
   clearTransactionUploadIdFilter,
+  setTransactionAccountIdFilter,
+  clearTransactionAccountIdFilter,
   addTransactionTagFilter,
   removeTransactionTagFilter
 } = filtersSlice.actions;

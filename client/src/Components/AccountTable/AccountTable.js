@@ -1,4 +1,5 @@
 import { EditOutlined, FileAddOutlined, PlusCircleOutlined } from '@ant-design/icons';
+import accounting from 'accounting-js';
 import { Button, Table } from 'antd';
 import cx from 'classnames';
 import React, { useEffect, useState } from 'react';
@@ -6,7 +7,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router';
 import { requestFetchAccounts } from '../../Redux/Accounts/actions';
 import { selectAccountsArray } from '../../Redux/Accounts/selectors';
-import { numberToCurrency } from '../../Utils/numberToCurrency';
 import { CreateUploadForm } from '../CreateUploadForm';
 import './styles.scss';
 
@@ -30,7 +30,7 @@ function AccountTable() {
       title: 'Balance',
       dataIndex: 'balance',
       className: 'AccountTable__balance',
-      render: (text) => numberToCurrency(text)
+      render: (text) => accounting.formatMoney(text)
     },
     {
       dataIndex: 'id',

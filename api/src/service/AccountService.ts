@@ -57,6 +57,13 @@ export const getAllAccounts = async(req: Request, res: Response): Promise<void> 
   res.send(accounts);
 };
 
+export const getAccountOptions = async(req: Request, res: Response): Promise<void> => {
+  const accountOptions = await getRepository(Account)
+    .createQueryBuilder('account')
+    .select(['account.id', 'account.name']).getMany();
+  res.send(accountOptions);
+};
+
 export const getAccount = async(req: Request, res: Response): Promise<void> => {
   const account = await getRepository(Account).findOne(req.params.accountId);
   res.send(account);
