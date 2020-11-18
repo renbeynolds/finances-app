@@ -28,7 +28,7 @@ export const createUpload = async(req: Request, res: Response): Promise<void> =>
         transaction.balance = Number(account.balance) + Number(transaction.amount);
         account.balance = Number(account.balance) + Number(transaction.amount);
 
-        if (req.body.preTagged === true) {
+        if (req.body.preTagged === 'true') {
           const tag = _.find(tags, { name: obj[req.body.tagHeader].toUpperCase() });
           if (tag) { transaction.tags.push(tag); } else {
             const newTag = new Tag();
