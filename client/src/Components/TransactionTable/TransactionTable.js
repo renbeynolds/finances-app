@@ -8,6 +8,7 @@ import { selectRequestStatus } from '../../Redux/Requests/selectors';
 import { requestFetchTransactions } from '../../Redux/Transactions/actions';
 import TransactionConstants from '../../Redux/Transactions/constants';
 import { selectTransactionsArray } from '../../Redux/Transactions/selectors';
+import EditableCell from '../EditableCell/EditableCell';
 import { EditableTagGroup } from '../EditableTagGroup';
 import { TransactionFilterCard } from '../TransactionFilterCard';
 import './styles.scss';
@@ -38,7 +39,7 @@ function TransactionTable() {
     },
     {
       title: 'Description',
-      dataIndex: 'description',
+      dataIndex: 'description'
     },
     {
       title: 'Amount',
@@ -51,6 +52,17 @@ function TransactionTable() {
       dataIndex: 'balance',
       className: 'TransactionTable__balance',
       render: (text) => accounting.formatMoney(text)
+    },
+    {
+      title: 'Balance Correction',
+      dataIndex: 'balanceCorrection',
+      render: (text) => <EditableCell
+        dataIndex='balanceCorrection'
+        title='Balance Correction'
+        value={text}
+        formatValue={(val) => accounting.formatMoney(val)}
+        onSave={(val) => console.log(val)}
+      />
     },
     {
       title: 'Tags',

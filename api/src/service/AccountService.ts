@@ -39,8 +39,8 @@ export const updateAccount = async(req: Request, res: Response): Promise<void> =
         .orderBy('trans.id', 'ASC');
       const transactions = await qb.getMany();
       transactions.forEach(t => {
-        t.balance = Number(account.balance) + Number(t.amount);
-        account.balance = Number(account.balance) + Number(t.amount);
+        t.balance = Number(account.balance) + Number(t.amount) + Number(t.balanceCorrection);
+        account.balance = Number(account.balance) + Number(t.amount) + Number(t.balanceCorrection);
       });
       await transactionalEntityManager.save(transactions);
     }

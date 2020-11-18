@@ -30,7 +30,7 @@ const filtersSlice = createSlice({
       },
       prepare: (accountId) => ({ payload: accountId })
     },
-    clearTransactionUploadIdFilter(state) {
+    clearTransactionAccountIdFilter(state) {
       state.transactions.accountId = null;
     },
 

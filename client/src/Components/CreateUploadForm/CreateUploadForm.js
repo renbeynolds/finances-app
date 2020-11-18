@@ -64,7 +64,6 @@ function CreateUploadForm(props) {
         <Form
           form={form}
           onValuesChange={(updated, all) => {
-            console.log(all);
             setValues(all);
             dispatch(resetRequest(UploadConstants.CREATE_UPLOAD));
           }}

@@ -20,6 +20,9 @@ export class Transaction {
     @Column('double precision', { scale: 2 })
     balance: number;
 
+    @Column('double precision', { scale: 2, default: 0 })
+    balanceCorrection: number;
+
     @ManyToOne(() => Upload, upload => upload.transactions)
     upload: Upload;
 
