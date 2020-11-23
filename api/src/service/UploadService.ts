@@ -39,15 +39,16 @@ export const createUpload = async(req: Request, res: Response): Promise<void> =>
             transaction.tags.push(newTag);
             tags.push(newTag);
           }
+        } else {
+          tags.forEach((tag) => {
+            tag.regexes.forEach((regex) => {
+              if (transaction.description.match(new RegExp(regex.pattern))) {
+                transaction.tags.push(tag);
+              }
+            });
+          });
         }
 
-        tags.forEach((tag) => {
-          tag.regexes.forEach((regex) => {
-            if (transaction.description.match(new RegExp(regex.pattern))) {
-              transaction.tags.push(tag);
-            }
-          });
-        });
         transactions.push(transaction);
       }
 
