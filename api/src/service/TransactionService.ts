@@ -16,7 +16,8 @@ export const getTransactions = async(req: Request, res: Response): Promise<void>
     .where(uploadId ? 'trans.upload = :uploadId' : '1=1', { uploadId })
     .andWhere(accountId ? 'upload.account = :accountId' : '1=1', { accountId })
     .andWhere(tagIds ? 'tag.id IN (:...tagIds)' : '1=1', { tagIds })
-    .orderBy('trans.id', 'DESC')
+    .orderBy('trans.date', 'DESC')
+    .addOrderBy('trans.id', 'DESC')
     .skip(req.pagination.offset)
     .take(req.pagination.limit);
 
