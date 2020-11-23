@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { requestCreateAccount, requestFetchAccounts } from './actions';
+import { requestCreateAccount, requestFetchAccounts, requestUpdateAccount } from './actions';
 
 const accountsSlide = createSlice({
   name: 'accounts',
@@ -10,6 +10,9 @@ const accountsSlide = createSlice({
       action.payload.forEach((a) => { state[a.id] = a; });
     },
     [requestCreateAccount.fulfilled]: (state, action) => {
+      state[action.payload.id] = action.payload;
+    },
+    [requestUpdateAccount.fulfilled]: (state, action) => {
       state[action.payload.id] = action.payload;
     }
   }

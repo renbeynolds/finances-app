@@ -5,7 +5,7 @@ import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectTransactionSearch } from '../../Redux/Filters/selectors';
 import { selectRequestStatus } from '../../Redux/Requests/selectors';
-import { requestFetchTransactions } from '../../Redux/Transactions/actions';
+import { requestFetchTransactions, requestUpdateTransaction } from '../../Redux/Transactions/actions';
 import TransactionConstants from '../../Redux/Transactions/constants';
 import { selectTransactionsArray } from '../../Redux/Transactions/selectors';
 import EditableCell from '../EditableCell/EditableCell';
@@ -32,6 +32,15 @@ function TransactionTable() {
     }));
   }, [dispatch, search]);
 
+  const onEditBalanceCorrection = (newValue, transaction) => {
+    dispatch(requestUpdateTransaction({
+      id: transaction.id,
+      transaction: {
+        ...transaction, balanceCorrection: newValue
+      }
+    }))
+  };
+
   const columns = [
     {
       title: 'Date',
@@ -56,12 +65,12 @@ function TransactionTable() {
     {
       title: 'Balance Correction',
       dataIndex: 'balanceCorrection',
-      render: (text) => <EditableCell
+      render: (text, record) => <EditableCell
         dataIndex='balanceCorrection'
         title='Balance Correction'
         value={text}
         formatValue={(val) => accounting.formatMoney(val)}
-        onSave={(val) => console.log(val)}
+        onSave={(newValue) => onEditBalanceCorrection(newValue, record)}
       />
     },
     {

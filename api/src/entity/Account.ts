@@ -24,7 +24,7 @@ export class Account {
   @Column('double precision', { default: 0, scale: 2 })
   startingAmount: number;
 
-  @Column('double precision', { scale: 2 })
+  @Column('double precision', { default: 0, scale: 2 })
   balance: number;
 
   @Column({ default: false })

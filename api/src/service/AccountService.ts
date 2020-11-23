@@ -30,7 +30,10 @@ export const updateAccount = async(req: Request, res: Response): Promise<void> =
     account.descriptionHeader = req.body.descriptionHeader;
     account.amountHeader = req.body.amountHeader;
     account.amountsInverted = req.body.amountsInverted;
-    if (account.startingAmount !== req.body.startingAmount) {
+
+    if (account.startingAmount !== Number(req.body.startingAmount)) {
+      const newStartingAmount = Number(req.body.startingAmount);
+      const currentStartingAmount = account.startingAmount;
       account.startingAmount = req.body.startingAmount;
       account.balance = req.body.startingAmount;
       const qb = transactionRepository.createQueryBuilder('trans')
@@ -38,9 +41,12 @@ export const updateAccount = async(req: Request, res: Response): Promise<void> =
         .where('upload.account = :accountId', { accountId: account.id })
         .orderBy('trans.id', 'ASC');
       const transactions = await qb.getMany();
-      transactions.forEach(t => {
-        t.balance = Number(account.balance) + Number(t.amount) + Number(t.balanceCorrection);
-        account.balance = Number(account.balance) + Number(t.amount) + Number(t.balanceCorrection);
+      transactions.forEach((t, idx) => {
+        t.balance -= currentStartingAmount;
+        t.balance += newStartingAmount;
+        if (idx === transactions.length - 1) {
+          account.balance = t.balance;
+        }
       });
       await transactionalEntityManager.save(transactions);
     }
