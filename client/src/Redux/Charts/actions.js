@@ -20,3 +20,20 @@ export const requestFetchSpendingOverTimeData = createAsyncThunk(
     });
   }
 );
+
+export const requestFetchAccountBalanceOverTimeData = createAsyncThunk(
+  Constants.FETCH_ACCOUNT_BALANCE_OVER_TIME_DATA,
+  (accountId, { rejectWithValue }) => {
+    let url = `/api/charts/account_balance_over_time/${accountId}`;
+    const request = createRequest(url, 'GET', {});
+    return Axios(request).then((response) => {
+      return response.data;
+    }).catch((error) => {
+      if (error.response.data.errors) {
+        return rejectWithValue(error.response.data.errors);
+      } else {
+        return rejectWithValue([error.response.statusText]);
+      }
+    });
+  }
+);
