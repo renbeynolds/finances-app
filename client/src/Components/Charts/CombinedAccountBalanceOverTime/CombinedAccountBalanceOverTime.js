@@ -24,8 +24,9 @@ function CombinedAccountBalanceOverTime() {
                 <CartesianGrid strokeDasharray='3 3'/>
                 <Tooltip formatter={(value) => accounting.formatMoney(value)}/>
                 { accountOptions.map(account => (
-                    <Line key={account.id} type='monotone' dataKey={account.name} />
+                    <Line key={account.id} type='monotone' stroke={account.color} dataKey={account.name} />
                 ))}
+                <Line type='monotone' stroke='#999999' dataKey='Total'/>
                 <Legend />
             </LineChart>
         </div>

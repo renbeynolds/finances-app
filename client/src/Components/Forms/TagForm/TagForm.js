@@ -97,7 +97,6 @@ function TagForm() {
       <Form.Item
         className='TagForm__color'
         label='Color'
-        rules={[]}
       >
         <Form.Item name='color'>
           <Input placeholder='#2db7f5' />

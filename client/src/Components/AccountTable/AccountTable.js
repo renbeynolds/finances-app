@@ -8,7 +8,7 @@ import { useHistory } from 'react-router';
 import { requestFetchAccounts } from '../../Redux/Accounts/actions';
 import { selectAccountsArray } from '../../Redux/Accounts/selectors';
 import { AccountBalanceOverTime } from '../Charts/AccountBalanceOverTime';
-import { CreateUploadForm } from '../CreateUploadForm';
+import { CreateUploadForm } from '../Forms/CreateUploadForm';
 import './styles.scss';
 
 function AccountTable() {

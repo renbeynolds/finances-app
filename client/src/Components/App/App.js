@@ -1,10 +1,10 @@
 import { Layout } from 'antd';
 import React from 'react';
 import { Route } from 'react-router-dom';
-import { AccountForm } from '../AccountForm';
 import { AccountTable } from '../AccountTable';
+import { AccountForm } from '../Forms/AccountForm';
+import { TagForm } from '../Forms/TagForm';
 import { Sidebar } from '../Sidebar';
-import { TagForm } from '../TagForm';
 import { TagTable } from '../TagTable';
 import { TransactionTable } from '../TransactionTable';
 import { Welcome } from '../Welcome';

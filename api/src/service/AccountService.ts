@@ -14,6 +14,7 @@ export const createAccount = async(req: Request, res: Response): Promise<void> =
   account.amountsInverted = req.body.amountsInverted;
   account.startingAmount = req.body.startingAmount;
   account.balance = req.body.startingAmount;
+  account.color = req.body.color;
 
   await accountRepository.save(account);
   res.send(account);
@@ -30,6 +31,7 @@ export const updateAccount = async(req: Request, res: Response): Promise<void> =
     account.descriptionHeader = req.body.descriptionHeader;
     account.amountHeader = req.body.amountHeader;
     account.amountsInverted = req.body.amountsInverted;
+    account.color = req.body.color;
 
     if (account.startingAmount !== Number(req.body.startingAmount)) {
       const newStartingAmount = Number(req.body.startingAmount);
@@ -66,7 +68,7 @@ export const getAllAccounts = async(req: Request, res: Response): Promise<void> 
 export const getAccountOptions = async(req: Request, res: Response): Promise<void> => {
   const accountOptions = await getRepository(Account)
     .createQueryBuilder('account')
-    .select(['account.id', 'account.name']).getMany();
+    .select(['account.id', 'account.name', 'account.color']).getMany();
   res.send(accountOptions);
 };
 

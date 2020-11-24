@@ -65,8 +65,9 @@ export const getCombinedAccountBalanceOverTimeData = async(req: Request, res: Re
     const { name, month, balance } = value;
     if (result[month]) {
       result[month][name] = balance;
+      result[month].Total += balance;
     } else {
-      result[month] = { month: month, [name]: balance };
+      result[month] = { month: month, [name]: balance, Total: balance };
     }
     return result;
   }, {})), 'month');

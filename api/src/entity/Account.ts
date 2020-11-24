@@ -30,6 +30,11 @@ export class Account {
   @Column({ default: false })
   amountsInverted: boolean;
 
+  @Column({
+    default: '#999999'
+  })
+  color: string;
+
   @OneToMany(() => Upload, upload => upload.account)
   uploads: Upload[];
 

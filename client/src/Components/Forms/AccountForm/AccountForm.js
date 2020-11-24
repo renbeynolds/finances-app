@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useHistory, useRouteMatch } from 'react-router';
 import { requestCreateAccount, requestFetchAccount, requestUpdateAccount } from '../../../Redux/Accounts/actions';
+import './styles.scss';
 
 const layout = {
   labelCol: {
@@ -37,7 +38,8 @@ function AccountForm() {
         descriptionHeader: request.payload.descriptionHeader,
         amountHeader: request.payload.amountHeader,
         amountsInverted: request.payload.amountsInverted,
-        startingAmount: request.payload.startingAmount
+        startingAmount: request.payload.startingAmount,
+        color: request.payload.color || '#999999'
       };
       form.setFieldsValue(initialValues);
       setValues(initialValues);
@@ -118,6 +120,20 @@ function AccountForm() {
         name='startingAmount'
       >
         <Input prefix='$' type='number' />
+      </Form.Item>
+      <Form.Item label='Color' className='AccountForm__color'>
+        <Form.Item name='color'>
+          <Input />
+        </Form.Item>
+        <div
+          style={{
+            borderRadius: '2px',
+            width: '90px',
+            height: '32px',
+            marginLeft: '30px',
+            backgroundColor: values.color
+          }}
+        ></div>
       </Form.Item>
       <Form.Item
         {...tailLayout}
