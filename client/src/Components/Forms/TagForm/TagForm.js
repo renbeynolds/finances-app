@@ -3,7 +3,7 @@ import { Button, Form, Input, Tag } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useHistory, useRouteMatch } from 'react-router';
-import { requestCreateTag, requestFetchTag, requestUpdateTag } from '../../Redux/Tags/actions';
+import { requestCreateTag, requestFetchTag, requestUpdateTag } from '../../../Redux/Tags/actions';
 import './styles.scss';
 
 const layout = {

@@ -2,7 +2,7 @@ import { Button, Checkbox, Form, Input } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useHistory, useRouteMatch } from 'react-router';
-import { requestCreateAccount, requestFetchAccount, requestUpdateAccount } from '../../Redux/Accounts/actions';
+import { requestCreateAccount, requestFetchAccount, requestUpdateAccount } from '../../../Redux/Accounts/actions';
 
 const layout = {
   labelCol: {

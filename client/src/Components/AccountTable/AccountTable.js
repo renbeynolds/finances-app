@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router';
 import { requestFetchAccounts } from '../../Redux/Accounts/actions';
 import { selectAccountsArray } from '../../Redux/Accounts/selectors';
-import { AccountBalanceOverTimeChart } from '../AccountBalanceOverTimeChart';
+import { AccountBalanceOverTime } from '../Charts/AccountBalanceOverTime';
 import { CreateUploadForm } from '../CreateUploadForm';
 import './styles.scss';
 
@@ -79,7 +79,7 @@ function AccountTable() {
         rowKey='id'
         expandable={{
           rowExpandable: () => true,
-          expandedRowRender: record => <AccountBalanceOverTimeChart accountId={record.id} />
+          expandedRowRender: record => <AccountBalanceOverTime accountId={record.id} />
         }}
         rowClassName={(record) => cx({
           'AccountTable__positive-balance': record.balance > 0,

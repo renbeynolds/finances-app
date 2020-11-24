@@ -5,7 +5,7 @@ import React from 'react';
 import { CartesianGrid, Line, LineChart, Tooltip, XAxis, YAxis } from 'recharts';
 import { useAccountBalanceOverTime } from './useAccountBalanceOverTime';
 
-function AccountBalanceOverTimeChart(props) {
+function AccountBalanceOverTime(props) {
 
     const data = useAccountBalanceOverTime(props.accountId);
 
@@ -28,8 +28,8 @@ function AccountBalanceOverTimeChart(props) {
     );
 }
 
-AccountBalanceOverTimeChart.propTypes = {
+AccountBalanceOverTime.propTypes = {
     accountId: PropTypes.number.isRequired
 };
 
-export default AccountBalanceOverTimeChart;
+export default AccountBalanceOverTime;

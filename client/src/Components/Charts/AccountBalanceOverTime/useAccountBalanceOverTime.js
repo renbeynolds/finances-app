@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { requestFetchAccountBalanceOverTimeData } from '../../Redux/Charts/actions';
+import { requestFetchAccountBalanceOverTimeData } from '../../../Redux/Charts/actions';
 
 export const useAccountBalanceOverTime = (accountId) => {
 

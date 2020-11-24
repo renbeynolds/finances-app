@@ -3,11 +3,11 @@ import { Space } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { CartesianGrid, Line, LineChart, Tooltip, XAxis, YAxis } from 'recharts';
-import { requestFetchSpendingOverTimeData } from '../../Redux/Charts/actions';
-import { selectTransactionSearch } from '../../Redux/Filters/selectors';
-import { TransactionFilterCard } from '../TransactionFilterCard';
+import { requestFetchSpendingOverTimeData } from '../../../Redux/Charts/actions';
+import { selectTransactionSearch } from '../../../Redux/Filters/selectors';
+import { TransactionFilterCard } from '../../TransactionFilterCard';
 
-function SpendingOverTimeChart() {
+function SpendingOverTime() {
 
   const dispatch = useDispatch();
   const [data, setData] = useState([]);
@@ -42,4 +42,4 @@ function SpendingOverTimeChart() {
   );
 }
 
-export default SpendingOverTimeChart;
+export default SpendingOverTime;
