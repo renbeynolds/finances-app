@@ -1,5 +1,5 @@
 import moment from 'moment';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 export const useDateRange = (defaultRange) => {
 
@@ -7,6 +7,12 @@ export const useDateRange = (defaultRange) => {
         moment().subtract(1,'months').startOf('month'),
         moment().subtract(1,'months').endOf('month')
     ]);
+
+    const [dateStrings, setDateStrings] = useState([dates[0].format('YYYY-MM-DD'), dates[1].format('YYYY-MM-DD')]);
+
+    useEffect(() => {
+        setDateStrings([dates[0].format('YYYY-MM-DD'), dates[1].format('YYYY-MM-DD')]);
+    }, [dates]);
 
     const setStartDate = (startDate) => {
         setDates((r) => [startDate, r[1]]);
@@ -18,7 +24,7 @@ export const useDateRange = (defaultRange) => {
 
     return {
         dates: [dates],
-        dateStrings: [dates[0].format('YYYY-MM-DD'), dates[1].format('YYYY-MM-DD')],
+        dateStrings: dateStrings,
         setDates: setDates,
         setStartDate: setStartDate,
         setEndDate: setEndDate
