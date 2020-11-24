@@ -33,7 +33,7 @@ function CreateUploadForm(props) {
           onOk();
           form.resetFields();
           dispatch(setTransactionUploadIdFilter(request.payload.id));
-          history.push('/transactions/table');
+          history.push('/transactions');
         }
       });
     }).catch(() => {

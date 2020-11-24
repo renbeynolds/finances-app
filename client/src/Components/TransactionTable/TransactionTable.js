@@ -45,6 +45,7 @@ function TransactionTable() {
     {
       title: 'Date',
       dataIndex: 'date',
+      width: '125px'
     },
     {
       title: 'Description',
