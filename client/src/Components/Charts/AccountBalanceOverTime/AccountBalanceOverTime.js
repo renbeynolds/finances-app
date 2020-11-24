@@ -3,7 +3,7 @@ import { Typography } from 'antd';
 import PropTypes from 'prop-types';
 import React from 'react';
 import { CartesianGrid, Line, LineChart, Tooltip, XAxis, YAxis } from 'recharts';
-import { useAccountBalanceOverTime } from './useAccountBalanceOverTime';
+import { useAccountBalanceOverTime } from '../../../Hooks/useAccountBalanceOverTime';
 
 function AccountBalanceOverTime(props) {
 

@@ -37,3 +37,20 @@ export const requestFetchAccountBalanceOverTimeData = createAsyncThunk(
     });
   }
 );
+
+export const requestFetchCombinedAccountBalanceOverTimeData = createAsyncThunk(
+  Constants.FETCH_COMBINED_ACCOUNT_BALANCE_OVER_TIME_DATA,
+  (_, { rejectWithValue }) => {
+    let url = '/api/charts/account_balance_over_time';
+    const request = createRequest(url, 'GET', {});
+    return Axios(request).then((response) => {
+      return response.data;
+    }).catch((error) => {
+      if (error.response.data.errors) {
+        return rejectWithValue(error.response.data.errors);
+      } else {
+        return rejectWithValue([error.response.statusText]);
+      }
+    });
+  }
+);

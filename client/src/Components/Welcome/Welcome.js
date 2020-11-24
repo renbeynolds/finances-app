@@ -1,8 +1,9 @@
 import React from 'react';
+import { CombinedAccountBalanceOverTime } from '../Charts/CombinedAccountBalanceOverTime';
 
 function Welcome() {
   return (
-    <div>Welcome</div>
+    <CombinedAccountBalanceOverTime/>
   );
 }
 

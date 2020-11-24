@@ -1,8 +1,8 @@
 import { CloseOutlined } from '@ant-design/icons';
 import { Button, Card, Select, Tag } from 'antd';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { requestFetchAccountOptions } from '../../Redux/Accounts/actions';
+import { useAccountOptions } from '../../Hooks/useAccountOptions';
 import { clearTransactionUploadIdFilter, removeTransactionTagFilter, setTransactionAccountIdFilter } from '../../Redux/Filters/reducer';
 import { selectTransactionAccountIdFilter, selectTransactionTagsFilter, selectTransactionUploadIdFilter } from '../../Redux/Filters/selectors';
 
@@ -15,16 +15,7 @@ function TransactionFilterCard() {
   const uploadId = useSelector(selectTransactionUploadIdFilter);
   const accountId = useSelector(selectTransactionAccountIdFilter);
   const tags = useSelector(selectTransactionTagsFilter);
-
-  const [accountOptions, setAccountOptions] = useState([]);
-
-  useEffect(() => {
-    const fetchFiltersOptions = async() => {
-      const request = await dispatch(requestFetchAccountOptions());
-      setAccountOptions(request.payload);
-    };
-    fetchFiltersOptions();
-  }, [dispatch]);
+  const accountOptions = useAccountOptions();
 
   const onAccountSelect = (value) => {
     dispatch(setTransactionAccountIdFilter(value));

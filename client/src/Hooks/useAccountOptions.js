@@ -1,19 +1,19 @@
 import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { requestFetchAccountBalanceOverTimeData } from '../../../Redux/Charts/actions';
+import { requestFetchAccountOptions } from '../Redux/Accounts/actions';
 
-export const useAccountBalanceOverTime = (accountId) => {
+export const useAccountOptions = () => {
 
     const dispatch = useDispatch();
     const [data, setData] = useState([]);
   
     useEffect(() => {
       const fetchData = async() => {
-        const request = await dispatch(requestFetchAccountBalanceOverTimeData(accountId));
+        const request = await dispatch(requestFetchAccountOptions());
         setData(request.payload);
       };
       fetchData();
-    }, [dispatch, accountId]);
+    }, [dispatch]);
 
     return data;
 
