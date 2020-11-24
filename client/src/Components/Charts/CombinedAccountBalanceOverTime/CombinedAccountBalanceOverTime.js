@@ -1,18 +1,35 @@
 import accounting from 'accounting-js';
-import { Typography } from 'antd';
+import { DatePicker, Space, Typography } from 'antd';
 import React from 'react';
 import { CartesianGrid, Legend, Line, LineChart, Tooltip, XAxis, YAxis } from 'recharts';
 import { useAccountOptions } from '../../../Hooks/useAccountOptions';
 import { useCombinedAccountBalanceOverTime } from '../../../Hooks/useCombinedAccountBalanceOverTime';
+import { useDateRange } from '../../../Hooks/useDateRange';
+import DateRanges from '../../../Utils/DateRanges';
+
+const { RangePicker } = DatePicker;
+const DEFAULT_RANGE = DateRanges.yearToDate();
 
 function CombinedAccountBalanceOverTime() {
 
-    const data = useCombinedAccountBalanceOverTime();
+    const { dateStrings, setDates } = useDateRange(DEFAULT_RANGE);
+    const data = useCombinedAccountBalanceOverTime(dateStrings);
     const accountOptions = useAccountOptions();
 
     return (
         <div>
-            <Typography.Title style={{ marginLeft: '80px' }} level={5}>Account Balances</Typography.Title>
+            <Space direction='horizontal' style={{ marginLeft: '80px' }}>
+                <Typography.Title level={5} style={{ lineHeight: '32px', marginBottom: 0 }}>Account Balances</Typography.Title>
+                <RangePicker
+                    defaultValue={DEFAULT_RANGE}
+                    ranges={{
+                        'Year to Date': DEFAULT_RANGE,
+                        'This Month': DateRanges.thisMonth(),
+                        'Last Month': DateRanges.lastMonth()
+                    }}
+                    onChange={(dates) => setDates(dates)}
+                />
+            </Space>
             <LineChart
                 width={600}
                 height={300}

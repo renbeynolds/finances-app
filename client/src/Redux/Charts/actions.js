@@ -40,8 +40,8 @@ export const requestFetchAccountBalanceOverTimeData = createAsyncThunk(
 
 export const requestFetchCombinedAccountBalanceOverTimeData = createAsyncThunk(
   Constants.FETCH_COMBINED_ACCOUNT_BALANCE_OVER_TIME_DATA,
-  (_, { rejectWithValue }) => {
-    let url = '/api/charts/account_balance_over_time';
+  (dateStrings, { rejectWithValue }) => {
+    let url = `/api/charts/account_balance_over_time?startDate=${dateStrings[0]}&endDate=${dateStrings[1]}`;
     const request = createRequest(url, 'GET', {});
     return Axios(request).then((response) => {
       return response.data;

@@ -42,11 +42,14 @@ export const getAccountBalanceOverTimeData = async(req: Request, res: Response):
 
 export const getCombinedAccountBalanceOverTimeData = async(req: Request, res: Response): Promise<void> => {
 
+  const startDate = req.query.startDate;
+  const endDate = req.query.endDate;
+
   const manager = getManager();
 
   const rawData = await manager.query(`
     WITH dates AS (
-      SELECT TO_CHAR(month::date, 'YYYY/MM') AS month FROM generate_series('2019-11-01', '2020-12-31', '1 month'::interval) month
+      SELECT TO_CHAR(month::date, 'YYYY/MM') AS month FROM generate_series('${startDate}', '${endDate}', '1 month'::interval) month
     )
     SELECT
       a.name, d.month, AVG(t.balance) AS balance
