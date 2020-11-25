@@ -1,9 +1,11 @@
 import { DatePicker, Space, Typography } from 'antd';
-import React from 'react';
-import { Cell, Pie, PieChart, Tooltip } from 'recharts';
+import React, { useState } from 'react';
+import { Cell, Pie, PieChart } from 'recharts';
 import { useDateRange } from '../../../Hooks/useDateRange';
 import { useTopSpendingCategories } from '../../../Hooks/useTopSpendingCategories';
+import ChartColors from '../../../Utils/ChartColors';
 import DateRanges from '../../../Utils/DateRanges';
+import ActivePieShape from '../ActivePieShape/ActivePieShape';
 
 const { RangePicker } = DatePicker;
 const DEFAULT_RANGE = DateRanges.last30Days();
@@ -12,8 +14,14 @@ function TopSpendingCategories() {
 
   const { dateStrings, setDates } = useDateRange(DEFAULT_RANGE);
   const data = useTopSpendingCategories(dateStrings);
+  const [activeIndex, setActiveIndex] = useState(0);
 
-  console.log(data);
+  const getColor = (entry, idx) => {
+    if (!entry.color || entry.color === '#999999') {
+      return ChartColors[idx];
+    }
+    return entry.color;
+  };
 
   return (
     <div>
@@ -31,7 +39,6 @@ function TopSpendingCategories() {
       </Space>
     	<PieChart width={600} height={300}>
         <Pie
-          isAnimationActive={false}
           data={data}
           innerRadius={70}
           outerRadius={95}
@@ -39,12 +46,14 @@ function TopSpendingCategories() {
           label
           paddingAngle={1}
           dataKey='data'
+          onMouseEnter={(data, idx) => setActiveIndex(idx)}
+          activeIndex={activeIndex}
+          activeShape={(props) => <ActivePieShape {...props} />}
         >
           {
-          	data.map((entry, index) => <Cell fill={entry.color || '#999999'}/>)
+          	data.map((entry, index) => <Cell fill={getColor(entry, index)}/>)
           }
         </Pie>
-        <Tooltip/>
        </PieChart>
     </div>
   );
