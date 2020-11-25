@@ -30,7 +30,8 @@ function TopSpendingCategories() {
         <RangePicker
             defaultValue={DEFAULT_RANGE}
             ranges={{
-                'Past Year': DEFAULT_RANGE,
+                'Last 30 Days': DEFAULT_RANGE,
+                'Past Year': DateRanges.last365Days,
                 'This Month': DateRanges.thisMonth(),
                 'Last Month': DateRanges.lastMonth()
             }}
@@ -43,7 +44,6 @@ function TopSpendingCategories() {
           innerRadius={70}
           outerRadius={95}
           fill="#8884d8"
-          label
           paddingAngle={1}
           dataKey='data'
           onMouseEnter={(data, idx) => setActiveIndex(idx)}
