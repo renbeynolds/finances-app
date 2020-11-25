@@ -1,11 +1,31 @@
+import accounting from 'accounting-js';
 import { DatePicker, Space, Typography } from 'antd';
 import React, { useState } from 'react';
-import { Cell, Pie, PieChart } from 'recharts';
+import { Cell, Legend, Pie, PieChart } from 'recharts';
 import { useDateRange } from '../../../Hooks/useDateRange';
 import { useTopSpendingCategories } from '../../../Hooks/useTopSpendingCategories';
 import ChartColors from '../../../Utils/ChartColors';
 import DateRanges from '../../../Utils/DateRanges';
 import ActivePieShape from '../ActivePieShape/ActivePieShape';
+
+const renderLegend = (props) => {
+  const { payload } = props;
+
+  return (
+    <>
+      {
+        payload.map((entry, index) => (
+          <div style={{ display: 'flex', color: '#333' }}>
+            <div style={{ backgroundColor: entry.color, width: '13px', height: '13px', marginTop: '4px' }} />
+            <div style={{ paddingLeft: '8px', flexGrow: 1 }}>{entry.value}</div>
+            <div style={{ paddingLeft: '8px' }}>{accounting.formatMoney(entry.payload.value)}</div>
+            <div style={{ paddingLeft: '8px', width: '70px', color: '#999' }}>{`(${(entry.payload.percent * 100).toFixed(2)}%)`}</div>
+          </div>
+        ))
+      }
+    </>
+  );
+}
 
 const { RangePicker } = DatePicker;
 const DEFAULT_RANGE = DateRanges.last30Days();
@@ -48,12 +68,22 @@ function TopSpendingCategories() {
           dataKey='data'
           onMouseEnter={(data, idx) => setActiveIndex(idx)}
           activeIndex={activeIndex}
-          activeShape={(props) => <ActivePieShape {...props} />}
+          activeShape={<ActivePieShape/>}
         >
           {
           	data.map((entry, index) => <Cell fill={getColor(entry, index)}/>)
           }
         </Pie>
+        <Legend
+          layout='vertical'
+          verticalAlign='middle'
+          align='right'
+          content={renderLegend}
+          
+          // formatter={(value, entry) => {
+          //   return <span>{`${value} ${accounting.formatMoney(entry.payload.value)}`}</span>;
+          // }}
+        />
        </PieChart>
     </div>
   );
