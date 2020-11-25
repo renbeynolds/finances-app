@@ -45,7 +45,6 @@ export const getCombinedAccountBalanceOverTimeData = async(req: Request, res: Re
   const startDate = req.query.startDate;
   const endDate = req.query.endDate;
   const bucket = req.query.bucket;
-
   const manager = getManager();
 
   const rawData = await manager.query(`
@@ -114,4 +113,56 @@ export const getCombinedAccountBalanceOverTimeData = async(req: Request, res: Re
   });
 
   res.status(200).send(noNulls);
+};
+
+export const getTopSpendingCategoriesData = async(req: Request, res: Response): Promise<void> => {
+
+  const startDate = req.query.startDate;
+  const endDate = req.query.endDate;
+  const manager = getManager();
+
+  const rawData = await manager.query(`
+    WITH tag_totals AS (
+      SELECT
+        SUM(trans.amount) AS data,
+        tags."tagId" AS tagid
+      FROM
+        transaction trans
+        LEFT JOIN transaction_tags_tag tags on tags."transactionId" = trans.id
+      WHERE
+        trans.amount < 0 AND
+        trans.date >= '${startDate}' AND trans.date <= '${endDate}'
+      GROUP BY tagid
+      HAVING tags."tagId" IS NOT NULL
+    )
+    SELECT name, -1 * data AS data, color FROM (
+      WITH tag_ranks AS (
+        SELECT
+          tagid,
+          data,
+          row_number() OVER (ORDER BY data ASC, tagid) AS rn
+        FROM tag_totals
+      )
+      (
+        SELECT
+          tagid,
+          tag.name AS name,
+          tag.color AS color,
+          data
+        FROM
+          tag_ranks
+          LEFT JOIN tag tag ON tag.id = tag_ranks.tagid
+        WHERE rn <= 5
+        ORDER BY rn
+      )
+      UNION ALL
+      SELECT NULL, 'OTHER', '#999999', SUM(data)
+      FROM tag_ranks
+      WHERE rn > 7
+      HAVING COUNT(*) > 0
+    ) ranking
+  `);
+
+
+  res.status(200).send(rawData);
 };

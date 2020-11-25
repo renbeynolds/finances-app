@@ -9,3 +9,9 @@
   ```bash
   > cat your_dump.sql | docker exec -i finances-app-db psql -U financesAppUser -d financesAppDB
   ```
+
+* Generating a Component
+  ```bash
+  > cd client
+  > npm run generate component
+  ```

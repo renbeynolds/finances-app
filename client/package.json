@@ -27,7 +27,8 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "eslint": "eslint src/. --ext .js --fix",
-    "stylelint": "stylelint \"src/**/*.scss\" --fix"
+    "stylelint": "stylelint \"src/**/*.scss\" --fix",
+    "generate": "plop"
   },
   "proxy": "http://localhost:3001",
   "eslintConfig": {
@@ -47,6 +48,7 @@
   },
   "devDependencies": {
     "eslint-plugin-react": "^7.21.3",
+    "plop": "^2.7.4",
     "stylelint": "^13.7.2",
     "stylelint-config-standard": "^20.0.0"
   }

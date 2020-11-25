@@ -8,15 +8,13 @@ import { useDateRange } from '../../../Hooks/useDateRange';
 import DateRanges from '../../../Utils/DateRanges';
 
 const { RangePicker } = DatePicker;
-const DEFAULT_RANGE = DateRanges.pastYear();
+const DEFAULT_RANGE = DateRanges.last365Days();
 
 function CombinedAccountBalanceOverTime() {
 
     const { dateStrings, setDates, bucket } = useDateRange(DEFAULT_RANGE);
     const data = useCombinedAccountBalanceOverTime(dateStrings, bucket);
     const accountOptions = useAccountOptions();
-
-    console.log(data);
 
     return (
         <div>

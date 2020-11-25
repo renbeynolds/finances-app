@@ -1,4 +1,4 @@
-import { BankOutlined, DollarOutlined, TagsOutlined } from '@ant-design/icons';
+import { BankOutlined, DollarOutlined, LineChartOutlined, TagsOutlined } from '@ant-design/icons';
 import { Layout, Menu } from 'antd';
 import React, { useState } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
@@ -20,9 +20,10 @@ function Sidebar() {
             >
                 <Menu.Item
                     key='/'
+                    icon={<LineChartOutlined/>}
                     onClick={() => history.push('/')}
                 >
-                    Home
+                    Overview
                 </Menu.Item>
                 <Menu.Item
                     key='/accounts'

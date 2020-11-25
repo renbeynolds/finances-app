@@ -4,10 +4,10 @@ import { Route } from 'react-router-dom';
 import { AccountTable } from '../AccountTable';
 import { AccountForm } from '../Forms/AccountForm';
 import { TagForm } from '../Forms/TagForm';
+import { Overview } from '../Overview';
 import { Sidebar } from '../Sidebar';
 import { TagTable } from '../TagTable';
 import { TransactionTable } from '../TransactionTable';
-import { Welcome } from '../Welcome';
 import './styles.scss';
 
 const { Content, Footer } = Layout;
@@ -18,7 +18,7 @@ function App() {
       <Sidebar />
       <Layout>
         <Content className='App__content'>
-          <Route exact path='/'><Welcome /></Route>
+          <Route exact path='/'><Overview /></Route>
           <Route exact path='/accounts'><AccountTable /></Route>
           <Route exact path='/accounts/create'><AccountForm /></Route>
           <Route exact path='/accounts/edit/:accountId'><AccountForm /></Route>
