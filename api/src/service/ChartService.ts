@@ -129,8 +129,10 @@ export const getTopSpendingCategoriesData = async(req: Request, res: Response): 
       FROM
         transaction trans
         LEFT JOIN transaction_tags_tag tags on tags."transactionId" = trans.id
+        LEFT JOIN tag t on tags."tagId" = t.id
       WHERE
         trans.amount < 0 AND
+        t.name <> 'TRANSFER' AND
         trans.date >= '${startDate}' AND trans.date <= '${endDate}'
       GROUP BY tagid
       HAVING tags."tagId" IS NOT NULL
