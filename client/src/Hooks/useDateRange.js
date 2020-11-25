@@ -10,8 +10,18 @@ export const useDateRange = (defaultRange) => {
 
     const [dateStrings, setDateStrings] = useState([dates[0].format('YYYY-MM-DD'), dates[1].format('YYYY-MM-DD')]);
 
+    const [bucket, setBucket] = useState('month');
+
     useEffect(() => {
         setDateStrings([dates[0].format('YYYY-MM-DD'), dates[1].format('YYYY-MM-DD')]);
+        const days = Math.floor(moment.duration(dates[1].diff(dates[0])).asDays());
+        if (days <= 31) {            // less than 1 month
+            setBucket('day');
+        } else if (days <= 365) {    // less than 1 year
+            setBucket('week');
+        } else {
+            setBucket('month'); // over 1 year
+        }
     }, [dates]);
 
     const setStartDate = (startDate) => {
@@ -23,11 +33,12 @@ export const useDateRange = (defaultRange) => {
     };
 
     return {
-        dates: [dates],
-        dateStrings: dateStrings,
-        setDates: setDates,
-        setStartDate: setStartDate,
-        setEndDate: setEndDate
+        dates,
+        dateStrings,
+        bucket,
+        setDates,
+        setStartDate,
+        setEndDate
     };
 
 };

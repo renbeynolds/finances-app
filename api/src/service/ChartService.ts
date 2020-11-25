@@ -44,36 +44,74 @@ export const getCombinedAccountBalanceOverTimeData = async(req: Request, res: Re
 
   const startDate = req.query.startDate;
   const endDate = req.query.endDate;
+  const bucket = req.query.bucket;
 
   const manager = getManager();
 
   const rawData = await manager.query(`
-    WITH dates AS (
-      SELECT TO_CHAR(month::date, 'YYYY/MM') AS month FROM generate_series('${startDate}', '${endDate}', '1 month'::interval) month
+    WITH account_dates AS (
+      WITH dates AS (
+        SELECT DATE_TRUNC('${bucket}', bucket::date) AS bucket FROM generate_series('${startDate}', '${endDate}', '1 ${bucket}'::interval) bucket
+      )
+      SELECT
+        d.bucket AS bucket,
+        a.id AS "accountId",
+        a.name AS "accountName"
+      FROM
+        dates d
+        CROSS JOIN account a
     )
     SELECT
-      a.name, d.month, AVG(t.balance) AS balance
-    FROM dates d
-    LEFT JOIN transaction t ON TO_CHAR(t.date, 'YYYY/MM') = d.month
-    LEFT JOIN upload u ON t."uploadId" = u.id
-    LEFT JOIN account a ON u."accountId" = a.id
-    GROUP BY d.month, a.name
+      TO_CHAR(ad.bucket, 'YYYY-MM-DD') as bucket, ad."accountName" as name, AVG(t.balance) as balance
+    FROM
+      account_dates ad
+      LEFT JOIN upload u ON u."accountId" = ad."accountId"
+      LEFT JOIN transaction t ON t."uploadId" = u.id AND DATE_TRUNC('${bucket}', t.date) = ad.bucket
+    GROUP BY
+      ad.bucket, ad."accountName"
+    ORDER BY ad.bucket
   `);
 
   // Could probably be accomplished as part of the query
   // using crosstab but that is prohibitively complex
-  // due to the need for "dynamic columns" based on
-  // the number of accounts present in the database
-  const response = _.orderBy(Object.values(_.reduce(rawData, (result, value, key) => {
-    const { name, month, balance } = value;
-    if (result[month]) {
-      result[month][name] = balance;
-      result[month].Total += balance;
+  // due to the need for "dynamic columns" based on the
+  // number of accounts present in the database
+  const transposed = Object.values(_.reduce(rawData, (result, value, key) => {
+    const { name, bucket, balance } = value;
+    if (result[bucket]) {
+      result[bucket][name] = balance;
     } else {
-      result[month] = { month: month, [name]: balance, Total: balance };
+      result[bucket] = { bucket: bucket, [name]: balance };
     }
     return result;
-  }, {})), 'month');
+  }, {}));
 
-  res.status(200).send(response);
+  // Could probably also be accomplished as part of
+  // the query but the complexity is not currently
+  // worth it for a side project
+  const noNulls = transposed.map((entry, idx) => {
+    entry['Total'] = 0;
+    Object.keys(entry).forEach(account => {
+      if (account !== 'bucket' && entry[account] === null) {
+        let searchIdx = idx - 1;
+        while (searchIdx >= 0 && transposed[searchIdx][account] === null) {
+          searchIdx -= 1;
+        }
+        if (searchIdx === -1) {
+          searchIdx = idx + 1;
+          while (searchIdx < transposed.length && transposed[searchIdx][account] === null) {
+            searchIdx += 1;
+          }
+        }
+        entry[account] = (searchIdx === -1 || searchIdx === transposed.length ? null : transposed[searchIdx][account]);
+      }
+
+      if (account !== 'bucket' && account !== 'Total' && entry[account] !== null) {
+        entry['Total'] += entry[account];
+      } 
+    });
+    return entry;
+  });
+
+  res.status(200).send(noNulls);
 };

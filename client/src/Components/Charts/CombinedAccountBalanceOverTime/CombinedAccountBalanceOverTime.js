@@ -8,13 +8,15 @@ import { useDateRange } from '../../../Hooks/useDateRange';
 import DateRanges from '../../../Utils/DateRanges';
 
 const { RangePicker } = DatePicker;
-const DEFAULT_RANGE = DateRanges.yearToDate();
+const DEFAULT_RANGE = DateRanges.pastYear();
 
 function CombinedAccountBalanceOverTime() {
 
-    const { dateStrings, setDates } = useDateRange(DEFAULT_RANGE);
-    const data = useCombinedAccountBalanceOverTime(dateStrings);
+    const { dateStrings, setDates, bucket } = useDateRange(DEFAULT_RANGE);
+    const data = useCombinedAccountBalanceOverTime(dateStrings, bucket);
     const accountOptions = useAccountOptions();
+
+    console.log(data);
 
     return (
         <div>
@@ -23,7 +25,7 @@ function CombinedAccountBalanceOverTime() {
                 <RangePicker
                     defaultValue={DEFAULT_RANGE}
                     ranges={{
-                        'Year to Date': DEFAULT_RANGE,
+                        'Past Year': DEFAULT_RANGE,
                         'This Month': DateRanges.thisMonth(),
                         'Last Month': DateRanges.lastMonth()
                     }}
@@ -36,14 +38,14 @@ function CombinedAccountBalanceOverTime() {
                 data={data}
                 margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
             >
-                <XAxis dataKey='month'/>
+                <XAxis dataKey='bucket'/>
                 <YAxis tickFormatter={(value) => accounting.formatMoney(value, { precision: 0})}/>
                 <CartesianGrid strokeDasharray='3 3'/>
                 <Tooltip formatter={(value) => accounting.formatMoney(value)}/>
                 { accountOptions.map(account => (
-                    <Line key={account.id} type='monotone' stroke={account.color} dataKey={account.name} />
+                    <Line key={account.id} connectNulls type='monotone' stroke={account.color} dataKey={account.name} />
                 ))}
-                <Line type='monotone' stroke='#999999' dataKey='Total'/>
+                <Line connectNulls type='monotone' stroke='#999999' dataKey='Total'/>
                 <Legend />
             </LineChart>
         </div>
