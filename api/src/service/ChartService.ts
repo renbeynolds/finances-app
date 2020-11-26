@@ -166,6 +166,42 @@ export const getTopSpendingCategoriesData = async(req: Request, res: Response): 
     ) ranking
   `);
 
+  res.status(200).send(rawData);
+};
+
+export const getIncomeVsExpenseData = async(req: Request, res: Response): Promise<void> => {
+
+  const startDate = req.query.startDate;
+  const endDate = req.query.endDate;
+
+  const manager = getManager();
+
+  const rawData = await manager.query(`
+    WITH nontransfers AS (
+      SELECT
+        id, amount, date
+      FROM
+        transaction
+      WHERE
+        id NOT IN (
+          SELECT "transactionId"
+          FROM transaction_tags_tag tt
+          LEFT JOIN tag t ON tt."tagId" = t.id
+          WHERE t.name = 'TRANSFER'
+        )
+    ),
+    calendar AS (
+      SELECT DATE_TRUNC('month', bucket::date) AS month FROM generate_series('${startDate}', '${endDate}', '1 month'::interval) bucket
+    )
+    SELECT
+      TO_CHAR(c.month, 'YYYY-MM') as month,
+      SUM(amount) AS "Total",
+      SUM (CASE WHEN amount > 0 THEN amount ELSE 0 END) AS "Income",
+      SUM (CASE WHEN amount < 0 THEN amount ELSE 0 END) AS "Expense"
+    FROM calendar c
+    LEFT JOIN nontransfers t ON DATE_TRUNC('month', t.date) = c.month
+    GROUP BY c.month
+  `);
 
   res.status(200).send(rawData);
 };

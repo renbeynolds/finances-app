@@ -71,3 +71,20 @@ export const requestFetchTopSpendingCategoriesData = createAsyncThunk(
     });
   }
 );
+
+export const requestFetchIncomeVsExpenseData = createAsyncThunk(
+  Constants.FETCH_INCOME_VS_EXPENSE_DATA,
+  (dateStrings, { rejectWithValue }) => {
+    let url = `/api/charts/income_vs_expense?startDate=${dateStrings[0]}&endDate=${dateStrings[1]}`;
+    const request = createRequest(url, 'GET', {});
+    return Axios(request).then((response) => {
+      return response.data;
+    }).catch((error) => {
+      if (error.response.data.errors) {
+        return rejectWithValue(error.response.data.errors);
+      } else {
+        return rejectWithValue([error.response.statusText]);
+      }
+    });
+  }
+);
