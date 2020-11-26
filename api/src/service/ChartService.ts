@@ -119,6 +119,7 @@ export const getTopSpendingCategoriesData = async(req: Request, res: Response): 
 
   const startDate = req.query.startDate;
   const endDate = req.query.endDate;
+  const numCategories = req.query.numCategories;
   const manager = getManager();
 
   const rawData = await manager.query(`
@@ -154,13 +155,13 @@ export const getTopSpendingCategoriesData = async(req: Request, res: Response): 
         FROM
           tag_ranks
           LEFT JOIN tag tag ON tag.id = tag_ranks.tagid
-        WHERE rn <= 5
+        WHERE rn <= ${numCategories}
         ORDER BY rn
       )
       UNION ALL
       SELECT NULL, 'OTHER', '#999999', SUM(data)
       FROM tag_ranks
-      WHERE rn > 7
+      WHERE rn > ${numCategories}
       HAVING COUNT(*) > 0
     ) ranking
   `);

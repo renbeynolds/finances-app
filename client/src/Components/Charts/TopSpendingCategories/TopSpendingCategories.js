@@ -1,5 +1,5 @@
 import accounting from 'accounting-js';
-import { DatePicker, Space, Typography } from 'antd';
+import { DatePicker, InputNumber, Space, Typography } from 'antd';
 import React, { useState } from 'react';
 import { Cell, Legend, Pie, PieChart } from 'recharts';
 import { useDateRange } from '../../../Hooks/useDateRange';
@@ -29,11 +29,13 @@ const renderLegend = (props) => {
 
 const { RangePicker } = DatePicker;
 const DEFAULT_RANGE = DateRanges.last30Days();
+const DEFAULT_NUM_CATEGORIES = 5;
 
 function TopSpendingCategories() {
 
   const { dateStrings, setDates } = useDateRange(DEFAULT_RANGE);
-  const data = useTopSpendingCategories(dateStrings);
+  const [numCategories, setNumCategories] = useState(DEFAULT_NUM_CATEGORIES);
+  const data = useTopSpendingCategories(dateStrings, numCategories);
   const [activeIndex, setActiveIndex] = useState(0);
 
   const getColor = (entry, idx) => {
@@ -57,6 +59,7 @@ function TopSpendingCategories() {
             }}
             onChange={(dates) => setDates(dates)}
         />
+        <InputNumber min={1} max={10} defaultValue={DEFAULT_NUM_CATEGORIES} onChange={setNumCategories} />
       </Space>
     	<PieChart width={600} height={300}>
         <Pie

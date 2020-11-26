@@ -57,8 +57,8 @@ export const requestFetchCombinedAccountBalanceOverTimeData = createAsyncThunk(
 
 export const requestFetchTopSpendingCategoriesData = createAsyncThunk(
   Constants.FETCH_TOP_SPENDING_CATEGORIES_DATA,
-  (dateStrings, { rejectWithValue }) => {
-    let url = `/api/charts/top_spending_categories?startDate=${dateStrings[0]}&endDate=${dateStrings[1]}`;
+  ({ dateStrings, numCategories }, { rejectWithValue }) => {
+    let url = `/api/charts/top_spending_categories?startDate=${dateStrings[0]}&endDate=${dateStrings[1]}&numCategories=${numCategories}`;
     const request = createRequest(url, 'GET', {});
     return Axios(request).then((response) => {
       return response.data;
