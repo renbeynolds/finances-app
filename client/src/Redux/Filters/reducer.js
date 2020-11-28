@@ -8,7 +8,8 @@ const filtersSlice = createSlice({
     accountId: null,
     tags: [],
     startDate: null,
-    endDate: null
+    endDate: null,
+    untagged: false
   },
   reducers: {
 
@@ -70,6 +71,14 @@ const filtersSlice = createSlice({
       state.endDate = null;
     },
 
+    // Untagged
+    setUntaggedFilter: {
+      reducer: (state, action) => {
+        state.untagged = action.payload
+      },
+      prepate: (untagged) => ({ payload: untagged })
+    }
+
   },
   extraReducers: {}
 });
@@ -84,7 +93,8 @@ export const {
   setStartDateFilter,
   clearStartDateFilter,
   setEndDateFilter,
-  clearEndDateFilter
+  clearEndDateFilter,
+  setUntaggedFilter
 } = filtersSlice.actions;
 
 export default filtersSlice.reducer;

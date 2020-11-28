@@ -64,11 +64,11 @@ function TransactionTable() {
       render: (text) => accounting.formatMoney(text)
     },
     {
-      title: 'Balance Correction',
+      title: 'Correction',
       dataIndex: 'balanceCorrection',
       render: (text, record) => <EditableCell
         dataIndex='balanceCorrection'
-        title='Balance Correction'
+        title='Correction'
         value={text}
         formatValue={(val) => accounting.formatMoney(val)}
         onSave={(newValue) => onEditBalanceCorrection(newValue, record)}

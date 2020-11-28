@@ -15,6 +15,9 @@ export const selectSearch = (state) => {
   if (state.filters.endDate) {
     search += `&endDate=${state.filters.endDate.format('YYYY-MM-DD')}`;
   }
+  if (state.filters.untagged) {
+    search += `&untagged=true`;
+  }
   if (search === '') { return null; }
   return search.substring(1);
 };
@@ -37,4 +40,8 @@ export const selectStartDateFilter = (state) => {
 
 export const selectEndDateFilter = (state) => {
   return state.filters.endDate;
+};
+
+export const selectUntaggedFilter = (state) => {
+  return state.filters.untagged;
 };

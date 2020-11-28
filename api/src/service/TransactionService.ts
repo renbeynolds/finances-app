@@ -10,6 +10,7 @@ export const getTransactions = async(req: Request, res: Response): Promise<void>
   const accountId = Number(req.query.accountId);
   const startDate = req.query.startDate;
   const endDate = req.query.endDate;
+  const untagged = req.query.untagged === 'true';
   const tagIds = req.query.tagIds ? JSON.parse(req.query.tagIds as string) : null;
 
   const qb = getRepository(Transaction).createQueryBuilder('trans')
@@ -18,6 +19,7 @@ export const getTransactions = async(req: Request, res: Response): Promise<void>
     .where(uploadId ? 'trans.upload = :uploadId' : '1=1', { uploadId })
     .andWhere(accountId ? 'upload.account = :accountId' : '1=1', { accountId })
     .andWhere(tagIds ? 'tag.id IN (:...tagIds)' : '1=1', { tagIds })
+    .andWhere(untagged ? 'tag.id IS NULL' : '1=1')
     .andWhere(startDate ? 'trans.date >= :startDate' : '1=1', { startDate })
     .andWhere(endDate ? 'trans.date <= :endDate' : '1=1', { endDate })
     .orderBy('trans.date', 'DESC')

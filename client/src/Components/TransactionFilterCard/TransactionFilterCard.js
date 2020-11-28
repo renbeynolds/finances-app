@@ -1,10 +1,10 @@
 import { CloseOutlined } from '@ant-design/icons';
-import { Button, Card, DatePicker, Select, Space, Tag } from 'antd';
+import { Button, Card, Checkbox, DatePicker, Select, Space, Tag } from 'antd';
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useAccountOptions } from '../../Hooks/useAccountOptions';
-import { clearEndDateFilter, clearStartDateFilter, clearUploadIdFilter, removeTagFilter, setAccountIdFilter, setEndDateFilter, setStartDateFilter } from '../../Redux/Filters/reducer';
-import { selectAccountIdFilter, selectEndDateFilter, selectStartDateFilter, selectTagsFilter, selectUploadIdFilter } from '../../Redux/Filters/selectors';
+import { clearEndDateFilter, clearStartDateFilter, clearUploadIdFilter, removeTagFilter, setAccountIdFilter, setEndDateFilter, setStartDateFilter, setUntaggedFilter } from '../../Redux/Filters/reducer';
+import { selectAccountIdFilter, selectEndDateFilter, selectStartDateFilter, selectTagsFilter, selectUntaggedFilter, selectUploadIdFilter } from '../../Redux/Filters/selectors';
 import DateRanges from '../../Utils/DateRanges';
 
 const { RangePicker } = DatePicker;
@@ -18,6 +18,7 @@ function TransactionFilterCard() {
   const accountId = useSelector(selectAccountIdFilter);
   const startDate = useSelector(selectStartDateFilter);
   const endDate = useSelector(selectEndDateFilter);
+  const untagged = useSelector(selectUntaggedFilter);
   const tags = useSelector(selectTagsFilter);
   const accountOptions = useAccountOptions();
 
@@ -35,9 +36,18 @@ function TransactionFilterCard() {
     }
   };
 
+  const onUntaggedChange = (e) => {
+    dispatch(setUntaggedFilter(e.target.checked));
+  };
+
   return (
     <Card bordered={true} style={{ width: '100%' }}>
       <Space direction='horizontal'>
+
+        <Checkbox
+          onChange={onUntaggedChange}
+          checked={untagged}
+        >Untagged</Checkbox>
 
         <Select
           style={{ width: 200 }}

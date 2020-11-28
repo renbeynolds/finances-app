@@ -1,5 +1,5 @@
 import { PlusOutlined } from '@ant-design/icons';
-import { AutoComplete, Input, Tag } from 'antd';
+import { AutoComplete, Input, Space, Tag } from 'antd';
 import PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -42,7 +42,7 @@ function EditableTagGroup(props) {
   };
 
   return (
-    <>
+    <Space direction='horizontal' size={1}>
       {transaction.tags.map((tag) => (
         <Tag
           key={tag.id}
@@ -71,7 +71,7 @@ function EditableTagGroup(props) {
         </Tag>
       )}
 
-    </>
+    </Space>
   );
 
 }
