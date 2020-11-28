@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router';
-import { setTransactionUploadIdFilter } from '../../../Redux/Filters/reducer';
+import { setUploadIdFilter } from '../../../Redux/Filters/reducer';
 import { resetRequest } from '../../../Redux/Requests/actions';
 import { createLoadingSelector, selectRequestStatus } from '../../../Redux/Requests/selectors';
 import { requestCreateUpload } from '../../../Redux/Uploads/actions';
@@ -32,7 +32,7 @@ function CreateUploadForm(props) {
         if (!request.error) {
           onOk();
           form.resetFields();
-          dispatch(setTransactionUploadIdFilter(request.payload.id));
+          dispatch(setUploadIdFilter(request.payload.id));
           history.push('/transactions');
         }
       });

@@ -3,7 +3,7 @@ import { AutoComplete, Input, Tag } from 'antd';
 import PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { addTransactionTagFilter } from '../../Redux/Filters/reducer';
+import { addTagFilter } from '../../Redux/Filters/reducer';
 import { requestFetchTags } from '../../Redux/Tags/actions';
 import { selectTagOptions } from '../../Redux/Tags/selectors';
 import { requestUpdateTransaction } from '../../Redux/Transactions/actions';
@@ -49,7 +49,7 @@ function EditableTagGroup(props) {
           color={tag.color}
           closable={true}
           onClose={() => onRemoveTag(tag.id)}
-          onClick={() => dispatch(addTransactionTagFilter(tag))}
+          onClick={() => dispatch(addTagFilter(tag))}
         >{tag.name}</Tag>
       ))}
 

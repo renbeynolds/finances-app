@@ -15,7 +15,7 @@ const renderLegend = (props) => {
     <>
       {
         payload.map((entry, index) => (
-          <div style={{ display: 'flex', color: '#333' }}>
+          <div key={index} style={{ display: 'flex', color: '#333' }}>
             <div style={{ backgroundColor: entry.color, width: '13px', height: '13px', marginTop: '4px' }} />
             <div style={{ paddingLeft: '8px', flexGrow: 1 }}>{entry.value}</div>
             <div style={{ paddingLeft: '8px' }}>{accounting.formatMoney(entry.payload.value)}</div>
@@ -33,7 +33,7 @@ const DEFAULT_NUM_CATEGORIES = 5;
 
 function TopSpendingCategories() {
 
-  const { dateStrings, setDates } = useDateRange(DEFAULT_RANGE);
+  const { dateStrings, setDates, dates } = useDateRange(DEFAULT_RANGE, true);
   const [numCategories, setNumCategories] = useState(DEFAULT_NUM_CATEGORIES);
   const data = useTopSpendingCategories(dateStrings, numCategories);
   const [activeIndex, setActiveIndex] = useState(0);
@@ -57,7 +57,8 @@ function TopSpendingCategories() {
                 'This Month': DateRanges.thisMonth(),
                 'Last Month': DateRanges.lastMonth()
             }}
-            onChange={(dates) => setDates(dates)}
+            value={dates}
+            onChange={(d) => setDates(d)}
         />
         <InputNumber min={1} max={10} defaultValue={DEFAULT_NUM_CATEGORIES} onChange={setNumCategories} />
       </Space>
@@ -74,7 +75,7 @@ function TopSpendingCategories() {
           activeShape={<ActivePieShape/>}
         >
           {
-          	data.map((entry, index) => <Cell fill={getColor(entry, index)}/>)
+          	data.map((entry, index) => <Cell key={index} fill={getColor(entry, index)}/>)
           }
         </Pie>
         <Legend
@@ -82,10 +83,6 @@ function TopSpendingCategories() {
           verticalAlign='middle'
           align='right'
           content={renderLegend}
-          
-          // formatter={(value, entry) => {
-          //   return <span>{`${value} ${accounting.formatMoney(entry.payload.value)}`}</span>;
-          // }}
         />
        </PieChart>
     </div>

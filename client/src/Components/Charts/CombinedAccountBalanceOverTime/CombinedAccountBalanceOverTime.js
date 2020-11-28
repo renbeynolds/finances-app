@@ -12,7 +12,7 @@ const DEFAULT_RANGE = DateRanges.last365Days();
 
 function CombinedAccountBalanceOverTime() {
 
-    const { dateStrings, setDates, bucket } = useDateRange(DEFAULT_RANGE);
+    const { dateStrings, dates, setDates, bucket } = useDateRange(DEFAULT_RANGE, true);
     const data = useCombinedAccountBalanceOverTime(dateStrings, bucket);
     const accountOptions = useAccountOptions();
 
@@ -27,6 +27,7 @@ function CombinedAccountBalanceOverTime() {
                         'This Month': DateRanges.thisMonth(),
                         'Last Month': DateRanges.lastMonth()
                     }}
+                    value={dates}
                     onChange={(dates) => setDates(dates)}
                 />
             </Space>

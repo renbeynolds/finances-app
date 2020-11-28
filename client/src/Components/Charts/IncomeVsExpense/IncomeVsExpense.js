@@ -1,9 +1,12 @@
 import accounting from 'accounting-js';
 import { DatePicker, Space, Typography } from 'antd';
-import React from 'react';
-import { Bar, CartesianGrid, ComposedChart, Legend, Line, ReferenceLine, Tooltip, XAxis, YAxis } from 'recharts';
+import moment from 'moment';
+import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { Bar, CartesianGrid, Cell, ComposedChart, Legend, Line, ReferenceLine, Tooltip, XAxis, YAxis } from 'recharts';
 import { useDateRange } from '../../../Hooks/useDateRange';
 import { useIncomeVsExpense } from '../../../Hooks/useIncomeVsExpense';
+import { setEndDateFilter, setStartDateFilter } from '../../../Redux/Filters/reducer';
 import DateRanges from '../../../Utils/DateRanges';
 
 const { RangePicker } = DatePicker;
@@ -11,8 +14,16 @@ const DEFAULT_RANGE = DateRanges.last365Days();
 
 function IncomeVsExpense() {
 
+  const dispatch = useDispatch();
   const { dateStrings, setDates } = useDateRange(DEFAULT_RANGE);
+  const [activeMonth, setActiveMonth] = useState(null);
   const data = useIncomeVsExpense(dateStrings);
+
+  const onBarClick = (e) => {
+    setActiveMonth(e.month);
+    dispatch(setStartDateFilter(moment(`${e.month}-01`)));
+    dispatch(setEndDateFilter(moment(`${e.month}-01`).endOf('month')));
+  };
 
   return (
     <div>
@@ -27,15 +38,31 @@ function IncomeVsExpense() {
         />
       </Space>
     	<ComposedChart width={600} height={300} data={data} stackOffset='sign'
-              margin={{top: 5, right: 30, left: 20, bottom: 5}}>
+              margin={{top: 5, right: 30, left: 20, bottom: 5}} >
         <CartesianGrid strokeDasharray='3 3'/>
         <XAxis dataKey='month'/>
         <YAxis tickFormatter={(value) => accounting.formatMoney(value, { precision: 0})}/>
         <Tooltip formatter={(value) => accounting.formatMoney(value)}/>
         <Legend />
         <ReferenceLine y={0} stroke='#000'/>
-        <Bar dataKey='Income' fill='#23b834' stackId='stack' />
-        <Bar dataKey='Expense' fill='#db3d3d' stackId='stack' />
+        <Bar dataKey='Income' fill='rgb(40, 201, 56)' stackId='stack' onClick={onBarClick}>
+          {
+          	data.map((entry, index) => {
+              const color = 'rgb(40, 201, 56)';
+              const inactiveColor = 'rgba(40, 201, 56, .5)'
+            	return <Cell key={index} style={{ cursor: 'pointer' }} fill={(entry.month === activeMonth || !activeMonth) ? color : inactiveColor} />;
+            })
+          }
+        </Bar>
+        <Bar dataKey='Expense' fill='rgb(222, 53, 53)' stackId='stack' onClick={onBarClick}>
+          {
+          	data.map((entry, index) => {
+              const color = 'rgb(222, 53, 53)';
+              const inactiveColor = 'rgba(222, 53, 53, .5)'
+            	return <Cell key={index} style={{ cursor: 'pointer' }} fill={(entry.month === activeMonth || !activeMonth) ? color : inactiveColor} />;
+            })
+          }
+        </Bar>
         <Line dataKey='Total' stroke='#000'/>
       </ComposedChart>
     </div>
