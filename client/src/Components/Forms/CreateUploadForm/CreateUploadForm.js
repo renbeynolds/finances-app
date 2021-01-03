@@ -12,7 +12,7 @@ import UploadConstants from '../../../Redux/Uploads/constants';
 
 function CreateUploadForm(props) {
 
-  const { accountId, isVisible, onCancel, onOk } = props;
+  const { accountId, isVisible, onCancel, onOk, accountName } = props;
 
   const dispatch = useDispatch();
   const history = useHistory();
@@ -52,7 +52,7 @@ function CreateUploadForm(props) {
   return (
     <Modal
       visible={isVisible}
-      title='Upload Transactions'
+      title={`Upload Transactions to ${accountName}`}
       okText='Submit'
       cancelText='Cancel'
       onCancel={onAbort}
@@ -117,6 +117,7 @@ function CreateUploadForm(props) {
 
 CreateUploadForm.propTypes = {
   accountId: PropTypes.number.isRequired,
+  accountName: PropTypes.string.isRequired,
   onCancel: PropTypes.func.isRequired,
   onOk: PropTypes.func.isRequired,
   isVisible: PropTypes.bool.isRequired

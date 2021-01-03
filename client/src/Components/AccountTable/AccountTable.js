@@ -16,7 +16,7 @@ function AccountTable() {
   const dispatch = useDispatch();
   const history = useHistory();
   const accounts = useSelector(selectAccountsArray);
-  const [createUploadFormVisible, setCreateUploadFormVisible] = useState(false);
+  const [uploadAccountId, setUploadAccountId] = useState(-1);
 
   useEffect(() => {
     dispatch(requestFetchAccounts());
@@ -35,18 +35,19 @@ function AccountTable() {
     },
     {
       dataIndex: 'id',
-      render: (id) => (
+      render: (id, account) => (
         <>
           <Button
             type='primary' shape='round'
             icon={<FileAddOutlined />} size='default'
-            onClick={() => setCreateUploadFormVisible(true)}
+            onClick={() => setUploadAccountId(id)}
           >Upload Transactions</Button>
           <CreateUploadForm
-            isVisible={createUploadFormVisible}
+            isVisible={uploadAccountId === id}
             accountId={id}
-            onCancel={() => setCreateUploadFormVisible(false)}
-            onOk={() => setCreateUploadFormVisible(false)}
+            accountName={account.name}
+            onCancel={() => setUploadAccountId(-1)}
+            onOk={() => setUploadAccountId(-1)}
           />
         </>
       )
