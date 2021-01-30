@@ -45,6 +45,10 @@ export const selectEndDateFilter = (state) => {
   return state.filters.endDate;
 };
 
+export const selectDescriptionFilter = (state) => {
+  return state.filters.description;
+};
+
 export const selectUntaggedFilter = (state) => {
   return state.filters.untagged;
 };

@@ -10,6 +10,7 @@ function RecurringTransactionTable() {
   const dispatch = useDispatch();
 
   const [recurring, setRecurring] = useState(false);
+  const [expandedRowKeys, setExpandedRowKeys] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -20,6 +21,11 @@ function RecurringTransactionTable() {
   }, [dispatch]);
 
   const onExpandRow = (expanded, record) => {
+    if (expanded) {
+      setExpandedRowKeys([record.description]);
+    } else {
+      setExpandedRowKeys([]);
+    }
     dispatch(setDescriptionFilter(record.description));
   };
 
@@ -36,6 +42,7 @@ function RecurringTransactionTable() {
       dataSource={recurring}
       rowKey='description'
       expandable={{
+        expandedRowKeys: expandedRowKeys,
         onExpand: onExpandRow,
         rowExpandable: () => true,
         expandedRowRender: record => (

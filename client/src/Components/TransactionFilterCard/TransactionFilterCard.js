@@ -3,8 +3,8 @@ import { Button, Card, Checkbox, DatePicker, Select, Space, Tag } from 'antd';
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useAccountOptions } from '../../Hooks/useAccountOptions';
-import { clearEndDateFilter, clearStartDateFilter, clearUploadIdFilter, removeTagFilter, setAccountIdFilter, setEndDateFilter, setStartDateFilter, setUntaggedFilter } from '../../Redux/Filters/reducer';
-import { selectAccountIdFilter, selectEndDateFilter, selectStartDateFilter, selectTagsFilter, selectUntaggedFilter, selectUploadIdFilter } from '../../Redux/Filters/selectors';
+import { clearDescriptionFilter, clearEndDateFilter, clearStartDateFilter, clearUploadIdFilter, removeTagFilter, setAccountIdFilter, setEndDateFilter, setStartDateFilter, setUntaggedFilter } from '../../Redux/Filters/reducer';
+import { selectAccountIdFilter, selectDescriptionFilter, selectEndDateFilter, selectStartDateFilter, selectTagsFilter, selectUntaggedFilter, selectUploadIdFilter } from '../../Redux/Filters/selectors';
 import DateRanges from '../../Utils/DateRanges';
 
 const { RangePicker } = DatePicker;
@@ -19,6 +19,7 @@ function TransactionFilterCard() {
   const startDate = useSelector(selectStartDateFilter);
   const endDate = useSelector(selectEndDateFilter);
   const untagged = useSelector(selectUntaggedFilter);
+  const description = useSelector(selectDescriptionFilter);
   const tags = useSelector(selectTagsFilter);
   const accountOptions = useAccountOptions();
 
@@ -63,9 +64,9 @@ function TransactionFilterCard() {
         <RangePicker
           defaultValue={[startDate, endDate]}
           ranges={{
-              'Last Month': DateRanges.lastMonth(),
-              'Last 30 Days': DateRanges.last30Days(),
-              'Past Year': DateRanges.last365Days(),
+            'Last Month': DateRanges.lastMonth(),
+            'Last 30 Days': DateRanges.last30Days(),
+            'Past Year': DateRanges.last365Days(),
           }}
           onChange={onDateRangeChange}
         />
@@ -75,6 +76,13 @@ function TransactionFilterCard() {
             icon={<CloseOutlined/>}
             onClick={() => dispatch(clearUploadIdFilter())}
           >Just Uploaded</Button>
+        }
+
+        { description &&
+          <Button
+            icon={<CloseOutlined/>}
+            onClick={() => dispatch(clearDescriptionFilter())}
+          >{`Description: ${description.substring(0, 12)}`}</Button>
         }
 
         { tags.length > 0 && tags.map((tag, idx) => (

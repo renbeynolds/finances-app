@@ -1,4 +1,4 @@
-import { BankOutlined, DollarOutlined, LineChartOutlined, TagsOutlined } from '@ant-design/icons';
+import { BankOutlined, DollarOutlined, LineChartOutlined, SyncOutlined, TagsOutlined } from '@ant-design/icons';
 import { Layout, Menu } from 'antd';
 import React, { useState } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
@@ -45,6 +45,13 @@ function Sidebar() {
                     onClick={() => history.push('/transactions')}
                 >
                     Transactions
+                </Menu.Item>
+                <Menu.Item
+                    key='/recurring'
+                    icon={<SyncOutlined />}
+                    onClick={() => history.push('/recurring')}
+                >
+                    Recurring
                 </Menu.Item>
             </Menu>
         </Sider>
