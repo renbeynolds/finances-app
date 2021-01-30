@@ -15,6 +15,9 @@ export const selectSearch = (state) => {
   if (state.filters.endDate) {
     search += `&endDate=${state.filters.endDate.format('YYYY-MM-DD')}`;
   }
+  if (state.filters.description) {
+    search += `&description=${state.filters.description}`;
+  }
   if (state.filters.untagged) {
     search += `&untagged=true`;
   }

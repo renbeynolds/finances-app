@@ -1,5 +1,5 @@
 import accounting from 'accounting-js';
-import { Space, Table } from 'antd';
+import { Table } from 'antd';
 import cx from 'classnames';
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -10,13 +10,12 @@ import TransactionConstants from '../../Redux/Transactions/constants';
 import { selectTransactionsArray } from '../../Redux/Transactions/selectors';
 import EditableCell from '../EditableCell/EditableCell';
 import { EditableTagGroup } from '../EditableTagGroup';
-import { TransactionFilterCard } from '../TransactionFilterCard';
 import './styles.scss';
 
 const DEFAULT_PAGE_SIZE = 10;
 const DEFAULT_CURRENT_PAGE = 1;
 
-function TransactionTable() {
+function TransactionTable({ size, hideColumns }) {
 
   const dispatch = useDispatch();
   const requestStatus = useSelector(state => selectRequestStatus(state, TransactionConstants.FETCH_TRANSACTIONS));
@@ -97,28 +96,31 @@ function TransactionTable() {
   };
 
   return (
-    <Space direction='vertical' style={{ width: '100%' }}>
-      <TransactionFilterCard />
-      <Table
-        columns={columns}
-        dataSource={transactions}
-        rowKey='id'
-        rowClassName={(record) => cx({
-          'TransactionTable__expense': record.amount < 0,
-          'TransactionTable__allowance': record.amount > 0,
-          'TransactionTable__positive-balance': record.balance > 0,
-          'TransactionTable__negative-balance': record.balance < 0
-        })}
-        pagination={{
-          ...requestStatus.pagination,
-          defaultCurrent: DEFAULT_CURRENT_PAGE,
-          defaultPageSize: DEFAULT_PAGE_SIZE
-        }}
-        loading={requestStatus.loading}
-        onChange={handleTableChange}
-      />
-    </Space>
+    <Table
+      columns={columns.filter(c => !hideColumns.includes(c.title))}
+      dataSource={transactions}
+      rowKey='id'
+      size={size}
+      rowClassName={(record) => cx({
+        'TransactionTable__expense': record.amount < 0,
+        'TransactionTable__allowance': record.amount > 0,
+        'TransactionTable__positive-balance': record.balance > 0,
+        'TransactionTable__negative-balance': record.balance < 0
+      })}
+      pagination={{
+        ...requestStatus.pagination,
+        defaultCurrent: DEFAULT_CURRENT_PAGE,
+        defaultPageSize: DEFAULT_PAGE_SIZE
+      }}
+      loading={requestStatus.loading}
+      onChange={handleTableChange}
+    />
   );
+}
+
+TransactionTable.defaultProps = {
+  size: 'default',
+  hideColumns: []
 }
 
 export default TransactionTable;

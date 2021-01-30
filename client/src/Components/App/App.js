@@ -1,12 +1,14 @@
-import { Layout } from 'antd';
+import { Layout, Space } from 'antd';
 import React from 'react';
 import { Route } from 'react-router-dom';
 import { AccountTable } from '../AccountTable';
 import { AccountForm } from '../Forms/AccountForm';
 import { TagForm } from '../Forms/TagForm';
 import { Overview } from '../Overview';
+import { RecurringTransactionTable } from '../RecurringTransactionTable';
 import { Sidebar } from '../Sidebar';
 import { TagTable } from '../TagTable';
+import { TransactionFilterCard } from '../TransactionFilterCard';
 import { TransactionTable } from '../TransactionTable';
 import './styles.scss';
 
@@ -25,7 +27,13 @@ function App() {
           <Route exact path='/tags'><TagTable /></Route>
           <Route exact path='/tags/create'><TagForm /></Route>
           <Route exact path='/tags/edit/:tagId'><TagForm /></Route>
-          <Route exact path='/transactions'><TransactionTable /></Route>
+          <Route exact path='/transactions'>
+            <Space direction='vertical' style={{ width: '100%' }}>
+              <TransactionFilterCard />
+              <TransactionTable />
+            </Space>
+          </Route>
+          <Route exact path='/recurring'><RecurringTransactionTable /></Route>
         </Content>
         <Footer className='App__footer'>Finances App ©2020 Ben Reynolds</Footer>
       </Layout>

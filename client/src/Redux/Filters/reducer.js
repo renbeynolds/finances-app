@@ -71,6 +71,17 @@ const filtersSlice = createSlice({
       state.endDate = null;
     },
 
+    // Description
+    setDescriptionFilter: {
+      reducer: (state, action) => {
+        state.description = action.payload;
+      },
+      prepare: (description) => ({ payload: description })
+    },
+    clearDescriptionFilter(state) {
+      state.description = null;
+    },
+
     // Untagged
     setUntaggedFilter: {
       reducer: (state, action) => {
@@ -94,7 +105,9 @@ export const {
   clearStartDateFilter,
   setEndDateFilter,
   clearEndDateFilter,
-  setUntaggedFilter
+  setUntaggedFilter,
+  setDescriptionFilter,
+  clearDescriptionFilter
 } = filtersSlice.actions;
 
 export default filtersSlice.reducer;
