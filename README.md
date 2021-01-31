@@ -15,3 +15,9 @@
   > cd client
   > npm run generate component
   ```
+
+* Generating a Migration
+  ```bash
+  > cd api
+  > npm run typeorm -- migration:generate -n PostRefactoring
+  ```

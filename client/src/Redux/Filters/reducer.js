@@ -9,7 +9,8 @@ const filtersSlice = createSlice({
     tags: [],
     startDate: null,
     endDate: null,
-    untagged: false
+    untagged: false,
+    recurrenceId: null
   },
   reducers: {
 
@@ -71,15 +72,15 @@ const filtersSlice = createSlice({
       state.endDate = null;
     },
 
-    // Description
-    setDescriptionFilter: {
+    // RecurrenceId
+    setRecurrenceIdFilter: {
       reducer: (state, action) => {
-        state.description = action.payload;
+        state.recurrenceId = action.payload;
       },
-      prepare: (description) => ({ payload: description })
+      prepare: (recurrenceId) => ({ payload: recurrenceId })
     },
-    clearDescriptionFilter(state) {
-      state.description = null;
+    clearRecurrenceIdFilter(state) {
+      state.recurrenceId = null;
     },
 
     // Untagged
@@ -106,8 +107,8 @@ export const {
   setEndDateFilter,
   clearEndDateFilter,
   setUntaggedFilter,
-  setDescriptionFilter,
-  clearDescriptionFilter
+  setRecurrenceIdFilter,
+  clearRecurrenceIdFilter
 } = filtersSlice.actions;
 
 export default filtersSlice.reducer;

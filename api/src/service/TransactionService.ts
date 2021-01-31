@@ -10,7 +10,7 @@ export const getTransactions = async(req: Request, res: Response): Promise<void>
   const accountId = Number(req.query.accountId);
   const startDate = req.query.startDate;
   const endDate = req.query.endDate;
-  const description = req.query.description;
+  const recurrenceId = Number(req.query.recurrenceId);
   const untagged = req.query.untagged === 'true';
   const tagIds = req.query.tagIds ? JSON.parse(req.query.tagIds as string) : null;
 
@@ -23,7 +23,7 @@ export const getTransactions = async(req: Request, res: Response): Promise<void>
     .andWhere(untagged ? 'tag.id IS NULL' : '1=1')
     .andWhere(startDate ? 'trans.date >= :startDate' : '1=1', { startDate })
     .andWhere(endDate ? 'trans.date <= :endDate' : '1=1', { endDate })
-    .andWhere(description ? 'trans.description = :description' : '1=1', { description })
+    .andWhere(recurrenceId ? 'trans.recurrenceId = :recurrenceId' : '1=1', { recurrenceId })
     .orderBy('trans.date', 'DESC')
     .addOrderBy('trans.id', 'DESC')
     .skip(req.pagination.offset)

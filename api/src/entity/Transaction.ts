@@ -8,6 +8,9 @@ export class Transaction {
     @PrimaryGeneratedColumn()
     id: number;
 
+    @Column('integer')
+    recurrenceId: number;
+
     @Column('date')
     date: Date;
 

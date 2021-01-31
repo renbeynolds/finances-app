@@ -15,8 +15,8 @@ export const selectSearch = (state) => {
   if (state.filters.endDate) {
     search += `&endDate=${state.filters.endDate.format('YYYY-MM-DD')}`;
   }
-  if (state.filters.description) {
-    search += `&description=${state.filters.description}`;
+  if (state.filters.recurrenceId) {
+    search += `&recurrenceId=${state.filters.recurrenceId}`;
   }
   if (state.filters.untagged) {
     search += `&untagged=true`;
@@ -45,8 +45,8 @@ export const selectEndDateFilter = (state) => {
   return state.filters.endDate;
 };
 
-export const selectDescriptionFilter = (state) => {
-  return state.filters.description;
+export const selectRecurrenceIdFilter = (state) => {
+  return state.filters.recurrenceId;
 };
 
 export const selectUntaggedFilter = (state) => {

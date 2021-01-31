@@ -1,7 +1,7 @@
 import { Table } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { setDescriptionFilter } from '../../Redux/Filters/reducer';
+import { setRecurrenceIdFilter } from '../../Redux/Filters/reducer';
 import { requestFetchRecurringTransactions } from '../../Redux/RecurringTransactions/actions';
 import { TransactionTable } from '../TransactionTable';
 
@@ -26,7 +26,7 @@ function RecurringTransactionTable() {
     } else {
       setExpandedRowKeys([]);
     }
-    dispatch(setDescriptionFilter(record.description));
+    dispatch(setRecurrenceIdFilter(record.recurrenceId));
   };
 
   const columns = [
