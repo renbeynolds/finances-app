@@ -32,7 +32,6 @@ export const createUpload = async(req: Request, res: Response): Promise<void> =>
         transaction.balance = Number(account.balance) + Number(transaction.amount);
         account.balance = Number(account.balance) + Number(transaction.amount);
 
-
         let recurrenceId = await selectRecurrenceIdByDescription(transaction.description);
         if (recurrenceId) {
           transaction.recurrenceId = recurrenceId;
@@ -42,7 +41,6 @@ export const createUpload = async(req: Request, res: Response): Promise<void> =>
           transaction.recurrenceId = ++maxRecurrenceId;
           recurrenceIdsMap[transaction.description] = transaction.recurrenceId;
         }
-
 
         if (req.body.preTagged === 'true') {
           const tag = _.find(tags, { name: obj[req.body.tagHeader].toUpperCase() });

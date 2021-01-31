@@ -1,5 +1,7 @@
 import { Request, Response } from "express";
-import { getManager } from "typeorm";
+import { getConnection, getManager } from "typeorm";
+import { SuppressedRecurrence } from "../entity/SuppressedRecurrence";
+import { Transaction } from '../entity/Transaction';
 
 export const getRecurringTransactions = async(req: Request, res: Response): Promise<void> => {
 
@@ -8,26 +10,46 @@ export const getRecurringTransactions = async(req: Request, res: Response): Prom
     const rawData = await manager.query(`
         WITH transactions_with_date_diff AS (
             SELECT
-                date - LAG(date) OVER(PARTITION BY description ORDER BY date) AS date_diff,
+                date - LAG(date) OVER(PARTITION BY "recurrenceId" ORDER BY date) AS date_diff,
                 *
             FROM transaction
         )
         SELECT
-            description,
-            "recurrenceId",
-            COUNT(*) AS transactions_count,
-            MIN(date) AS subscription_started,
-            MAX(date) AS latest_transaction,
-            SUM(amount::numeric) AS total_amount
-        FROM transactions_with_date_diff
+            t."recurrenceId",
+            (SELECT description FROM transaction t2 WHERE t2."recurrenceId" = t."recurrenceId" LIMIT 1) AS description
+        FROM transactions_with_date_diff t
         WHERE
-            date_diff IS NOT NULL
-            AND date_diff BETWEEN 25 AND 35
-        GROUP BY 1, 2
+            t.date_diff IS NOT NULL
+            AND t.date_diff BETWEEN 25 AND 35
+            AND NOT EXISTS (SELECT * FROM suppressed_recurrence sr WHERE sr."recurrenceId" = t."recurrenceId")
+        GROUP BY t."recurrenceId"
         HAVING COUNT(*) > 2
-        ORDER BY 3 DESC
     `);
 
     res.status(200).send(rawData);
 
-}
+};
+
+export const suppressRecurringTransactions = async(req: Request, res: Response): Promise<void> => {
+    const recurrenceIds = req.body.recurrenceIds;
+    await getConnection()
+        .createQueryBuilder()
+        .insert()
+        .into(SuppressedRecurrence)
+        .values(recurrenceIds.map(r => ({ recurrenceId: r })))
+        .execute();
+    res.status(200).send(recurrenceIds);
+};
+
+export const linkRecurringTransactions = async(req: Request, res: Response): Promise<void> => {
+    const recurrenceIds = req.body.recurrenceIds;
+    await getConnection()
+        .createQueryBuilder()
+        .update(Transaction)
+        .set({ 
+            recurrenceId: Math.min(...recurrenceIds), 
+        })
+        .where('"recurrenceId" IN (:...recurrenceIds)', { recurrenceIds })
+        .execute();
+    res.status(200).send();
+};

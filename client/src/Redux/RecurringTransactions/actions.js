@@ -19,3 +19,37 @@ export const requestFetchRecurringTransactions = createAsyncThunk(
     });
   }
 );
+
+export const requestSuppressRecurringTransactions = createAsyncThunk(
+  Constants.SUPPRESS_RECURRING_TRANSACTIONS,
+  (recurrenceIds, { rejectWithValue }) => {
+    let url = '/api/recurring_transactions/suppress';
+    const request = createRequest(url, 'PUT', { recurrenceIds });
+    return Axios(request).then((response) => {
+      return response.data;
+    }).catch((error) => {
+      if (error.response.data.errors) {
+        return rejectWithValue(error.response.data.errors);
+      } else {
+        return rejectWithValue([error.response.statusText]);
+      }
+    });
+  }
+);
+
+export const requestLinkRecurringTransactions = createAsyncThunk(
+  Constants.LINK_RECURRING_TRANSACTIONS,
+  (recurrenceIds, { rejectWithValue }) => {
+    let url = '/api/recurring_transactions/link';
+    const request = createRequest(url, 'PUT', { recurrenceIds });
+    return Axios(request).then((response) => {
+      return response.data;
+    }).catch((error) => {
+      if (error.response.data.errors) {
+        return rejectWithValue(error.response.data.errors);
+      } else {
+        return rejectWithValue([error.response.statusText]);
+      }
+    });
+  }
+);
