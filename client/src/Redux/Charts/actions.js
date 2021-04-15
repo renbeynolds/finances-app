@@ -3,24 +3,6 @@ import Axios from 'axios';
 import createRequest from '../../Utils/createRequest';
 import Constants from './constants';
 
-export const requestFetchSpendingOverTimeData = createAsyncThunk(
-  Constants.FETCH_SPENDING_OVER_TIME_DATA,
-  ({ search }, { rejectWithValue }) => {
-    let url = '/api/charts/spending_over_time';
-    if (search) { url += `?${search}`; }
-    const request = createRequest(url, 'GET', {});
-    return Axios(request).then((response) => {
-      return response.data;
-    }).catch((error) => {
-      if (error.response.data.errors) {
-        return rejectWithValue(error.response.data.errors);
-      } else {
-        return rejectWithValue([error.response.statusText]);
-      }
-    });
-  }
-);
-
 export const requestFetchAccountBalanceOverTimeData = createAsyncThunk(
   Constants.FETCH_ACCOUNT_BALANCE_OVER_TIME_DATA,
   (accountId, { rejectWithValue }) => {

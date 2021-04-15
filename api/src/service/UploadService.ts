@@ -16,9 +16,6 @@ export const createUpload = async(req: Request, res: Response): Promise<void> =>
   const csvData = req.files['file'].data.toString('utf8');
   csvtojson({ flatKeys: true }).fromString(csvData).then(async json => {
     await getManager().transaction(async transactionalEntityManager => {
-      let maxRecurrenceId = await selectMaxRecurrenceId();
-      console.log(maxRecurrenceId);
-      const recurrenceIdsMap = {};
       const transactions: Transaction[] = [];
       for (let i = json.length - 1; i >= 0; i--) {
         const obj = json[i];
@@ -31,16 +28,6 @@ export const createUpload = async(req: Request, res: Response): Promise<void> =>
         if (account.amountsInverted) { transaction.amount = -1 * transaction.amount; }
         transaction.balance = Number(account.balance) + Number(transaction.amount);
         account.balance = Number(account.balance) + Number(transaction.amount);
-
-        let recurrenceId = await selectRecurrenceIdByDescription(transaction.description);
-        if (recurrenceId) {
-          transaction.recurrenceId = recurrenceId;
-        } else if (recurrenceIdsMap[transaction.description]) {
-          transaction.recurrenceId = recurrenceIdsMap[transaction.description];
-        } else {
-          transaction.recurrenceId = ++maxRecurrenceId;
-          recurrenceIdsMap[transaction.description] = transaction.recurrenceId;
-        }
 
         if (req.body.preTagged === 'true') {
           const tag = _.find(tags, { name: obj[req.body.tagHeader].toUpperCase() });
@@ -74,16 +61,3 @@ export const createUpload = async(req: Request, res: Response): Promise<void> =>
 
   });
 };
-
-async function selectMaxRecurrenceId(): Promise<number> {
-  const qb = getRepository(Transaction).createQueryBuilder('trans')
-    .select('MAX(trans.recurrenceId)', 'max');
-  return (await qb.getRawOne()).max;
-}
-
-async function selectRecurrenceIdByDescription(description: string): Promise<number> {
-  const qb = getRepository(Transaction).createQueryBuilder('trans')
-    .where('trans.description = :description', { description });
-  const matchedTransaction = await qb.getOne();
-  return matchedTransaction ? matchedTransaction.recurrenceId : null;
-}

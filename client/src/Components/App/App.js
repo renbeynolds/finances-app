@@ -5,7 +5,6 @@ import { AccountTable } from '../AccountTable';
 import { AccountForm } from '../Forms/AccountForm';
 import { TagForm } from '../Forms/TagForm';
 import { Overview } from '../Overview';
-import { RecurringTransactionTable } from '../RecurringTransactionTable';
 import { Sidebar } from '../Sidebar';
 import { TagTable } from '../TagTable';
 import { TransactionFilterCard } from '../TransactionFilterCard';
@@ -33,7 +32,6 @@ function App() {
               <TransactionTable />
             </Space>
           </Route>
-          <Route exact path='/recurring'><RecurringTransactionTable /></Route>
         </Content>
         <Footer className='App__footer'>Finances App ©2020 Ben Reynolds</Footer>
       </Layout>
