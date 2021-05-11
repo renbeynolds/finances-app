@@ -1,22 +1,16 @@
 import { EditOutlined, PlusCircleOutlined } from '@ant-design/icons';
 import { Button, Table, Tag } from 'antd';
-import React, { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import React from 'react';
+import { useSelector } from 'react-redux';
 import { useHistory } from 'react-router';
-import { requestFetchTags } from '../../Redux/Tags/actions';
 import { selectTagsArray } from '../../Redux/Tags/selectors';
 import { RegexesList } from '../RegexesList';
 import './styles.scss';
 
 function TagTable() {
 
-  const dispatch = useDispatch();
   const history = useHistory();
   const tags = useSelector(selectTagsArray);
-
-  useEffect(() => {
-    dispatch(requestFetchTags());
-  }, [dispatch]);
 
   const columns = [
     {

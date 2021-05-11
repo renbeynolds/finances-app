@@ -1,10 +1,9 @@
 import { PlusOutlined } from '@ant-design/icons';
 import { AutoComplete, Input, Space, Tag } from 'antd';
 import PropTypes from 'prop-types';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { addTagFilter } from '../../Redux/Filters/reducer';
-import { requestFetchTags } from '../../Redux/Tags/actions';
+import { addTagIdFilter } from '../../Redux/Filters/reducer';
 import { selectTagOptions } from '../../Redux/Tags/selectors';
 import { requestUpdateTransaction } from '../../Redux/Transactions/actions';
 import './styles.scss';
@@ -16,13 +15,6 @@ function EditableTagGroup(props) {
   const dispatch = useDispatch();
   const [addVisible, setAddVisible] = useState(false);
   const tagNameOptions = useSelector(state => selectTagOptions(state, transaction.tags));
-
-  // Fetch available tags when adding one to a transaction
-  useEffect(() => {
-    if (addVisible) {
-      dispatch(requestFetchTags());
-    }
-  }, [dispatch, addVisible]);
 
   const onAddTag = (value, option) => {
     dispatch(requestUpdateTransaction({
@@ -49,7 +41,7 @@ function EditableTagGroup(props) {
           color={tag.color}
           closable={true}
           onClose={() => onRemoveTag(tag.id)}
-          onClick={() => dispatch(addTagFilter(tag))}
+          onClick={() => dispatch(addTagIdFilter(tag.id))}
         >{tag.name}</Tag>
       ))}
 

@@ -1,9 +1,11 @@
 import accounting from 'accounting-js';
 import { DatePicker, InputNumber, Space, Typography } from 'antd';
 import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { Cell, Legend, Pie, PieChart } from 'recharts';
 import { useDateRange } from '../../../Hooks/useDateRange';
 import { useTopSpendingCategories } from '../../../Hooks/useTopSpendingCategories';
+import { setSingleTagIdFilter } from '../../../Redux/Filters/reducer';
 import ChartColors from '../../../Utils/ChartColors';
 import DateRanges from '../../../Utils/DateRanges';
 import ActivePieShape from '../ActivePieShape/ActivePieShape';
@@ -33,6 +35,7 @@ const DEFAULT_NUM_CATEGORIES = 5;
 
 function TopSpendingCategories() {
 
+  const dispatch = useDispatch();
   const { dateStrings, setDates, dates } = useDateRange(DEFAULT_RANGE, true);
   const [numCategories, setNumCategories] = useState(DEFAULT_NUM_CATEGORIES);
   const data = useTopSpendingCategories(dateStrings, numCategories);
@@ -43,6 +46,11 @@ function TopSpendingCategories() {
       return ChartColors[idx];
     }
     return entry.color;
+  };
+
+  const onSliceClick = (e) => {
+    console.log(e.payload.payload.tagId);
+    dispatch(setSingleTagIdFilter(e.payload.payload.tagId));
   };
 
   return (
@@ -71,6 +79,7 @@ function TopSpendingCategories() {
           paddingAngle={1}
           dataKey='data'
           onMouseEnter={(data, idx) => setActiveIndex(idx)}
+          onClick={onSliceClick}
           activeIndex={activeIndex}
           activeShape={<ActivePieShape/>}
         >

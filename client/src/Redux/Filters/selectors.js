@@ -6,8 +6,8 @@ export const selectSearch = (state) => {
   if (state.filters.accountId) {
     search += `&accountId=${state.filters.accountId}`;
   }
-  if (state.filters.tags.length !== 0) {
-    search += `&tagIds=${JSON.stringify(state.filters.tags.map(t => t.id))}`;
+  if (state.filters.tagIds.length !== 0) {
+    search += `&tagIds=${JSON.stringify(state.filters.tagIds)}`;
   }
   if (state.filters.startDate) {
     search += `&startDate=${state.filters.startDate.format('YYYY-MM-DD')}`;
@@ -33,9 +33,13 @@ export const selectAccountIdFilter = (state) => {
   return state.filters.accountId;
 };
 
-export const selectTagsFilter = (state) => {
-  return state.filters.tags;
+export const selectTagIdsFilter = (state) => {
+  return state.filters.tagIds;
 };
+
+export const selectTagIdsFilterTags = (state) => {
+  return state.filters.tagIds.map(tagId => state.tags[tagId]);
+}
 
 export const selectStartDateFilter = (state) => {
   return state.filters.startDate;

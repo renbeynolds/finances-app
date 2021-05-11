@@ -3,8 +3,8 @@ import { Button, Card, Checkbox, DatePicker, Select, Space, Tag } from 'antd';
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useAccountOptions } from '../../Hooks/useAccountOptions';
-import { clearEndDateFilter, clearRecurrenceIdFilter, clearStartDateFilter, clearUploadIdFilter, removeTagFilter, setAccountIdFilter, setEndDateFilter, setStartDateFilter, setUntaggedFilter } from '../../Redux/Filters/reducer';
-import { selectAccountIdFilter, selectEndDateFilter, selectRecurrenceIdFilter, selectStartDateFilter, selectTagsFilter, selectUntaggedFilter, selectUploadIdFilter } from '../../Redux/Filters/selectors';
+import { clearEndDateFilter, clearStartDateFilter, clearUploadIdFilter, removeTagIdFilter, setAccountIdFilter, setEndDateFilter, setStartDateFilter, setUntaggedFilter } from '../../Redux/Filters/reducer';
+import { selectAccountIdFilter, selectEndDateFilter, selectStartDateFilter, selectTagIdsFilterTags, selectUntaggedFilter, selectUploadIdFilter } from '../../Redux/Filters/selectors';
 import DateRanges from '../../Utils/DateRanges';
 
 const { RangePicker } = DatePicker;
@@ -19,8 +19,7 @@ function TransactionFilterCard() {
   const startDate = useSelector(selectStartDateFilter);
   const endDate = useSelector(selectEndDateFilter);
   const untagged = useSelector(selectUntaggedFilter);
-  const recurrenceId = useSelector(selectRecurrenceIdFilter);
-  const tags = useSelector(selectTagsFilter);
+  const tags = useSelector(selectTagIdsFilterTags);
   const accountOptions = useAccountOptions();
 
   const onAccountSelect = (value) => {
@@ -78,18 +77,11 @@ function TransactionFilterCard() {
           >Just Uploaded</Button>
         }
 
-        { recurrenceId &&
-          <Button
-            icon={<CloseOutlined/>}
-            onClick={() => dispatch(clearRecurrenceIdFilter())}
-          >{`Recurrence ID: ${recurrenceId}`}</Button>
-        }
-
         { tags.length > 0 && tags.map((tag, idx) => (
           <Tag
             key={idx}
             closable={true}
-            onClose={() => dispatch(removeTagFilter(tag))}
+            onClose={() => dispatch(removeTagIdFilter(tag.id))}
             color={tag.color}
           >{tag.name}</Tag>
         ))}

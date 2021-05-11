@@ -6,11 +6,10 @@ const filtersSlice = createSlice({
   initialState: {
     uploadId: null,
     accountId: null,
-    tags: [],
+    tagIds: [],
     startDate: null,
     endDate: null,
-    untagged: false,
-    recurrenceId: null
+    untagged: false
   },
   reducers: {
 
@@ -37,17 +36,23 @@ const filtersSlice = createSlice({
     },
 
     // Tags
-    addTagFilter: {
+    addTagIdFilter: {
       reducer: (state, action) => {
-        state.tags.push(action.payload);
+        state.tagIds.push(action.payload);
       },
-      prepare: (tag) => ({ payload: tag })
+      prepare: (tagId) => ({ payload: tagId })
     },
-    removeTagFilter: {
+    removeTagIdFilter: {
       reducer: (state, action) => {
-        state.tags = state.tags.filter(t => t.id !== action.payload.id);
+        state.tagIds = state.tagIds.filter(id => id !== action.payload);
       },
-      prepare: (tag) => ({ payload: tag })
+      prepare: (tagId) => ({ payload: tagId })
+    },
+    setSingleTagIdFilter: {
+      reducer: (state, action) => {
+        state.tagIds = [action.payload];
+      },
+      prepare: (tagId) => ({ payload: tagId })
     },
 
     // Start Date
@@ -72,17 +77,6 @@ const filtersSlice = createSlice({
       state.endDate = null;
     },
 
-    // RecurrenceId
-    setRecurrenceIdFilter: {
-      reducer: (state, action) => {
-        state.recurrenceId = action.payload;
-      },
-      prepare: (recurrenceId) => ({ payload: recurrenceId })
-    },
-    clearRecurrenceIdFilter(state) {
-      state.recurrenceId = null;
-    },
-
     // Untagged
     setUntaggedFilter: {
       reducer: (state, action) => {
@@ -100,15 +94,14 @@ export const {
   clearUploadIdFilter,
   setAccountIdFilter,
   clearAccountIdFilter,
-  addTagFilter,
-  removeTagFilter,
+  addTagIdFilter,
+  removeTagIdFilter,
+  setSingleTagIdFilter,
   setStartDateFilter,
   clearStartDateFilter,
   setEndDateFilter,
   clearEndDateFilter,
   setUntaggedFilter,
-  setRecurrenceIdFilter,
-  clearRecurrenceIdFilter
 } = filtersSlice.actions;
 
 export default filtersSlice.reducer;

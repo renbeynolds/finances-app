@@ -1,6 +1,8 @@
 import { Layout, Space } from 'antd';
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
 import { Route } from 'react-router-dom';
+import { requestFetchTags } from '../../Redux/Tags/actions';
 import { AccountTable } from '../AccountTable';
 import { AccountForm } from '../Forms/AccountForm';
 import { TagForm } from '../Forms/TagForm';
@@ -14,6 +16,13 @@ import './styles.scss';
 const { Content, Footer } = Layout;
 
 function App() {
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(requestFetchTags());
+  }, []);
+
   return (
     <Layout className='App__layout'>
       <Sidebar />

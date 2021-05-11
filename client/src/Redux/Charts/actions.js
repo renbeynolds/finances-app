@@ -70,3 +70,20 @@ export const requestFetchIncomeVsExpenseData = createAsyncThunk(
     });
   }
 );
+
+export const requestFetchTagTotalOverTimeData = createAsyncThunk(
+  Constants.FETCH_TAG_TOTAL_OVER_TIME_DATA,
+  ({ dateStrings, tagId }, { rejectWithValue }) => {
+    let url = `/api/charts/tag_total_over_time?startDate=${dateStrings[0]}&endDate=${dateStrings[1]}&tagId=${tagId}`;
+    const request = createRequest(url, 'GET', {});
+    return Axios(request).then((response) => {
+      return response.data;
+    }).catch((error) => {
+      if (error.response.data.errors) {
+        return rejectWithValue(error.response.data.errors);
+      } else {
+        return rejectWithValue([error.response.statusText]);
+      }
+    });
+  }
+);

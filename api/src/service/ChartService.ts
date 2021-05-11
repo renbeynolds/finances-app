@@ -117,7 +117,7 @@ export const getTopSpendingCategoriesData = async(req: Request, res: Response): 
       GROUP BY tagid
       HAVING tags."tagId" IS NOT NULL
     )
-    SELECT name, -1 * data AS data, color FROM (
+    SELECT name, tagid AS "tagId", -1 * data AS data, color FROM (
       WITH tag_ranks AS (
         SELECT
           tagid,
@@ -183,4 +183,36 @@ export const getIncomeVsExpenseData = async(req: Request, res: Response): Promis
   `);
 
   res.status(200).send(rawData);
+};
+
+export const getTagTotalOverTime = async(req: Request, res: Response): Promise<void> => {
+
+  const startDate = req.query.startDate;
+  const endDate = req.query.endDate;
+  const tagId = Number(req.query.tagId);
+
+  const manager = getManager();
+
+  const rawData = await manager.query(`
+    WITH tagged_transactions AS (
+      SELECT trans.*
+      FROM transaction trans
+      WHERE EXISTS (
+        SELECT 1 FROM transaction_tags_tag tags WHERE tags."tagId" = ${tagId} AND tags."transactionId" = trans.id
+      )
+    ),
+    calendar AS (
+      SELECT DATE_TRUNC('month', bucket::date) AS month FROM generate_series('${startDate}', '${endDate}', '1 month'::interval) bucket
+    )
+    SELECT
+      TO_CHAR(c.month, 'YYYY-MM') as month,
+      ABS(SUM(tt.amount)) AS "Total"
+    FROM calendar c
+    LEFT JOIN tagged_transactions tt ON DATE_TRUNC('month', tt.date) = c.month
+    GROUP BY c.month
+    ORDER BY c.month
+  `);
+
+  res.status(200).send(rawData);
+
 };
