@@ -1,8 +1,8 @@
 import { Router } from 'express';
-import { handleValidationErrors } from '../base/ValidationErrorHandler';
 // import uploadRouter from '../uploads/UploadRouter';
-import { createAccount, searchAccounts } from './AccountService';
-import { createAccountValidations } from './createAccountValidations';
+import { createAccount, searchAccounts } from '../services/AccountService';
+import { createAccountValidations } from '../validation/createAccountValidations';
+import { handleValidationErrors } from '../validation/ValidationErrorHandler';
 
 const router: Router = Router({ mergeParams: true });
 

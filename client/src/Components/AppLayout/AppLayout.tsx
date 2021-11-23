@@ -3,7 +3,7 @@ import React from 'react';
 // import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 // import { AccountForm } from '../AccountForm';
 import { BottomDrawer } from '../BottomDrawer';
-// import { SideMenu } from '../SideMenu';
+import { SideMenu } from '../SideMenu';
 // import { TagForm } from '../TagForm';
 // import { UploadTransactionsForm } from '../UploadTransactionsForm';
 
@@ -22,7 +22,7 @@ const AppLayout = (): JSX.Element => {
         height: '100%',
       }}
     >
-      {/* <SideMenu /> */}
+      <SideMenu />
       <Layout>
         <Header></Header>
         <Content>

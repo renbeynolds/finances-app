@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
-// import Client from '../../db/Client';
-// import { insertAccount } from './AccountQueries';
+import { getRepository } from 'typeorm';
+import { Account } from '../entities/Account';
 
 export const createAccount = async (
   req: Request,
@@ -15,9 +15,6 @@ export const searchAccounts = async (
   req: Request,
   res: Response
 ): Promise<void> => {
-  // Client('accounts')
-  //   .select()
-  //   .then(function (result) {
-  //     res.status(200).send(result);
-  //   });
+  const accounts = await getRepository(Account).find();
+  res.send(accounts);
 };

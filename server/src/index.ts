@@ -2,7 +2,7 @@ import express from 'express';
 import fileUpload from 'express-fileupload';
 import path from 'path';
 import { createConnection } from 'typeorm';
-import rootRouter from './RootRouter';
+import rootRouter from './routes/RootRouter';
 
 createConnection()
   .then(async (connection) => {
