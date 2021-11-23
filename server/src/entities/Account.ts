@@ -20,10 +20,10 @@ export class Account {
   @Column()
   amountHeader: string;
 
-  @Column('money', { default: 0 })
+  @Column('numeric', { default: 0, precision: 12, scale: 2 })
   startingAmount: number;
 
-  @Column('money', { default: 0 })
+  @Column('numeric', { default: 0, precision: 12, scale: 2 })
   balance: number;
 
   @Column({ default: false })

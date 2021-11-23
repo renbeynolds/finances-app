@@ -13,13 +13,13 @@ export class Transaction {
   @Column('text')
   description: string;
 
-  @Column('money')
+  @Column('numeric', { precision: 12, scale: 2 })
   amount: number;
 
-  @Column('money')
+  @Column('numeric', { precision: 12, scale: 2 })
   balance: number;
 
-  @Column('money', { default: 0 })
+  @Column('numeric', { default: 0, precision: 12, scale: 2 })
   balanceCorrection: number;
 
   @ManyToOne(() => Upload, (upload) => upload.transactions)
