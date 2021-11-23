@@ -1,0 +1,12 @@
+{
+  "name": "finances-app",
+  "version": "0.1.0",
+  "dependencies": {},
+  "scripts": {
+    "start": "concurrently -p name -c \"magenta,blue\" -n \"server,client\" \"cd server && yarn start\" \"cd client && yarn start\""
+  },
+  "devDependencies": {
+    "concurrently": "^6.4.0",
+    "prettier": "^2.4.1"
+  }
+}

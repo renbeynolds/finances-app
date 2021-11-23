@@ -1,0 +1,20 @@
+version: '3'
+
+services:
+  db:
+    image: postgres:13-alpine
+    restart: unless-stopped
+    container_name: finances-app-db
+    environment:
+      POSTGRES_USER: username
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: database
+    ports:
+      - 5432:5432
+
+  adminer:
+    image: adminer
+    restart: always
+    container_name: finances-app-adminer
+    ports:
+      - 8181:8080
