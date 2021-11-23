@@ -4,7 +4,6 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
 import { tagsState } from '../../State/TagsState';
-import { NEW_TAG_URL } from '../AppLayout/AppLayout';
 
 const { Text } = Typography;
 
@@ -13,7 +12,7 @@ const TagsList = (): JSX.Element => {
   const navigate = useNavigate();
 
   const onAddTagClick = () => {
-    navigate(NEW_TAG_URL);
+    navigate('/tags/new');
   };
 
   return (

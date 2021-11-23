@@ -1,25 +1,39 @@
-import React from 'react';
+import { Spin } from 'antd';
+import React, { Suspense } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { RecoilRoot } from 'recoil';
 import { AccountForm } from './Components/AccountForm';
 import { AppLayout } from './Components/AppLayout';
+import { TagForm } from './Components/TagForm';
+import { UploadTransactionsForm } from './Components/UploadTransactionsForm';
+
+export const ROOT_URL = '/';
 
 const App = (): JSX.Element => {
   return (
     <RecoilRoot>
       <BrowserRouter>
         <Routes>
-          <Route path='/' element={<AppLayout />}>
-            <Route index element={<AccountForm />} />
-            {/* <Route path="teams" element={<Teams />}>
-              <Route path=":teamId" element={<Team />} />
-              <Route path="new" element={<NewTeamForm />} />
-              <Route index element={<LeagueStandings />} />
-            </Route> */}
+          <Route path={ROOT_URL} element={<AppLayout />}>
+            <Route path={'accounts'}>
+              <Route path={'new'} element={<AccountForm />} />
+              <Route path={':accountId'}>
+                <Route
+                  path={'upload'}
+                  element={
+                    <Suspense fallback={<Spin />}>
+                      <UploadTransactionsForm />
+                    </Suspense>
+                  }
+                />
+              </Route>
+            </Route>
+            <Route path={'tags'}>
+              <Route path={'new'} element={<TagForm />} />
+            </Route>
           </Route>
         </Routes>
       </BrowserRouter>
-      {/* <AppLayout /> */}
     </RecoilRoot>
   );
 };

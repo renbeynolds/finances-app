@@ -3,9 +3,9 @@ import Title from 'antd/lib/typography/Title';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSetRecoilState } from 'recoil';
+import { ROOT_URL } from '../../App';
 import { accountsState } from '../../State/AccountsState';
 import { apiPost } from '../../Utils';
-import { ROOT_URL } from '../AppLayout/AppLayout';
 import AccountFormField from './AccountFormField';
 
 const layout = {

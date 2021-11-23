@@ -3,6 +3,10 @@ import { Tag } from './Tag';
 
 @Entity()
 export class RegexRule {
+  constructor(pattern: string) {
+    this.pattern = pattern;
+  }
+
   @PrimaryGeneratedColumn()
   id: number;
 

@@ -6,9 +6,20 @@ export const createAccount = async (
   req: Request,
   res: Response
 ): Promise<void> => {
-  // insertAccount(req.body as ICreateAccountCMD).then((account) => {
-  //   res.status(200).send(account);
-  // });
+  const accountRepository = getRepository(Account);
+
+  const account = new Account();
+  account.name = req.body.name;
+  account.dateHeader = req.body.dateHeader;
+  account.descriptionHeader = req.body.descriptionHeader;
+  account.amountHeader = req.body.amountHeader;
+  account.amountsInverted = req.body.amountsInverted;
+  account.startingAmount = req.body.startingAmount;
+  account.balance = req.body.startingAmount;
+  account.color = req.body.color;
+
+  await accountRepository.save(account);
+  res.send(account);
 };
 
 export const searchAccounts = async (

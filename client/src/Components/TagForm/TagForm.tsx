@@ -4,9 +4,9 @@ import Title from 'antd/lib/typography/Title';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSetRecoilState } from 'recoil';
+import { ROOT_URL } from '../../App';
 import { tagsState } from '../../State/TagsState';
 import { apiPost } from '../../Utils';
-import { ROOT_URL } from '../AppLayout/AppLayout';
 import TagFormField from './TagFormField';
 
 const layout = {
@@ -65,7 +65,7 @@ const TagForm = (): JSX.Element => {
         <TagFormField name='name' label='Name' />
         <TagFormField name='color' label='Color' />
 
-        <Form.List name='regexPatterns' initialValue={[]}>
+        <Form.List name='regexRules' initialValue={[]}>
           {(fields, { add, remove }) => {
             return (
               <div>
@@ -74,7 +74,7 @@ const TagForm = (): JSX.Element => {
                     {...(index === 0
                       ? regexItemLayout
                       : regexItemLayoutWithoutLabel)}
-                    label={index === 0 ? 'Regex Patterns' : ''}
+                    label={index === 0 ? 'Regex Rules' : ''}
                     required={false}
                     key={field.key}
                   >
@@ -84,10 +84,7 @@ const TagForm = (): JSX.Element => {
                       rules={[]}
                       noStyle
                     >
-                      <Input
-                        placeholder='regex string'
-                        style={{ width: '60%' }}
-                      />
+                      <Input placeholder='pattern' style={{ width: '60%' }} />
                     </Form.Item>
                     <MinusCircleOutlined
                       style={{ margin: '0 8px' }}

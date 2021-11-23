@@ -5,10 +5,6 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
 import { accountsState } from '../../State/AccountsState';
-import {
-  NEW_ACCOUNT_URL,
-  UPLOAD_TRANSACTIONS_URL,
-} from '../AppLayout/AppLayout';
 
 const { Text } = Typography;
 
@@ -17,11 +13,11 @@ const AccountsList = (): JSX.Element => {
   const navigate = useNavigate();
 
   const onAddAccountClick = () => {
-    navigate(NEW_ACCOUNT_URL);
+    navigate('/accounts/new');
   };
 
   const onUploadTransactionsClick = (accountId: number) => {
-    navigate(UPLOAD_TRANSACTIONS_URL(accountId));
+    navigate(`accounts/${accountId}/upload`);
   };
 
   return (
