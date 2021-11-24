@@ -1,12 +1,23 @@
-import { Request, Response } from 'express';
+import { Response } from 'express';
 import { getRepository } from 'typeorm';
 import { Transaction } from '../entities/Transaction';
-// import Client from '../../db/Client';
+import { PaginatedRequest } from '../middleware/PaginatedRequest';
 
 export const searchTransactions = async (
-  req: Request,
+  req: PaginatedRequest,
   res: Response
 ): Promise<void> => {
-  const transactions = await getRepository(Transaction).find();
-  res.send(transactions);
+  const query = await getRepository(Transaction)
+    .createQueryBuilder('trans')
+    .orderBy('trans.date', 'DESC')
+    .addOrderBy('trans.id', 'DESC')
+    .skip(req.pagination.offset)
+    .take(req.pagination.limit);
+
+  const [result, total] = await query.getManyAndCount();
+
+  res.status(200).send({
+    data: result,
+    pagination: { total },
+  });
 };
