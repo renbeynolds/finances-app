@@ -4,9 +4,8 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { RecoilRoot } from 'recoil';
 import { AccountForm } from './Accounts/AccountForm';
 import { AppLayout } from './Common/AppLayout';
-import { UploadTransactionsForm } from './Common/UploadTransactionsForm';
 import { TagForm } from './Tags/TagForm';
-import { TransactionTable } from './Transactions/TransactionTable';
+import { UploadForm } from './Uploads/UploadForm';
 
 export const ROOT_URL = '/';
 
@@ -16,7 +15,7 @@ const App = (): JSX.Element => {
       <BrowserRouter>
         <Routes>
           <Route path={ROOT_URL} element={<AppLayout />}>
-            <Route index element={<TransactionTable />} />
+            <Route index element={<>Charts Here</>} />
             <Route path={'accounts'}>
               <Route path={'new'} element={<AccountForm />} />
               <Route path={':accountId'}>
@@ -24,7 +23,7 @@ const App = (): JSX.Element => {
                   path={'upload'}
                   element={
                     <Suspense fallback={<Spin />}>
-                      <UploadTransactionsForm />
+                      <UploadForm />
                     </Suspense>
                   }
                 />

@@ -1,3 +1,4 @@
+import accounting from 'accounting';
 import { Table } from 'antd';
 import { TablePaginationConfig } from 'antd/lib/table';
 import React, { useEffect, useState } from 'react';
@@ -36,18 +37,18 @@ const TransactionTable = (): JSX.Element => {
       title: 'Description',
       dataIndex: 'description',
     },
-    // {
-    //   title: 'Amount',
-    //   dataIndex: 'amount',
-    //   className: 'TransactionTable__amount',
-    //   render: (text) => accounting.formatMoney(text),
-    // },
-    // {
-    //   title: 'Balance',
-    //   dataIndex: 'balance',
-    //   className: 'TransactionTable__balance',
-    //   render: (text) => accounting.formatMoney(text),
-    // },
+    {
+      title: 'Amount',
+      dataIndex: 'amount',
+      // className: 'TransactionTable__amount',
+      render: (text: string) => accounting.formatMoney(text),
+    },
+    {
+      title: 'Balance',
+      dataIndex: 'balance',
+      // className: 'TransactionTable__balance',
+      render: (text: string) => accounting.formatMoney(text),
+    },
     // {
     //   title: 'Correction',
     //   dataIndex: 'balanceCorrection',

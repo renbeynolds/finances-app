@@ -2,11 +2,12 @@ import { CaretDownOutlined, CaretUpOutlined } from '@ant-design/icons';
 import { makeStyles } from '@material-ui/styles';
 import { Drawer, Typography } from 'antd';
 import React, { useState } from 'react';
+import { TransactionTable } from '../../Transactions/TransactionTable';
 import { SIDE_MENU_WIDTH } from '../SideMenu';
 import ResizeHandle from './ResizeHandle';
 
 const CLOSED_HEIGHT = 55;
-const OPEN_HEIGHT = 300;
+const OPEN_HEIGHT = 775;
 
 const useStyles = makeStyles({
   drawer: {
@@ -63,7 +64,7 @@ const BottomDrawer = (): JSX.Element => {
       height={height}
       className={classes.drawer}
     >
-      <div>foo</div>
+      <TransactionTable />
     </Drawer>
   );
 };

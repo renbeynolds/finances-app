@@ -25,7 +25,7 @@ interface FormValues {
   };
 }
 
-const UploadTransactionsForm = (): JSX.Element => {
+const UploadForm = (): JSX.Element => {
   const [form] = Form.useForm();
   const [values, setValues] = useState<FormValues>({
     fileUploader: {
@@ -111,4 +111,4 @@ const UploadTransactionsForm = (): JSX.Element => {
   );
 };
 
-export default UploadTransactionsForm;
+export default UploadForm;
