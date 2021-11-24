@@ -1,3 +1,0 @@
-interface Pagination {
-  total: number;
-}

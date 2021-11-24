@@ -1,6 +1,6 @@
-interface ITransaction {
+export interface TransactionDTO {
   id: number;
-  date: string;
+  date: Date;
   description: string;
   amount: number;
   balance: number;

@@ -1,5 +1,13 @@
-import { NextFunction, Response } from 'express';
-import { PaginatedRequest } from './PaginatedRequest';
+import { NextFunction, Request, Response } from 'express';
+
+interface PaginationParams {
+  offset?: number;
+  limit?: number;
+}
+
+export interface PaginatedRequest extends Request {
+  pagination: PaginationParams;
+}
 
 const pagination = function (
   req: PaginatedRequest,

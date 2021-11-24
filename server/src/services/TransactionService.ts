@@ -1,11 +1,13 @@
+import { TransactionDTO } from '@client/Transactions/TransactionDTO';
+import { PaginatedResponse } from '@client/Utils/PaginatedResponse';
 import { Response } from 'express';
 import { getRepository } from 'typeorm';
 import { Transaction } from '../entities/Transaction';
-import { PaginatedRequest } from '../middleware/PaginatedRequest';
+import { PaginatedRequest } from '../middleware/Pagination';
 
 export const searchTransactions = async (
   req: PaginatedRequest,
-  res: Response
+  res: Response<PaginatedResponse<TransactionDTO>>
 ): Promise<void> => {
   const query = await getRepository(Transaction)
     .createQueryBuilder('trans')
