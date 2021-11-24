@@ -3,7 +3,7 @@ import { Button, List, Typography } from 'antd';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
-import { tagsState } from '../../State/TagsState';
+import { tagsState } from '../../Tags/TagsState';
 
 const { Text } = Typography;
 

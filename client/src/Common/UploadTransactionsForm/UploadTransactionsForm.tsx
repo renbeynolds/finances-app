@@ -4,7 +4,7 @@ import { UploadFile } from 'antd/lib/upload/interface';
 import React, { useState } from 'react';
 import { useParams } from 'react-router';
 import { useRecoilValue } from 'recoil';
-import { accountState } from '../../State/AccountsState';
+import { accountState } from '../../Accounts/AccountsState';
 import { apiFormPost } from '../../Utils/api';
 
 const { Title, Text } = Typography;

@@ -1,4 +1,4 @@
-interface ICreateAccountCMD {
+export interface CreateAccountCMD {
   name: string;
   dateHeader: string;
   descriptionHeader: string;

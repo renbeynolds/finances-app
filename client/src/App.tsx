@@ -2,11 +2,11 @@ import { Spin } from 'antd';
 import React, { Suspense } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { RecoilRoot } from 'recoil';
-import { AccountForm } from './Components/AccountForm';
-import { AppLayout } from './Components/AppLayout';
-import { TagForm } from './Components/TagForm';
-import { TransactionTable } from './Components/TransactionTable';
-import { UploadTransactionsForm } from './Components/UploadTransactionsForm';
+import { AccountForm } from './Accounts/AccountForm';
+import { AppLayout } from './Common/AppLayout';
+import { UploadTransactionsForm } from './Common/UploadTransactionsForm';
+import { TagForm } from './Tags/TagForm';
+import { TransactionTable } from './Transactions/TransactionTable';
 
 export const ROOT_URL = '/';
 

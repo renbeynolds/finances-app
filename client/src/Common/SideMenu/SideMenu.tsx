@@ -2,7 +2,7 @@ import { BankOutlined, TagOutlined } from '@ant-design/icons';
 import { Layout, Menu, Spin, Typography } from 'antd';
 import { MenuInfo } from 'rc-menu/lib/interface';
 import React, { Suspense, useState } from 'react';
-import AccountsList from './AccountsList';
+import { SidebarAccountsList } from '../../Accounts/SidebarAccountsList';
 import TagsList from './TagsList';
 
 const { Title } = Typography;
@@ -42,7 +42,7 @@ const SideMenu = (): JSX.Element => {
             {activePanel}
           </Title>
           <Suspense fallback={<Spin />}>
-            {activePanel === ACCOUNTS_KEY && <AccountsList />}
+            {activePanel === ACCOUNTS_KEY && <SidebarAccountsList />}
             {activePanel === TAGS_KEY && <TagsList />}
           </Suspense>
         </div>

@@ -1,10 +1,11 @@
 import _ from 'lodash';
 import { atom, selector, selectorFamily } from 'recoil';
 import { apiGet } from '../Utils';
+import { AccountDTO } from './AccountDTO';
 
 export const accountsQuery = selector({
   key: 'accountsQuery',
-  get: async () => await apiGet<IAccount[]>('/api/accounts'),
+  get: async () => await apiGet<AccountDTO[]>('/api/accounts'),
 });
 
 export const accountsState = atom({

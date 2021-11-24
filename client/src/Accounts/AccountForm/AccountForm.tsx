@@ -4,8 +4,10 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSetRecoilState } from 'recoil';
 import { ROOT_URL } from '../../App';
-import { accountsState } from '../../State/AccountsState';
 import { apiPost } from '../../Utils';
+import { AccountDTO } from '../AccountDTO';
+import { accountsState } from '../AccountsState';
+import { CreateAccountCMD } from '../CreateAccountCMD';
 import AccountFormField from './AccountFormField';
 
 const layout = {
@@ -21,8 +23,8 @@ const AccountForm = (): JSX.Element => {
   const setAccountsState = useSetRecoilState(accountsState);
   const navigate = useNavigate();
 
-  const onFinish = (values: ICreateAccountCMD) => {
-    apiPost<ICreateAccountCMD, IAccount>('/api/accounts', values).then(
+  const onFinish = (values: CreateAccountCMD) => {
+    apiPost<CreateAccountCMD, AccountDTO>('/api/accounts', values).then(
       (newAccount) => {
         setAccountsState((currentAccounts) => [...currentAccounts, newAccount]);
         navigate(ROOT_URL);

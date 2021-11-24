@@ -5,8 +5,10 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSetRecoilState } from 'recoil';
 import { ROOT_URL } from '../../App';
-import { tagsState } from '../../State/TagsState';
 import { apiPost } from '../../Utils';
+import { CreateTagCMD } from '../CreateTagCMD';
+import { TagDTO } from '../TagDTO';
+import { tagsState } from '../TagsState';
 import TagFormField from './TagFormField';
 
 const layout = {
@@ -38,8 +40,8 @@ const TagForm = (): JSX.Element => {
   const setTagsState = useSetRecoilState(tagsState);
   const navigate = useNavigate();
 
-  const onFinish = (values: ICreateTagCMD) => {
-    apiPost<ICreateTagCMD, ITag>('/api/tags', values).then((newTag) => {
+  const onFinish = (values: CreateTagCMD) => {
+    apiPost<CreateTagCMD, TagDTO>('/api/tags', values).then((newTag) => {
       setTagsState((currentTags) => [...currentTags, newTag]);
       navigate(ROOT_URL);
     });

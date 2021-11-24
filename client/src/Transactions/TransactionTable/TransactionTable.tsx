@@ -8,7 +8,7 @@ import {
   paginatedTransactions,
   transactionsPageNum,
   transactionsPageSize,
-} from '../../State/TransactionsState';
+} from '../TransactionsState';
 
 const TransactionTable = (): JSX.Element => {
   const { state, contents } = useRecoilValueLoadable(paginatedTransactions);

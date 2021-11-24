@@ -4,11 +4,11 @@ import { Button, List, Tooltip, Typography } from 'antd';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
-import { accountsState } from '../../State/AccountsState';
+import { accountsState } from '../AccountsState';
 
 const { Text } = Typography;
 
-const AccountsList = (): JSX.Element => {
+const SidebarAccountsList = (): JSX.Element => {
   const accounts = useRecoilValue(accountsState);
   const navigate = useNavigate();
 
@@ -73,4 +73,4 @@ const AccountsList = (): JSX.Element => {
   );
 };
 
-export default AccountsList;
+export default SidebarAccountsList;

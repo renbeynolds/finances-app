@@ -1,11 +1,11 @@
-interface IAccount {
+export interface AccountDTO {
   id: number;
   name: string;
   dateHeader: string;
   descriptionHeader: string;
   amountHeader: string;
-  amountsInverted: boolean;
   startingAmount: number;
   balance: number;
+  amountsInverted: boolean;
   color: string;
 }
