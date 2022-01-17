@@ -41,13 +41,13 @@ const TransactionTable = (): JSX.Element => {
       title: 'Amount',
       dataIndex: 'amount',
       // className: 'TransactionTable__amount',
-      render: (text: string) => accounting.formatMoney(text),
+      render: (value: number) => accounting.formatMoney(value),
     },
     {
       title: 'Balance',
       dataIndex: 'balance',
       // className: 'TransactionTable__balance',
-      render: (text: string) => accounting.formatMoney(text),
+      render: (value: number) => accounting.formatMoney(value),
     },
     // {
     //   title: 'Correction',
