@@ -2,7 +2,7 @@
 
 * Creating a Database Backup
   ```bash
-  > docker exec -t finances-app-db pg_dumpall -c -U financesAppUser > dump_`date +%d-%m-%Y"_"%H_%M_%S`.sql
+  > docker exec -t finances-app-db pg_dumpall -c -U financesAppUser > dump_`date +%Y-%m-%d"_"%H_%M_%S`.sql
   ```
 
 * Restoring the Database
