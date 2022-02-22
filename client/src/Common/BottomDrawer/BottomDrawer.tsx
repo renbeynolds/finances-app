@@ -7,12 +7,15 @@ import { SIDE_MENU_WIDTH } from '../SideMenu';
 import ResizeHandle from './ResizeHandle';
 
 const CLOSED_HEIGHT = 55;
-const OPEN_HEIGHT = 775;
+const OPEN_HEIGHT = 730;
 
 const useStyles = makeStyles({
   drawer: {
     width: `calc(100% - ${SIDE_MENU_WIDTH}px)`,
     marginLeft: `${SIDE_MENU_WIDTH}px`,
+    '& .ant-drawer-body': {
+      padding: 0,
+    },
   },
 });
 
@@ -43,6 +46,7 @@ const BottomDrawer = (): JSX.Element => {
               onResize={setHeight}
               height={height}
               minHeight={CLOSED_HEIGHT}
+              maxHeight={OPEN_HEIGHT}
             />
           </div>
           <Typography

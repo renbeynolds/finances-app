@@ -4,6 +4,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 type ResizeHandleProps = {
   height: number;
   onResize: (height: number) => void;
+  maxHeight: number;
 } & typeof defaultProps;
 
 const defaultProps = {
@@ -14,6 +15,7 @@ const ResizeHandle = ({
   height,
   onResize,
   minHeight,
+  maxHeight,
 }: ResizeHandleProps): JSX.Element => {
   const [previousClientY, setPreviousClientY] = useState<number>(0);
   const [dragging, setDragging] = useState<boolean>(false);
@@ -22,7 +24,10 @@ const ResizeHandle = ({
     ({ clientY }) => {
       if (dragging) {
         const newOffset = previousClientY - clientY;
-        if (height + newOffset >= minHeight) {
+        if (
+          height + newOffset >= minHeight &&
+          height + newOffset <= maxHeight
+        ) {
           onResize(height + newOffset);
           setPreviousClientY(clientY);
         }

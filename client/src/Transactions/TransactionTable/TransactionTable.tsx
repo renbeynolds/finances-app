@@ -1,8 +1,10 @@
 import accounting from 'accounting';
 import { Table } from 'antd';
 import { TablePaginationConfig } from 'antd/lib/table';
+import cx from 'classnames';
 import React, { useEffect, useState } from 'react';
 import { useRecoilValueLoadable, useSetRecoilState } from 'recoil';
+import { TransactionDTO } from '../TransactionDTO';
 import {
   DEFAULT_TRANSACTIONS_PAGE_NUM,
   DEFAULT_TRANSACTIONS_PAGE_SIZE,
@@ -10,6 +12,7 @@ import {
   transactionsPageNum,
   transactionsPageSize,
 } from '../TransactionsState';
+import './styles.scss';
 
 const TransactionTable = (): JSX.Element => {
   const { state, contents } = useRecoilValueLoadable(paginatedTransactions);
@@ -40,13 +43,13 @@ const TransactionTable = (): JSX.Element => {
     {
       title: 'Amount',
       dataIndex: 'amount',
-      // className: 'TransactionTable__amount',
+      className: 'TransactionTable__amount',
       render: (value: number) => accounting.formatMoney(value),
     },
     {
       title: 'Balance',
       dataIndex: 'balance',
-      // className: 'TransactionTable__balance',
+      className: 'TransactionTable__balance',
       render: (value: number) => accounting.formatMoney(value),
     },
     // {
@@ -85,19 +88,22 @@ const TransactionTable = (): JSX.Element => {
       columns={columns}
       dataSource={transactions}
       rowKey='id'
-      // size={size}
-      // rowClassName={(record) =>
-      //   cx({
-      //     TransactionTable__expense: record.amount < 0,
-      //     TransactionTable__allowance: record.amount > 0,
-      //     'TransactionTable__positive-balance': record.balance > 0,
-      //     'TransactionTable__negative-balance': record.balance < 0,
-      //   })
-      // }
+      rowClassName={(record: TransactionDTO) =>
+        cx({
+          TransactionTable__expense: record.amount < 0,
+          TransactionTable__allowance: record.amount > 0,
+          'TransactionTable__positive-balance': record.balance > 0,
+          'TransactionTable__negative-balance': record.balance < 0,
+        })
+      }
       pagination={{
         total: totalTransactions,
         defaultCurrent: DEFAULT_TRANSACTIONS_PAGE_NUM,
-        defaultPageSize: DEFAULT_TRANSACTIONS_PAGE_SIZE,
+        pageSize: DEFAULT_TRANSACTIONS_PAGE_SIZE,
+        showSizeChanger: false,
+        style: {
+          paddingRight: '24px',
+        },
       }}
       loading={state === 'loading'}
       onChange={handleTableChange}

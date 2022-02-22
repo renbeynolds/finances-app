@@ -13,6 +13,7 @@
     "@types/react-dom": "^17.0.0",
     "accounting": "^0.4.1",
     "antd": "4.15.6",
+    "classnames": "^2.3.1",
     "lodash": "^4.17.21",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
@@ -52,6 +53,7 @@
   "devDependencies": {
     "@types/accounting": "^0.4.2",
     "@types/lodash": "^4.14.177",
-    "@types/recharts": "^1.8.23"
+    "@types/recharts": "^1.8.23",
+    "sass": "^1.49.8"
   }
 }
