@@ -1,6 +1,10 @@
-import { CaretDownOutlined, CaretUpOutlined } from '@ant-design/icons';
+import {
+  CaretDownOutlined,
+  CaretUpOutlined,
+  ExpandOutlined,
+} from '@ant-design/icons';
 import { makeStyles } from '@material-ui/styles';
-import { Drawer, Typography } from 'antd';
+import { Button, Drawer, Typography } from 'antd';
 import React, { useState } from 'react';
 import { TransactionTable } from '../../Transactions/TransactionTable';
 import { SIDE_MENU_WIDTH } from '../SideMenu';
@@ -15,6 +19,9 @@ const useStyles = makeStyles({
     marginLeft: `${SIDE_MENU_WIDTH}px`,
     '& .ant-drawer-body': {
       padding: 0,
+    },
+    '& .ant-drawer-close': {
+      marginRight: '48px',
     },
   },
 });
@@ -49,20 +56,45 @@ const BottomDrawer = (): JSX.Element => {
               maxHeight={OPEN_HEIGHT}
             />
           </div>
-          <Typography
+          <div
             style={{
+              display: 'flex',
+              justifyContent: 'space-between',
               marginTop: '-16px',
             }}
           >
-            Transactions
-          </Typography>
+            <Typography
+              style={{
+                position: 'relative',
+                top: '4px',
+              }}
+            >
+              Transactions
+            </Typography>
+            <div style={{ display: 'flex' }}>
+              <Button
+                icon={
+                  height === CLOSED_HEIGHT ? (
+                    <CaretUpOutlined />
+                  ) : (
+                    <CaretDownOutlined />
+                  )
+                }
+                style={{ border: 'none', marginRight: '8px' }}
+                size='small'
+                onClick={onClose}
+              />
+              <Button
+                icon={<ExpandOutlined />}
+                style={{ border: 'none' }}
+                size='small'
+              />
+            </div>
+          </div>
         </div>
       }
-      closeIcon={
-        height === CLOSED_HEIGHT ? <CaretUpOutlined /> : <CaretDownOutlined />
-      }
-      onClose={onClose}
       placement='bottom'
+      closable={false}
       visible
       mask={false}
       height={height}
