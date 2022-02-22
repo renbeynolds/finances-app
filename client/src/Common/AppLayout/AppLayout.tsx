@@ -4,7 +4,7 @@ import { Outlet } from 'react-router-dom';
 import { BottomDrawer } from '../BottomDrawer';
 import { SideMenu } from '../SideMenu';
 
-const { Header, Content } = Layout;
+const { Content } = Layout;
 
 const AppLayout = (): JSX.Element => {
   return (
@@ -15,7 +15,6 @@ const AppLayout = (): JSX.Element => {
     >
       <SideMenu />
       <Layout>
-        <Header></Header>
         <Content>
           <Outlet />
         </Content>

@@ -1,6 +1,7 @@
 import {
   CaretDownOutlined,
   CaretUpOutlined,
+  CompressOutlined,
   ExpandOutlined,
 } from '@ant-design/icons';
 import { makeStyles } from '@material-ui/styles';
@@ -29,6 +30,7 @@ const useStyles = makeStyles({
 const BottomDrawer = (): JSX.Element => {
   const classes = useStyles();
   const [height, setHeight] = useState<number>(CLOSED_HEIGHT);
+  const [fullScreen, setFullScreen] = useState<boolean>(false);
 
   const onClose = () => {
     if (height === CLOSED_HEIGHT) {
@@ -36,6 +38,10 @@ const BottomDrawer = (): JSX.Element => {
     } else {
       setHeight(CLOSED_HEIGHT);
     }
+  };
+
+  const onToggleFullScreen = () => {
+    setFullScreen(!fullScreen);
   };
 
   return (
@@ -49,12 +55,16 @@ const BottomDrawer = (): JSX.Element => {
               justifyContent: 'center',
             }}
           >
-            <ResizeHandle
-              onResize={setHeight}
-              height={height}
-              minHeight={CLOSED_HEIGHT}
-              maxHeight={OPEN_HEIGHT}
-            />
+            {fullScreen ? (
+              <div style={{ height: '14px' }} />
+            ) : (
+              <ResizeHandle
+                onResize={setHeight}
+                height={height}
+                minHeight={CLOSED_HEIGHT}
+                maxHeight={OPEN_HEIGHT}
+              />
+            )}
           </div>
           <div
             style={{
@@ -66,28 +76,31 @@ const BottomDrawer = (): JSX.Element => {
             <Typography
               style={{
                 position: 'relative',
-                top: '4px',
+                top: '2px',
               }}
             >
               Transactions
             </Typography>
             <div style={{ display: 'flex' }}>
+              {!fullScreen && (
+                <Button
+                  icon={
+                    height === CLOSED_HEIGHT ? (
+                      <CaretUpOutlined />
+                    ) : (
+                      <CaretDownOutlined />
+                    )
+                  }
+                  style={{ border: 'none', marginRight: '8px' }}
+                  size='small'
+                  onClick={onClose}
+                />
+              )}
               <Button
-                icon={
-                  height === CLOSED_HEIGHT ? (
-                    <CaretUpOutlined />
-                  ) : (
-                    <CaretDownOutlined />
-                  )
-                }
-                style={{ border: 'none', marginRight: '8px' }}
-                size='small'
-                onClick={onClose}
-              />
-              <Button
-                icon={<ExpandOutlined />}
+                icon={fullScreen ? <CompressOutlined /> : <ExpandOutlined />}
                 style={{ border: 'none' }}
                 size='small'
+                onClick={onToggleFullScreen}
               />
             </div>
           </div>
@@ -97,7 +110,7 @@ const BottomDrawer = (): JSX.Element => {
       closable={false}
       visible
       mask={false}
-      height={height}
+      height={fullScreen ? '100%' : height}
       className={classes.drawer}
     >
       <TransactionTable />
