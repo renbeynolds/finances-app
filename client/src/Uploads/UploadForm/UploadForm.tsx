@@ -3,6 +3,7 @@ import { Button, Col, Form, Row, Typography, Upload } from 'antd';
 import { UploadFile } from 'antd/lib/upload/interface';
 import React, { useState } from 'react';
 import { useParams } from 'react-router';
+import { useNavigate } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
 import { accountState } from '../../Accounts/AccountsState';
 import { apiFormPost } from '../../Utils/api';
@@ -27,6 +28,7 @@ interface FormValues {
 
 const UploadForm = (): JSX.Element => {
   const [form] = Form.useForm();
+  const navigate = useNavigate();
   const [values, setValues] = useState<FormValues>({
     fileUploader: {
       file: new Blob(),
@@ -42,7 +44,9 @@ const UploadForm = (): JSX.Element => {
     apiFormPost<void>(
       `/api/accounts/${routeParams.accountId}/uploads`,
       formData
-    );
+    ).then(() => {
+      navigate('/');
+    });
   };
 
   const disableUpload =
