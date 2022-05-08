@@ -1,7 +1,6 @@
 import accounting from 'accounting';
-// import moment from 'moment';
-import React from 'react';
-// import { useDispatch } from 'react-redux';
+import moment from 'moment';
+import React, { useState } from 'react';
 import {
   Bar,
   CartesianGrid,
@@ -14,42 +13,29 @@ import {
   XAxis,
   YAxis,
 } from 'recharts';
-import { useRecoilValue } from 'recoil';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { endDateState, startDateState } from '../../Filters/FiltersState';
 import { incomeVsExpenseQuery } from './state';
-// import { useDateRange } from '../../../Hooks/useDateRange';
-// import { useIncomeVsExpense } from '../../../Hooks/useIncomeVsExpense';
-// import { setEndDateFilter, setStartDateFilter } from '../../../Redux/Filters/reducer';
-// import DateRanges from '../../../Utils/DateRanges';
-
-// const { RangePicker } = DatePicker;
-// const DEFAULT_RANGE = DateRanges.last365Days();
 
 function IncomeVsExpense() {
-  // const dispatch = useDispatch();
-  // const { dateStrings, setDates } = useDateRange(DEFAULT_RANGE);
-  // const [activeMonth, setActiveMonth] = useState(null);
-  // const data = useIncomeVsExpense(dateStrings);
+  const [activeMonth, setActiveMonth] = useState<string | null>(null);
 
   const data = useRecoilValue(incomeVsExpenseQuery);
+  const setStartDate = useSetRecoilState(startDateState);
+  const setEndDate = useSetRecoilState(endDateState);
 
-  // const onBarClick = (e) => {
-  //   setActiveMonth(e.month);
-  //   dispatch(setStartDateFilter(moment(`${e.month}-01`)));
-  //   dispatch(setEndDateFilter(moment(`${e.month}-01`).endOf('month')));
-  // };
+  const onBarClick = (e: { month: string }) => {
+    if (e.month === activeMonth) {
+      setActiveMonth(null);
+    } else {
+      setActiveMonth(e.month);
+      setStartDate(moment(`${e.month}-01`));
+      setEndDate(moment(`${e.month}-01`).endOf('month'));
+    }
+  };
 
   return (
     <div>
-      {/* <Space direction='horizontal' style={{ marginLeft: '80px' }}>
-        <Typography.Title level={5}>Income vs Expense</Typography.Title>
-        <RangePicker
-            defaultValue={DEFAULT_RANGE}
-            ranges={{
-                'Past Year': DEFAULT_RANGE
-            }}
-            onChange={(dates) => setDates(dates)}
-        />
-      </Space> */}
       <ComposedChart
         width={600}
         height={300}
@@ -67,21 +53,47 @@ function IncomeVsExpense() {
         <Tooltip formatter={(value: number) => accounting.formatMoney(value)} />
         <Legend />
         <ReferenceLine y={0} stroke='#000' />
-        <Bar dataKey='Income' fill='rgb(40, 201, 56)' stackId='stack'>
+        <Bar
+          dataKey='Income'
+          fill='rgb(40, 201, 56)'
+          stackId='stack'
+          onClick={onBarClick}
+        >
           {data.map((entry, index) => {
             const color = 'rgb(40, 201, 56)';
-            // const inactiveColor = 'rgba(40, 201, 56, .5)'
+            const inactiveColor = 'rgba(40, 201, 56, .5)';
             return (
-              <Cell key={index} style={{ cursor: 'pointer' }} fill={color} />
+              <Cell
+                key={index}
+                style={{ cursor: 'pointer' }}
+                fill={
+                  entry.month === activeMonth || !activeMonth
+                    ? color
+                    : inactiveColor
+                }
+              />
             );
           })}
         </Bar>
-        <Bar dataKey='Expense' fill='rgb(222, 53, 53)' stackId='stack'>
+        <Bar
+          dataKey='Expense'
+          fill='rgb(222, 53, 53)'
+          stackId='stack'
+          onClick={onBarClick}
+        >
           {data.map((entry, index) => {
             const color = 'rgb(222, 53, 53)';
-            // const inactiveColor = 'rgba(222, 53, 53, .5)'
+            const inactiveColor = 'rgba(222, 53, 53, .5)';
             return (
-              <Cell key={index} style={{ cursor: 'pointer' }} fill={color} />
+              <Cell
+                key={index}
+                style={{ cursor: 'pointer' }}
+                fill={
+                  entry.month === activeMonth || !activeMonth
+                    ? color
+                    : inactiveColor
+                }
+              />
             );
           })}
         </Bar>

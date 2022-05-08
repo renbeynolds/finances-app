@@ -1,16 +1,16 @@
 import { Request, Response } from 'express';
-import { DateTime } from 'luxon';
+import moment from 'moment';
 import { getManager } from 'typeorm';
 
 export const getIncomeVsExpenseData = async (
   req: Request,
   res: Response
 ): Promise<void> => {
-  const endDate = DateTime.now().endOf('month');
-  const startDate = endDate.minus({ years: 1 });
+  const endDate = moment().endOf('month');
+  const startDate = moment().endOf('month').subtract(1, 'year');
 
-  const endDateString = endDate.toFormat('LL-dd-yyyy');
-  const startDateString = startDate.toFormat('LL-dd-yyyy');
+  const endDateString = endDate.format('MM-DD-YYYY');
+  const startDateString = startDate.format('MM-DD-YYYY');
 
   const manager = getManager();
 
