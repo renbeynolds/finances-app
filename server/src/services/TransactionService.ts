@@ -11,10 +11,12 @@ export const searchTransactions = async (
 ): Promise<void> => {
   const startDate = req.query.startDate;
   const endDate = req.query.endDate;
+  const tagId = req.query.tagId;
 
   const query = await getRepository(Transaction)
     .createQueryBuilder('trans')
-    .where(startDate ? 'trans.date >= :startDate' : '1=1', { startDate })
+    .where(tagId ? 'trans.tagId = :tagId' : '1=1', { tagId })
+    .andWhere(startDate ? 'trans.date >= :startDate' : '1=1', { startDate })
     .andWhere(endDate ? 'trans.date <= :endDate' : '1=1', { endDate })
     .orderBy('trans.date', 'DESC')
     .addOrderBy('trans.id', 'DESC')

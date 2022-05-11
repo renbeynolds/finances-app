@@ -1,4 +1,5 @@
 import accounting from 'accounting';
+import Title from 'antd/lib/typography/Title';
 import moment from 'moment';
 import React, { useState } from 'react';
 import {
@@ -36,6 +37,14 @@ function IncomeVsExpense() {
 
   return (
     <div>
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'center',
+        }}
+      >
+        <Title level={3}>Income vs Expense</Title>
+      </div>
       <ComposedChart
         width={600}
         height={300}

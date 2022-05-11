@@ -1,9 +1,10 @@
-import { Spin } from 'antd';
+import { Space, Spin } from 'antd';
 import React, { Suspense } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { RecoilRoot } from 'recoil';
 import { AccountForm } from './Accounts/AccountForm';
 import IncomeVsExpense from './Charts/IncomeVsExpense/IndexVsExpense';
+import { TopSpendingTags } from './Charts/TopSpendingTags';
 import { AppLayout } from './Common/AppLayout';
 import { TagForm } from './Tags/TagForm';
 import { UploadForm } from './Uploads/UploadForm';
@@ -20,7 +21,10 @@ const App = (): JSX.Element => {
               index
               element={
                 <Suspense fallback={<Spin />}>
-                  <IncomeVsExpense />
+                  <Space direction='horizontal' size='large'>
+                    <IncomeVsExpense />
+                    <TopSpendingTags />
+                  </Space>
                 </Suspense>
               }
             />

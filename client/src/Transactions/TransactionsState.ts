@@ -1,5 +1,9 @@
 import { atom, selector } from 'recoil';
-import { endDateState, startDateState } from '../Filters/FiltersState';
+import {
+  endDateState,
+  startDateState,
+  tagFilter,
+} from '../Filters/FiltersState';
 import { apiGet } from '../Utils';
 import { PaginatedResponse } from '../Utils/PaginatedResponse';
 import { TransactionDTO } from './TransactionDTO';
@@ -22,15 +26,18 @@ export const paginatedTransactions = selector({
   get: async ({ get }) => {
     const pageNum = get(transactionsPageNum);
     const pageSize = get(transactionsPageSize);
+    const offset = pageSize * (pageNum - 1);
+
     const startDate = get(startDateState);
     const endDate = get(endDateState);
 
-    const offset = pageSize * (pageNum - 1);
+    const tagId = get(tagFilter);
+    const tagIdQuery = tagId ? `&tagId=${tagId}` : '';
 
     return await apiGet<PaginatedResponse<TransactionDTO>>(
       `/api/transactions?limit=${pageSize}&offset=${offset}&startDate=${startDate.format(
         'YYYY-MM-DD'
-      )}&endDate=${endDate.format('YYYY-MM-DD')}`
+      )}&endDate=${endDate.format('YYYY-MM-DD')}${tagIdQuery}`
     );
   },
 });
