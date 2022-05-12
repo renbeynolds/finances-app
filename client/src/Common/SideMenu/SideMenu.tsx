@@ -4,7 +4,7 @@ import { MenuInfo } from 'rc-menu/lib/interface';
 import React, { Suspense, useState } from 'react';
 import { SidebarAccountsList } from '../../Accounts/SidebarAccountsList';
 import { SidebarFiltersList } from '../../Filters/SidebarFiltersList';
-import TagsList from './TagsList';
+import { SidebarTagList } from '../../Tags/SidebarTagList';
 
 const { Title } = Typography;
 const { Sider } = Layout;
@@ -31,7 +31,14 @@ const SideMenu = (): JSX.Element => {
           justifyContent: 'space-between',
         }}
       >
-        <div>
+        <div
+          style={{
+            height: '100%',
+            display: 'flex',
+            flexDirection: 'column',
+            minHeight: 0,
+          }}
+        >
           <Title
             level={3}
             style={{
@@ -45,7 +52,7 @@ const SideMenu = (): JSX.Element => {
           </Title>
           <Suspense fallback={<Spin />}>
             {activePanel === ACCOUNTS_KEY && <SidebarAccountsList />}
-            {activePanel === TAGS_KEY && <TagsList />}
+            {activePanel === TAGS_KEY && <SidebarTagList />}
             {activePanel === FILTERS_KEY && <SidebarFiltersList />}
           </Suspense>
         </div>

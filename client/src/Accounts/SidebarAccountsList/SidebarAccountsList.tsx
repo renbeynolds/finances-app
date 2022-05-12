@@ -21,7 +21,7 @@ const SidebarAccountsList = (): JSX.Element => {
   };
 
   return (
-    <>
+    <div>
       <List
         size='small'
         dataSource={accounts}
@@ -69,7 +69,7 @@ const SidebarAccountsList = (): JSX.Element => {
       >
         Add Account
       </Button>
-    </>
+    </div>
   );
 };
 

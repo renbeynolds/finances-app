@@ -3,11 +3,11 @@ import { Button, List, Typography } from 'antd';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
-import { tagsState } from '../../Tags/TagsState';
+import { tagsState } from '../TagsState';
 
 const { Text } = Typography;
 
-const TagsList = (): JSX.Element => {
+const SidebarTagList = (): JSX.Element => {
   const tags = useRecoilValue(tagsState);
   const navigate = useNavigate();
 
@@ -16,7 +16,13 @@ const TagsList = (): JSX.Element => {
   };
 
   return (
-    <>
+    <div
+      style={{
+        minHeight: 0,
+        overflowY: 'scroll',
+        marginBottom: '2rem',
+      }}
+    >
       <List
         size='small'
         dataSource={tags}
@@ -43,8 +49,8 @@ const TagsList = (): JSX.Element => {
       >
         Add Tag
       </Button>
-    </>
+    </div>
   );
 };
 
-export default TagsList;
+export default SidebarTagList;
