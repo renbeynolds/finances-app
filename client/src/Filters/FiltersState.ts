@@ -1,4 +1,7 @@
-import { atom } from 'recoil';
+import _ from 'lodash';
+import { atom, selector } from 'recoil';
+import { TagDTO } from '../Tags/TagDTO';
+import { tagsState } from '../Tags/TagsState';
 import DateRanges from '../Utils/DateRanges';
 
 const DEFAULT_DATE_RANGE = DateRanges.last30Days();
@@ -16,4 +19,13 @@ export const endDateState = atom({
 export const tagFilter = atom<number | null>({
   key: 'tagFilter',
   default: null,
+});
+
+export const tagObjectFilter = selector({
+  key: 'tagObjectFilter',
+  get: async ({ get }) => {
+    const tags = get(tagsState);
+    const tagId = get(tagFilter);
+    return _.find(tags, { id: tagId }) as TagDTO;
+  },
 });

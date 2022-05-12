@@ -1,15 +1,13 @@
 import accounting from 'accounting';
 import { Empty } from 'antd';
 import Title from 'antd/lib/typography/Title';
+import alpha from 'color-alpha';
 import _ from 'lodash';
 import React, { ReactNode, useState } from 'react';
 import { Cell, Legend, Pie, PieChart } from 'recharts';
 import { Props } from 'recharts/types/component/DefaultLegendContent';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { tagFilter } from '../../Filters/FiltersState';
-// import { useDateRange } from '../../../Hooks/useDateRange';
-// import { useTopSpendingCategories } from '../../../Hooks/useTopSpendingCategories';
-// import { setSingleTagIdFilter } from '../../../Redux/Filters/reducer';
 import ChartColors from '../../Utils/ChartColors';
 import ActivePieShape from './ActivePieShape';
 import { topSpendingTagsQuery } from './state';
@@ -20,26 +18,30 @@ const renderLegend = (props: Props): ReactNode => {
 
   return (
     <>
-      {payload?.map((entry, index) => (
-        <div key={index} style={{ display: 'flex', color: '#333' }}>
-          <div
-            style={{
-              backgroundColor: entry.color,
-              width: '13px',
-              height: '13px',
-              marginTop: '4px',
-            }}
-          />
-          <div style={{ paddingLeft: '8px', flexGrow: 1 }}>{entry.value}</div>
-          <div style={{ paddingLeft: '8px' }}>
-            {accounting.formatMoney(entry?.value)}
+      {payload?.map((entry, index) => {
+        // @ts-ignore
+        const percentage = `(${(entry?.payload?.percent * 100).toFixed(2)}%)`;
+        // @ts-ignore
+        const value = accounting.formatMoney(entry?.payload?.data);
+
+        return (
+          <div key={index} style={{ display: 'flex', color: '#333' }}>
+            <div
+              style={{
+                backgroundColor: entry.color,
+                width: '13px',
+                height: '13px',
+                marginTop: '4px',
+              }}
+            />
+            <div style={{ paddingLeft: '8px', flexGrow: 1 }}>{entry.value}</div>
+            <div style={{ paddingLeft: '8px' }}>{value}</div>
+            <div style={{ paddingLeft: '8px', width: '70px', color: '#999' }}>
+              {percentage}
+            </div>
           </div>
-          <div
-            style={{ paddingLeft: '8px', width: '70px', color: '#999' }}
-            // @ts-ignore
-          >{`(${(entry?.payload?.percent * 100).toFixed(2)}%)`}</div>
-        </div>
-      ))}
+        );
+      })}
     </>
   );
 };
@@ -47,17 +49,29 @@ const renderLegend = (props: Props): ReactNode => {
 function TopSpendingTags() {
   const data = useRecoilValue(topSpendingTagsQuery);
   const setTagFilter = useSetRecoilState(tagFilter);
+  const tagFilterValue = useRecoilValue(tagFilter);
   const [activeIndex, setActiveIndex] = useState(0);
 
   const getColor = (entry: TopSpendingTagDTO, idx: number) => {
+    let color: string | undefined = '';
     if (_.isEmpty(entry.color) || entry.color === '#999999') {
-      return ChartColors[idx];
+      color = ChartColors[idx];
+    } else {
+      color = entry.color;
     }
-    return entry.color;
+    if (tagFilterValue === entry.tagId || tagFilterValue === null) {
+      return color;
+    }
+    return alpha(color as string, 0.5);
   };
 
   const onSliceClick = (e: any) => {
-    setTagFilter(e.payload.payload.tagId);
+    const newFilterValue = e.payload.payload.tagId;
+    if (newFilterValue !== tagFilterValue) {
+      setTagFilter(newFilterValue);
+    } else {
+      setTagFilter(null);
+    }
   };
 
   return (

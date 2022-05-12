@@ -7,7 +7,7 @@ export const getTopSpendingTagsData = async (
 ): Promise<void> => {
   const startDate = req.query.startDate;
   const endDate = req.query.endDate;
-  const numTags = 10;
+  const numTags = 9;
   const manager = getManager();
 
   const rawData = await manager.query(`

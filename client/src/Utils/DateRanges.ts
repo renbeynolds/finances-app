@@ -1,10 +1,12 @@
-import moment from 'moment';
+import moment, { Moment } from 'moment';
+
+type DateRange = [Moment, Moment];
 
 export default {
-  last30Days: () => [moment().subtract(30, 'days'), moment()],
-  last365Days: () => [moment().subtract(1, 'year'), moment()],
-  thisMonth: () => [moment().startOf('month'), moment()],
-  lastMonth: () => [
+  last30Days: (): DateRange => [moment().subtract(30, 'days'), moment()],
+  last365Days: (): DateRange => [moment().subtract(1, 'year'), moment()],
+  thisMonth: (): DateRange => [moment().startOf('month'), moment()],
+  lastMonth: (): DateRange => [
     moment().subtract(1, 'month').startOf('month'),
     moment().subtract(1, 'month').endOf('month'),
   ],

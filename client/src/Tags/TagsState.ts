@@ -1,4 +1,5 @@
-import { atom, selector } from 'recoil';
+import _ from 'lodash';
+import { atom, selector, selectorFamily } from 'recoil';
 import { apiGet } from '../Utils';
 import { TagDTO } from './TagDTO';
 
@@ -10,4 +11,14 @@ export const tagsQuery = selector({
 export const tagsState = atom({
   key: 'tags',
   default: tagsQuery,
+});
+
+export const tagState = selectorFamily({
+  key: 'tag',
+  get:
+    (tagId: number) =>
+    ({ get }) => {
+      const tags = get(tagsState);
+      return _.find(tags, { id: tagId });
+    },
 });
