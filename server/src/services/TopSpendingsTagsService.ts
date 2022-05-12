@@ -53,5 +53,7 @@ export const getTopSpendingTagsData = async (
     ) ranking
   `);
 
+  rawData.forEach((d) => (d.data = parseFloat(d.data)));
+
   res.status(200).send(rawData);
 };

@@ -57,7 +57,7 @@ function TopSpendingTags() {
   };
 
   const onSliceClick = (e: any) => {
-    setTagFilter(e.payload.payload.id);
+    setTagFilter(e.payload.payload.tagId);
   };
 
   return (

@@ -13,7 +13,10 @@ export class Transaction {
   @Column('text')
   description: string;
 
-  @Column('numeric', { precision: 12, scale: 2 })
+  @Column('numeric', {
+    precision: 12,
+    scale: 2,
+  })
   amount: number;
 
   @Column('numeric', { precision: 12, scale: 2 })

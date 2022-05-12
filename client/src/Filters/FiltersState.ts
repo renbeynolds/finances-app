@@ -1,7 +1,7 @@
 import { atom } from 'recoil';
 import DateRanges from '../Utils/DateRanges';
 
-const DEFAULT_DATE_RANGE = DateRanges.last365Days();
+const DEFAULT_DATE_RANGE = DateRanges.last30Days();
 
 export const startDateState = atom({
   key: 'startDate',

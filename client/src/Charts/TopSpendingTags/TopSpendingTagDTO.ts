@@ -1,5 +1,5 @@
 export interface TopSpendingTagDTO {
-  id: number;
+  tagId: number;
   data: number;
   name: string;
   color?: string;
