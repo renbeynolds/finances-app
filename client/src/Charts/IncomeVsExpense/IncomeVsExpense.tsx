@@ -36,9 +36,9 @@ function IncomeVsExpense() {
     const startOfChosenMonth = moment(`${month}-01`).startOf('month');
     const endOfChosenMonth = moment(`${month}-01`).endOf('month');
     return (
-      startDate.format('YYYY-MM-DD') ==
+      startDate.format('YYYY-MM-DD') ===
         startOfChosenMonth.format('YYYY-MM-DD') &&
-      endDate.format('YYYY-MM-DD') == endOfChosenMonth.format('YYYY-MM-DD')
+      endDate.format('YYYY-MM-DD') === endOfChosenMonth.format('YYYY-MM-DD')
     );
   };
 
@@ -60,7 +60,7 @@ function IncomeVsExpense() {
       >
         <Title level={3}>Income vs Expense</Title>
       </div>
-      <ResponsiveContainer width={600} height={300}>
+      <ResponsiveContainer minWidth={600} height={300}>
         <ComposedChart
           data={data}
           stackOffset='sign'

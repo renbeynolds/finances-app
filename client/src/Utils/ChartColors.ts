@@ -1,6 +1,6 @@
 // https://material-ui.com/customization/color/
 
-export default [
+const chartColors = [
   '#d32f2f',
   '#e64a19',
   '#fbc02d',
@@ -13,3 +13,5 @@ export default [
   '#455a64',
   '#d81b60',
 ];
+
+export default chartColors;

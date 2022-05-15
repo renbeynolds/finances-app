@@ -33,7 +33,7 @@ const ResizeHandle = ({
         }
       }
     },
-    [dragging, previousClientY, onResize, height, minHeight]
+    [dragging, previousClientY, onResize, height, minHeight, maxHeight]
   );
 
   const handleMouseUp = useCallback(() => {

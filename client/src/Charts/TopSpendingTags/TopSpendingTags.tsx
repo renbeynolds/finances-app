@@ -89,7 +89,7 @@ function TopSpendingTags() {
           <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
         </div>
       ) : (
-        <ResponsiveContainer width={600} height={300}>
+        <ResponsiveContainer minWidth={600} height={300}>
           <PieChart>
             <Pie
               data={data}

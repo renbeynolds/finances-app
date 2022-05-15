@@ -13,6 +13,7 @@ import { UploadForm } from './Uploads/UploadForm';
 export const ROOT_URL = '/';
 
 const App = (): JSX.Element => {
+  console.log('App render');
   return (
     <RecoilRoot>
       <BrowserRouter>

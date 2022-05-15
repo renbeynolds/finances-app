@@ -2,7 +2,7 @@ import moment, { Moment } from 'moment';
 
 type DateRange = [Moment, Moment];
 
-export default {
+const dateRanges = {
   last30Days: (): DateRange => [moment().subtract(30, 'days'), moment()],
   last365Days: (): DateRange => [moment().subtract(1, 'year'), moment()],
   thisMonth: (): DateRange => [
@@ -14,3 +14,5 @@ export default {
     moment().subtract(1, 'month').endOf('month'),
   ],
 };
+
+export default dateRanges;

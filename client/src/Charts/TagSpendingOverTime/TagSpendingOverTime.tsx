@@ -27,8 +27,8 @@ function TagSpendingOverTime() {
       >
         <Title level={3}>Tags Over Time</Title>
       </div>
-      <ResponsiveContainer width={600} height={300}>
-        <LineChart margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
+      <ResponsiveContainer minWidth={600} height={300}>
+        <LineChart>
           <XAxis
             dataKey='month'
             type='category'
@@ -50,7 +50,7 @@ function TagSpendingOverTime() {
               name={d.name}
               connectNulls
               type='monotone'
-              stroke={'blue'}
+              // stroke={'blue'}
               data={d.data}
               dataKey='total'
             />
