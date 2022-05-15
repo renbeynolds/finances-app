@@ -22,17 +22,21 @@ const App = (): JSX.Element => {
             <Route
               index
               element={
-                <Suspense fallback={<Spin />}>
-                  <Space direction='vertical' size='large'>
-                    <Space direction='horizontal' size='large'>
+                <Space direction='vertical' size='large'>
+                  <Space direction='horizontal' size='large'>
+                    <Suspense fallback={<Spin />}>
                       <IncomeVsExpense />
+                    </Suspense>
+                    <Suspense fallback={<Spin />}>
                       <TopSpendingTags />
-                    </Space>
-                    <Space direction='horizontal' size='large'>
-                      <TagSpendingOverTime />
-                    </Space>
+                    </Suspense>
                   </Space>
-                </Suspense>
+                  <Space direction='horizontal' size='large'>
+                    <Suspense fallback={<Spin />}>
+                      <TagSpendingOverTime />
+                    </Suspense>
+                  </Space>
+                </Space>
               }
             />
             <Route path={'accounts'}>
