@@ -4,7 +4,7 @@ import Title from 'antd/lib/typography/Title';
 import alpha from 'color-alpha';
 import _ from 'lodash';
 import React, { ReactNode, useState } from 'react';
-import { Cell, Legend, Pie, PieChart } from 'recharts';
+import { Cell, Legend, Pie, PieChart, ResponsiveContainer } from 'recharts';
 import { Props } from 'recharts/types/component/DefaultLegendContent';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { tagFilter } from '../../Filters/FiltersState';
@@ -89,30 +89,32 @@ function TopSpendingTags() {
           <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
         </div>
       ) : (
-        <PieChart width={600} height={300}>
-          <Pie
-            data={data}
-            innerRadius={70}
-            outerRadius={95}
-            fill='#8884d8'
-            paddingAngle={1}
-            dataKey='data'
-            onMouseEnter={(data, idx) => setActiveIndex(idx)}
-            onClick={onSliceClick}
-            activeIndex={activeIndex}
-            activeShape={ActivePieShape}
-          >
-            {data.map((entry: TopSpendingTagDTO, index: number) => (
-              <Cell key={index} fill={getColor(entry, index)} />
-            ))}
-          </Pie>
-          <Legend
-            layout='vertical'
-            verticalAlign='middle'
-            align='right'
-            content={renderLegend}
-          />
-        </PieChart>
+        <ResponsiveContainer width={600} height={300}>
+          <PieChart>
+            <Pie
+              data={data}
+              innerRadius={70}
+              outerRadius={95}
+              fill='#8884d8'
+              paddingAngle={1}
+              dataKey='data'
+              onMouseEnter={(data, idx) => setActiveIndex(idx)}
+              onClick={onSliceClick}
+              activeIndex={activeIndex}
+              activeShape={ActivePieShape}
+            >
+              {data.map((entry: TopSpendingTagDTO, index: number) => (
+                <Cell key={index} fill={getColor(entry, index)} />
+              ))}
+            </Pie>
+            <Legend
+              layout='vertical'
+              verticalAlign='middle'
+              align='right'
+              content={renderLegend}
+            />
+          </PieChart>
+        </ResponsiveContainer>
       )}
     </div>
   );

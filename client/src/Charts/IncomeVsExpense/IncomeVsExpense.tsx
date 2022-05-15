@@ -10,6 +10,7 @@ import {
   Legend,
   Line,
   ReferenceLine,
+  ResponsiveContainer,
   Tooltip,
   XAxis,
   YAxis,
@@ -59,61 +60,63 @@ function IncomeVsExpense() {
       >
         <Title level={3}>Income vs Expense</Title>
       </div>
-      <ComposedChart
-        width={600}
-        height={300}
-        data={data}
-        stackOffset='sign'
-        margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
-      >
-        <CartesianGrid strokeDasharray='3 3' />
-        <XAxis dataKey='month' />
-        <YAxis
-          tickFormatter={(value: number) =>
-            accounting.formatMoney(value, { precision: 0 })
-          }
-        />
-        <Tooltip formatter={(value: number) => accounting.formatMoney(value)} />
-        <Legend />
-        <ReferenceLine y={0} stroke='#000' />
-        <Bar
-          dataKey='Income'
-          fill='rgb(40, 201, 56)'
-          stackId='stack'
-          onClick={onBarClick}
+      <ResponsiveContainer width={600} height={300}>
+        <ComposedChart
+          data={data}
+          stackOffset='sign'
+          margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
         >
-          {data.map((entry, index) => {
-            const color = 'rgb(40, 201, 56)';
-            const inactiveColor = 'rgba(40, 201, 56, .5)';
-            return (
-              <Cell
-                key={index}
-                style={{ cursor: 'pointer' }}
-                fill={isFilteredToMonth(entry.month) ? color : inactiveColor}
-              />
-            );
-          })}
-        </Bar>
-        <Bar
-          dataKey='Expense'
-          fill='rgb(222, 53, 53)'
-          stackId='stack'
-          onClick={onBarClick}
-        >
-          {data.map((entry, index) => {
-            const color = 'rgb(222, 53, 53)';
-            const inactiveColor = 'rgba(222, 53, 53, .5)';
-            return (
-              <Cell
-                key={index}
-                style={{ cursor: 'pointer' }}
-                fill={isFilteredToMonth(entry.month) ? color : inactiveColor}
-              />
-            );
-          })}
-        </Bar>
-        <Line dataKey='Total' stroke='#000' />
-      </ComposedChart>
+          <CartesianGrid strokeDasharray='3 3' />
+          <XAxis dataKey='month' />
+          <YAxis
+            tickFormatter={(value: number) =>
+              accounting.formatMoney(value, { precision: 0 })
+            }
+          />
+          <Tooltip
+            formatter={(value: number) => accounting.formatMoney(value)}
+          />
+          <Legend />
+          <ReferenceLine y={0} stroke='#000' />
+          <Bar
+            dataKey='Income'
+            fill='rgb(40, 201, 56)'
+            stackId='stack'
+            onClick={onBarClick}
+          >
+            {data.map((entry, index) => {
+              const color = 'rgb(40, 201, 56)';
+              const inactiveColor = 'rgba(40, 201, 56, .5)';
+              return (
+                <Cell
+                  key={index}
+                  style={{ cursor: 'pointer' }}
+                  fill={isFilteredToMonth(entry.month) ? color : inactiveColor}
+                />
+              );
+            })}
+          </Bar>
+          <Bar
+            dataKey='Expense'
+            fill='rgb(222, 53, 53)'
+            stackId='stack'
+            onClick={onBarClick}
+          >
+            {data.map((entry, index) => {
+              const color = 'rgb(222, 53, 53)';
+              const inactiveColor = 'rgba(222, 53, 53, .5)';
+              return (
+                <Cell
+                  key={index}
+                  style={{ cursor: 'pointer' }}
+                  fill={isFilteredToMonth(entry.month) ? color : inactiveColor}
+                />
+              );
+            })}
+          </Bar>
+          <Line dataKey='Total' stroke='#000' />
+        </ComposedChart>
+      </ResponsiveContainer>
     </div>
   );
 }
