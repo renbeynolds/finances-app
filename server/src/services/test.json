@@ -1,0 +1,522 @@
+[
+  {
+    "id": 1,
+    "name": "INVESTMENTS",
+    "color": "#999999",
+    "data": [
+      { "month": "2021-05", "total": 2.9 },
+      { "month": "2021-06", "total": 2.81 },
+      { "month": "2021-07", "total": 5.11 },
+      { "month": "2021-08", "total": 5.11 },
+      { "month": "2021-09", "total": 4.94 },
+      { "month": "2021-10", "total": 5.11 },
+      { "month": "2021-11", "total": 4.95 },
+      { "month": "2021-12", "total": 7.67 },
+      { "month": "2022-01", "total": 9.68 },
+      { "month": "2022-02", "total": 6.96 },
+      { "month": "2022-03", "total": 7.71 },
+      { "month": "2022-04", "total": 7.46 },
+      { "month": "2022-05", "total": null }
+    ]
+  },
+  {
+    "id": 3,
+    "name": "REIMBURSEMENT",
+    "color": "#999999",
+    "data": [
+      { "month": "2021-05", "total": null },
+      { "month": "2021-06", "total": 140 },
+      { "month": "2021-07", "total": 654.9 },
+      { "month": "2021-08", "total": null },
+      { "month": "2021-09", "total": 378.99 },
+      { "month": "2021-10", "total": 27.54 },
+      { "month": "2021-11", "total": null },
+      { "month": "2021-12", "total": 736.43 },
+      { "month": "2022-01", "total": 2320.97 },
+      { "month": "2022-02", "total": 3205.59 },
+      { "month": "2022-03", "total": null },
+      { "month": "2022-04", "total": 18613.38 },
+      { "month": "2022-05", "total": null }
+    ]
+  },
+  {
+    "id": 4,
+    "name": "GIFT",
+    "color": "#999999",
+    "data": [
+      { "month": "2021-05", "total": null },
+      { "month": "2021-06", "total": null },
+      { "month": "2021-07", "total": -50.91 },
+      { "month": "2021-08", "total": null },
+      { "month": "2021-09", "total": -300 },
+      { "month": "2021-10", "total": -28 },
+      { "month": "2021-11", "total": -310.61 },
+      { "month": "2021-12", "total": -325.66 },
+      { "month": "2022-01", "total": -60.9 },
+      { "month": "2022-02", "total": 78.63 },
+      { "month": "2022-03", "total": null },
+      { "month": "2022-04", "total": null },
+      { "month": "2022-05", "total": null }
+    ]
+  },
+  {
+    "id": 5,
+    "name": "MISCELLANEOUS",
+    "color": "#999999",
+    "data": [
+      { "month": "2021-05", "total": null },
+      { "month": "2021-06", "total": -15.89 },
+      { "month": "2021-07", "total": null },
+      { "month": "2021-08", "total": null },
+      { "month": "2021-09", "total": -56.5 },
+      { "month": "2021-10", "total": 72.37 },
+      { "month": "2021-11", "total": -80.8 },
+      { "month": "2021-12", "total": -281.21 },
+      { "month": "2022-01", "total": -112.35 },
+      { "month": "2022-02", "total": -1104.45 },
+      { "month": "2022-03", "total": -11.4 },
+      { "month": "2022-04", "total": -147.1 },
+      { "month": "2022-05", "total": null }
+    ]
+  },
+  {
+    "id": 6,
+    "name": "BILLS",
+    "color": "#999999",
+    "data": [
+      { "month": "2021-05", "total": -375.78 },
+      { "month": "2021-06", "total": -631.97 },
+      { "month": "2021-07", "total": -462.84 },
+      { "month": "2021-08", "total": -409.7 },
+      { "month": "2021-09", "total": -465.48 },
+      { "month": "2021-10", "total": -408.99 },
+      { "month": "2021-11", "total": -412.44 },
+      { "month": "2021-12", "total": -3405.58 },
+      { "month": "2022-01", "total": -1179.28 },
+      { "month": "2022-02", "total": -1837.77 },
+      { "month": "2022-03", "total": -1646.93 },
+      { "month": "2022-04", "total": -3243.61 },
+      { "month": "2022-05", "total": -66.14 }
+    ]
+  },
+  {
+    "id": 7,
+    "name": "GROCERIES",
+    "color": "#999999",
+    "data": [
+      { "month": "2021-05", "total": -529.3 },
+      { "month": "2021-06", "total": -754.67 },
+      { "month": "2021-07", "total": -790.79 },
+      { "month": "2021-08", "total": -481.94 },
+      { "month": "2021-09", "total": -490.62 },
+      { "month": "2021-10", "total": -762.82 },
+      { "month": "2021-11", "total": -609.83 },
+      { "month": "2021-12", "total": -653.89 },
+      { "month": "2022-01", "total": -847.66 },
+      { "month": "2022-02", "total": -1122.68 },
+      { "month": "2022-03", "total": -642.33 },
+      { "month": "2022-04", "total": -703.52 },
+      { "month": "2022-05", "total": -434.63 }
+    ]
+  },
+  {
+    "id": 8,
+    "name": "GAS",
+    "color": "#999999",
+    "data": [
+      { "month": "2021-05", "total": -173.9 },
+      { "month": "2021-06", "total": -151.79 },
+      { "month": "2021-07", "total": -156.5 },
+      { "month": "2021-08", "total": -143.73 },
+      { "month": "2021-09", "total": -142.48 },
+      { "month": "2021-10", "total": -298.41 },
+      { "month": "2021-11", "total": -49.57 },
+      { "month": "2021-12", "total": -425.2 },
+      { "month": "2022-01", "total": -237.61 },
+      { "month": "2022-02", "total": -66.81 },
+      { "month": "2022-03", "total": -63.25 },
+      { "month": "2022-04", "total": -138.05 },
+      { "month": "2022-05", "total": -43.3 }
+    ]
+  },
+  {
+    "id": 9,
+    "name": "SHOPPING",
+    "color": "#999999",
+    "data": [
+      { "month": "2021-05", "total": -1643.99 },
+      { "month": "2021-06", "total": -2092.12 },
+      { "month": "2021-07", "total": -692.53 },
+      { "month": "2021-08", "total": -557.66 },
+      { "month": "2021-09", "total": -848.68 },
+      { "month": "2021-10", "total": -227.52 },
+      { "month": "2021-11", "total": -623.43 },
+      { "month": "2021-12", "total": -6323.49 },
+      { "month": "2022-01", "total": -3425.2 },
+      { "month": "2022-02", "total": -965.99 },
+      { "month": "2022-03", "total": -1256.27 },
+      { "month": "2022-04", "total": -2843.16 },
+      { "month": "2022-05", "total": -513.85 }
+    ]
+  },
+  {
+    "id": 10,
+    "name": "ENTERTAINMENT",
+    "color": "#999999",
+    "data": [
+      { "month": "2021-05", "total": -80.88 },
+      { "month": "2021-06", "total": -180.35 },
+      { "month": "2021-07", "total": -253.77 },
+      { "month": "2021-08", "total": -202.79 },
+      { "month": "2021-09", "total": -44.63 },
+      { "month": "2021-10", "total": -20.24 },
+      { "month": "2021-11", "total": -155.34 },
+      { "month": "2021-12", "total": -468.29 },
+      { "month": "2022-01", "total": -175.09 },
+      { "month": "2022-02", "total": null },
+      { "month": "2022-03", "total": -27.58 },
+      { "month": "2022-04", "total": null },
+      { "month": "2022-05", "total": null }
+    ]
+  },
+  {
+    "id": 12,
+    "name": "DINING OUT",
+    "color": "#999999",
+    "data": [
+      { "month": "2021-05", "total": -630.32 },
+      { "month": "2021-06", "total": -1208.67 },
+      { "month": "2021-07", "total": -747.65 },
+      { "month": "2021-08", "total": -927.91 },
+      { "month": "2021-09", "total": -1267.64 },
+      { "month": "2021-10", "total": -565.03 },
+      { "month": "2021-11", "total": -1122.05 },
+      { "month": "2021-12", "total": -908.16 },
+      { "month": "2022-01", "total": -767.02 },
+      { "month": "2022-02", "total": -492.09 },
+      { "month": "2022-03", "total": -357.14 },
+      { "month": "2022-04", "total": -951.01 },
+      { "month": "2022-05", "total": -100.03 }
+    ]
+  },
+  {
+    "id": 13,
+    "name": "RENT",
+    "color": "#999999",
+    "data": [
+      { "month": "2021-05", "total": null },
+      { "month": "2021-06", "total": null },
+      { "month": "2021-07", "total": null },
+      { "month": "2021-08", "total": null },
+      { "month": "2021-09", "total": null },
+      { "month": "2021-10", "total": null },
+      { "month": "2021-11", "total": null },
+      { "month": "2021-12", "total": null },
+      { "month": "2022-01", "total": null },
+      { "month": "2022-02", "total": null },
+      { "month": "2022-03", "total": null },
+      { "month": "2022-04", "total": null },
+      { "month": "2022-05", "total": null }
+    ]
+  },
+  {
+    "id": 14,
+    "name": "BONUS",
+    "color": "#999999",
+    "data": [
+      { "month": "2021-05", "total": null },
+      { "month": "2021-06", "total": null },
+      { "month": "2021-07", "total": null },
+      { "month": "2021-08", "total": null },
+      { "month": "2021-09", "total": 1500 },
+      { "month": "2021-10", "total": 145.13 },
+      { "month": "2021-11", "total": 580.5 },
+      { "month": "2021-12", "total": null },
+      { "month": "2022-01", "total": null },
+      { "month": "2022-02", "total": 10540.18 },
+      { "month": "2022-03", "total": 1393.1 },
+      { "month": "2022-04", "total": null },
+      { "month": "2022-05", "total": null }
+    ]
+  },
+  {
+    "id": 15,
+    "name": "MINISTRY GIVING",
+    "color": "#999999",
+    "data": [
+      { "month": "2021-05", "total": -1850 },
+      { "month": "2021-06", "total": -1775 },
+      { "month": "2021-07", "total": -2275 },
+      { "month": "2021-08", "total": -1775 },
+      { "month": "2021-09", "total": -1775 },
+      { "month": "2021-10", "total": -1775 },
+      { "month": "2021-11", "total": -1725 },
+      { "month": "2021-12", "total": -1725 },
+      { "month": "2022-01", "total": -1725 },
+      { "month": "2022-02", "total": -1725 },
+      { "month": "2022-03", "total": -1725 },
+      { "month": "2022-04", "total": -1725 },
+      { "month": "2022-05", "total": -125 }
+    ]
+  },
+  {
+    "id": 16,
+    "name": "STUDENT LOANS",
+    "color": "#999999",
+    "data": [
+      { "month": "2021-05", "total": null },
+      { "month": "2021-06", "total": null },
+      { "month": "2021-07", "total": null },
+      { "month": "2021-08", "total": null },
+      { "month": "2021-09", "total": null },
+      { "month": "2021-10", "total": null },
+      { "month": "2021-11", "total": null },
+      { "month": "2021-12", "total": null },
+      { "month": "2022-01", "total": null },
+      { "month": "2022-02", "total": null },
+      { "month": "2022-03", "total": -451 },
+      { "month": "2022-04", "total": null },
+      { "month": "2022-05", "total": null }
+    ]
+  },
+  {
+    "id": 18,
+    "name": "IOU",
+    "color": "#999999",
+    "data": [
+      { "month": "2021-05", "total": null },
+      { "month": "2021-06", "total": null },
+      { "month": "2021-07", "total": null },
+      { "month": "2021-08", "total": null },
+      { "month": "2021-09", "total": null },
+      { "month": "2021-10", "total": null },
+      { "month": "2021-11", "total": null },
+      { "month": "2021-12", "total": null },
+      { "month": "2022-01", "total": null },
+      { "month": "2022-02", "total": null },
+      { "month": "2022-03", "total": null },
+      { "month": "2022-04", "total": null },
+      { "month": "2022-05", "total": null }
+    ]
+  },
+  {
+    "id": 19,
+    "name": "TRAVEL",
+    "color": "#999999",
+    "data": [
+      { "month": "2021-05", "total": -498.42 },
+      { "month": "2021-06", "total": -694.89 },
+      { "month": "2021-07", "total": -32.15 },
+      { "month": "2021-08", "total": -44.35 },
+      { "month": "2021-09", "total": -69.39 },
+      { "month": "2021-10", "total": -396.8 },
+      { "month": "2021-11", "total": -1383.7 },
+      { "month": "2021-12", "total": -41.9 },
+      { "month": "2022-01", "total": null },
+      { "month": "2022-02", "total": null },
+      { "month": "2022-03", "total": -120 },
+      { "month": "2022-04", "total": -76.61 },
+      { "month": "2022-05", "total": -2594.15 }
+    ]
+  },
+  {
+    "id": 21,
+    "name": "SUBSCRIPTIONS",
+    "color": "#999999",
+    "data": [
+      { "month": "2021-05", "total": -68.97 },
+      { "month": "2021-06", "total": -42.97 },
+      { "month": "2021-07", "total": -42.97 },
+      { "month": "2021-08", "total": -42.97 },
+      { "month": "2021-09", "total": -42.97 },
+      { "month": "2021-10", "total": -43.97 },
+      { "month": "2021-11", "total": -43.97 },
+      { "month": "2021-12", "total": -43.97 },
+      { "month": "2022-01", "total": -43.97 },
+      { "month": "2022-02", "total": -70.72 },
+      { "month": "2022-03", "total": -102.22 },
+      { "month": "2022-04", "total": -43.97 },
+      { "month": "2022-05", "total": null }
+    ]
+  },
+  {
+    "id": 22,
+    "name": "HOME IMPROVEMENT",
+    "color": "#999999",
+    "data": [
+      { "month": "2021-05", "total": -759.44 },
+      { "month": "2021-06", "total": -50 },
+      { "month": "2021-07", "total": null },
+      { "month": "2021-08", "total": null },
+      { "month": "2021-09", "total": -338.52 },
+      { "month": "2021-10", "total": -106.3 },
+      { "month": "2021-11", "total": -352.04 },
+      { "month": "2021-12", "total": -4292.16 },
+      { "month": "2022-01", "total": -15658.05 },
+      { "month": "2022-02", "total": -7841.63 },
+      { "month": "2022-03", "total": -5023.89 },
+      { "month": "2022-04", "total": -349.41 },
+      { "month": "2022-05", "total": null }
+    ]
+  },
+  {
+    "id": 24,
+    "name": "PHARMACY",
+    "color": "#999999",
+    "data": [
+      { "month": "2021-05", "total": null },
+      { "month": "2021-06", "total": -3.29 },
+      { "month": "2021-07", "total": -31.66 },
+      { "month": "2021-08", "total": null },
+      { "month": "2021-09", "total": null },
+      { "month": "2021-10", "total": null },
+      { "month": "2021-11", "total": null },
+      { "month": "2021-12", "total": null },
+      { "month": "2022-01", "total": -11.48 },
+      { "month": "2022-02", "total": null },
+      { "month": "2022-03", "total": null },
+      { "month": "2022-04", "total": null },
+      { "month": "2022-05", "total": null }
+    ]
+  },
+  {
+    "id": 25,
+    "name": "MEDICAL",
+    "color": "#999999",
+    "data": [
+      { "month": "2021-05", "total": null },
+      { "month": "2021-06", "total": -300 },
+      { "month": "2021-07", "total": -177.5 },
+      { "month": "2021-08", "total": -132.05 },
+      { "month": "2021-09", "total": -242.2 },
+      { "month": "2021-10", "total": -30 },
+      { "month": "2021-11", "total": -954.68 },
+      { "month": "2021-12", "total": -40 },
+      { "month": "2022-01", "total": -15.6 },
+      { "month": "2022-02", "total": -294 },
+      { "month": "2022-03", "total": -224.35 },
+      { "month": "2022-04", "total": null },
+      { "month": "2022-05", "total": -15 }
+    ]
+  },
+  {
+    "id": 26,
+    "name": "CHARITY",
+    "color": "#999999",
+    "data": [
+      { "month": "2021-05", "total": null },
+      { "month": "2021-06", "total": null },
+      { "month": "2021-07", "total": null },
+      { "month": "2021-08", "total": null },
+      { "month": "2021-09", "total": null },
+      { "month": "2021-10", "total": null },
+      { "month": "2021-11", "total": null },
+      { "month": "2021-12", "total": null },
+      { "month": "2022-01", "total": null },
+      { "month": "2022-02", "total": -103.3 },
+      { "month": "2022-03", "total": null },
+      { "month": "2022-04", "total": null },
+      { "month": "2022-05", "total": null }
+    ]
+  },
+  {
+    "id": 27,
+    "name": "PET CARE",
+    "color": "#999999",
+    "data": [
+      { "month": "2021-05", "total": null },
+      { "month": "2021-06", "total": null },
+      { "month": "2021-07", "total": -217.38 },
+      { "month": "2021-08", "total": -2081.47 },
+      { "month": "2021-09", "total": -580.84 },
+      { "month": "2021-10", "total": -319.26 },
+      { "month": "2021-11", "total": -207.45 },
+      { "month": "2021-12", "total": -62.04 },
+      { "month": "2022-01", "total": -166.32 },
+      { "month": "2022-02", "total": -81.27 },
+      { "month": "2022-03", "total": -181.76 },
+      { "month": "2022-04", "total": -82.39 },
+      { "month": "2022-05", "total": null }
+    ]
+  },
+  {
+    "id": 23,
+    "name": "MORTGAGE",
+    "color": "#999999",
+    "data": [
+      { "month": "2021-05", "total": -1888.61 },
+      { "month": "2021-06", "total": -1888.61 },
+      { "month": "2021-07", "total": -3728.61 },
+      { "month": "2021-08", "total": -2000 },
+      { "month": "2021-09", "total": null },
+      { "month": "2021-10", "total": -11141 },
+      { "month": "2021-11", "total": -1900 },
+      { "month": "2021-12", "total": 88684.46 },
+      { "month": "2022-01", "total": -51250 },
+      { "month": "2022-02", "total": -2806.17 },
+      { "month": "2022-03", "total": -2556.17 },
+      { "month": "2022-04", "total": -2334.21 },
+      { "month": "2022-05", "total": -2334.21 }
+    ]
+  },
+  {
+    "id": 20,
+    "name": "AUTOMOTIVE",
+    "color": "#999999",
+    "data": [
+      { "month": "2021-05", "total": -536.41 },
+      { "month": "2021-06", "total": -1035.02 },
+      { "month": "2021-07", "total": -1247.21 },
+      { "month": "2021-08", "total": -230.51 },
+      { "month": "2021-09", "total": -536.41 },
+      { "month": "2021-10", "total": -536.41 },
+      { "month": "2021-11", "total": -571.41 },
+      { "month": "2021-12", "total": -536.41 },
+      { "month": "2022-01", "total": -548.18 },
+      { "month": "2022-02", "total": -536.41 },
+      { "month": "2022-03", "total": -536.41 },
+      { "month": "2022-04", "total": -1763.01 },
+      { "month": "2022-05", "total": -305.9 }
+    ]
+  },
+  {
+    "id": 2,
+    "name": "TRANSFER",
+    "color": "#f7d916",
+    "data": [
+      { "month": "2021-05", "total": 0 },
+      { "month": "2021-06", "total": 0 },
+      { "month": "2021-07", "total": 0 },
+      { "month": "2021-08", "total": 0 },
+      { "month": "2021-09", "total": 0 },
+      { "month": "2021-10", "total": 0 },
+      { "month": "2021-11", "total": -20.02 },
+      { "month": "2021-12", "total": 0 },
+      { "month": "2022-01", "total": 0 },
+      { "month": "2022-02", "total": 0 },
+      { "month": "2022-03", "total": 0 },
+      { "month": "2022-04", "total": 0 },
+      { "month": "2022-05", "total": null }
+    ]
+  },
+  {
+    "id": 11,
+    "name": "PAYCHECK",
+    "color": "green",
+    "data": [
+      { "month": "2021-05", "total": 12018.59 },
+      { "month": "2021-06", "total": 15285.4 },
+      { "month": "2021-07", "total": 21626.94 },
+      { "month": "2021-08", "total": 13678.61 },
+      { "month": "2021-09", "total": 11916.44 },
+      { "month": "2021-10", "total": 11916.42 },
+      { "month": "2021-11", "total": 11735.97 },
+      { "month": "2021-12", "total": 11784.25 },
+      { "month": "2022-01", "total": 12282.54 },
+      { "month": "2022-02", "total": 8152.59 },
+      { "month": "2022-03", "total": 12661.1 },
+      { "month": "2022-04", "total": 13226.47 },
+      { "month": "2022-05", "total": null }
+    ]
+  }
+]

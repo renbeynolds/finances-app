@@ -4,6 +4,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { RecoilRoot } from 'recoil';
 import { AccountForm } from './Accounts/AccountForm';
 import IncomeVsExpense from './Charts/IncomeVsExpense/IndexVsExpense';
+import { TagSpendingOverTime } from './Charts/TagSpendingOverTime';
 import { TopSpendingTags } from './Charts/TopSpendingTags';
 import { AppLayout } from './Common/AppLayout';
 import { TagForm } from './Tags/TagForm';
@@ -21,9 +22,14 @@ const App = (): JSX.Element => {
               index
               element={
                 <Suspense fallback={<Spin />}>
-                  <Space direction='horizontal' size='large'>
-                    <IncomeVsExpense />
-                    <TopSpendingTags />
+                  <Space direction='vertical' size='large'>
+                    <Space direction='horizontal' size='large'>
+                      <IncomeVsExpense />
+                      <TopSpendingTags />
+                    </Space>
+                    <Space direction='horizontal' size='large'>
+                      <TagSpendingOverTime />
+                    </Space>
                   </Space>
                 </Suspense>
               }
