@@ -27,7 +27,7 @@ export const getTagSpendingOverTimeData = async (
       )
       SELECT
         TO_CHAR(c.month, 'YYYY-MM') as month,
-        SUM(t.amount) as "total"
+        COALESCE(SUM(t.amount), 0) as "total"
       FROM calendar c
       LEFT JOIN tag_transactions t ON DATE_TRUNC('month', t.date) = c.month
       GROUP BY c.month
