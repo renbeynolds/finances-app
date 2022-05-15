@@ -6,7 +6,7 @@ export const tagSpendingOverTimeQuery = selector({
   key: 'tagSpendingOverTimeQuery',
   get: async ({ get }) => {
     const tagId = get(tagFilter);
-    return await apiGet<any[]>(
+    return await apiGet<any>(
       `/api/charts/tag_spending_over_time?tagId=${tagId}`
     );
   },

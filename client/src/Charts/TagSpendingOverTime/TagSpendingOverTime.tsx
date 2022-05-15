@@ -45,16 +45,14 @@ function TagSpendingOverTime() {
           <Tooltip
             formatter={(value: number) => accounting.formatMoney(value)}
           />
-          {data.map((d) => (
-            <Line
-              key={d.id}
-              name={d.name}
-              connectNulls
-              type='monotone'
-              data={d.data}
-              dataKey='total'
-            />
-          ))}
+          <Line
+            key={data.id}
+            name={data.name}
+            connectNulls
+            type='monotone'
+            data={data.data}
+            dataKey='total'
+          />
         </LineChart>
       </ResponsiveContainer>
     </div>
