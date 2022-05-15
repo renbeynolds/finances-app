@@ -1,8 +1,8 @@
 import { Router } from 'express';
 import { createAccount, searchAccounts } from '../services/AccountService';
+import { createUpload } from '../services/UploadService';
 import { createAccountValidations } from '../validation/createAccountValidations';
 import { handleValidationErrors } from '../validation/ValidationErrorHandler';
-import uploadRouter from './UploadRouter';
 
 const router: Router = Router({ mergeParams: true });
 
@@ -15,6 +15,6 @@ router.post(
 
 router.get('/', searchAccounts);
 
-router.use('/:accountId/uploads', uploadRouter);
+router.post('/:accountId/uploads', createUpload);
 
 export default router;

@@ -1,10 +1,16 @@
-import { BankOutlined, FilterOutlined, TagOutlined } from '@ant-design/icons';
+import {
+  BankOutlined,
+  FilterOutlined,
+  TagOutlined,
+  UploadOutlined,
+} from '@ant-design/icons';
 import { Layout, Menu, Spin, Typography } from 'antd';
 import { MenuInfo } from 'rc-menu/lib/interface';
 import React, { Suspense, useState } from 'react';
 import { SidebarAccountsList } from '../../Accounts/SidebarAccountsList';
 import { SidebarFiltersList } from '../../Filters/SidebarFiltersList';
 import { SidebarTagList } from '../../Tags/SidebarTagList';
+import { SidebarUploadsList } from '../../Uploads/SidebarUploadsList';
 
 const { Title } = Typography;
 const { Sider } = Layout;
@@ -13,6 +19,7 @@ export const SIDE_MENU_WIDTH = 300;
 const ACCOUNTS_KEY = 'Accounts';
 const TAGS_KEY = 'Tags';
 const FILTERS_KEY = 'Filters';
+const UPLOADS_KEY = 'Uploads';
 
 const SideMenu = (): JSX.Element => {
   const [activePanel, setActivePanel] = useState<React.Key>(ACCOUNTS_KEY);
@@ -54,12 +61,14 @@ const SideMenu = (): JSX.Element => {
             {activePanel === ACCOUNTS_KEY && <SidebarAccountsList />}
             {activePanel === TAGS_KEY && <SidebarTagList />}
             {activePanel === FILTERS_KEY && <SidebarFiltersList />}
+            {activePanel === UPLOADS_KEY && <SidebarUploadsList />}
           </Suspense>
         </div>
         <Menu mode='horizontal' theme='dark' onClick={onPanelSelect}>
           <Menu.Item key={ACCOUNTS_KEY} icon={<BankOutlined />} />
           <Menu.Item key={TAGS_KEY} icon={<TagOutlined />} />
           <Menu.Item key={FILTERS_KEY} icon={<FilterOutlined />} />
+          <Menu.Item key={UPLOADS_KEY} icon={<UploadOutlined />} />
         </Menu>
       </div>
     </Sider>

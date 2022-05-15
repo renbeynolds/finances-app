@@ -28,15 +28,7 @@ const SidebarTagList = (): JSX.Element => {
         dataSource={tags}
         renderItem={(tag) => (
           <List.Item>
-            <div
-              style={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                width: '100%',
-              }}
-            >
-              <Text>{tag.name}</Text>
-            </div>
+            <Text>{tag.name}</Text>
           </List.Item>
         )}
       />

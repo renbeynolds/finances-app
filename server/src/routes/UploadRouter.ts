@@ -1,8 +1,8 @@
 import { Router } from 'express';
-import { createUpload } from '../services/UploadService';
+import { searchUploads } from '../services/UploadService';
 
 const router: Router = Router({ mergeParams: true });
 
-router.post('/', createUpload);
+router.get('/', searchUploads);
 
 export default router;

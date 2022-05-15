@@ -68,3 +68,11 @@ const getCsvDataFromRequest = async (req: Request): Promise<any[]> => {
   }).fromString(csvString);
   return csvData;
 };
+
+export const searchUploads = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
+  const uploads = await getRepository(Upload).find();
+  res.send(uploads);
+};
