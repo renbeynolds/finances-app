@@ -1,7 +1,7 @@
 import accounting from 'accounting';
 import Title from 'antd/lib/typography/Title';
 import moment from 'moment';
-import React, { useState } from 'react';
+import React from 'react';
 import {
   Bar,
   CartesianGrid,
@@ -23,20 +23,28 @@ import {
 import { incomeVsExpenseQuery } from './state';
 
 function IncomeVsExpense() {
-  const [activeMonth, setActiveMonth] = useState<string | null>(null);
+  const startDate = useRecoilValue(startDateState);
+  const endDate = useRecoilValue(endDateState);
 
   const data = useRecoilValue(incomeVsExpenseQuery);
   const setStartDate = useSetRecoilState(startDateState);
   const setEndDate = useSetRecoilState(endDateState);
   const resetTagFilter = useResetRecoilState(tagFilter);
 
+  const isFilteredToMonth = (month: string) => {
+    const startOfChosenMonth = moment(`${month}-01`).startOf('month');
+    const endOfChosenMonth = moment(`${month}-01`).endOf('month');
+    return (
+      startDate.format('YYYY-MM-DD') ==
+        startOfChosenMonth.format('YYYY-MM-DD') &&
+      endDate.format('YYYY-MM-DD') == endOfChosenMonth.format('YYYY-MM-DD')
+    );
+  };
+
   const onBarClick = (e: { month: string }) => {
     resetTagFilter();
-    if (e.month === activeMonth) {
-      setActiveMonth(null);
-    } else {
-      setActiveMonth(e.month);
-      setStartDate(moment(`${e.month}-01`));
+    if (!isFilteredToMonth(e.month)) {
+      setStartDate(moment(`${e.month}-01`).startOf('month'));
       setEndDate(moment(`${e.month}-01`).endOf('month'));
     }
   };
@@ -81,11 +89,7 @@ function IncomeVsExpense() {
               <Cell
                 key={index}
                 style={{ cursor: 'pointer' }}
-                fill={
-                  entry.month === activeMonth || !activeMonth
-                    ? color
-                    : inactiveColor
-                }
+                fill={isFilteredToMonth(entry.month) ? color : inactiveColor}
               />
             );
           })}
@@ -103,11 +107,7 @@ function IncomeVsExpense() {
               <Cell
                 key={index}
                 style={{ cursor: 'pointer' }}
-                fill={
-                  entry.month === activeMonth || !activeMonth
-                    ? color
-                    : inactiveColor
-                }
+                fill={isFilteredToMonth(entry.month) ? color : inactiveColor}
               />
             );
           })}

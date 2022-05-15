@@ -3,7 +3,7 @@ import React, { Suspense } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { RecoilRoot } from 'recoil';
 import { AccountForm } from './Accounts/AccountForm';
-import IncomeVsExpense from './Charts/IncomeVsExpense/IndexVsExpense';
+import { IncomeVsExpense } from './Charts/IncomeVsExpense';
 import { TagSpendingOverTime } from './Charts/TagSpendingOverTime';
 import { TopSpendingTags } from './Charts/TopSpendingTags';
 import { AppLayout } from './Common/AppLayout';

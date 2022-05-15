@@ -1,1 +1,1 @@
-export { default as IndexVsExpense } from './IndexVsExpense';
+export { default as IncomeVsExpense } from './IncomeVsExpense';
