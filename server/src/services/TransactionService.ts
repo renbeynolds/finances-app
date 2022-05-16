@@ -1,6 +1,6 @@
 import { TransactionDTO } from '@client/Transactions/TransactionDTO';
 import { PaginatedResponse } from '@client/Utils/PaginatedResponse';
-import { Response } from 'express';
+import { Request, Response } from 'express';
 import { getRepository } from 'typeorm';
 import { Transaction } from '../entities/Transaction';
 import { PaginatedRequest } from '../middleware/Pagination';
@@ -26,7 +26,25 @@ export const searchTransactions = async (
   const [result, total] = await query.getManyAndCount();
 
   res.status(200).send({
+    // @ts-ignore
     data: result,
     pagination: { total },
   });
+};
+
+export const updateTransaction = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
+  const id = parseInt(req.params.id);
+  const tagId = req.body.tagId;
+
+  console.log(id, tagId);
+
+  const updatedTransaction = await getRepository(Transaction).save({
+    id: id,
+    tagId: tagId,
+  });
+
+  res.status(200).send(updatedTransaction);
 };

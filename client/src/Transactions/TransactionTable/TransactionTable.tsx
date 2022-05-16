@@ -4,6 +4,7 @@ import { TablePaginationConfig } from 'antd/lib/table';
 import cx from 'classnames';
 import React, { useEffect, useState } from 'react';
 import { useRecoilValueLoadable, useSetRecoilState } from 'recoil';
+import { EditableTag } from '../../Tags/EditableTag';
 import { TransactionDTO } from '../TransactionDTO';
 import {
   DEFAULT_TRANSACTIONS_PAGE_NUM,
@@ -65,16 +66,15 @@ const TransactionTable = (): JSX.Element => {
     //     />
     //   ),
     // },
-    // {
-    //   title: 'Tags',
-    //   dataIndex: 'tags',
-    //   className: 'TransactionTable__tags',
-    //   // (tags, transaction, index)
-    //   render: (...args) => {
-    //     const [, transaction] = args;
-    //     return <EditableTagGroup transaction={transaction} />;
-    //   },
-    // },
+    {
+      title: 'Tag',
+      dataIndex: 'tagId',
+      // (tagId, transaction, index)
+      render: (...args: [number, TransactionDTO, number]) => {
+        const [tagId, transaction] = args;
+        return <EditableTag tagId={tagId} transactionId={transaction.id} />;
+      },
+    },
   ];
 
   // (pagination, filters, sorter)

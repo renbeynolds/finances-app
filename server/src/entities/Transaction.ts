@@ -28,6 +28,9 @@ export class Transaction {
   @ManyToOne(() => Upload, (upload) => upload.transactions)
   upload: Upload;
 
+  @Column('int', { nullable: true })
+  tagId: number;
+
   @ManyToOne(() => Tag, (tag) => tag.transactions)
   tag: Tag;
 }
