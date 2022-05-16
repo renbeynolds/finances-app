@@ -3,7 +3,7 @@ import { AutoComplete, Input, Tag } from 'antd';
 import _ from 'lodash';
 import { OptionData, OptionGroupData } from 'rc-select/lib/interface';
 import React, { useState } from 'react';
-import { useRecoilValueLoadable, useSetRecoilState } from 'recoil';
+import { useRecoilRefresher_UNSTABLE, useRecoilValueLoadable } from 'recoil';
 import { TransactionDTO } from '../../Transactions/TransactionDTO';
 import { paginatedTransactions } from '../../Transactions/TransactionsState';
 import { UpdateTransactionCMD } from '../../Transactions/UpdateTransactionCMD';
@@ -24,7 +24,9 @@ const EditableTag = ({
 }: EditableTagProps): JSX.Element => {
   const [editing, setEditing] = useState<Boolean>(false);
   const tags = useRecoilValueLoadable(tagsState);
-  const setPaginatedTransactions = useSetRecoilState(paginatedTransactions);
+  const refreshTransactions = useRecoilRefresher_UNSTABLE(
+    paginatedTransactions
+  );
 
   if (tags.state !== 'hasValue') {
     return <Tag />;
@@ -41,13 +43,8 @@ const EditableTag = ({
     apiPut<UpdateTransactionCMD, TransactionDTO>(
       `/api/transactions/${transactionId}`,
       { tagId: option.id }
-    ).then((updatedTransaction) => {
-      setPaginatedTransactions((paginatedResp) => ({
-        ...paginatedResp,
-        data: paginatedResp.data.map((t) =>
-          t.id === updatedTransaction.id ? updatedTransaction : t
-        ),
-      }));
+    ).then(() => {
+      refreshTransactions();
     });
     setEditing(false);
   };
