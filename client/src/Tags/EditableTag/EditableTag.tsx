@@ -1,3 +1,4 @@
+import { PlusOutlined } from '@ant-design/icons';
 import { AutoComplete, Input, Tag } from 'antd';
 import _ from 'lodash';
 import { OptionData, OptionGroupData } from 'rc-select/lib/interface';
@@ -11,7 +12,7 @@ import { TagDTO } from '../TagDTO';
 import { tagsState } from '../TagsState';
 
 type EditableTagProps = {
-  tagId: number;
+  tagId?: number;
   transactionId: number;
 } & typeof defaultProps;
 
@@ -69,8 +70,20 @@ const EditableTag = ({
 
   const tag = _.find(tags.contents, { id: tagId });
 
+  if (!tagId) {
+    return (
+      <Tag style={{ cursor: 'pointer' }} onClick={() => setEditing(true)}>
+        <PlusOutlined /> Add
+      </Tag>
+    );
+  }
+
   return (
-    <Tag onClick={() => setEditing(true)} color={tag?.color}>
+    <Tag
+      onClick={() => setEditing(true)}
+      color={tag?.color}
+      style={{ cursor: 'pointer' }}
+    >
       {tag?.name}
     </Tag>
   );
