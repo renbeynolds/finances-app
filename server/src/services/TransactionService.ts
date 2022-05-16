@@ -39,12 +39,14 @@ export const updateTransaction = async (
   const id = parseInt(req.params.id);
   const tagId = req.body.tagId;
 
-  console.log(id, tagId);
+  const repository = getRepository(Transaction);
 
-  const updatedTransaction = await getRepository(Transaction).save({
-    id: id,
-    tagId: tagId,
-  });
+  const updatedTransaction = await repository
+    .save({
+      id: id,
+      tagId: tagId,
+    })
+    .then((transaction) => repository.findOne(transaction.id));
 
   res.status(200).send(updatedTransaction);
 };

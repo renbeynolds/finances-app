@@ -21,8 +21,8 @@ export const transactionsPageSize = atom({
   default: DEFAULT_TRANSACTIONS_PAGE_SIZE,
 });
 
-export const paginatedTransactions = selector({
-  key: 'paginatedTransactions',
+export const paginatedTransactionsQuery = selector({
+  key: 'paginatedTransactionsQuery',
   get: async ({ get }) => {
     const pageNum = get(transactionsPageNum);
     const pageSize = get(transactionsPageSize);
@@ -40,4 +40,9 @@ export const paginatedTransactions = selector({
       )}&endDate=${endDate.format('YYYY-MM-DD')}${tagIdQuery}`
     );
   },
+});
+
+export const paginatedTransactions = atom({
+  key: 'paginatedTransactions',
+  default: paginatedTransactionsQuery,
 });
