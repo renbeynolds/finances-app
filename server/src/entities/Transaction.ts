@@ -25,6 +25,9 @@ export class Transaction {
   @Column('numeric', { default: 0, precision: 12, scale: 2 })
   balanceCorrection: number;
 
+  @Column('int')
+  uploadId: number;
+
   @ManyToOne(() => Upload, (upload) => upload.transactions)
   upload: Upload;
 

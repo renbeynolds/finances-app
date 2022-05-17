@@ -73,6 +73,10 @@ export const searchUploads = async (
   req: Request,
   res: Response
 ): Promise<void> => {
-  const uploads = await getRepository(Upload).find();
+  const uploads = await getRepository(Upload).find({
+    order: {
+      createdAt: 'DESC',
+    },
+  });
   res.send(uploads);
 };

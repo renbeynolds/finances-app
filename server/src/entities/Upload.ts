@@ -1,4 +1,5 @@
 import {
+  Column,
   CreateDateColumn,
   Entity,
   ManyToOne,
@@ -15,6 +16,9 @@ export class Upload {
 
   @CreateDateColumn()
   createdAt: Date;
+
+  @Column('int')
+  accountId: number;
 
   @ManyToOne(() => Account, (account) => account.uploads)
   account: Account;

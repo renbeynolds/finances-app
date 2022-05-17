@@ -12,12 +12,15 @@ export const searchTransactions = async (
   const startDate = req.query.startDate;
   const endDate = req.query.endDate;
   const tagId = req.query.tagId;
+  const uploadId = req.query.uploadId;
+  console.log(uploadId);
 
   const query = await getRepository(Transaction)
     .createQueryBuilder('trans')
     .where(tagId ? 'trans.tagId = :tagId' : '1=1', { tagId })
     .andWhere(startDate ? 'trans.date >= :startDate' : '1=1', { startDate })
     .andWhere(endDate ? 'trans.date <= :endDate' : '1=1', { endDate })
+    .andWhere(uploadId ? 'trans.uploadId = :uploadId' : '1=1', { uploadId })
     .orderBy('trans.date', 'DESC')
     .addOrderBy('trans.id', 'DESC')
     .skip(req.pagination.offset)

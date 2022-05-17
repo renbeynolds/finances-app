@@ -29,3 +29,8 @@ export const tagObjectFilter = selector({
     return _.find(tags, { id: tagId }) as TagDTO;
   },
 });
+
+export const uploadFilter = atom<number | null>({
+  key: 'uploadFilter',
+  default: null,
+});

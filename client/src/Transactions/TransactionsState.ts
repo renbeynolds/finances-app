@@ -3,6 +3,7 @@ import {
   endDateState,
   startDateState,
   tagFilter,
+  uploadFilter,
 } from '../Filters/FiltersState';
 import { apiGet } from '../Utils';
 import { PaginatedResponse } from '../Utils/PaginatedResponse';
@@ -34,10 +35,13 @@ export const paginatedTransactions = selector({
     const tagId = get(tagFilter);
     const tagIdQuery = tagId ? `&tagId=${tagId}` : '';
 
+    const uploadId = get(uploadFilter);
+    const uploadIdQuery = uploadId ? `&uploadId=${uploadId}` : '';
+
     return await apiGet<PaginatedResponse<TransactionDTO>>(
       `/api/transactions?limit=${pageSize}&offset=${offset}&startDate=${startDate.format(
         'YYYY-MM-DD'
-      )}&endDate=${endDate.format('YYYY-MM-DD')}${tagIdQuery}`
+      )}&endDate=${endDate.format('YYYY-MM-DD')}${tagIdQuery}${uploadIdQuery}`
     );
   },
 });

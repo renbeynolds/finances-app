@@ -7,6 +7,7 @@ import { IncomeVsExpense } from './Charts/IncomeVsExpense';
 import { TagSpendingOverTime } from './Charts/TagSpendingOverTime';
 import { TopSpendingTags } from './Charts/TopSpendingTags';
 import { AppLayout } from './Common/AppLayout';
+import { FilterDependencyEffect } from './Filters/FilterDependecyEffect';
 import { TagForm } from './Tags/TagForm';
 import { UploadForm } from './Uploads/UploadForm';
 
@@ -15,6 +16,7 @@ export const ROOT_URL = '/';
 const App = (): JSX.Element => {
   return (
     <RecoilRoot>
+      <FilterDependencyEffect />
       <BrowserRouter>
         <Routes>
           <Route path={ROOT_URL} element={<AppLayout />}>

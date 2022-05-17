@@ -15,12 +15,8 @@ import {
   XAxis,
   YAxis,
 } from 'recharts';
-import { useRecoilValue, useResetRecoilState, useSetRecoilState } from 'recoil';
-import {
-  endDateState,
-  startDateState,
-  tagFilter,
-} from '../../Filters/FiltersState';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { endDateState, startDateState } from '../../Filters/FiltersState';
 import { incomeVsExpenseQuery } from './state';
 
 function IncomeVsExpense() {
@@ -30,7 +26,6 @@ function IncomeVsExpense() {
   const data = useRecoilValue(incomeVsExpenseQuery);
   const setStartDate = useSetRecoilState(startDateState);
   const setEndDate = useSetRecoilState(endDateState);
-  const resetTagFilter = useResetRecoilState(tagFilter);
 
   const isFilteredToMonth = (month: string) => {
     const startOfChosenMonth = moment(`${month}-01`).startOf('month');
@@ -43,7 +38,6 @@ function IncomeVsExpense() {
   };
 
   const onBarClick = (e: { month: string }) => {
-    resetTagFilter();
     if (!isFilteredToMonth(e.month)) {
       setStartDate(moment(`${e.month}-01`).startOf('month'));
       setEndDate(moment(`${e.month}-01`).endOf('month'));
