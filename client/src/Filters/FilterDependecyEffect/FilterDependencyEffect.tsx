@@ -15,6 +15,7 @@ const FilterDependencyEffect = (): null => {
   const setStartDate = useSetRecoilState(startDateState);
   const setEndDate = useSetRecoilState(endDateState);
   const resetTagFilter = useResetRecoilState(tagFilter);
+  const resetUploadFilter = useResetRecoilState(uploadFilter);
 
   // Set date range to match the transactions in the upload
   // when an upload is chosen
@@ -23,10 +24,12 @@ const FilterDependencyEffect = (): null => {
     setEndDate(null);
   }, [uploadId, setStartDate, setEndDate]);
 
-  // Clear tag filter when a different date range is chosen
+  // Clear tag and upload filters when a different date
+  // range is chosen
   useEffect(() => {
     resetTagFilter();
-  }, [startDate, endDate, resetTagFilter]);
+    resetUploadFilter();
+  }, [startDate, endDate, resetTagFilter, resetUploadFilter]);
 
   return null;
 };
