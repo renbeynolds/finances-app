@@ -1,3 +1,4 @@
+import moment from 'moment';
 import { atom, selector } from 'recoil';
 import {
   endDateState,
@@ -29,8 +30,8 @@ export const paginatedTransactions = selector({
     const pageSize = get(transactionsPageSize);
     const offset = pageSize * (pageNum - 1);
 
-    const startDate = get(startDateState);
-    const endDate = get(endDateState);
+    const startDate = get(startDateState) || moment('1800-01-01');
+    const endDate = get(endDateState) || moment();
 
     const tagId = get(tagFilter);
     const tagIdQuery = tagId ? `&tagId=${tagId}` : '';

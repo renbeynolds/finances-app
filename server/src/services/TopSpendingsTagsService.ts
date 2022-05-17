@@ -7,8 +7,11 @@ export const getTopSpendingTagsData = async (
 ): Promise<void> => {
   const startDate = req.query.startDate;
   const endDate = req.query.endDate;
+  const uploadId = req.query.uploadId;
   const numTags = 9;
   const manager = getManager();
+
+  const uploadQuery = uploadId ? `trans."uploadId" = ${uploadId}` : '1 = 1';
 
   const rawData = await manager.query(`
     WITH tag_totals AS (
@@ -21,7 +24,8 @@ export const getTopSpendingTagsData = async (
       WHERE
         trans.amount < 0 AND
         t.name <> 'TRANSFER' AND
-        trans.date >= '${startDate}' AND trans.date <= '${endDate}'
+        trans.date >= '${startDate}' AND trans.date <= '${endDate}' AND
+        ${uploadQuery}
       GROUP BY t."id"
       HAVING t."id" IS NOT NULL
     )

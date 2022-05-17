@@ -6,12 +6,12 @@ import DateRanges from '../Utils/DateRanges';
 
 const DEFAULT_DATE_RANGE = DateRanges.last30Days();
 
-export const startDateState = atom({
+export const startDateState = atom<moment.Moment | null>({
   key: 'startDate',
   default: DEFAULT_DATE_RANGE[0],
 });
 
-export const endDateState = atom({
+export const endDateState = atom<moment.Moment | null>({
   key: 'endDate',
   default: DEFAULT_DATE_RANGE[1],
 });

@@ -19,8 +19,8 @@ const FilterDependencyEffect = (): null => {
   // Set date range to match the transactions in the upload
   // when an upload is chosen
   useEffect(() => {
-    // setStartDate(null);
-    // setEndDate(null);
+    setStartDate(null);
+    setEndDate(null);
   }, [uploadId, setStartDate, setEndDate]);
 
   // Clear tag filter when a different date range is chosen

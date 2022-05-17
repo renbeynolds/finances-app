@@ -13,7 +13,6 @@ export const searchTransactions = async (
   const endDate = req.query.endDate;
   const tagId = req.query.tagId;
   const uploadId = req.query.uploadId;
-  console.log(uploadId);
 
   const query = await getRepository(Transaction)
     .createQueryBuilder('trans')
