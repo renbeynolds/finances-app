@@ -1,3 +1,4 @@
 export interface UpdateTransactionCMD {
-  tagId: number;
+  tagId?: number;
+  comment?: string;
 }

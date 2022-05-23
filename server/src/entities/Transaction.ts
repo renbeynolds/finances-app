@@ -13,6 +13,9 @@ export class Transaction {
   @Column('text')
   description: string;
 
+  @Column('text', { default: null })
+  comment: string;
+
   @Column('numeric', {
     precision: 12,
     scale: 2,

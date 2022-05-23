@@ -3,8 +3,14 @@ import { Table } from 'antd';
 import { TablePaginationConfig } from 'antd/lib/table';
 import cx from 'classnames';
 import React, { useEffect, useState } from 'react';
-import { useRecoilValueLoadable, useSetRecoilState } from 'recoil';
+import {
+  useRecoilRefresher_UNSTABLE,
+  useRecoilValueLoadable,
+  useSetRecoilState,
+} from 'recoil';
+import { EditableCell } from '../../Common/EditableCell';
 import { EditableTag } from '../../Tags/EditableTag';
+import { apiPut } from '../../Utils/api';
 import { TransactionDTO } from '../TransactionDTO';
 import {
   DEFAULT_TRANSACTIONS_PAGE_NUM,
@@ -13,10 +19,14 @@ import {
   transactionsPageNum,
   transactionsPageSize,
 } from '../TransactionsState';
+import { UpdateTransactionCMD } from '../UpdateTransactionCMD';
 import './styles.scss';
 
 const TransactionTable = (): JSX.Element => {
   const { state, contents } = useRecoilValueLoadable(paginatedTransactions);
+  const refreshTransactions = useRecoilRefresher_UNSTABLE(
+    paginatedTransactions
+  );
 
   const [transactions, setTransactions] = useState([]);
   const [totalTransactions, setTotalTransactions] = useState(0);
@@ -31,6 +41,15 @@ const TransactionTable = (): JSX.Element => {
     }
   }, [setTransactions, setTotalTransactions, state, contents]);
 
+  const onEditComment = (transactionId: number, newComment: string) => {
+    apiPut<UpdateTransactionCMD, TransactionDTO>(
+      `/api/transactions/${transactionId}`,
+      { comment: newComment }
+    ).then(() => {
+      refreshTransactions();
+    });
+  };
+
   const columns = [
     {
       title: 'Date',
@@ -40,6 +59,18 @@ const TransactionTable = (): JSX.Element => {
     {
       title: 'Description',
       dataIndex: 'description',
+    },
+    {
+      title: 'Comment',
+      dataIndex: 'comment',
+      render: (value: string, record: TransactionDTO) => (
+        <EditableCell
+          title='Comment'
+          dataIndex='comment'
+          value={value}
+          onSave={(newComment) => onEditComment(record.id, newComment)}
+        />
+      ),
     },
     {
       title: 'Amount',

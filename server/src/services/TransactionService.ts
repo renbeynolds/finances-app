@@ -40,13 +40,15 @@ export const updateTransaction = async (
 ): Promise<void> => {
   const id = parseInt(req.params.id);
   const tagId = req.body.tagId;
+  const comment = req.body.comment;
 
   const repository = getRepository(Transaction);
 
   const updatedTransaction = await repository
     .save({
-      id: id,
-      tagId: tagId,
+      id,
+      tagId,
+      comment,
     })
     .then((transaction) => repository.findOne(transaction.id));
 
