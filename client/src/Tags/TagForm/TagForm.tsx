@@ -1,15 +1,18 @@
 import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
-import { Button, Col, Form, Input, Row } from 'antd';
+import { Button, Col, Form, Input, Row, Spin } from 'antd';
 import Title from 'antd/lib/typography/Title';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSetRecoilState } from 'recoil';
 import { ROOT_URL } from '../../App';
 import { apiPost } from '../../Utils';
+import { apiPut } from '../../Utils/api';
+import { capitalized } from '../../Utils/StringUtils';
 import { CreateTagCMD } from '../CreateTagCMD';
 import { TagDTO } from '../TagDTO';
 import { tagsState } from '../TagsState';
 import TagFormField from './TagFormField';
+import { useRouteParamTag } from './useRouteParamTag';
 
 const layout = {
   labelCol: {
@@ -36,15 +39,42 @@ const regexItemLayoutWithoutLabel = {
   },
 };
 
-const TagForm = (): JSX.Element => {
+type TagFormProps = {
+  intent: 'create' | 'edit';
+};
+
+const TagForm = ({ intent }: TagFormProps): JSX.Element => {
   const setTagsState = useSetRecoilState(tagsState);
   const navigate = useNavigate();
+  const [form] = Form.useForm<CreateTagCMD>();
+
+  const tagToEdit = useRouteParamTag();
+
+  useEffect(() => {
+    form.resetFields();
+  }, [tagToEdit, form]);
+
+  if (intent === 'edit' && !tagToEdit) {
+    return <Spin />;
+  }
 
   const onFinish = (values: CreateTagCMD) => {
-    apiPost<CreateTagCMD, TagDTO>('/api/tags', values).then((newTag) => {
-      setTagsState((currentTags) => [...currentTags, newTag]);
-      navigate(ROOT_URL);
-    });
+    if (intent === 'create') {
+      apiPost<CreateTagCMD, TagDTO>('/api/tags', values).then((newTag) => {
+        setTagsState((currentTags) => [...currentTags, newTag]);
+        navigate(ROOT_URL);
+      });
+    } else {
+      console.log(values);
+      apiPut<CreateTagCMD, TagDTO>(`/api/tags/${tagToEdit?.id}`, values).then(
+        (updatedTag) => {
+          setTagsState((currentTags) =>
+            currentTags.map((t) => (t.id === updatedTag.id ? updatedTag : t))
+          );
+          navigate(ROOT_URL);
+        }
+      );
+    }
   };
 
   return (
@@ -60,14 +90,21 @@ const TagForm = (): JSX.Element => {
       <Row>
         <Col span={8} />
         <Col span={8}>
-          <Title>Create Tag</Title>
+          <Title>{capitalized(intent)} Tag</Title>
         </Col>
       </Row>
-      <Form onFinish={onFinish} {...layout}>
-        <TagFormField name='name' label='Name' />
-        <TagFormField name='color' label='Color' />
+      <Form onFinish={onFinish} {...layout} form={form}>
+        <TagFormField name='name' label='Name' initialValue={tagToEdit?.name} />
+        <TagFormField
+          name='color'
+          label='Color'
+          initialValue={tagToEdit?.color}
+        />
 
-        <Form.List name='regexRules' initialValue={[]}>
+        <Form.List
+          name='regexRules'
+          initialValue={tagToEdit ? tagToEdit.regexRules : []}
+        >
           {(fields, { add, remove }) => {
             return (
               <div>

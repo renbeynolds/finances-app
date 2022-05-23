@@ -54,7 +54,8 @@ const App = (): JSX.Element => {
               </Route>
             </Route>
             <Route path={'tags'}>
-              <Route path={'new'} element={<TagForm />} />
+              <Route path={'new'} element={<TagForm intent='create' />} />
+              <Route path={':tagId'} element={<TagForm intent='edit' />} />
             </Route>
           </Route>
         </Routes>

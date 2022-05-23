@@ -1,4 +1,4 @@
-import { PlusOutlined } from '@ant-design/icons';
+import { EditOutlined, PlusOutlined } from '@ant-design/icons';
 import { Button, List, Typography } from 'antd';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -15,6 +15,10 @@ const SidebarTagList = (): JSX.Element => {
     navigate('/tags/new');
   };
 
+  const onEditTagClick = (tagId: number) => {
+    navigate(`/tags/${tagId}`);
+  };
+
   return (
     <div
       style={{
@@ -29,6 +33,11 @@ const SidebarTagList = (): JSX.Element => {
         renderItem={(tag) => (
           <List.Item>
             <Text>{tag.name}</Text>
+            <Button
+              icon={<EditOutlined />}
+              shape='circle'
+              onClick={() => onEditTagClick(tag.id)}
+            />
           </List.Item>
         )}
       />

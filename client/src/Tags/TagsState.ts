@@ -16,8 +16,11 @@ export const tagsState = atom({
 export const tagState = selectorFamily({
   key: 'tag',
   get:
-    (tagId: number) =>
+    (tagId?: number | null) =>
     ({ get }) => {
+      if (!tagId) {
+        return null;
+      }
       const tags = get(tagsState);
       return _.find(tags, { id: tagId });
     },

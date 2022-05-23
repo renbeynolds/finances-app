@@ -13,6 +13,9 @@ export class RegexRule {
   @Column()
   pattern: string;
 
+  @Column('int')
+  tagId: number;
+
   @ManyToOne(() => Tag, (tag) => tag.regexRules)
   tag: Tag;
 }
