@@ -1,23 +1,18 @@
 # Finances APP
 
-* Creating a Database Backup
+- Creating a Database Backup
+
   ```bash
-  > docker exec -t finances-app-db pg_dumpall -c -U financesAppUser > dump_`date +%Y-%m-%d"_"%H_%M_%S`.sql
+  > docker exec -t finance-app-db pg_dumpall -c -U username > dump_`date +%Y-%m-%d"_"%H_%M_%S`.sql
   ```
 
-* Restoring the Database
+- Restoring the Database
   ```bash
-  > cat your_dump.sql | docker exec -i finances-app-db psql -U financesAppUser -d financesAppDB
-  ```
-
-* Generating a Component
-  ```bash
-  > cd client
-  > npm run generate component
+  > cat your_dump.sql | docker exec -i finance-app-db psql -U username -d database
   ```
 
 * Generating a Migration
   ```bash
-  > cd api
-  > npm run typeorm -- migration:generate -n PostRefactoring
+  > cd server
+  > yarn run typeorm migration:generate -n <migration_name>
   ```
