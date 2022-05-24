@@ -2,14 +2,11 @@ import { Space, Spin } from 'antd';
 import React, { Suspense } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { RecoilRoot } from 'recoil';
-import { AccountForm } from './Accounts/AccountForm';
 import { IncomeVsExpense } from './Charts/IncomeVsExpense';
 import { TagSpendingOverTime } from './Charts/TagSpendingOverTime';
 import { TopSpendingTags } from './Charts/TopSpendingTags';
-import { AppLayout } from './Common/AppLayout';
 import { FilterDependencyEffect } from './Filters/FilterDependecyEffect';
-import { TagForm } from './Tags/TagForm';
-import { UploadForm } from './Uploads/UploadForm';
+import { Layout } from './Layout';
 
 export const ROOT_URL = '/';
 
@@ -19,7 +16,7 @@ const App = (): JSX.Element => {
       <FilterDependencyEffect />
       <BrowserRouter>
         <Routes>
-          <Route path={ROOT_URL} element={<AppLayout />}>
+          <Route path={ROOT_URL} element={<Layout />}>
             <Route
               index
               element={
@@ -40,7 +37,7 @@ const App = (): JSX.Element => {
                 </Space>
               }
             />
-            <Route path={'accounts'}>
+            {/* <Route path={'accounts'}>
               <Route path={'new'} element={<AccountForm />} />
               <Route path={':accountId'}>
                 <Route
@@ -56,7 +53,7 @@ const App = (): JSX.Element => {
             <Route path={'tags'}>
               <Route path={'new'} element={<TagForm intent='create' />} />
               <Route path={':tagId'} element={<TagForm intent='edit' />} />
-            </Route>
+            </Route> */}
           </Route>
         </Routes>
       </BrowserRouter>

@@ -1,7 +1,7 @@
 import { PlusOutlined } from '@ant-design/icons';
 import { AutoComplete, Input, Tag } from 'antd';
 import _ from 'lodash';
-import { OptionData, OptionGroupData } from 'rc-select/lib/interface';
+// import { OptionData, OptionGroupData } from 'rc-select/lib/interface';
 import React, { useState } from 'react';
 import { useRecoilRefresher_UNSTABLE, useRecoilValueLoadable } from 'recoil';
 import { TransactionDTO } from '../../Transactions/TransactionDTO';
@@ -39,7 +39,7 @@ const EditableTag = ({
     })
   );
 
-  const onSelect = (value: string, option: OptionData | OptionGroupData) => {
+  const onSelect = (value: string, option: any) => {
     apiPut<UpdateTransactionCMD, TransactionDTO>(
       `/api/transactions/${transactionId}`,
       { tagId: option.id }
