@@ -22,7 +22,12 @@ const Layout = (): JSX.Element => {
           onSiderOpen={() => setSiderOpen(true)}
           onSiderClose={() => setSiderOpen(false)}
         />
-        <Content>
+        <Content
+          style={{
+            margin: 24,
+            backgroundColor: '#fff',
+          }}
+        >
           <Outlet />
         </Content>
       </AntdLayout>

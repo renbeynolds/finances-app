@@ -17,13 +17,13 @@ import {
 } from 'recharts';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { endDateState, startDateState } from '../../Filters/FiltersState';
-import { incomeVsExpenseQuery } from './state';
+import { useIncomeVsExpenseData } from './useIncomeVsExpenseData';
 
-function IncomeVsExpense() {
+function IncomeVsExpenseChart() {
   const startDate = useRecoilValue(startDateState);
   const endDate = useRecoilValue(endDateState);
 
-  const data = useRecoilValue(incomeVsExpenseQuery);
+  const data = useIncomeVsExpenseData();
   const setStartDate = useSetRecoilState(startDateState);
   const setEndDate = useSetRecoilState(endDateState);
 
@@ -115,4 +115,4 @@ function IncomeVsExpense() {
   );
 }
 
-export default IncomeVsExpense;
+export default IncomeVsExpenseChart;

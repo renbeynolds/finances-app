@@ -1,12 +1,9 @@
-import { Space, Spin } from 'antd';
-import React, { Suspense } from 'react';
+import React from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { RecoilRoot } from 'recoil';
-import { IncomeVsExpense } from './Charts/IncomeVsExpense';
-import { TagSpendingOverTime } from './Charts/TagSpendingOverTime';
-import { TopSpendingTags } from './Charts/TopSpendingTags';
 import { FilterDependencyEffect } from './Filters/FilterDependecyEffect';
 import { Layout } from './Layout';
+import { Overview } from './Overview';
 
 export const ROOT_URL = '/';
 
@@ -17,26 +14,7 @@ const App = (): JSX.Element => {
       <BrowserRouter>
         <Routes>
           <Route path={ROOT_URL} element={<Layout />}>
-            <Route
-              index
-              element={
-                <Space direction='vertical' size='large'>
-                  <Space direction='horizontal' size='large'>
-                    <Suspense fallback={<Spin />}>
-                      <IncomeVsExpense />
-                    </Suspense>
-                    <Suspense fallback={<Spin />}>
-                      <TopSpendingTags />
-                    </Suspense>
-                  </Space>
-                  <Space direction='horizontal' size='large'>
-                    <Suspense fallback={<Spin />}>
-                      <TagSpendingOverTime />
-                    </Suspense>
-                  </Space>
-                </Space>
-              }
-            />
+            <Route index element={<Overview />} />
             {/* <Route path={'accounts'}>
               <Route path={'new'} element={<AccountForm />} />
               <Route path={':accountId'}>
