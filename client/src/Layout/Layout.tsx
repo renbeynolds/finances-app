@@ -7,15 +7,21 @@ import { Sider } from './Sider';
 const { Content } = AntdLayout;
 
 const Layout = (): JSX.Element => {
+  const [siderOpen, setSiderOpen] = React.useState<boolean>(false);
+
   return (
     <AntdLayout
       style={{
         height: '100%',
       }}
     >
-      <Sider />
+      <Sider open={siderOpen} />
       <AntdLayout>
-        <Header />
+        <Header
+          siderOpen={siderOpen}
+          onSiderOpen={() => setSiderOpen(true)}
+          onSiderClose={() => setSiderOpen(false)}
+        />
         <Content>
           <Outlet />
         </Content>
