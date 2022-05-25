@@ -8,7 +8,7 @@ import { makeStyles } from '@material-ui/styles';
 import { Button, Layout, Menu } from 'antd';
 import { ItemType } from 'antd/lib/menu/hooks/useItems';
 import React from 'react';
-import { useNavigate } from 'react-router';
+import { useLocation, useNavigate } from 'react-router';
 
 const { Header: AntdHeader } = Layout;
 
@@ -16,6 +16,12 @@ const MENU_ITEMS: ItemType[] = [
   { label: 'Overview', key: 'overview', icon: <DashboardOutlined /> },
   { label: 'Trends', key: 'trends', icon: <LineChartOutlined /> },
 ];
+
+const getSelectedKeysFromPathname = (pathname: string): string[] => {
+  const basePath = pathname.split('/')[1];
+  const knownKeys = MENU_ITEMS.map((item) => item?.key);
+  return knownKeys.includes(basePath) ? [basePath] : [];
+};
 
 const useStyles = makeStyles({
   menu: {
@@ -38,6 +44,7 @@ const Header = ({
   onSiderClose,
 }: HeaderProps): JSX.Element => {
   const navigate = useNavigate();
+  const location = useLocation();
   const classes = useStyles();
 
   return (
@@ -53,7 +60,7 @@ const Header = ({
       <Menu
         mode='horizontal'
         items={MENU_ITEMS}
-        defaultSelectedKeys={['overview']}
+        selectedKeys={getSelectedKeysFromPathname(location.pathname)}
         onSelect={({ key }) => navigate(key)}
         className={classes.menu}
       />

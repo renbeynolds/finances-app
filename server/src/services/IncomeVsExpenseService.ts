@@ -1,4 +1,4 @@
-import { IncomeVsExpenseDTO } from '@client/Overview/IncomeVsExpenseChart/useIncomeVsExpenseData';
+import { IncomeVsExpenseDTO } from '@client/Trends/IncomeVsExpenseChart/useIncomeVsExpenseData';
 import { Request, Response } from 'express';
 import moment from 'moment';
 import { getManager } from 'typeorm';
