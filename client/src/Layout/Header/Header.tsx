@@ -4,6 +4,7 @@ import {
   MenuFoldOutlined,
   MenuUnfoldOutlined,
 } from '@ant-design/icons';
+import { makeStyles } from '@material-ui/styles';
 import { Button, Layout, Menu } from 'antd';
 import { ItemType } from 'antd/lib/menu/hooks/useItems';
 import React from 'react';
@@ -15,6 +16,15 @@ const MENU_ITEMS: ItemType[] = [
   { label: 'Overview', key: 'overview', icon: <DashboardOutlined /> },
   { label: 'Trends', key: 'trends', icon: <LineChartOutlined /> },
 ];
+
+const useStyles = makeStyles({
+  menu: {
+    '& .ant-menu-item:after': {
+      left: 0,
+      right: 0,
+    },
+  },
+});
 
 interface HeaderProps {
   siderOpen: boolean;
@@ -28,6 +38,7 @@ const Header = ({
   onSiderClose,
 }: HeaderProps): JSX.Element => {
   const navigate = useNavigate();
+  const classes = useStyles();
 
   return (
     <AntdHeader style={{ paddingLeft: '25px' }}>
@@ -40,11 +51,11 @@ const Header = ({
         />
       </div>
       <Menu
-        theme='dark'
         mode='horizontal'
         items={MENU_ITEMS}
         defaultSelectedKeys={['overview']}
         onSelect={({ key }) => navigate(key)}
+        className={classes.menu}
       />
     </AntdHeader>
   );

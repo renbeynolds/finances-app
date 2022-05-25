@@ -1,5 +1,5 @@
 import accounting from 'accounting';
-import { Card } from 'antd';
+import { Card, Typography } from 'antd';
 import _ from 'lodash';
 import React, { ReactNode, useState } from 'react';
 import { Cell, Legend, Pie, PieChart, ResponsiveContainer } from 'recharts';
@@ -21,7 +21,7 @@ const renderLegend = (props: Props): ReactNode => {
         const value = accounting.formatMoney(entry?.payload?.data);
 
         return (
-          <div key={index} style={{ display: 'flex', color: '#333' }}>
+          <div key={index} style={{ display: 'flex', color: '#fff' }}>
             <div
               style={{
                 backgroundColor: entry.color,
@@ -30,11 +30,18 @@ const renderLegend = (props: Props): ReactNode => {
                 marginTop: '4px',
               }}
             />
-            <div style={{ paddingLeft: '8px', flexGrow: 1 }}>{entry.value}</div>
-            <div style={{ paddingLeft: '8px' }}>{value}</div>
-            <div style={{ paddingLeft: '8px', width: '70px', color: '#999' }}>
+            <Typography.Text style={{ paddingLeft: '8px', flexGrow: 1 }}>
+              {entry.value}
+            </Typography.Text>
+            <Typography.Text style={{ paddingLeft: '8px' }}>
+              {value}
+            </Typography.Text>
+            <Typography.Text
+              type='secondary'
+              style={{ paddingLeft: '8px', width: '70px' }}
+            >
               {percentage}
-            </div>
+            </Typography.Text>
           </div>
         );
       })}
@@ -65,7 +72,7 @@ const TopSpendingTagsChart = ({
   };
 
   return (
-    <Card title='Top Spending Tags'>
+    <Card title='Top Spending Tags' bordered={false}>
       <ResponsiveContainer height={300}>
         <PieChart>
           <Pie
@@ -80,7 +87,7 @@ const TopSpendingTagsChart = ({
             activeShape={ActivePieShape}
           >
             {data.map((entry: TopSpendingTagDTO, index: number) => (
-              <Cell key={index} fill={getColor(entry, index)} />
+              <Cell key={index} fill={getColor(entry, index)} stroke='none' />
             ))}
           </Pie>
           <Legend

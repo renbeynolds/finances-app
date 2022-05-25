@@ -32,12 +32,22 @@ const ActivePieShape = ({
       <text x={cx} y={cy} dy={-15} textAnchor='middle' fill={fill}>
         {payload.name}
       </text>
-      <text x={cx} y={cy} dy={5} textAnchor='middle' fill='#333'>
+      <text
+        x={cx}
+        y={cy}
+        dy={5}
+        textAnchor='middle'
+        fill='rgba(255, 255, 255, 0.85)'
+      >
         {accounting.formatMoney(value)}
       </text>
-      <text x={cx} y={cy} dy={25} textAnchor='middle' fill='#999'>{`(${(
-        percent * 100
-      ).toFixed(2)}%)`}</text>
+      <text
+        x={cx}
+        y={cy}
+        dy={25}
+        textAnchor='middle'
+        fill='rgba(255, 255, 255, 0.45)'
+      >{`(${(percent * 100).toFixed(2)}%)`}</text>
       <Sector
         cx={cx}
         cy={cy}

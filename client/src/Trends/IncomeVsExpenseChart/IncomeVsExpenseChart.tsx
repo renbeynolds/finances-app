@@ -1,3 +1,4 @@
+import { presetDarkPalettes } from '@ant-design/colors';
 import accounting from 'accounting';
 import Card from 'antd/lib/card';
 import moment from 'moment';
@@ -6,9 +7,7 @@ import {
   Bar,
   CartesianGrid,
   ComposedChart,
-  Legend,
   Line,
-  ReferenceLine,
   ResponsiveContainer,
   Tooltip,
   XAxis,
@@ -42,13 +41,19 @@ const IncomeVsExpenseChart = (): JSX.Element => {
             formatter={(value: number) => accounting.formatMoney(value)}
             labelFormatter={formatMonth}
           />
-          <Legend />
-          <ReferenceLine y={0} stroke='#000' />
-          <Bar dataKey='Income' fill='rgb(40, 201, 56)' stackId='stack' />
-          <Bar dataKey='Expense' fill='rgb(222, 53, 53)' stackId='stack' />
+          <Bar
+            dataKey='Income'
+            fill={presetDarkPalettes.green.primary}
+            stackId='stack'
+          />
+          <Bar
+            dataKey='Expense'
+            fill={presetDarkPalettes.red.primary}
+            stackId='stack'
+          />
           <Line
             dataKey='Total'
-            stroke='#000'
+            stroke='#fff'
             dot={false}
             legendType='plainline'
           />

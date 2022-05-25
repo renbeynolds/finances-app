@@ -3,13 +3,13 @@ import accounting from 'accounting';
 import { Button, List, Tooltip, Typography } from 'antd';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useRecoilValue } from 'recoil';
+import { useRecoilValueLoadable } from 'recoil';
 import { accountsState } from '../AccountsState';
 
 const { Text } = Typography;
 
 const SidebarAccountsList = (): JSX.Element => {
-  const accounts = useRecoilValue(accountsState);
+  const accounts = useRecoilValueLoadable(accountsState);
   const navigate = useNavigate();
 
   const onAddAccountClick = () => {
@@ -20,11 +20,15 @@ const SidebarAccountsList = (): JSX.Element => {
     navigate(`accounts/${accountId}/upload`);
   };
 
+  if (accounts.state !== 'hasValue') {
+    return <div></div>;
+  }
+
   return (
     <div>
       <List
         size='small'
-        dataSource={accounts}
+        dataSource={accounts.contents}
         renderItem={(account) => (
           <List.Item>
             <div
@@ -44,7 +48,7 @@ const SidebarAccountsList = (): JSX.Element => {
                   onClick={() => onUploadTransactionsClick(account.id)}
                 />
               </Tooltip>
-              <Text>{account.name}</Text>
+              <Text style={{ color: '#fff' }}>{account.name}</Text>
               <Text
                 type={
                   account.balance > 0
@@ -62,7 +66,6 @@ const SidebarAccountsList = (): JSX.Element => {
       />
       <Button
         style={{ marginLeft: '16px', marginTop: '8px' }}
-        type='ghost'
         size='small'
         icon={<PlusOutlined />}
         onClick={onAddAccountClick}
