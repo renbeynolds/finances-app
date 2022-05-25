@@ -2,13 +2,13 @@ import { EditOutlined, PlusOutlined } from '@ant-design/icons';
 import { Button, List, Typography } from 'antd';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useRecoilValue } from 'recoil';
+import { useRecoilValueLoadable } from 'recoil';
 import { tagsState } from '../TagsState';
 
 const { Text } = Typography;
 
 const SidebarTagList = (): JSX.Element => {
-  const tags = useRecoilValue(tagsState);
+  const tags = useRecoilValueLoadable(tagsState);
   const navigate = useNavigate();
 
   const onAddTagClick = () => {
@@ -16,8 +16,12 @@ const SidebarTagList = (): JSX.Element => {
   };
 
   const onEditTagClick = (tagId: number) => {
-    navigate(`/tags/${tagId}`);
+    navigate(`/tags/${tagId}/edit`);
   };
+
+  if (tags.state !== 'hasValue') {
+    return <div></div>;
+  }
 
   return (
     <div
@@ -29,7 +33,7 @@ const SidebarTagList = (): JSX.Element => {
     >
       <List
         size='small'
-        dataSource={tags}
+        dataSource={tags.contents}
         renderItem={(tag) => (
           <List.Item>
             <Text>{tag.name}</Text>

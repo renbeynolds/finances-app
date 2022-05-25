@@ -4,6 +4,7 @@ import { Layout, Menu, Typography } from 'antd';
 import { ItemType } from 'antd/lib/menu/hooks/useItems';
 import React from 'react';
 import { SidebarAccountsList } from '../../Accounts/SidebarAccountsList';
+import { SidebarTagList } from '../../Tags/SidebarTagList';
 import { capitalized } from '../../Utils/StringUtils';
 
 const { Sider: AntdSider } = Layout;
@@ -51,6 +52,7 @@ const Sider = ({ open }: SiderProps): JSX.Element => {
           </Typography.Title>
         </div>
         {activeKey === 'accounts' && <SidebarAccountsList />}
+        {activeKey === 'tags' && <SidebarTagList />}
         <div style={{ flexGrow: 1 }} />
         <Menu
           items={MENU_ITEMS}

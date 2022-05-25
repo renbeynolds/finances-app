@@ -8,7 +8,6 @@ import { makeStyles } from '@material-ui/styles';
 import { Button, Drawer, Typography } from 'antd';
 import React, { useState } from 'react';
 import { TransactionTable } from '../../Transactions/TransactionTable';
-import { SIDE_MENU_WIDTH } from '../SideMenu';
 import ResizeHandle from './ResizeHandle';
 
 const CLOSED_HEIGHT = 55;
@@ -16,11 +15,11 @@ const OPEN_HEIGHT = 730;
 
 const useStyles = makeStyles({
   drawer: {
-    width: `calc(100% - ${SIDE_MENU_WIDTH}px)`,
-    marginLeft: `${SIDE_MENU_WIDTH}px`,
-    '& .ant-drawer-body': {
-      padding: 0,
-    },
+    // width: `calc(100% - ${SIDE_MENU_WIDTH}px)`,
+    // marginLeft: `${SIDE_MENU_WIDTH}px`,
+    // '& .ant-drawer-body': {
+    //   padding: 0,
+    // },
     '& .ant-drawer-close': {
       marginRight: '48px',
     },

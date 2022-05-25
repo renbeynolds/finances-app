@@ -11,12 +11,10 @@ import {
   YAxis,
 } from 'recharts';
 import { useRecoilValue } from 'recoil';
-import { tagObjectFilter } from '../../Filters/FiltersState';
 import { tagSpendingOverTimeQuery } from './state';
 
 function TagSpendingOverTime() {
   const data = useRecoilValue(tagSpendingOverTimeQuery);
-  const chosenTag = useRecoilValue(tagObjectFilter);
 
   return (
     <div>
@@ -26,7 +24,7 @@ function TagSpendingOverTime() {
           justifyContent: 'center',
         }}
       >
-        <Title level={3}>{chosenTag ? chosenTag.name : 'Tag Over Time'}</Title>
+        <Title level={3}>{'Tag Over Time'}</Title>
       </div>
       <ResponsiveContainer minWidth={600} height={300}>
         <LineChart>

@@ -48,7 +48,7 @@ const Header = ({
   const classes = useStyles();
 
   return (
-    <AntdHeader style={{ paddingLeft: '25px' }}>
+    <AntdHeader style={{ paddingLeft: '25px', paddingRight: 0 }}>
       <div style={{ float: 'left', paddingRight: '25px' }}>
         <Button
           ghost

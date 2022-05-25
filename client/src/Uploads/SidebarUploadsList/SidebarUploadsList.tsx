@@ -1,15 +1,13 @@
 import { List, Typography } from 'antd';
 import moment from 'moment';
 import React from 'react';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
-import { uploadFilter } from '../../Filters/FiltersState';
+import { useRecoilValue } from 'recoil';
 import { uploadsListState } from '../UploadState';
 
 const { Text } = Typography;
 
 const SidebarUploadsList = (): JSX.Element => {
   const uploads = useRecoilValue(uploadsListState);
-  const setUploadFilter = useSetRecoilState(uploadFilter);
 
   const uploadsWithDate = uploads.map((u) => ({
     ...u,
@@ -27,7 +25,7 @@ const SidebarUploadsList = (): JSX.Element => {
         size='small'
         dataSource={uploadsWithDate}
         renderItem={(upload) => (
-          <List.Item onClick={() => setUploadFilter(upload.id)}>
+          <List.Item>
             <Text>{upload.createdAt}</Text>
             <Text>{upload.accountName}</Text>
           </List.Item>
