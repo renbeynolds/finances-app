@@ -1,14 +1,39 @@
-import { Col, Row } from 'antd';
+import { Col, DatePicker, Row, Space } from 'antd';
 import React from 'react';
-import { IncomeVsExpenseChart } from './IncomeVsExpenseChart';
+import DateRanges from '../Utils/DateRanges';
+import { TopSpendingTagsChart } from './TopSpendingTagsChart';
 
 const Overview = (): JSX.Element => {
+  const defaultDateRange = DateRanges.thisMonth();
+  const [startDate, setStartDate] = React.useState<moment.Moment>(
+    defaultDateRange[0]
+  );
+  const [endDate, setEndDate] = React.useState<moment.Moment>(
+    defaultDateRange[1]
+  );
+
   return (
-    <Row gutter={16}>
-      <Col span={12}>
-        <IncomeVsExpenseChart />
-      </Col>
-    </Row>
+    <Space direction='vertical' style={{ width: '100%' }}>
+      <DatePicker.RangePicker
+        value={[startDate, endDate]}
+        ranges={{
+          'Last 30 Days': DateRanges.last30Days(),
+          'This Month': DateRanges.thisMonth(),
+          'Last Month': DateRanges.lastMonth(),
+          'Last 365 Days': DateRanges.last365Days(),
+        }}
+        allowClear={false}
+        onChange={(dates) => {
+          setStartDate(dates?.[0] as moment.Moment);
+          setEndDate(dates?.[1] as moment.Moment);
+        }}
+      />
+      <Row gutter={16}>
+        <Col span={12}>
+          <TopSpendingTagsChart startDate={startDate} endDate={endDate} />
+        </Col>
+      </Row>
+    </Space>
   );
 };
 

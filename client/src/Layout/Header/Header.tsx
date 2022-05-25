@@ -8,13 +8,12 @@ import { Button, Layout, Menu } from 'antd';
 import { ItemType } from 'antd/lib/menu/hooks/useItems';
 import React from 'react';
 import { useNavigate } from 'react-router';
-import { OVERVIEW_PATH, TRENDS_PATH } from '../../App';
 
 const { Header: AntdHeader } = Layout;
 
 const MENU_ITEMS: ItemType[] = [
-  { label: 'Overview', key: OVERVIEW_PATH, icon: <DashboardOutlined /> },
-  { label: 'Trends', key: TRENDS_PATH, icon: <LineChartOutlined /> },
+  { label: 'Overview', key: 'overview', icon: <DashboardOutlined /> },
+  { label: 'Trends', key: 'trends', icon: <LineChartOutlined /> },
 ];
 
 interface HeaderProps {

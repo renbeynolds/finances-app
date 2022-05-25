@@ -7,8 +7,6 @@ import { Overview } from './Overview';
 import { Trends } from './Trends';
 
 export const ROOT_URL = '/';
-export const OVERVIEW_PATH = 'overview';
-export const TRENDS_PATH = 'trends';
 
 const App = (): JSX.Element => {
   return (
@@ -17,9 +15,9 @@ const App = (): JSX.Element => {
       <BrowserRouter>
         <Routes>
           <Route path={ROOT_URL} element={<Layout />}>
-            <Route index element={<Navigate to={OVERVIEW_PATH} />} />
-            <Route path={OVERVIEW_PATH} element={<Overview />} />
-            <Route path={TRENDS_PATH} element={<Trends />} />
+            <Route index element={<Navigate to={'overview'} />} />
+            <Route path={'overview'} element={<Overview />} />
+            <Route path={'trends'} element={<Trends />} />
             {/* <Route path={'accounts'}>
               <Route path={'new'} element={<AccountForm />} />
               <Route path={':accountId'}>
