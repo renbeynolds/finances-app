@@ -25,7 +25,6 @@ const Layout = (): JSX.Element => {
         <Content
           style={{
             margin: 24,
-            backgroundColor: '#fff',
           }}
         >
           <Outlet />

@@ -1,3 +1,4 @@
+import { IncomeVsExpenseDTO } from '@client/Overview/IncomeVsExpenseChart/useIncomeVsExpenseData';
 import { Request, Response } from 'express';
 import moment from 'moment';
 import { getManager } from 'typeorm';
@@ -6,17 +7,16 @@ export const getIncomeVsExpenseData = async (
   req: Request,
   res: Response
 ): Promise<void> => {
-  const endDate = moment().endOf('month');
-  const startDate = moment().endOf('month').subtract(1, 'year');
+  const startDate = moment()
+    .endOf('month')
+    .subtract(1, 'year')
+    .format('MM-DD-YYYY');
 
-  const endDateString = endDate.format('MM-DD-YYYY');
-  const startDateString = startDate.format('MM-DD-YYYY');
+  const endDate = moment().endOf('month').format('MM-DD-YYYY');
 
-  const manager = getManager();
-
-  const rawData = await manager.query(`
+  const rawData: IncomeVsExpenseDTO[] = await getManager().query(`
     WITH calendar AS (
-      SELECT DATE_TRUNC('month', bucket::date) AS month FROM generate_series('${startDateString}', '${endDateString}', '1 month'::interval) bucket
+      SELECT DATE_TRUNC('month', bucket::date) AS month FROM generate_series('${startDate}', '${endDate}', '1 month'::interval) bucket
     )
     SELECT
       TO_CHAR(c.month, 'YYYY-MM') as month,

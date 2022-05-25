@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { apiGet } from '../../Utils';
 
-interface IncomeVsExpenseDTO {
+export interface IncomeVsExpenseDTO {
   month: string;
   Income: string;
   Expense: string;
