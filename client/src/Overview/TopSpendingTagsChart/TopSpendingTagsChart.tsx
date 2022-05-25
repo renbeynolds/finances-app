@@ -21,7 +21,7 @@ const renderLegend = (props: Props): ReactNode => {
         const value = accounting.formatMoney(entry?.payload?.data);
 
         return (
-          <div key={index} style={{ display: 'flex', color: '#fff' }}>
+          <div key={index} style={{ display: 'flex' }}>
             <div
               style={{
                 backgroundColor: entry.color,

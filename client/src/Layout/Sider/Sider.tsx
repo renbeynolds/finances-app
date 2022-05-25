@@ -46,10 +46,7 @@ const Sider = ({ open }: SiderProps): JSX.Element => {
         }}
       >
         <div style={{ display: 'flex', justifyContent: 'center' }}>
-          <Typography.Title
-            level={2}
-            style={{ color: '#fff', lineHeight: '64px' }}
-          >
+          <Typography.Title level={2} style={{ lineHeight: '64px' }}>
             {capitalized(activeKey)}
           </Typography.Title>
         </div>

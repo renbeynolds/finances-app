@@ -48,7 +48,7 @@ const SidebarAccountsList = (): JSX.Element => {
                   onClick={() => onUploadTransactionsClick(account.id)}
                 />
               </Tooltip>
-              <Text style={{ color: '#fff' }}>{account.name}</Text>
+              <Text>{account.name}</Text>
               <Text
                 type={
                   account.balance > 0
