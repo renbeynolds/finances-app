@@ -4,7 +4,7 @@ import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import { RecoilRoot } from 'recoil';
 import { AccountForm } from './Accounts/AccountForm';
 import { Layout } from './Layout';
-import { Overview } from './Overview';
+import { Snapshot } from './Snapshot';
 import { TagForm } from './Tags/TagForm';
 import { TagInsights } from './Tags/TagInsights';
 import { Trends } from './Trends';
@@ -18,8 +18,8 @@ const App = (): JSX.Element => {
       <BrowserRouter>
         <Routes>
           <Route path={ROOT_URL} element={<Layout />}>
-            <Route index element={<Navigate to={'overview'} />} />
-            <Route path={'overview'} element={<Overview />} />
+            <Route index element={<Navigate to={'snapshot'} />} />
+            <Route path={'snapshot'} element={<Snapshot />} />
             <Route path={'trends'} element={<Trends />} />
             <Route path={'accounts'}>
               <Route path={'new'} element={<AccountForm />} />

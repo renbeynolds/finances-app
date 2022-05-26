@@ -6,7 +6,7 @@ import { endDateFilterAtom, startDateFilterAtom } from '../Filters/FilterState';
 import { TransactionTable } from '../Transactions/TransactionTable';
 import { TopSpendingTagsChart } from './TopSpendingTagsChart';
 
-const Overview = (): JSX.Element => {
+const Snapshot = (): JSX.Element => {
   const startDateFilter = useRecoilValue(startDateFilterAtom);
   const endDateFilter = useRecoilValue(endDateFilterAtom);
 
@@ -33,4 +33,4 @@ const Overview = (): JSX.Element => {
   );
 };
 
-export default Overview;
+export default Snapshot;

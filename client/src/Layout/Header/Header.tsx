@@ -13,7 +13,7 @@ import { useLocation, useNavigate } from 'react-router';
 const { Header: AntdHeader } = Layout;
 
 const MENU_ITEMS: ItemType[] = [
-  { label: 'Overview', key: 'overview', icon: <DashboardOutlined /> },
+  { label: 'Snapshot', key: 'snapshot', icon: <DashboardOutlined /> },
   { label: 'Trends', key: 'trends', icon: <LineChartOutlined /> },
 ];
 
