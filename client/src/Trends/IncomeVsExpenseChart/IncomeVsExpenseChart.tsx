@@ -1,7 +1,6 @@
 import { presetDarkPalettes } from '@ant-design/colors';
 import accounting from 'accounting';
 import Card from 'antd/lib/card';
-import moment from 'moment';
 import React from 'react';
 import {
   Bar,
@@ -13,11 +12,8 @@ import {
   XAxis,
   YAxis,
 } from 'recharts';
+import { formatMonthString } from '../../Utils/StringUtils';
 import { useIncomeVsExpenseData } from './useIncomeVsExpenseData';
-
-const formatMonth = (month: string): string => {
-  return moment(month).format('MMM YYYY');
-};
 
 const IncomeVsExpenseChart = (): JSX.Element => {
   const data = useIncomeVsExpenseData();
@@ -31,7 +27,7 @@ const IncomeVsExpenseChart = (): JSX.Element => {
           margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
         >
           <CartesianGrid strokeDasharray='3 3' />
-          <XAxis dataKey='month' tickFormatter={formatMonth} />
+          <XAxis dataKey='month' tickFormatter={formatMonthString} />
           <YAxis
             tickFormatter={(value: number) =>
               accounting.formatMoney(value, { precision: 0 })
@@ -39,7 +35,7 @@ const IncomeVsExpenseChart = (): JSX.Element => {
           />
           <Tooltip
             formatter={(value: number) => accounting.formatMoney(value)}
-            labelFormatter={formatMonth}
+            labelFormatter={formatMonthString}
             contentStyle={{
               backgroundColor: '#1d1d1d',
               border: 'none',

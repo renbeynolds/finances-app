@@ -1,5 +1,5 @@
 import accounting from 'accounting';
-import Title from 'antd/lib/typography/Title';
+import { Card } from 'antd';
 import React from 'react';
 import {
   CartesianGrid,
@@ -10,28 +10,27 @@ import {
   XAxis,
   YAxis,
 } from 'recharts';
-import { useRecoilValue } from 'recoil';
-import { tagSpendingOverTimeQuery } from './state';
+import { formatMonthString } from '../../../Utils/StringUtils';
+import { useTagSpendingOverTimeData } from './useTagSpendingOverTimeData';
 
-function TagSpendingOverTime() {
-  const data = useRecoilValue(tagSpendingOverTimeQuery);
+interface TagSpendingOverTimeChartProps {
+  tagId: number;
+}
+
+const TagSpendingOverTimeChart = ({
+  tagId,
+}: TagSpendingOverTimeChartProps): JSX.Element => {
+  const data = useTagSpendingOverTimeData(tagId);
 
   return (
-    <div>
-      <div
-        style={{
-          display: 'flex',
-          justifyContent: 'center',
-        }}
-      >
-        <Title level={3}>{'Tag Over Time'}</Title>
-      </div>
+    <Card title='Tag Spending Over Time'>
       <ResponsiveContainer minWidth={600} height={300}>
         <LineChart>
           <XAxis
             dataKey='month'
             type='category'
             allowDuplicatedCategory={false}
+            tickFormatter={formatMonthString}
           />
           <YAxis
             dataKey='total'
@@ -42,6 +41,11 @@ function TagSpendingOverTime() {
           <CartesianGrid strokeDasharray='3 3' />
           <Tooltip
             formatter={(value: number) => accounting.formatMoney(value)}
+            labelFormatter={formatMonthString}
+            contentStyle={{
+              backgroundColor: '#1d1d1d',
+              border: 'none',
+            }}
           />
           <Line
             key={data.id}
@@ -53,8 +57,8 @@ function TagSpendingOverTime() {
           />
         </LineChart>
       </ResponsiveContainer>
-    </div>
+    </Card>
   );
-}
+};
 
-export default TagSpendingOverTime;
+export default TagSpendingOverTimeChart;

@@ -15,7 +15,8 @@ interface RequestState {
 export const usePaginatedTransactions = (
   pageNumber: number,
   startDate: moment.Moment,
-  endDate: moment.Moment
+  endDate: moment.Moment,
+  tagId?: number
 ) => {
   const [state, setState] = React.useState<RequestState>({
     data: [],
@@ -26,10 +27,12 @@ export const usePaginatedTransactions = (
 
   useEffect(() => {
     const fetchData = async () => {
+      const tagIdQuery = tagId ? `&tagId=${tagId}` : '';
+
       const response = await apiGet<PaginatedResponse<TransactionDTO>>(
         `/api/transactions?limit=${PAGE_SIZE}&offset=${offset}&startDate=${startDate.format(
           'YYYY-MM-DD'
-        )}&endDate=${endDate.format('YYYY-MM-DD')}`
+        )}&endDate=${endDate.format('YYYY-MM-DD')}${tagIdQuery}`
       );
       setState({
         data: response.data,
@@ -39,7 +42,7 @@ export const usePaginatedTransactions = (
     };
     setState((currentState) => ({ ...currentState, loading: true }));
     fetchData();
-  }, [setState, offset, startDate, endDate]);
+  }, [setState, offset, startDate, endDate, tagId]);
 
   const updateTransaction = (transaction: TransactionDTO) => {
     setState((currentState) => ({

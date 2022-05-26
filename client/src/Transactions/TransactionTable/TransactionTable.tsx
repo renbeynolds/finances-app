@@ -42,11 +42,13 @@ const useStyles = makeStyles(() => ({
 interface TransactionTableProps {
   startDate: moment.Moment;
   endDate: moment.Moment;
+  tagId?: number;
 }
 
 const TransactionTable = ({
   startDate,
   endDate,
+  tagId,
 }: TransactionTableProps): JSX.Element => {
   const classes = useStyles();
   const [pageNumber, setPageNumber] = useState<number>(1);
@@ -56,7 +58,7 @@ const TransactionTable = ({
   }, [setPageNumber, startDate, endDate]);
 
   const { data, totalTransactions, loading, updateTransaction } =
-    usePaginatedTransactions(pageNumber, startDate, endDate);
+    usePaginatedTransactions(pageNumber, startDate, endDate, tagId);
 
   const columns = [
     {

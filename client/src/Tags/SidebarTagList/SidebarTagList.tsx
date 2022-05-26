@@ -1,8 +1,9 @@
 import { EditOutlined, PlusOutlined } from '@ant-design/icons';
 import { makeStyles } from '@material-ui/styles';
 import { Button, List, Typography } from 'antd';
+import cx from 'classnames';
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useRecoilValueLoadable } from 'recoil';
 import { tagsState } from '../TagsState';
 
@@ -15,11 +16,15 @@ const useStyles = makeStyles(() => ({
       cursor: 'pointer',
     },
   },
+  listItemSelected: {
+    backgroundColor: '#303030',
+  },
 }));
 
 const SidebarTagList = (): JSX.Element => {
   const tags = useRecoilValueLoadable(tagsState);
   const navigate = useNavigate();
+  const location = useLocation();
   const classes = useStyles();
 
   const onAddTagClick = () => {
@@ -55,7 +60,10 @@ const SidebarTagList = (): JSX.Element => {
         dataSource={tags.contents}
         renderItem={(tag) => (
           <List.Item
-            className={classes.listItem}
+            className={cx(classes.listItem, {
+              [classes.listItemSelected]:
+                location.pathname === `/tags/${tag.id}`,
+            })}
             onClick={() => onSelectTag(tag.id)}
           >
             <Text>{tag.name}</Text>
