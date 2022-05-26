@@ -56,10 +56,21 @@ const EditableCell = ({
       </Form>
     );
   } else if (value) {
-    return <div onClick={() => setEditing(true)}>{value}</div>;
+    return (
+      <div
+        onClick={() => setEditing(true)}
+        style={{
+          textOverflow: 'ellipsis',
+          whiteSpace: 'nowrap',
+          overflow: 'hidden',
+        }}
+      >
+        {value}
+      </div>
+    );
   } else {
     return (
-      <Button type='dashed' onClick={() => setEditing(true)}>
+      <Button type='dashed' onClick={() => setEditing(true)} size='small'>
         +
       </Button>
     );

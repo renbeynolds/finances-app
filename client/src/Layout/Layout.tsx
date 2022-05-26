@@ -25,6 +25,7 @@ const Layout = (): JSX.Element => {
         <Content
           style={{
             margin: 24,
+            overflowY: 'scroll',
           }}
         >
           <Outlet />

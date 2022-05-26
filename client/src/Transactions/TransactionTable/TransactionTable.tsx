@@ -1,3 +1,4 @@
+import { makeStyles } from '@material-ui/styles';
 import accounting from 'accounting';
 import { Table } from 'antd';
 import { TablePaginationConfig } from 'antd/lib/table';
@@ -22,11 +23,18 @@ import {
 import { UpdateTransactionCMD } from '../UpdateTransactionCMD';
 import './styles.scss';
 
+const useStyles = makeStyles(() => ({
+  row: {
+    height: 57,
+  },
+}));
+
 const TransactionTable = (): JSX.Element => {
   const { state, contents } = useRecoilValueLoadable(paginatedTransactions);
   const refreshTransactions = useRecoilRefresher_UNSTABLE(
     paginatedTransactions
   );
+  const classes = useStyles();
 
   const [transactions, setTransactions] = useState([]);
   const [totalTransactions, setTotalTransactions] = useState(0);
@@ -59,10 +67,12 @@ const TransactionTable = (): JSX.Element => {
     {
       title: 'Description',
       dataIndex: 'description',
+      ellipsis: true,
     },
     {
       title: 'Comment',
       dataIndex: 'comment',
+      ellipsis: true,
       render: (value: string, record: TransactionDTO) => (
         <EditableCell
           title='Comment'
@@ -71,18 +81,21 @@ const TransactionTable = (): JSX.Element => {
           onSave={(newComment) => onEditComment(record.id, newComment)}
         />
       ),
+      width: '275px',
     },
     {
       title: 'Amount',
       dataIndex: 'amount',
       className: 'TransactionTable__amount',
       render: (value: number) => accounting.formatMoney(value),
+      width: '200px',
     },
     {
       title: 'Balance',
       dataIndex: 'balance',
       className: 'TransactionTable__balance',
       render: (value: number) => accounting.formatMoney(value),
+      width: '200px',
     },
     // {
     //   title: 'Correction',
@@ -105,6 +118,7 @@ const TransactionTable = (): JSX.Element => {
         const [tagId, transaction] = args;
         return <EditableTag tagId={tagId} transactionId={transaction.id} />;
       },
+      width: '200px',
     },
   ];
 
@@ -120,7 +134,7 @@ const TransactionTable = (): JSX.Element => {
       dataSource={transactions}
       rowKey='id'
       rowClassName={(record: TransactionDTO) =>
-        cx({
+        cx(classes.row, {
           TransactionTable__expense: record.amount < 0,
           TransactionTable__allowance: record.amount > 0,
           'TransactionTable__positive-balance': record.balance > 0,

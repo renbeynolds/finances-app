@@ -1,5 +1,6 @@
 import { Col, DatePicker, Row, Space } from 'antd';
 import React from 'react';
+import { TransactionTable } from '../Transactions/TransactionTable';
 import DateRanges from '../Utils/DateRanges';
 import { TopSpendingTagsChart } from './TopSpendingTagsChart';
 
@@ -31,6 +32,11 @@ const Overview = (): JSX.Element => {
       <Row gutter={16}>
         <Col span={12}>
           <TopSpendingTagsChart startDate={startDate} endDate={endDate} />
+        </Col>
+      </Row>
+      <Row>
+        <Col span={24}>
+          <TransactionTable />
         </Col>
       </Row>
     </Space>
