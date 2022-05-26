@@ -35,12 +35,15 @@ const SidebarTagList = (): JSX.Element => {
         size='small'
         dataSource={tags.contents}
         renderItem={(tag) => (
-          <List.Item>
+          <List.Item onClick={() => navigate(`/tags/${tag.id}`)}>
             <Text>{tag.name}</Text>
             <Button
+              type='primary'
               icon={<EditOutlined />}
               shape='circle'
+              ghost
               onClick={() => onEditTagClick(tag.id)}
+              size='small'
             />
           </List.Item>
         )}

@@ -38,28 +38,33 @@ const SidebarAccountsList = (): JSX.Element => {
                 width: '100%',
               }}
             >
-              <Tooltip title='Upload Transactions' placement='right'>
-                <Button
-                  type='primary'
-                  ghost
-                  shape='circle'
-                  icon={<UploadOutlined />}
-                  size='small'
-                  onClick={() => onUploadTransactionsClick(account.id)}
-                />
-              </Tooltip>
               <Text>{account.name}</Text>
-              <Text
-                type={
-                  account.balance > 0
-                    ? 'success'
-                    : account.balance < 0
-                    ? 'danger'
-                    : undefined
-                }
-              >
-                {accounting.formatMoney(account.balance)}
-              </Text>
+              <div>
+                <Text
+                  type={
+                    account.balance > 0
+                      ? 'success'
+                      : account.balance < 0
+                      ? 'danger'
+                      : undefined
+                  }
+                  style={{
+                    paddingRight: '16px',
+                  }}
+                >
+                  {accounting.formatMoney(account.balance)}
+                </Text>
+                <Tooltip title='Upload Transactions' placement='right'>
+                  <Button
+                    type='primary'
+                    ghost
+                    shape='circle'
+                    icon={<UploadOutlined />}
+                    size='small'
+                    onClick={() => onUploadTransactionsClick(account.id)}
+                  />
+                </Tooltip>
+              </div>
             </div>
           </List.Item>
         )}

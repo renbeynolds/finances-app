@@ -6,6 +6,7 @@ import { AccountForm } from './Accounts/AccountForm';
 import { Layout } from './Layout';
 import { Overview } from './Overview';
 import { TagForm } from './Tags/TagForm';
+import { TagInsights } from './Tags/TagInsights';
 import { Trends } from './Trends';
 import { UploadForm } from './Uploads/UploadForm';
 
@@ -35,6 +36,7 @@ const App = (): JSX.Element => {
             </Route>
             <Route path={'tags'}>
               <Route path={'new'} element={<TagForm intent='create' />} />
+              <Route path={':tagId'} element={<TagInsights />} />
               <Route path={':tagId/edit'} element={<TagForm intent='edit' />} />
             </Route>
           </Route>
