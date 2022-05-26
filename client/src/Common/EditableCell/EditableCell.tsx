@@ -63,6 +63,7 @@ const EditableCell = ({
           textOverflow: 'ellipsis',
           whiteSpace: 'nowrap',
           overflow: 'hidden',
+          cursor: 'pointer',
         }}
       >
         {value}

@@ -3,9 +3,9 @@ import { AutoComplete, Input, Tag } from 'antd';
 import _ from 'lodash';
 // import { OptionData, OptionGroupData } from 'rc-select/lib/interface';
 import React, { useState } from 'react';
-import { useRecoilRefresher_UNSTABLE, useRecoilValueLoadable } from 'recoil';
+import { useRecoilValueLoadable } from 'recoil';
 import { TransactionDTO } from '../../Transactions/TransactionDTO';
-import { paginatedTransactions } from '../../Transactions/TransactionsState';
+// import { paginatedTransactions } from '../../Transactions/TransactionsState';
 import { UpdateTransactionCMD } from '../../Transactions/UpdateTransactionCMD';
 import { apiPut } from '../../Utils/api';
 import { TagDTO } from '../TagDTO';
@@ -24,9 +24,9 @@ const EditableTag = ({
 }: EditableTagProps): JSX.Element => {
   const [editing, setEditing] = useState<Boolean>(false);
   const tags = useRecoilValueLoadable(tagsState);
-  const refreshTransactions = useRecoilRefresher_UNSTABLE(
-    paginatedTransactions
-  );
+  // const refreshTransactions = useRecoilRefresher_UNSTABLE(
+  //   paginatedTransactions
+  // );
 
   if (tags.state !== 'hasValue') {
     return <Tag />;
@@ -44,7 +44,7 @@ const EditableTag = ({
       `/api/transactions/${transactionId}`,
       { tagId: option.id }
     ).then(() => {
-      refreshTransactions();
+      // refreshTransactions();
     });
     setEditing(false);
   };

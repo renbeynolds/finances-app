@@ -4,59 +4,59 @@ import { Table } from 'antd';
 import { TablePaginationConfig } from 'antd/lib/table';
 import cx from 'classnames';
 import React, { useEffect, useState } from 'react';
-import {
-  useRecoilRefresher_UNSTABLE,
-  useRecoilValueLoadable,
-  useSetRecoilState,
-} from 'recoil';
 import { EditableCell } from '../../Common/EditableCell';
 import { EditableTag } from '../../Tags/EditableTag';
 import { apiPut } from '../../Utils/api';
 import { TransactionDTO } from '../TransactionDTO';
-import {
-  DEFAULT_TRANSACTIONS_PAGE_NUM,
-  DEFAULT_TRANSACTIONS_PAGE_SIZE,
-  paginatedTransactions,
-  transactionsPageNum,
-  transactionsPageSize,
-} from '../TransactionsState';
 import { UpdateTransactionCMD } from '../UpdateTransactionCMD';
-import './styles.scss';
+import { usePaginatedTransactions } from './usePaginatedTransactions';
 
 const useStyles = makeStyles(() => ({
   row: {
     height: 57,
   },
+  amount: {},
+  balance: {},
+  expense: {
+    '& $amount': {
+      color: 'red',
+    },
+  },
+  income: {
+    '& $amount': {
+      color: 'green',
+    },
+  },
+  negativeBalance: {
+    '& $balance': {
+      color: 'red',
+    },
+  },
+  positiveBalance: {
+    '& $balance': {
+      color: 'green',
+    },
+  },
 }));
 
-const TransactionTable = (): JSX.Element => {
-  const { state, contents } = useRecoilValueLoadable(paginatedTransactions);
-  const refreshTransactions = useRecoilRefresher_UNSTABLE(
-    paginatedTransactions
-  );
+interface TransactionTableProps {
+  startDate: moment.Moment;
+  endDate: moment.Moment;
+}
+
+const TransactionTable = ({
+  startDate,
+  endDate,
+}: TransactionTableProps): JSX.Element => {
   const classes = useStyles();
-
-  const [transactions, setTransactions] = useState([]);
-  const [totalTransactions, setTotalTransactions] = useState(0);
-
-  const setPageNum = useSetRecoilState(transactionsPageNum);
-  const setPageSize = useSetRecoilState(transactionsPageSize);
+  const [pageNumber, setPageNumber] = useState<number>(1);
 
   useEffect(() => {
-    if (state === 'hasValue') {
-      setTransactions(contents.data);
-      setTotalTransactions(contents.pagination.total);
-    }
-  }, [setTransactions, setTotalTransactions, state, contents]);
+    setPageNumber(1);
+  }, [setPageNumber, startDate, endDate]);
 
-  const onEditComment = (transactionId: number, newComment: string) => {
-    apiPut<UpdateTransactionCMD, TransactionDTO>(
-      `/api/transactions/${transactionId}`,
-      { comment: newComment }
-    ).then(() => {
-      refreshTransactions();
-    });
-  };
+  const { data, totalTransactions, loading, updateTransaction } =
+    usePaginatedTransactions(pageNumber, startDate, endDate);
 
   const columns = [
     {
@@ -86,14 +86,14 @@ const TransactionTable = (): JSX.Element => {
     {
       title: 'Amount',
       dataIndex: 'amount',
-      className: 'TransactionTable__amount',
+      className: classes.amount,
       render: (value: number) => accounting.formatMoney(value),
       width: '200px',
     },
     {
       title: 'Balance',
       dataIndex: 'balance',
-      className: 'TransactionTable__balance',
+      className: classes.balance,
       render: (value: number) => accounting.formatMoney(value),
       width: '200px',
     },
@@ -122,35 +122,40 @@ const TransactionTable = (): JSX.Element => {
     },
   ];
 
+  const onEditComment = (transactionId: number, newComment: string) => {
+    apiPut<UpdateTransactionCMD, TransactionDTO>(
+      `/api/transactions/${transactionId}`,
+      { comment: newComment }
+    ).then((updatedTransaction) => {
+      updateTransaction(updatedTransaction);
+    });
+  };
+
   // (pagination, filters, sorter)
   const handleTableChange = (pagination: TablePaginationConfig) => {
-    setPageNum(pagination.current!);
-    setPageSize(pagination.pageSize!);
+    setPageNumber(pagination.current!);
   };
 
   return (
     <Table
       columns={columns}
-      dataSource={transactions}
+      dataSource={data}
       rowKey='id'
       rowClassName={(record: TransactionDTO) =>
         cx(classes.row, {
-          TransactionTable__expense: record.amount < 0,
-          TransactionTable__allowance: record.amount > 0,
-          'TransactionTable__positive-balance': record.balance > 0,
-          'TransactionTable__negative-balance': record.balance < 0,
+          [classes.expense]: record.amount < 0,
+          [classes.income]: record.amount > 0,
+          [classes.positiveBalance]: record.balance > 0,
+          [classes.negativeBalance]: record.balance < 0,
         })
       }
       pagination={{
         total: totalTransactions,
-        defaultCurrent: DEFAULT_TRANSACTIONS_PAGE_NUM,
-        pageSize: DEFAULT_TRANSACTIONS_PAGE_SIZE,
+        current: pageNumber,
+        pageSize: 10,
         showSizeChanger: false,
-        style: {
-          paddingRight: '24px',
-        },
       }}
-      loading={state === 'loading'}
+      loading={loading}
       onChange={handleTableChange}
     />
   );

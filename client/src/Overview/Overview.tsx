@@ -36,7 +36,7 @@ const Overview = (): JSX.Element => {
       </Row>
       <Row>
         <Col span={24}>
-          <TransactionTable />
+          <TransactionTable startDate={startDate} endDate={endDate} />
         </Col>
       </Row>
     </Space>
