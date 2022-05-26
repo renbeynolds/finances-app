@@ -40,6 +40,10 @@ const IncomeVsExpenseChart = (): JSX.Element => {
           <Tooltip
             formatter={(value: number) => accounting.formatMoney(value)}
             labelFormatter={formatMonth}
+            contentStyle={{
+              backgroundColor: '#1d1d1d',
+              border: 'none',
+            }}
           />
           <Bar
             dataKey='Income'
