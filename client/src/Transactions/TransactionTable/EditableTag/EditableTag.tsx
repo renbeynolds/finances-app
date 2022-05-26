@@ -1,32 +1,19 @@
 import { PlusOutlined } from '@ant-design/icons';
 import { AutoComplete, Input, Tag } from 'antd';
 import _ from 'lodash';
-// import { OptionData, OptionGroupData } from 'rc-select/lib/interface';
 import React, { useState } from 'react';
 import { useRecoilValueLoadable } from 'recoil';
-import { TransactionDTO } from '../../Transactions/TransactionDTO';
-// import { paginatedTransactions } from '../../Transactions/TransactionsState';
-import { UpdateTransactionCMD } from '../../Transactions/UpdateTransactionCMD';
-import { apiPut } from '../../Utils/api';
-import { TagDTO } from '../TagDTO';
-import { tagsState } from '../TagsState';
+import { TagDTO } from '../../../Tags/TagDTO';
+import { tagsState } from '../../../Tags/TagsState';
 
-type EditableTagProps = {
+interface EditableTagProps {
   tagId?: number;
-  transactionId: number;
-} & typeof defaultProps;
+  onSave: (tagId: number) => void;
+}
 
-const defaultProps = {};
-
-const EditableTag = ({
-  tagId,
-  transactionId,
-}: EditableTagProps): JSX.Element => {
+const EditableTag = ({ tagId, onSave }: EditableTagProps): JSX.Element => {
   const [editing, setEditing] = useState<Boolean>(false);
   const tags = useRecoilValueLoadable(tagsState);
-  // const refreshTransactions = useRecoilRefresher_UNSTABLE(
-  //   paginatedTransactions
-  // );
 
   if (tags.state !== 'hasValue') {
     return <Tag />;
@@ -40,12 +27,7 @@ const EditableTag = ({
   );
 
   const onSelect = (value: string, option: any) => {
-    apiPut<UpdateTransactionCMD, TransactionDTO>(
-      `/api/transactions/${transactionId}`,
-      { tagId: option.id }
-    ).then(() => {
-      // refreshTransactions();
-    });
+    onSave(option.id);
     setEditing(false);
   };
 

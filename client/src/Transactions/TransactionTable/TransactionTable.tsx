@@ -4,11 +4,11 @@ import { Table } from 'antd';
 import { TablePaginationConfig } from 'antd/lib/table';
 import cx from 'classnames';
 import React, { useEffect, useState } from 'react';
-import { EditableCell } from '../../Common/EditableCell';
-import { EditableTag } from '../../Tags/EditableTag';
 import { apiPut } from '../../Utils/api';
 import { TransactionDTO } from '../TransactionDTO';
 import { UpdateTransactionCMD } from '../UpdateTransactionCMD';
+import { EditableCell } from './EditableCell';
+import { EditableTag } from './EditableTag';
 import { usePaginatedTransactions } from './usePaginatedTransactions';
 
 const useStyles = makeStyles(() => ({
@@ -116,7 +116,12 @@ const TransactionTable = ({
       // (tagId, transaction, index)
       render: (...args: [number, TransactionDTO, number]) => {
         const [tagId, transaction] = args;
-        return <EditableTag tagId={tagId} transactionId={transaction.id} />;
+        return (
+          <EditableTag
+            tagId={tagId}
+            onSave={(newTagId) => onEditTag(transaction.id, newTagId)}
+          />
+        );
       },
       width: '200px',
     },
@@ -126,6 +131,15 @@ const TransactionTable = ({
     apiPut<UpdateTransactionCMD, TransactionDTO>(
       `/api/transactions/${transactionId}`,
       { comment: newComment }
+    ).then((updatedTransaction) => {
+      updateTransaction(updatedTransaction);
+    });
+  };
+
+  const onEditTag = (transactionId: number, tagId: number) => {
+    apiPut<UpdateTransactionCMD, TransactionDTO>(
+      `/api/transactions/${transactionId}`,
+      { tagId }
     ).then((updatedTransaction) => {
       updateTransaction(updatedTransaction);
     });
