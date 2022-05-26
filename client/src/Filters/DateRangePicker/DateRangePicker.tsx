@@ -1,6 +1,6 @@
 import { DatePicker, Space, Typography } from 'antd';
 import moment from 'moment';
-import React from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import {
   DATE_FILTER_FORMAT,
@@ -19,6 +19,26 @@ const DateRangePicker = (): JSX.Element => {
     DEFAULT_DATE_RANGE_NAME
   );
 
+  const checkAndSetRangeName = useCallback(
+    (start: string, end: string) => {
+      for (var entry of Object.entries(DateRanges)) {
+        if (
+          entry[1][0].format(DATE_FILTER_FORMAT) === start &&
+          entry[1][1].format(DATE_FILTER_FORMAT) === end
+        ) {
+          setRangeName(entry[0]);
+          return;
+        }
+      }
+      setRangeName(null);
+    },
+    [setRangeName]
+  );
+
+  useEffect(() => {
+    checkAndSetRangeName(startDateFilter, endDateFilter);
+  }, [checkAndSetRangeName, startDateFilter, endDateFilter]);
+
   return (
     <Space direction='horizontal'>
       <DatePicker.RangePicker
@@ -30,17 +50,6 @@ const DateRangePicker = (): JSX.Element => {
           const newEndDateFilter = dates?.[1]?.format(DATE_FILTER_FORMAT)!;
           setStartDateFilter(newStartDateFilter);
           setEndDateFilter(newEndDateFilter);
-
-          for (var entry of Object.entries(DateRanges)) {
-            if (
-              entry[1][0].format(DATE_FILTER_FORMAT) === newStartDateFilter &&
-              entry[1][1].format(DATE_FILTER_FORMAT) === newEndDateFilter
-            ) {
-              setRangeName(entry[0]);
-              return;
-            }
-          }
-          setRangeName(null);
         }}
       />
       {rangeName && (
