@@ -1,14 +1,18 @@
 import { atom } from 'recoil';
-import DateRanges from '../Utils/DateRanges';
+import DateRanges from './DateRangePicker/DateRanges';
 
-const DEFAULT_DATE_RANGE = DateRanges.last30Days();
+export const DEFAULT_DATE_RANGE_NAME = 'This Month';
 
-export const startDateFilterAtom = atom<moment.Moment>({
+const DEFAULT_DATE_RANGE = DateRanges[DEFAULT_DATE_RANGE_NAME];
+
+export const DATE_FILTER_FORMAT = 'YYYY-MM-DD';
+
+export const startDateFilterAtom = atom<string>({
   key: 'startDateFilter',
-  default: DEFAULT_DATE_RANGE[0],
+  default: DEFAULT_DATE_RANGE[0].format(DATE_FILTER_FORMAT),
 });
 
-export const endDateFilterAtom = atom<moment.Moment>({
+export const endDateFilterAtom = atom<string>({
   key: 'endDateFilter',
-  default: DEFAULT_DATE_RANGE[1],
+  default: DEFAULT_DATE_RANGE[1].format(DATE_FILTER_FORMAT),
 });

@@ -40,8 +40,8 @@ const useStyles = makeStyles(() => ({
 }));
 
 interface TransactionTableProps {
-  startDate: moment.Moment;
-  endDate: moment.Moment;
+  startDate: string;
+  endDate: string;
   tagId?: number;
 }
 

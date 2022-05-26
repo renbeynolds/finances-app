@@ -51,8 +51,8 @@ const renderLegend = (props: Props): ReactNode => {
 };
 
 interface TopSpendingTagsChartProps {
-  startDate: moment.Moment;
-  endDate: moment.Moment;
+  startDate: string;
+  endDate: string;
 }
 
 const TopSpendingTagsChart = ({

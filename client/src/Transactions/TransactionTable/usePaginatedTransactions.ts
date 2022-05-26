@@ -1,4 +1,3 @@
-import moment from 'moment';
 import React, { useEffect } from 'react';
 import { apiGet } from '../../Utils';
 import { PaginatedResponse } from '../../Utils/PaginatedResponse';
@@ -14,8 +13,8 @@ interface RequestState {
 
 export const usePaginatedTransactions = (
   pageNumber: number,
-  startDate: moment.Moment,
-  endDate: moment.Moment,
+  startDate: string,
+  endDate: string,
   tagId?: number
 ) => {
   const [state, setState] = React.useState<RequestState>({
@@ -30,9 +29,7 @@ export const usePaginatedTransactions = (
       const tagIdQuery = tagId ? `&tagId=${tagId}` : '';
 
       const response = await apiGet<PaginatedResponse<TransactionDTO>>(
-        `/api/transactions?limit=${PAGE_SIZE}&offset=${offset}&startDate=${startDate.format(
-          'YYYY-MM-DD'
-        )}&endDate=${endDate.format('YYYY-MM-DD')}${tagIdQuery}`
+        `/api/transactions?limit=${PAGE_SIZE}&offset=${offset}&startDate=${startDate}&endDate=${endDate}${tagIdQuery}`
       );
       setState({
         data: response.data,
