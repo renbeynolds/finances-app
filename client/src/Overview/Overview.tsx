@@ -1,22 +1,21 @@
 import { Col, DatePicker, Row, Space } from 'antd';
 import React from 'react';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { endDateFilterAtom, startDateFilterAtom } from '../Filters/FilterState';
 import { TransactionTable } from '../Transactions/TransactionTable';
 import DateRanges from '../Utils/DateRanges';
 import { TopSpendingTagsChart } from './TopSpendingTagsChart';
 
 const Overview = (): JSX.Element => {
-  const defaultDateRange = DateRanges.thisMonth();
-  const [startDate, setStartDate] = React.useState<moment.Moment>(
-    defaultDateRange[0]
-  );
-  const [endDate, setEndDate] = React.useState<moment.Moment>(
-    defaultDateRange[1]
-  );
+  const startDateFilter = useRecoilValue(startDateFilterAtom);
+  const endDateFilter = useRecoilValue(endDateFilterAtom);
+  const setStartDateFilter = useSetRecoilState(startDateFilterAtom);
+  const setEndDateFilter = useSetRecoilState(endDateFilterAtom);
 
   return (
     <Space direction='vertical' style={{ width: '100%' }}>
       <DatePicker.RangePicker
-        value={[startDate, endDate]}
+        value={[startDateFilter, endDateFilter]}
         ranges={{
           'Last 30 Days': DateRanges.last30Days(),
           'This Month': DateRanges.thisMonth(),
@@ -25,18 +24,24 @@ const Overview = (): JSX.Element => {
         }}
         allowClear={false}
         onChange={(dates) => {
-          setStartDate(dates?.[0] as moment.Moment);
-          setEndDate(dates?.[1] as moment.Moment);
+          setStartDateFilter(dates?.[0] as moment.Moment);
+          setEndDateFilter(dates?.[1] as moment.Moment);
         }}
       />
       <Row gutter={16}>
         <Col span={12}>
-          <TopSpendingTagsChart startDate={startDate} endDate={endDate} />
+          <TopSpendingTagsChart
+            startDate={startDateFilter}
+            endDate={endDateFilter}
+          />
         </Col>
       </Row>
       <Row>
         <Col span={24}>
-          <TransactionTable startDate={startDate} endDate={endDate} />
+          <TransactionTable
+            startDate={startDateFilter}
+            endDate={endDateFilter}
+          />
         </Col>
       </Row>
     </Space>

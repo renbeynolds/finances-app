@@ -74,12 +74,7 @@ const TopSpendingTagsChart = ({
   };
 
   const onSliceClick = (e: any) => {
-    navigate(`/tags/${e.payload.payload.tagId}`, {
-      state: {
-        startDate: startDate.format('YYYY-MM-DD'),
-        endDate: endDate.format('YYYY-MM-DD'),
-      },
-    });
+    navigate(`/tags/${e.payload.payload.tagId}`);
   };
 
   return (

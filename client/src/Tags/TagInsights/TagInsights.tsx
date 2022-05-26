@@ -1,32 +1,29 @@
 import { Col, DatePicker, Row, Space } from 'antd';
 import moment from 'moment';
 import React from 'react';
-import { useLocation, useParams } from 'react-router';
+import { useParams } from 'react-router';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
+import {
+  endDateFilterAtom,
+  startDateFilterAtom,
+} from '../../Filters/FilterState';
 import { TransactionTable } from '../../Transactions/TransactionTable';
 import DateRanges from '../../Utils/DateRanges';
 import { TagSpendingOverTimeChart } from './TagSpendingOverTimeChart';
 
 const TagInsights = (): JSX.Element => {
-  const { state: locationState } = useLocation();
-
   const { tagId: tagIdString } = useParams();
   const tagId = parseInt(tagIdString!);
 
-  const defaultDateRange = locationState
-    ? [moment(locationState.startDate), moment(locationState.endDate)]
-    : DateRanges.last365Days();
-
-  const [startDate, setStartDate] = React.useState<moment.Moment>(
-    defaultDateRange[0]
-  );
-  const [endDate, setEndDate] = React.useState<moment.Moment>(
-    defaultDateRange[1]
-  );
+  const startDateFilter = useRecoilValue(startDateFilterAtom);
+  const endDateFilter = useRecoilValue(endDateFilterAtom);
+  const setStartDateFilter = useSetRecoilState(startDateFilterAtom);
+  const setEndDateFilter = useSetRecoilState(endDateFilterAtom);
 
   return (
     <Space direction='vertical' style={{ width: '100%' }}>
       <DatePicker.RangePicker
-        value={[startDate, endDate]}
+        value={[startDateFilter, endDateFilter]}
         ranges={{
           'Last 30 Days': DateRanges.last30Days(),
           'This Month': DateRanges.thisMonth(),
@@ -35,8 +32,8 @@ const TagInsights = (): JSX.Element => {
         }}
         allowClear={false}
         onChange={(dates) => {
-          setStartDate(dates?.[0] as moment.Moment);
-          setEndDate(dates?.[1] as moment.Moment);
+          setStartDateFilter(dates?.[0] as moment.Moment);
+          setEndDateFilter(dates?.[1] as moment.Moment);
         }}
       />
       <Row>
@@ -47,8 +44,8 @@ const TagInsights = (): JSX.Element => {
       <Row>
         <Col span={24}>
           <TransactionTable
-            startDate={startDate}
-            endDate={endDate}
+            startDate={startDateFilter}
+            endDate={endDateFilter}
             tagId={tagId}
           />
         </Col>
