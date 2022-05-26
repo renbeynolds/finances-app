@@ -28,7 +28,7 @@ const ActivePieShape = ({
   value,
 }: ActivePieShapeProps) => {
   return (
-    <g>
+    <g style={{ cursor: 'pointer' }}>
       <text x={cx} y={cy} dy={-15} textAnchor='middle' fill={fill}>
         {payload.name}
       </text>

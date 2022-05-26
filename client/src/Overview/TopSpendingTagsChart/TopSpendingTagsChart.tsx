@@ -2,6 +2,7 @@ import accounting from 'accounting';
 import { Card, Typography } from 'antd';
 import _ from 'lodash';
 import React, { ReactNode, useState } from 'react';
+import { useNavigate } from 'react-router';
 import { Cell, Legend, Pie, PieChart, ResponsiveContainer } from 'recharts';
 import { Props } from 'recharts/types/component/DefaultLegendContent';
 import ChartColors from '../../Utils/ChartColors';
@@ -58,6 +59,7 @@ const TopSpendingTagsChart = ({
   startDate,
   endDate,
 }: TopSpendingTagsChartProps): JSX.Element => {
+  const navigate = useNavigate();
   const data = useTopSpendingTagsData(startDate, endDate);
   const [activeIndex, setActiveIndex] = useState(0);
 
@@ -69,6 +71,15 @@ const TopSpendingTagsChart = ({
       color = entry.color;
     }
     return color;
+  };
+
+  const onSliceClick = (e: any) => {
+    navigate(`/tags/${e.payload.payload.tagId}`, {
+      state: {
+        startDate: startDate.format('YYYY-MM-DD'),
+        endDate: endDate.format('YYYY-MM-DD'),
+      },
+    });
   };
 
   return (
@@ -83,6 +94,7 @@ const TopSpendingTagsChart = ({
             paddingAngle={1}
             dataKey='data'
             onMouseEnter={(data, idx) => setActiveIndex(idx)}
+            onClick={onSliceClick}
             activeIndex={activeIndex}
             activeShape={ActivePieShape}
           >

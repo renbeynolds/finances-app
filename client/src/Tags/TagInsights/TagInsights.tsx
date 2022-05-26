@@ -1,14 +1,21 @@
 import { Col, DatePicker, Row, Space } from 'antd';
+import moment from 'moment';
 import React from 'react';
-import { useParams } from 'react-router';
+import { useLocation, useParams } from 'react-router';
 import { TransactionTable } from '../../Transactions/TransactionTable';
 import DateRanges from '../../Utils/DateRanges';
 import { TagSpendingOverTimeChart } from './TagSpendingOverTimeChart';
 
 const TagInsights = (): JSX.Element => {
+  const { state: locationState } = useLocation();
+
   const { tagId: tagIdString } = useParams();
   const tagId = parseInt(tagIdString!);
-  const defaultDateRange = DateRanges.last365Days();
+
+  const defaultDateRange = locationState
+    ? [moment(locationState.startDate), moment(locationState.endDate)]
+    : DateRanges.last365Days();
+
   const [startDate, setStartDate] = React.useState<moment.Moment>(
     defaultDateRange[0]
   );
