@@ -30,7 +30,10 @@ const Snapshot = (): JSX.Element => {
       </Row>
       <Row>
         <Col span={24}>
-          <TransactionTable type={transactionTypeFilter} />
+          <TransactionTable
+            type={transactionTypeFilter}
+            setType={setTransactionTypeFilter}
+          />
         </Col>
       </Row>
     </Space>

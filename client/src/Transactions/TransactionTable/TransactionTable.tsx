@@ -2,6 +2,7 @@ import { makeStyles } from '@material-ui/styles';
 import accounting from 'accounting';
 import { Table } from 'antd';
 import { TablePaginationConfig } from 'antd/lib/table';
+import { FilterValue } from 'antd/lib/table/interface';
 import cx from 'classnames';
 import React, { useEffect, useState } from 'react';
 import { useRecoilValue } from 'recoil';
@@ -47,11 +48,13 @@ const useStyles = makeStyles(() => ({
 interface TransactionTableProps {
   tagId?: number;
   type?: TransactionType;
+  setType?: (type: TransactionType | undefined) => void;
 }
 
 const TransactionTable = ({
   tagId,
   type,
+  setType,
 }: TransactionTableProps): JSX.Element => {
   const classes = useStyles();
   const [pageNumber, setPageNumber] = useState<number>(1);
@@ -96,6 +99,18 @@ const TransactionTable = ({
       className: classes.amount,
       render: (value: number) => accounting.formatMoney(value),
       width: '200px',
+      filters: [
+        {
+          text: 'Expense',
+          value: 'expense',
+        },
+        {
+          text: 'Income',
+          value: 'income',
+        },
+      ],
+      filteredValue: type ? [type] : [],
+      filterMultiple: false,
     },
     {
       title: 'Balance',
@@ -153,8 +168,16 @@ const TransactionTable = ({
   };
 
   // (pagination, filters, sorter)
-  const handleTableChange = (pagination: TablePaginationConfig) => {
+  const handleTableChange = (
+    pagination: TablePaginationConfig,
+    filters: Record<string, FilterValue | null>
+  ) => {
     setPageNumber(pagination.current!);
+    if (setType && filters.amount) {
+      setType(filters.amount[0] as TransactionType);
+    } else if (setType) {
+      setType(undefined);
+    }
   };
 
   return (
