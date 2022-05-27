@@ -74,6 +74,23 @@ const TransactionTable = ({
       type
     );
 
+  const amountFilterProps = setType
+    ? {
+        filters: [
+          {
+            text: 'Expense',
+            value: 'expense',
+          },
+          {
+            text: 'Income',
+            value: 'income',
+          },
+        ],
+        filteredValue: type ? [type] : [],
+        filterMultiple: false,
+      }
+    : {};
+
   const columns = [
     {
       title: 'Date',
@@ -105,18 +122,7 @@ const TransactionTable = ({
       className: classes.amount,
       render: (value: number) => accounting.formatMoney(value),
       width: '200px',
-      filters: [
-        {
-          text: 'Expense',
-          value: 'expense',
-        },
-        {
-          text: 'Income',
-          value: 'income',
-        },
-      ],
-      filteredValue: type ? [type] : [],
-      filterMultiple: false,
+      ...amountFilterProps,
     },
     {
       title: 'Balance',
