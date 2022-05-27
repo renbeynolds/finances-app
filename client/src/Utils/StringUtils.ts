@@ -1,3 +1,5 @@
+import moment from 'moment';
+
 export const capitalized = (input: string): string => {
   const words = input.split(' ');
   return words
@@ -6,3 +8,6 @@ export const capitalized = (input: string): string => {
     })
     .join(' ');
 };
+
+export const formatMonthString = (input: string): string =>
+  moment(input).format('MMM YYYY');

@@ -14,7 +14,11 @@ export const uploadsState = atom({
   default: uploadsQuery,
 });
 
-export const uploadsListState = selector({
+export type UploadListItem = UploadDTO & {
+  accountName?: string;
+};
+
+export const uploadsListState = selector<UploadListItem[]>({
   key: 'uploadsListState',
   get: ({ get }) => {
     const uploads = get(uploadsState);

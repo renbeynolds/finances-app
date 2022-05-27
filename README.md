@@ -16,3 +16,7 @@
   > cd server
   > yarn run typeorm migration:generate -n <migration_name>
   ```
+
+## Notes
+
+- Antd v5 is [in progress](https://github.com/ant-design/ant-design/issues/33862) and will replace the awful `.less` styling solution with a much more flexible CSS in JS strategy.

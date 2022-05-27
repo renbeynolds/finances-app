@@ -7,6 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
 import { accountState } from '../../Accounts/AccountsState';
 import { apiFormPost } from '../../Utils/api';
+import { UploadDTO } from '../UploadDTO';
 
 const { Title, Text } = Typography;
 
@@ -41,11 +42,11 @@ const UploadForm = (): JSX.Element => {
   const onFinish = (values: FormValues) => {
     const formData = new FormData();
     formData.append('file', values.fileUploader.file);
-    apiFormPost<void>(
+    apiFormPost<UploadDTO>(
       `/api/accounts/${routeParams.accountId}/uploads`,
       formData
-    ).then(() => {
-      navigate('/');
+    ).then((newUpload) => {
+      navigate(`/uploads/${newUpload.id}`);
     });
   };
 

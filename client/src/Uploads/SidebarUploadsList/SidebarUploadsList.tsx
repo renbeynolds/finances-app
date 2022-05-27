@@ -1,20 +1,46 @@
+import { makeStyles } from '@material-ui/styles';
 import { List, Typography } from 'antd';
+import cx from 'classnames';
 import moment from 'moment';
 import React from 'react';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
-import { uploadFilter } from '../../Filters/FiltersState';
-import { uploadsListState } from '../UploadState';
+import { useLocation, useNavigate } from 'react-router';
+import { useRecoilValueLoadable } from 'recoil';
+import { UploadListItem, uploadsListState } from '../UploadState';
 
 const { Text } = Typography;
 
-const SidebarUploadsList = (): JSX.Element => {
-  const uploads = useRecoilValue(uploadsListState);
-  const setUploadFilter = useSetRecoilState(uploadFilter);
+const useStyles = makeStyles(() => ({
+  listItem: {
+    '&:hover': {
+      backgroundColor: '#303030',
+      cursor: 'pointer',
+    },
+  },
+  listItemSelected: {
+    backgroundColor: '#303030',
+  },
+}));
 
-  const uploadsWithDate = uploads.map((u) => ({
-    ...u,
-    createdAt: moment(u.createdAt).format('MMM DD, YYYY HH:mm:ss'),
-  }));
+const SidebarUploadsList = (): JSX.Element => {
+  const classes = useStyles();
+  const uploads = useRecoilValueLoadable(uploadsListState);
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  if (uploads.state !== 'hasValue') {
+    return <div></div>;
+  }
+
+  const uploadsWithDate: UploadListItem[] = uploads.contents.map(
+    (u: UploadListItem) => ({
+      ...u,
+      createdAt: moment(u.createdAt).format('MMM DD, YYYY HH:mm:ss'),
+    })
+  );
+
+  const onSelectUpload = (uploadId: number) => {
+    navigate(`/uploads/${uploadId}`);
+  };
 
   return (
     <div
@@ -27,9 +53,15 @@ const SidebarUploadsList = (): JSX.Element => {
         size='small'
         dataSource={uploadsWithDate}
         renderItem={(upload) => (
-          <List.Item onClick={() => setUploadFilter(upload.id)}>
-            <Text>{upload.createdAt}</Text>
+          <List.Item
+            className={cx(classes.listItem, {
+              [classes.listItemSelected]:
+                location.pathname === `/uploads/${upload.id}`,
+            })}
+            onClick={() => onSelectUpload(upload.id)}
+          >
             <Text>{upload.accountName}</Text>
+            <Text>{upload.createdAt}</Text>
           </List.Item>
         )}
       />

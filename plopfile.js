@@ -26,4 +26,26 @@ module.exports = (plop) => {
       },
     ],
   });
+  plop.setGenerator('dataHook', {
+    description: 'Create a custom hook for fetching data',
+    prompts: [
+      {
+        type: 'input',
+        name: 'name',
+        message: 'What is the hook name?',
+      },
+      {
+        type: 'input',
+        name: 'subdirectory',
+        message: 'What subdirectory should it live in (client/src/<VALUE>)?',
+      },
+    ],
+    actions: [
+      {
+        type: 'add',
+        path: 'client/src/{{subdirectory}}/{{camelCase name}}.ts',
+        templateFile: 'plop-templates/DataHook/hook.ts.hbs',
+      },
+    ],
+  });
 };
