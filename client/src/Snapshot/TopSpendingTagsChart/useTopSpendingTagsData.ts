@@ -1,9 +1,16 @@
 import React, { useEffect } from 'react';
+import { useRecoilValue } from 'recoil';
+import {
+  endDateFilterAtom,
+  startDateFilterAtom,
+} from '../../Filters/FilterState';
 import { apiGet } from '../../Utils';
 import { TopSpendingTagDTO } from './TopSpendingTagDTO';
 
-export const useTopSpendingTagsData = (startDate: string, endDate: string) => {
+export const useTopSpendingTagsData = () => {
   const [data, setData] = React.useState<TopSpendingTagDTO[]>([]);
+  const startDate = useRecoilValue(startDateFilterAtom);
+  const endDate = useRecoilValue(endDateFilterAtom);
 
   useEffect(() => {
     const fetchData = async () => {

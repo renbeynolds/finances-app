@@ -1,4 +1,9 @@
 import React, { useEffect } from 'react';
+import { useRecoilValue } from 'recoil';
+import {
+  endDateFilterAtom,
+  startDateFilterAtom,
+} from '../../Filters/FilterState';
 import { apiGet } from '../../Utils';
 import { PaginatedResponse } from '../../Utils/PaginatedResponse';
 import { TransactionDTO } from '../TransactionDTO';
@@ -13,10 +18,11 @@ interface RequestState {
 
 export const usePaginatedTransactions = (
   pageNumber: number,
-  startDate: string,
-  endDate: string,
   tagId?: number
 ) => {
+  const startDate = useRecoilValue(startDateFilterAtom);
+  const endDate = useRecoilValue(endDateFilterAtom);
+
   const [state, setState] = React.useState<RequestState>({
     data: [],
     loading: false,

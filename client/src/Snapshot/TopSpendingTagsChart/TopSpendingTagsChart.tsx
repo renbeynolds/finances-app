@@ -50,17 +50,9 @@ const renderLegend = (props: Props): ReactNode => {
   );
 };
 
-interface TopSpendingTagsChartProps {
-  startDate: string;
-  endDate: string;
-}
-
-const TopSpendingTagsChart = ({
-  startDate,
-  endDate,
-}: TopSpendingTagsChartProps): JSX.Element => {
+const TopSpendingTagsChart = (): JSX.Element => {
   const navigate = useNavigate();
-  const data = useTopSpendingTagsData(startDate, endDate);
+  const data = useTopSpendingTagsData();
   const [activeIndex, setActiveIndex] = useState(0);
 
   const getColor = (entry: TopSpendingTagDTO, idx: number) => {

@@ -4,6 +4,11 @@ import { Table } from 'antd';
 import { TablePaginationConfig } from 'antd/lib/table';
 import cx from 'classnames';
 import React, { useEffect, useState } from 'react';
+import { useRecoilValue } from 'recoil';
+import {
+  endDateFilterAtom,
+  startDateFilterAtom,
+} from '../../Filters/FilterState';
 import { apiPut } from '../../Utils/api';
 import { TransactionDTO } from '../TransactionDTO';
 import { UpdateTransactionCMD } from '../UpdateTransactionCMD';
@@ -40,25 +45,21 @@ const useStyles = makeStyles(() => ({
 }));
 
 interface TransactionTableProps {
-  startDate: string;
-  endDate: string;
   tagId?: number;
 }
 
-const TransactionTable = ({
-  startDate,
-  endDate,
-  tagId,
-}: TransactionTableProps): JSX.Element => {
+const TransactionTable = ({ tagId }: TransactionTableProps): JSX.Element => {
   const classes = useStyles();
   const [pageNumber, setPageNumber] = useState<number>(1);
+  const startDate = useRecoilValue(startDateFilterAtom);
+  const endDate = useRecoilValue(endDateFilterAtom);
 
   useEffect(() => {
     setPageNumber(1);
   }, [setPageNumber, startDate, endDate]);
 
   const { data, totalTransactions, loading, updateTransaction } =
-    usePaginatedTransactions(pageNumber, startDate, endDate, tagId);
+    usePaginatedTransactions(pageNumber, tagId);
 
   const columns = [
     {
