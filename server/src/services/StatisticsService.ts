@@ -14,9 +14,11 @@ export const getTotalExpense = async (
 
   const result = await getRepository(Transaction)
     .createQueryBuilder('trans')
+    .leftJoin('trans.tag', 'tag')
     .where('trans.amount < 0')
     .andWhere('trans.date >= :startDate', { startDate })
     .andWhere('trans.date <= :endDate', { endDate })
+    .andWhere("tag.name <> 'TRANSFER'")
     .select('SUM(trans.amount) * -1', 'totalExpense')
     .getRawOne();
 
