@@ -46,9 +46,13 @@ const useStyles = makeStyles(() => ({
 
 interface TransactionTableProps {
   tagId?: number;
+  type?: TransactionType;
 }
 
-const TransactionTable = ({ tagId }: TransactionTableProps): JSX.Element => {
+const TransactionTable = ({
+  tagId,
+  type,
+}: TransactionTableProps): JSX.Element => {
   const classes = useStyles();
   const [pageNumber, setPageNumber] = useState<number>(1);
   const startDate = useRecoilValue(startDateFilterAtom);
@@ -56,10 +60,10 @@ const TransactionTable = ({ tagId }: TransactionTableProps): JSX.Element => {
 
   useEffect(() => {
     setPageNumber(1);
-  }, [setPageNumber, startDate, endDate]);
+  }, [setPageNumber, startDate, endDate, type]);
 
   const { data, totalTransactions, loading, updateTransaction } =
-    usePaginatedTransactions(pageNumber, tagId);
+    usePaginatedTransactions(pageNumber, tagId, type);
 
   const columns = [
     {

@@ -3,7 +3,13 @@ import { Card, Typography } from 'antd';
 import React from 'react';
 import { useTotalExpenseData } from './useTotalExpenseData';
 
-const TotalExpenseIndicator = (): JSX.Element => {
+interface TotalExpenseIndicatorProps {
+  onValueClick?: () => void;
+}
+
+const TotalExpenseIndicator = ({
+  onValueClick,
+}: TotalExpenseIndicatorProps): JSX.Element => {
   const data = useTotalExpenseData();
 
   return (
@@ -14,7 +20,12 @@ const TotalExpenseIndicator = (): JSX.Element => {
           justifyContent: 'center',
         }}
       >
-        <Typography.Title type='danger' level={3}>
+        <Typography.Title
+          type='danger'
+          level={3}
+          onClick={onValueClick}
+          style={{ cursor: onValueClick ? 'pointer' : 'default' }}
+        >
           {accounting.formatMoney(data.totalExpense)}
         </Typography.Title>
       </div>

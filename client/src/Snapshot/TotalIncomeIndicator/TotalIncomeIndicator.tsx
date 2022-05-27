@@ -3,7 +3,13 @@ import { Card, Typography } from 'antd';
 import React from 'react';
 import { useTotalIncomeData } from './useTotalIncomeData';
 
-const TotalIncomeIndicator = (): JSX.Element => {
+interface TotalIncomeIndicatorProps {
+  onValueClick?: () => void;
+}
+
+const TotalIncomeIndicator = ({
+  onValueClick,
+}: TotalIncomeIndicatorProps): JSX.Element => {
   const data = useTotalIncomeData();
 
   return (
@@ -14,7 +20,12 @@ const TotalIncomeIndicator = (): JSX.Element => {
           justifyContent: 'center',
         }}
       >
-        <Typography.Title type='success' level={3}>
+        <Typography.Title
+          type='success'
+          level={3}
+          onClick={onValueClick}
+          style={{ cursor: onValueClick ? 'pointer' : 'default' }}
+        >
           {accounting.formatMoney(data.totalIncome)}
         </Typography.Title>
       </div>

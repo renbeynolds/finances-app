@@ -7,6 +7,9 @@ import { TotalExpenseIndicator } from './TotalExpenseIndicator';
 import { TotalIncomeIndicator } from './TotalIncomeIndicator';
 
 const Snapshot = (): JSX.Element => {
+  const [transactionTypeFilter, setTransactionTypeFilter] =
+    React.useState<TransactionType>();
+
   return (
     <Space direction='vertical' style={{ width: '100%' }}>
       <DateRangePicker />
@@ -15,15 +18,19 @@ const Snapshot = (): JSX.Element => {
           <TopSpendingTagsChart />
         </Col>
         <Col span={4}>
-          <TotalIncomeIndicator />
+          <TotalIncomeIndicator
+            onValueClick={() => setTransactionTypeFilter('income')}
+          />
         </Col>
         <Col span={4}>
-          <TotalExpenseIndicator />
+          <TotalExpenseIndicator
+            onValueClick={() => setTransactionTypeFilter('expense')}
+          />
         </Col>
       </Row>
       <Row>
         <Col span={24}>
-          <TransactionTable />
+          <TransactionTable type={transactionTypeFilter} />
         </Col>
       </Row>
     </Space>

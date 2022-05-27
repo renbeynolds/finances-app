@@ -18,7 +18,8 @@ interface RequestState {
 
 export const usePaginatedTransactions = (
   pageNumber: number,
-  tagId?: number
+  tagId?: number,
+  type?: TransactionType
 ) => {
   const startDate = useRecoilValue(startDateFilterAtom);
   const endDate = useRecoilValue(endDateFilterAtom);
@@ -33,9 +34,10 @@ export const usePaginatedTransactions = (
   useEffect(() => {
     const fetchData = async () => {
       const tagIdQuery = tagId ? `&tagId=${tagId}` : '';
+      const typeQuery = type ? `&type=${type}` : '';
 
       const response = await apiGet<PaginatedResponse<TransactionDTO>>(
-        `/api/transactions?limit=${PAGE_SIZE}&offset=${offset}&startDate=${startDate}&endDate=${endDate}${tagIdQuery}`
+        `/api/transactions?limit=${PAGE_SIZE}&offset=${offset}&startDate=${startDate}&endDate=${endDate}${tagIdQuery}${typeQuery}`
       );
       setState({
         data: response.data,
@@ -45,7 +47,7 @@ export const usePaginatedTransactions = (
     };
     setState((currentState) => ({ ...currentState, loading: true }));
     fetchData();
-  }, [setState, offset, startDate, endDate, tagId]);
+  }, [setState, offset, startDate, endDate, tagId, type]);
 
   const updateTransaction = (transaction: TransactionDTO) => {
     setState((currentState) => ({
