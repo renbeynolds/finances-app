@@ -1,10 +1,11 @@
-import { BankOutlined, TagOutlined } from '@ant-design/icons';
+import { BankOutlined, TagOutlined, UploadOutlined } from '@ant-design/icons';
 import { makeStyles } from '@material-ui/styles';
 import { Layout, Menu, Typography } from 'antd';
 import { ItemType } from 'antd/lib/menu/hooks/useItems';
 import React from 'react';
 import { SidebarAccountsList } from '../../Accounts/SidebarAccountsList';
 import { SidebarTagList } from '../../Tags/SidebarTagList';
+import { SidebarUploadsList } from '../../Uploads/SidebarUploadsList';
 import { capitalized } from '../../Utils/StringUtils';
 
 const { Sider: AntdSider } = Layout;
@@ -26,6 +27,7 @@ const useStyles = makeStyles({
 const MENU_ITEMS: ItemType[] = [
   { icon: <BankOutlined />, key: 'accounts' },
   { icon: <TagOutlined />, key: 'tags' },
+  { icon: <UploadOutlined />, key: 'uploads' },
 ];
 
 interface SiderProps {
@@ -53,6 +55,7 @@ const Sider = ({ open }: SiderProps): JSX.Element => {
         </div>
         {activeKey === 'accounts' && <SidebarAccountsList />}
         {activeKey === 'tags' && <SidebarTagList />}
+        {activeKey === 'uploads' && <SidebarUploadsList />}
         <div style={{ flexGrow: 1 }} />
         <Menu
           items={MENU_ITEMS}

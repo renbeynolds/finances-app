@@ -1,9 +1,4 @@
 import React, { useEffect } from 'react';
-import { useRecoilValue } from 'recoil';
-import {
-  endDateFilterAtom,
-  startDateFilterAtom,
-} from '../../Filters/FilterState';
 import { apiGet } from '../../Utils';
 import { PaginatedResponse } from '../../Utils/PaginatedResponse';
 import { TransactionDTO } from '../TransactionDTO';
@@ -18,12 +13,12 @@ interface RequestState {
 
 export const usePaginatedTransactions = (
   pageNumber: number,
+  startDate?: string,
+  endDate?: string,
   tagId?: number,
+  uploadId?: number,
   type?: TransactionType
 ) => {
-  const startDate = useRecoilValue(startDateFilterAtom);
-  const endDate = useRecoilValue(endDateFilterAtom);
-
   const [state, setState] = React.useState<RequestState>({
     data: [],
     loading: false,
@@ -33,11 +28,14 @@ export const usePaginatedTransactions = (
 
   useEffect(() => {
     const fetchData = async () => {
+      const startDateQuery = startDate ? `&startDate=${startDate}` : '';
+      const endDateQuery = endDate ? `&endDate=${endDate}` : '';
       const tagIdQuery = tagId ? `&tagId=${tagId}` : '';
+      const uploadIdQuery = uploadId ? `&uploadId=${uploadId}` : '';
       const typeQuery = type ? `&type=${type}` : '';
 
       const response = await apiGet<PaginatedResponse<TransactionDTO>>(
-        `/api/transactions?limit=${PAGE_SIZE}&offset=${offset}&startDate=${startDate}&endDate=${endDate}${tagIdQuery}${typeQuery}`
+        `/api/transactions?limit=${PAGE_SIZE}&offset=${offset}${startDateQuery}${endDateQuery}${tagIdQuery}${uploadIdQuery}${typeQuery}`
       );
       setState({
         data: response.data,

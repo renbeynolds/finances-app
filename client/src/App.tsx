@@ -9,6 +9,7 @@ import { TagForm } from './Tags/TagForm';
 import { TagInsights } from './Tags/TagInsights';
 import { Trends } from './Trends';
 import { UploadForm } from './Uploads/UploadForm';
+import { UploadViewer } from './Uploads/UploadViewer';
 
 export const ROOT_URL = '/';
 
@@ -38,6 +39,9 @@ const App = (): JSX.Element => {
               <Route path={'new'} element={<TagForm intent='create' />} />
               <Route path={':tagId'} element={<TagInsights />} />
               <Route path={':tagId/edit'} element={<TagForm intent='edit' />} />
+            </Route>
+            <Route path={'uploads'}>
+              <Route path={':uploadId'} element={<UploadViewer />} />
             </Route>
           </Route>
         </Routes>
