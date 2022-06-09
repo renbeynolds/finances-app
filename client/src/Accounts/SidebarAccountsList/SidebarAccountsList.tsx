@@ -1,23 +1,47 @@
 import { PlusOutlined, UploadOutlined } from '@ant-design/icons';
+import { makeStyles } from '@material-ui/styles';
 import accounting from 'accounting';
 import { Button, List, Tooltip, Typography } from 'antd';
+import cx from 'classnames';
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useRecoilValueLoadable } from 'recoil';
 import { accountsState } from '../AccountsState';
 
 const { Text } = Typography;
 
+const useStyles = makeStyles(() => ({
+  listItem: {
+    '&:hover': {
+      backgroundColor: '#303030',
+      cursor: 'pointer',
+    },
+  },
+  listItemSelected: {
+    backgroundColor: '#303030',
+  },
+}));
+
 const SidebarAccountsList = (): JSX.Element => {
   const accounts = useRecoilValueLoadable(accountsState);
   const navigate = useNavigate();
+  const location = useLocation();
+  const classes = useStyles();
 
   const onAddAccountClick = () => {
     navigate('/accounts/new');
   };
 
-  const onUploadTransactionsClick = (accountId: number) => {
+  const onUploadTransactionsClick = (
+    event: React.MouseEvent<HTMLButtonElement>,
+    accountId: number
+  ) => {
+    event.stopPropagation();
     navigate(`accounts/${accountId}/upload`);
+  };
+
+  const onSelectAccount = (accountId: number) => {
+    navigate(`/accounts/${accountId}`);
   };
 
   if (accounts.state !== 'hasValue') {
@@ -30,7 +54,13 @@ const SidebarAccountsList = (): JSX.Element => {
         size='small'
         dataSource={accounts.contents}
         renderItem={(account) => (
-          <List.Item>
+          <List.Item
+            className={cx(classes.listItem, {
+              [classes.listItemSelected]:
+                location.pathname === `/accounts/${account.id}`,
+            })}
+            onClick={() => onSelectAccount(account.id)}
+          >
             <div
               style={{
                 display: 'flex',
@@ -61,7 +91,9 @@ const SidebarAccountsList = (): JSX.Element => {
                     shape='circle'
                     icon={<UploadOutlined />}
                     size='small'
-                    onClick={() => onUploadTransactionsClick(account.id)}
+                    onClick={(event: React.MouseEvent<HTMLButtonElement>) =>
+                      onUploadTransactionsClick(event, account.id)
+                    }
                   />
                 </Tooltip>
               </div>

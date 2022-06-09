@@ -13,15 +13,20 @@ export const searchTransactions = async (
   const endDate = req.query.endDate;
   const tagId = req.query.tagId;
   const uploadId = req.query.uploadId;
+  const accountId = req.query.accountId;
   const type = req.query.type;
 
   const query = await getRepository(Transaction)
     .createQueryBuilder('trans')
     .leftJoin('trans.tag', 'tag')
+    .leftJoin('trans.upload', 'upload')
     .where(tagId ? 'trans.tagId = :tagId' : '1=1', { tagId })
     .andWhere(startDate ? 'trans.date >= :startDate' : '1=1', { startDate })
     .andWhere(endDate ? 'trans.date <= :endDate' : '1=1', { endDate })
-    .andWhere(uploadId ? 'trans.uploadId = :uploadId' : '1=1', { uploadId })
+    .andWhere(uploadId ? 'upload.id = :uploadId' : '1=1', { uploadId })
+    .andWhere(accountId ? 'upload.accountId = :accountId' : '1=1', {
+      accountId,
+    })
     .andWhere(type === 'expense' ? 'trans.amount < 0' : '1=1')
     .andWhere(type === 'income' ? 'trans.amount > 0' : '1=1')
     .andWhere(

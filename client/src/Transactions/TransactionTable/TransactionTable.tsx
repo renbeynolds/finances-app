@@ -42,6 +42,7 @@ const useStyles = makeStyles(() => ({
 
 interface TransactionTableProps {
   tagId?: number;
+  accountId?: number;
   startDate?: string;
   endDate?: string;
   uploadId?: number;
@@ -51,6 +52,7 @@ interface TransactionTableProps {
 
 const TransactionTable = ({
   tagId,
+  accountId,
   uploadId,
   startDate,
   endDate,
@@ -71,6 +73,7 @@ const TransactionTable = ({
       endDate,
       tagId,
       uploadId,
+      accountId,
       type
     );
 

@@ -3,6 +3,7 @@ import React, { Suspense } from 'react';
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import { RecoilRoot } from 'recoil';
 import { AccountForm } from './Accounts/AccountForm';
+import { AccountInsights } from './Accounts/AccountInsights';
 import { Layout } from './Layout';
 import { Snapshot } from './Snapshot';
 import { TagForm } from './Tags/TagForm';
@@ -24,6 +25,7 @@ const App = (): JSX.Element => {
             <Route path={'trends'} element={<Trends />} />
             <Route path={'accounts'}>
               <Route path={'new'} element={<AccountForm />} />
+              <Route path={':accountId'} element={<AccountInsights />} />
               <Route path={':accountId'}>
                 <Route
                   path={'upload'}
