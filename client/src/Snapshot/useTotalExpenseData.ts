@@ -1,12 +1,9 @@
 import React, { useEffect } from 'react';
 import { useRecoilValue } from 'recoil';
-import {
-  endDateFilterAtom,
-  startDateFilterAtom,
-} from '../../Filters/FilterState';
-import { apiGet } from '../../Utils';
+import { endDateFilterAtom, startDateFilterAtom } from '../Filters/FilterState';
+import { apiGet } from '../Utils';
 
-export const useTotalIncomeData = () => {
+export const useTotalExpenseData = () => {
   const startDateFilter = useRecoilValue(startDateFilterAtom);
   const endDateFilter = useRecoilValue(endDateFilterAtom);
   const [data, setData] = React.useState<any>({});
@@ -14,7 +11,7 @@ export const useTotalIncomeData = () => {
   useEffect(() => {
     const fetchData = async () => {
       const response = await apiGet<any>(
-        `/api/statistics/total_income?startDate=${startDateFilter}&endDate=${endDateFilter}`
+        `/api/statistics/total_expense?startDate=${startDateFilter}&endDate=${endDateFilter}`
       );
       setData(response);
     };

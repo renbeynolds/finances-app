@@ -1,19 +1,22 @@
-import accounting from 'accounting';
 import { Card, Typography } from 'antd';
+import { TitleProps } from 'antd/lib/typography/Title';
 import React from 'react';
-import { useTotalIncomeData } from './useTotalIncomeData';
 
-interface TotalIncomeIndicatorProps {
+interface NumberIndicatorProps {
   onValueClick?: () => void;
+  value: string;
+  title: string;
+  titleProps?: TitleProps;
 }
 
-const TotalIncomeIndicator = ({
+const NumberIndicator = ({
+  value,
+  title,
   onValueClick,
-}: TotalIncomeIndicatorProps): JSX.Element => {
-  const data = useTotalIncomeData();
-
+  titleProps = {},
+}: NumberIndicatorProps): JSX.Element => {
   return (
-    <Card title='Income' bordered={false}>
+    <Card title={title} bordered={false}>
       <div
         style={{
           display: 'flex',
@@ -21,16 +24,16 @@ const TotalIncomeIndicator = ({
         }}
       >
         <Typography.Title
-          type='success'
           level={3}
           onClick={onValueClick}
           style={{ cursor: onValueClick ? 'pointer' : 'default' }}
+          {...titleProps}
         >
-          {accounting.formatMoney(data.totalIncome)}
+          {value}
         </Typography.Title>
       </div>
     </Card>
   );
 };
 
-export default TotalIncomeIndicator;
+export default NumberIndicator;
