@@ -47,9 +47,11 @@ export const getAverageExpense = async (
   req: Request,
   res: Response
 ): Promise<void> => {
+  const months = req.query.months;
+
   const startDate = moment()
     .endOf('month')
-    .subtract(3, 'months')
+    .subtract(months as string, 'months')
     .format('MM-DD-YYYY');
 
   const endDate = moment()
@@ -81,9 +83,11 @@ export const getAverageIncome = async (
   req: Request,
   res: Response
 ): Promise<void> => {
+  const months = req.query.months;
+
   const startDate = moment()
     .endOf('month')
-    .subtract(3, 'months')
+    .subtract(months as string, 'months')
     .format('MM-DD-YYYY');
 
   const endDate = moment()

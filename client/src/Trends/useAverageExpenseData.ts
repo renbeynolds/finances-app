@@ -1,16 +1,18 @@
 import React, { useEffect } from 'react';
 import { apiGet } from '../Utils';
 
-export const useAverageExpenseData = () => {
+export const useAverageExpenseData = (monthsToAverage: number) => {
   const [data, setData] = React.useState<any>({});
 
   useEffect(() => {
     const fetchData = async () => {
-      const response = await apiGet<any>('/api/statistics/average_expense');
+      const response = await apiGet<any>(
+        `/api/statistics/average_expense?months=${monthsToAverage}`
+      );
       setData(response);
     };
     fetchData();
-  }, [setData]);
+  }, [setData, monthsToAverage]);
 
   return data;
 };
