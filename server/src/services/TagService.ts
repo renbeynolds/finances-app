@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { getRepository } from 'typeorm';
-import { RegexRule } from '../entities/RegexRule';
+import { PrefixRule } from '../entities/PrefixRule';
 import { Tag } from '../entities/Tag';
 
 export const createTag = async (req: Request, res: Response): Promise<void> => {
@@ -9,8 +9,8 @@ export const createTag = async (req: Request, res: Response): Promise<void> => {
   const tag = new Tag();
   tag.name = req.body.name;
   tag.color = req.body.color;
-  if (req.body.regexRules) {
-    tag.regexRules = req.body.regexRules.map((p) => new RegexRule(p));
+  if (req.body.prefixRules) {
+    tag.prefixRules = req.body.prefixRules.map((p) => new PrefixRule(p));
   }
 
   await tagRepository.save(tag);
@@ -27,26 +27,26 @@ export const searchTags = async (
 
 export const updateTag = async (req: Request, res: Response): Promise<void> => {
   const tagRepository = getRepository(Tag);
-  const regexRepository = getRepository(RegexRule);
+  const prefixRepository = getRepository(PrefixRule);
 
   const tag = await tagRepository.findOne(req.params.tagId, {
-    relations: ['regexRules'],
+    relations: ['prefixRules'],
   });
   tag.name = req.body.name;
   tag.color = req.body.color;
 
-  const currentRegexesToRemove = tag.regexRules.filter(
-    (r) => !req.body.regexRules.includes(r.pattern)
+  const currentPrefixesToRemove = tag.prefixRules.filter(
+    (r) => !req.body.prefixRules.includes(r.prefix)
   );
-  regexRepository.remove(currentRegexesToRemove);
+  prefixRepository.remove(currentPrefixesToRemove);
 
-  const currentRegexesToKeep = tag.regexRules.filter((r) =>
-    req.body.regexRules.includes(r.pattern)
+  const currentPrefixesToKeep = tag.prefixRules.filter((r) =>
+    req.body.prefixRules.includes(r.prefix)
   );
-  const newRegexesToAdd = req.body.regexRules
-    .filter((p) => !tag.regexRules.map((r) => r.pattern).includes(p))
-    .map((p) => new RegexRule(p));
-  tag.regexRules = currentRegexesToKeep.concat(newRegexesToAdd);
+  const newPrefixesToAdd = req.body.prefixRules
+    .filter((p) => !tag.prefixRules.map((r) => r.prefix).includes(p))
+    .map((p) => new PrefixRule(p));
+  tag.prefixRules = currentPrefixesToKeep.concat(newPrefixesToAdd);
 
   await tagRepository.save(tag);
   res.send(tag);

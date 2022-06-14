@@ -1,5 +1,5 @@
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
-import { RegexRule } from './RegexRule';
+import { PrefixRule } from './PrefixRule';
 import { Transaction } from './Transaction';
 
 @Entity()
@@ -17,8 +17,8 @@ export class Tag {
   })
   color: string;
 
-  @OneToMany(() => RegexRule, (rule) => rule.tag, { cascade: true })
-  regexRules: RegexRule[];
+  @OneToMany(() => PrefixRule, (rule) => rule.tag, { cascade: true })
+  prefixRules: PrefixRule[];
 
   @OneToMany(() => Transaction, (transaction) => transaction.upload)
   transactions: Transaction[];

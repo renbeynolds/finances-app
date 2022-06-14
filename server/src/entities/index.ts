@@ -1,5 +1,5 @@
 export { Account } from './Account';
-export { RegexRule } from './RegexRule';
+export { PrefixRule } from './PrefixRule';
 export { Tag } from './Tag';
 export { Transaction } from './Transaction';
 export { Upload } from './Upload';

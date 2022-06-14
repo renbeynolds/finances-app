@@ -9,7 +9,7 @@ export const createUpload = async (
   req: Request,
   res: Response
 ): Promise<void> => {
-  const tags = await getRepository(Tag).find({ relations: ['regexRules'] });
+  const tags = await getRepository(Tag).find({ relations: ['prefixRules'] });
   const accountId = parseInt(req.params.accountId);
   const account = await getRepository(Account).findOne(accountId);
   const csvData = await getCsvDataFromRequest(req);
@@ -51,8 +51,8 @@ export const createUpload = async (
 
 const getTagForTransaction = (tags: Tag[], transaction: Transaction): Tag => {
   tags.forEach((tag) => {
-    tag.regexRules.forEach((rule) => {
-      if (transaction.description.match(new RegExp(rule.pattern))) {
+    tag.prefixRules.forEach((rule) => {
+      if (transaction.description.startsWith(rule.prefix)) {
         return tag;
       }
     });

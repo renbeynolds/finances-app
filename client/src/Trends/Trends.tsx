@@ -21,15 +21,14 @@ const Trends = (): JSX.Element => {
       <Col span={12}>
         <IncomeVsExpenseChart />
       </Col>
-      {/* Putting everything "in one row" is a workaround for vertical
-          row spacing not working correctly:
-          https://github.com/ant-design/ant-design/issues/4410 */}
-      <Col span={12}></Col>
       <Col span={12}>
         <Row gutter={[16, 16]}>
+          {/* Putting everything "in one row" is a workaround for vertical
+          row spacing not working correctly:
+          https://github.com/ant-design/ant-design/issues/4410 */}
           <Col span={24}>
             <div style={{ display: 'flex' }}>
-              <Typography.Title level={5}>Last</Typography.Title>
+              <Typography.Title level={5}>Average Over Last</Typography.Title>
               <div>
                 <InputNumber
                   min={3}
@@ -49,7 +48,7 @@ const Trends = (): JSX.Element => {
           </Col>
           <Col span={8}>
             <NumberIndicator
-              title='Avg Expense'
+              title='Expense'
               value={accounting.formatMoney(averageExpenseData.avg)}
               titleProps={{
                 type: 'danger',
@@ -58,7 +57,7 @@ const Trends = (): JSX.Element => {
           </Col>
           <Col span={8}>
             <NumberIndicator
-              title='Avg Income'
+              title='Income'
               value={accounting.formatMoney(averageIncomeData.avg)}
               titleProps={{
                 type: 'success',
@@ -67,7 +66,7 @@ const Trends = (): JSX.Element => {
           </Col>
           <Col span={8}>
             <NumberIndicator
-              title='Avg Net'
+              title='Net'
               value={accounting.formatMoney(averageNet)}
               titleProps={{
                 type:

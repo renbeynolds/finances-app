@@ -1,27 +1,27 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
 import { useRecoilValueLoadable } from 'recoil';
-import { getTagRegexRules } from '../Requests';
+import { getTagPrefixRules } from '../Requests';
 import { tagState } from '../TagsState';
 
 export const useRouteParamTag = () => {
   const { tagId } = useParams();
   const tagIdInt = tagId ? parseInt(tagId) : null;
   const tag = useRecoilValueLoadable(tagState(tagIdInt));
-  const [regexRules, setRegexRules] = useState<string[]>([]);
+  const [prefixRules, setPrefixRules] = useState<string[]>([]);
 
   useEffect(() => {
-    const fetchRegexRules = async () => {
+    const fetchPrefixRules = async () => {
       if (tagId) {
-        setRegexRules(await getTagRegexRules(parseInt(tagId)));
+        setPrefixRules(await getTagPrefixRules(parseInt(tagId)));
       }
     };
 
-    fetchRegexRules();
-  }, [tagId, setRegexRules]);
+    fetchPrefixRules();
+  }, [tagId, setPrefixRules]);
 
   if (tag.state !== 'hasValue') {
     return null;
   }
-  return { ...tag.contents, regexRules };
+  return { ...tag.contents, prefixRules };
 };

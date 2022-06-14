@@ -2,20 +2,20 @@ import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { Tag } from './Tag';
 
 @Entity()
-export class RegexRule {
-  constructor(pattern: string) {
-    this.pattern = pattern;
+export class PrefixRule {
+  constructor(prefix: string) {
+    this.prefix = prefix;
   }
 
   @PrimaryGeneratedColumn()
   id: number;
 
   @Column()
-  pattern: string;
+  prefix: string;
 
   @Column('int')
   tagId: number;
 
-  @ManyToOne(() => Tag, (tag) => tag.regexRules)
+  @ManyToOne(() => Tag, (tag) => tag.prefixRules)
   tag: Tag;
 }

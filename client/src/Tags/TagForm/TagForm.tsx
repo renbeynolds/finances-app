@@ -23,7 +23,7 @@ const layout = {
   },
 };
 
-const regexItemLayout = {
+const prefixItemLayout = {
   labelCol: {
     span: 8,
   },
@@ -32,7 +32,7 @@ const regexItemLayout = {
   },
 };
 
-const regexItemLayoutWithoutLabel = {
+const prefixItemLayoutWithoutLabel = {
   wrapperCol: {
     offset: 8,
     span: 8,
@@ -102,8 +102,8 @@ const TagForm = ({ intent }: TagFormProps): JSX.Element => {
         />
 
         <Form.List
-          name='regexRules'
-          initialValue={tagToEdit ? tagToEdit.regexRules : []}
+          name='prefixRules'
+          initialValue={tagToEdit ? tagToEdit.prefixRules : []}
         >
           {(fields, { add, remove }) => {
             return (
@@ -111,9 +111,9 @@ const TagForm = ({ intent }: TagFormProps): JSX.Element => {
                 {fields.map((field, index) => (
                   <Form.Item
                     {...(index === 0
-                      ? regexItemLayout
-                      : regexItemLayoutWithoutLabel)}
-                    label={index === 0 ? 'Regex Rules' : ''}
+                      ? prefixItemLayout
+                      : prefixItemLayoutWithoutLabel)}
+                    label={index === 0 ? 'Prefix Rules' : ''}
                     required={false}
                     key={field.key}
                   >
@@ -133,7 +133,7 @@ const TagForm = ({ intent }: TagFormProps): JSX.Element => {
                     />
                   </Form.Item>
                 ))}
-                <Form.Item {...regexItemLayoutWithoutLabel}>
+                <Form.Item {...prefixItemLayoutWithoutLabel}>
                   <Button
                     type='dashed'
                     onClick={() => {
