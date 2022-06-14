@@ -1,4 +1,4 @@
 export interface UpdateTransactionCMD {
-  tagId?: number;
+  categoryId?: number;
   comment?: string;
 }

@@ -1,5 +1,5 @@
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
-import { Tag } from './Tag';
+import { Category } from './Category';
 
 @Entity()
 export class PrefixRule {
@@ -14,8 +14,8 @@ export class PrefixRule {
   prefix: string;
 
   @Column('int')
-  tagId: number;
+  categoryId: number;
 
-  @ManyToOne(() => Tag, (tag) => tag.prefixRules)
-  tag: Tag;
+  @ManyToOne(() => Category, (category) => category.prefixRules)
+  category: Category;
 }

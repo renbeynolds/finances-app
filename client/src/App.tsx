@@ -4,10 +4,10 @@ import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import { RecoilRoot } from 'recoil';
 import { AccountForm } from './Accounts/AccountForm';
 import { AccountInsights } from './Accounts/AccountInsights';
+import { CategoryForm } from './Categories/CategoryForm';
+import { CategoryInsights } from './Categories/CategoryInsights';
 import { Layout } from './Layout';
 import { Snapshot } from './Snapshot';
-import { TagForm } from './Tags/TagForm';
-import { TagInsights } from './Tags/TagInsights';
 import { Trends } from './Trends';
 import { UploadForm } from './Uploads/UploadForm';
 import { UploadViewer } from './Uploads/UploadViewer';
@@ -37,10 +37,13 @@ const App = (): JSX.Element => {
                 />
               </Route>
             </Route>
-            <Route path={'tags'}>
-              <Route path={'new'} element={<TagForm intent='create' />} />
-              <Route path={':tagId'} element={<TagInsights />} />
-              <Route path={':tagId/edit'} element={<TagForm intent='edit' />} />
+            <Route path={'categories'}>
+              <Route path={'new'} element={<CategoryForm intent='create' />} />
+              <Route path={':categoryId'} element={<CategoryInsights />} />
+              <Route
+                path={':categoryId/edit'}
+                element={<CategoryForm intent='edit' />}
+              />
             </Route>
             <Route path={'uploads'}>
               <Route path={':uploadId'} element={<UploadViewer />} />

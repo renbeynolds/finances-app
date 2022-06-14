@@ -1,5 +1,5 @@
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
-import { Tag } from './Tag';
+import { Category } from './Category';
 import { Upload } from './Upload';
 
 @Entity()
@@ -35,8 +35,8 @@ export class Transaction {
   upload: Upload;
 
   @Column('int', { nullable: true })
-  tagId: number;
+  categoryId: number;
 
-  @ManyToOne(() => Tag, (tag) => tag.transactions)
-  tag: Tag;
+  @ManyToOne(() => Category, (category) => category.transactions)
+  category: Category;
 }
