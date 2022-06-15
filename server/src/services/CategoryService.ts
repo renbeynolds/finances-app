@@ -15,6 +15,12 @@ export const createCategory = async (
   if (req.body.prefixRules) {
     category.prefixRules = req.body.prefixRules.map((p) => new PrefixRule(p));
   }
+  if (req.body.parentCategoryId) {
+    const parentCategory = await categoryRepository.findOne(
+      req.body.parentCategoryId
+    );
+    category.parentCategory = parentCategory;
+  }
 
   await categoryRepository.save(category);
   res.send(category);
@@ -40,6 +46,15 @@ export const updateCategory = async (
   });
   category.name = req.body.name;
   category.color = req.body.color;
+
+  if (req.body.parentCategoryId) {
+    const parentCategory = await categoryRepository.findOne(
+      req.body.parentCategoryId
+    );
+    category.parentCategory = parentCategory;
+  } else {
+    category.parentCategory = null;
+  }
 
   const currentPrefixesToRemove = category.prefixRules.filter(
     (r) => !req.body.prefixRules.includes(r.prefix)

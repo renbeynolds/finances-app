@@ -17,9 +17,9 @@ router.post(
   createCategory
 );
 
-router.put('/:tagId', updateCategory);
+router.put('/:categoryId', updateCategory);
 
 router.get('/', searchCategories);
-router.get('/:tagId/rules', getPrefixRulesForCategory);
+router.get('/:categoryId/rules', getPrefixRulesForCategory);
 
 export default router;

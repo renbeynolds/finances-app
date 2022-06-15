@@ -1,9 +1,10 @@
 import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
-import { Button, Col, Form, Input, Row, Spin } from 'antd';
+import { Button, Col, Form, Input, Row, Select, Spin } from 'antd';
 import Title from 'antd/lib/typography/Title';
+import _ from 'lodash';
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useSetRecoilState } from 'recoil';
+import { useRecoilValueLoadable, useSetRecoilState } from 'recoil';
 import { ROOT_URL } from '../../App';
 import { apiPost } from '../../Utils';
 import { apiPut } from '../../Utils/api';
@@ -45,10 +46,19 @@ type CategoryFormProps = {
 
 const CategoryForm = ({ intent }: CategoryFormProps): JSX.Element => {
   const setCategoriesState = useSetRecoilState(categoriesState);
+  const categories = useRecoilValueLoadable(categoriesState);
   const navigate = useNavigate();
   const [form] = Form.useForm<CreateCategoryCMD>();
 
   const categoryToEdit = useRouteParamCategory();
+
+  const categoryOptions: { value: number; label: string }[] =
+    categories.state === 'hasValue'
+      ? categories.contents.map((t: CategoryDTO) => ({
+          label: t.name,
+          value: t.id,
+        }))
+      : [];
 
   useEffect(() => {
     form.resetFields();
@@ -108,11 +118,30 @@ const CategoryForm = ({ intent }: CategoryFormProps): JSX.Element => {
           initialValue={categoryToEdit?.name}
         />
         <CategoryFormField
+          name='parentCategoryId'
+          label='Parent Category'
+          initialValue={categoryToEdit?.parentCategoryId}
+        >
+          <Select
+            showSearch
+            options={categoryOptions}
+            disabled={_.find(categories.contents, {
+              parentCategoryId: categoryToEdit?.id,
+            })}
+            allowClear
+            filterOption={(inputValue, option) =>
+              option?.label.toUpperCase().indexOf(inputValue.toUpperCase()) !==
+              -1
+            }
+          >
+            <Input />
+          </Select>
+        </CategoryFormField>
+        <CategoryFormField
           name='color'
           label='Color'
           initialValue={categoryToEdit?.color}
         />
-
         <Form.List
           name='prefixRules'
           initialValue={categoryToEdit ? categoryToEdit.prefixRules : []}

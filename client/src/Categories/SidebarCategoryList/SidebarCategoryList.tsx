@@ -2,6 +2,7 @@ import { EditOutlined, PlusOutlined } from '@ant-design/icons';
 import { makeStyles } from '@material-ui/styles';
 import { Button, List, Typography } from 'antd';
 import cx from 'classnames';
+import _ from 'lodash';
 import React from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useRecoilValueLoadable } from 'recoil';
@@ -47,6 +48,16 @@ const SidebarCategoryList = (): JSX.Element => {
     return <div></div>;
   }
 
+  const topLevelCategories = _.sortBy(
+    categories.contents.filter((c) => !c.parentCategoryId),
+    'name'
+  ).map((c) => ({
+    ...c,
+    subcategories: categories.contents.filter(
+      (sc) => sc.parentCategoryId === c.id
+    ),
+  }));
+
   return (
     <div
       style={{
@@ -57,27 +68,52 @@ const SidebarCategoryList = (): JSX.Element => {
     >
       <List
         size='small'
-        dataSource={categories.contents}
+        dataSource={topLevelCategories}
         renderItem={(category) => (
-          <List.Item
-            className={cx(classes.listItem, {
-              [classes.listItemSelected]:
-                location.pathname === `/categories/${category.id}`,
-            })}
-            onClick={() => onSelectCategory(category.id)}
-          >
-            <Text>{category.name}</Text>
-            <Button
-              type='primary'
-              icon={<EditOutlined />}
-              shape='circle'
-              ghost
-              onClick={(event: React.MouseEvent<HTMLButtonElement>) =>
-                onEditCategoryClick(event, category.id)
-              }
-              size='small'
-            />
-          </List.Item>
+          <>
+            <List.Item
+              className={cx(classes.listItem, {
+                [classes.listItemSelected]:
+                  location.pathname === `/categories/${category.id}`,
+              })}
+              onClick={() => onSelectCategory(category.id)}
+            >
+              <Text>{category.name}</Text>
+              <Button
+                type='primary'
+                icon={<EditOutlined />}
+                shape='circle'
+                ghost
+                onClick={(event: React.MouseEvent<HTMLButtonElement>) =>
+                  onEditCategoryClick(event, category.id)
+                }
+                size='small'
+              />
+            </List.Item>
+            {category.subcategories.map((subcategory) => (
+              <List.Item
+                className={cx(classes.listItem, {
+                  [classes.listItemSelected]:
+                    location.pathname === `/categories/${subcategory.id}`,
+                })}
+                onClick={() => onSelectCategory(subcategory.id)}
+              >
+                <Text style={{ marginLeft: '8px' }}>
+                  └ &nbsp;{subcategory.name}
+                </Text>
+                <Button
+                  type='primary'
+                  icon={<EditOutlined />}
+                  shape='circle'
+                  ghost
+                  onClick={(event: React.MouseEvent<HTMLButtonElement>) =>
+                    onEditCategoryClick(event, subcategory.id)
+                  }
+                  size='small'
+                />
+              </List.Item>
+            ))}
+          </>
         )}
       />
       <Button

@@ -1,4 +1,10 @@
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  ManyToOne,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { PrefixRule } from './PrefixRule';
 import { Transaction } from './Transaction';
 
@@ -22,4 +28,15 @@ export class Category {
 
   @OneToMany(() => Transaction, (transaction) => transaction.upload)
   transactions: Transaction[];
+
+  @ManyToOne(() => Category, (category) => category.subcategories, {
+    nullable: true,
+  })
+  parentCategory: Category;
+
+  @Column('int', { nullable: true })
+  parentCategoryId: number;
+
+  @OneToMany(() => Category, (category) => category.parentCategory)
+  subcategories: Category[];
 }
