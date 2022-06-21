@@ -12,7 +12,7 @@ const AccountInsights = (): JSX.Element => {
       <Col span={24}>
         <TransactionTable
           accountId={accountId}
-          // tagId={tagId}
+          // categoryId={categoryId}
           // startDate={startDate}
           // endDate={endDate}
         />

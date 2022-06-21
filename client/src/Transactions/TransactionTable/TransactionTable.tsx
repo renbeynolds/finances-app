@@ -8,8 +8,8 @@ import React, { useEffect, useState } from 'react';
 import { apiPut } from '../../Utils/api';
 import { TransactionDTO } from '../TransactionDTO';
 import { UpdateTransactionCMD } from '../UpdateTransactionCMD';
+import { EditableCategory } from './EditableCategory';
 import { EditableCell } from './EditableCell';
-import { EditableTag } from './EditableTag';
 import { usePaginatedTransactions } from './usePaginatedTransactions';
 
 const useStyles = makeStyles(() => ({
@@ -41,7 +41,7 @@ const useStyles = makeStyles(() => ({
 }));
 
 interface TransactionTableProps {
-  tagId?: number;
+  categoryId?: number;
   accountId?: number;
   startDate?: string;
   endDate?: string;
@@ -51,7 +51,7 @@ interface TransactionTableProps {
 }
 
 const TransactionTable = ({
-  tagId,
+  categoryId,
   accountId,
   uploadId,
   startDate,
@@ -71,7 +71,7 @@ const TransactionTable = ({
       pageNumber,
       startDate,
       endDate,
-      tagId,
+      categoryId,
       uploadId,
       accountId,
       type
@@ -148,15 +148,17 @@ const TransactionTable = ({
     //   ),
     // },
     {
-      title: 'Tag',
-      dataIndex: 'tagId',
-      // (tagId, transaction, index)
+      title: 'Category',
+      dataIndex: 'categoryId',
+      // (categoryId, transaction, index)
       render: (...args: [number, TransactionDTO, number]) => {
-        const [tagId, transaction] = args;
+        const [categoryId, transaction] = args;
         return (
-          <EditableTag
-            tagId={tagId}
-            onSave={(newTagId) => onEditTag(transaction.id, newTagId)}
+          <EditableCategory
+            categoryId={categoryId}
+            onSave={(newCategoryId) =>
+              onEditCategory(transaction.id, newCategoryId)
+            }
           />
         );
       },
@@ -173,10 +175,10 @@ const TransactionTable = ({
     });
   };
 
-  const onEditTag = (transactionId: number, tagId: number) => {
+  const onEditCategory = (transactionId: number, categoryId: number) => {
     apiPut<UpdateTransactionCMD, TransactionDTO>(
       `/api/transactions/${transactionId}`,
-      { tagId }
+      { categoryId }
     ).then((updatedTransaction) => {
       updateTransaction(updatedTransaction);
     });

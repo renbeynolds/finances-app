@@ -3,13 +3,15 @@ import { UploadFile } from 'antd/lib/upload/interface';
 import csvtojson from 'csvtojson';
 import { Request, Response } from 'express';
 import { getManager, getRepository } from 'typeorm';
-import { Account, Tag, Transaction, Upload } from '../entities';
+import { Account, Category, Transaction, Upload } from '../entities';
 
 export const createUpload = async (
   req: Request,
   res: Response
 ): Promise<void> => {
-  const tags = await getRepository(Tag).find({ relations: ['prefixRules'] });
+  const categories = await getRepository(Category).find({
+    relations: ['prefixRules'],
+  });
   const accountId = parseInt(req.params.accountId);
   const account = await getRepository(Account).findOne(accountId);
   const csvData = await getCsvDataFromRequest(req);
@@ -34,7 +36,10 @@ export const createUpload = async (
           Number(account.balance) + Number(transaction.amount);
         account.balance = Number(account.balance) + Number(transaction.amount);
 
-        transaction.tag = getTagForTransaction(tags, transaction);
+        transaction.category = getCategoryForTransaction(
+          categories,
+          transaction
+        );
 
         transactions.push(transaction);
       }
@@ -49,11 +54,14 @@ export const createUpload = async (
     });
 };
 
-const getTagForTransaction = (tags: Tag[], transaction: Transaction): Tag => {
-  tags.forEach((tag) => {
-    tag.prefixRules.forEach((rule) => {
+const getCategoryForTransaction = (
+  categories: Category[],
+  transaction: Transaction
+): Category => {
+  categories.forEach((category) => {
+    category.prefixRules.forEach((rule) => {
       if (transaction.description.startsWith(rule.prefix)) {
-        return tag;
+        return category;
       }
     });
   });

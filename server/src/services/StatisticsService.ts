@@ -12,11 +12,11 @@ export const getTotalExpense = async (
 
   const result = await getRepository(Transaction)
     .createQueryBuilder('trans')
-    .leftJoin('trans.tag', 'tag')
+    .leftJoin('trans.category', 'category')
     .where('trans.amount < 0')
     .andWhere('trans.date >= :startDate', { startDate })
     .andWhere('trans.date <= :endDate', { endDate })
-    .andWhere("tag.name <> 'TRANSFER'")
+    .andWhere("category.name <> 'TRANSFER'")
     .select('SUM(trans.amount) * -1', 'totalExpense')
     .getRawOne();
 
@@ -32,11 +32,11 @@ export const getTotalIncome = async (
 
   const result = await getRepository(Transaction)
     .createQueryBuilder('trans')
-    .leftJoin('trans.tag', 'tag')
+    .leftJoin('trans.category', 'category')
     .where('trans.amount > 0')
     .andWhere('trans.date >= :startDate', { startDate })
     .andWhere('trans.date <= :endDate', { endDate })
-    .andWhere("tag.name <> 'TRANSFER'")
+    .andWhere("category.name <> 'TRANSFER'")
     .select('SUM(trans.amount)', 'totalIncome')
     .getRawOne();
 
@@ -70,7 +70,7 @@ export const getAverageExpense = async (
         SUM(amount) AS "total"
       FROM calendar c
       LEFT JOIN transaction t ON DATE_TRUNC('month', t.date) = c.month
-      WHERE t."tagId" IS NULL OR t."tagId" <> (SELECT id FROM tag WHERE name = 'TRANSFER') AND
+      WHERE t."categoryId" IS NULL OR t."categoryId" <> (SELECT id FROM category WHERE name = 'TRANSFER') AND
       t.amount < 0
       GROUP BY c.month
     ) sums
@@ -106,7 +106,7 @@ export const getAverageIncome = async (
         SUM(amount) AS "total"
       FROM calendar c
       LEFT JOIN transaction t ON DATE_TRUNC('month', t.date) = c.month
-      WHERE t."tagId" IS NULL OR t."tagId" <> (SELECT id FROM tag WHERE name = 'TRANSFER') AND
+      WHERE t."categoryId" IS NULL OR t."categoryId" <> (SELECT id FROM category WHERE name = 'TRANSFER') AND
       t.amount > 0
       GROUP BY c.month
     ) sums

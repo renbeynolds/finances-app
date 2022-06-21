@@ -6,7 +6,7 @@ import { NumberIndicator } from '../Common/NumberIndicator';
 import { DateRangePicker } from '../Filters/DateRangePicker';
 import { endDateFilterAtom, startDateFilterAtom } from '../Filters/FilterState';
 import { TransactionTable } from '../Transactions/TransactionTable';
-import { TopSpendingTagsChart } from './TopSpendingTagsChart';
+import { TopSpendingCategoriesChart } from './TopSpendingCategoriesChart';
 import { useTotalExpenseData } from './useTotalExpenseData';
 import { useTotalIncomeData } from './useTotalIncomeData';
 
@@ -25,7 +25,7 @@ const Snapshot = (): JSX.Element => {
       <DateRangePicker />
       <Row gutter={16}>
         <Col span={12}>
-          <TopSpendingTagsChart />
+          <TopSpendingCategoriesChart />
         </Col>
         <Col span={4}>
           <NumberIndicator

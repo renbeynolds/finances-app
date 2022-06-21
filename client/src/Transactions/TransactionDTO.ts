@@ -6,5 +6,5 @@ export interface TransactionDTO {
   amount: number;
   balance: number;
   balanceCorrection: number;
-  tagId: number;
+  categoryId: number;
 }

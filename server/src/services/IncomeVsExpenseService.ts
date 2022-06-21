@@ -25,7 +25,7 @@ export const getIncomeVsExpenseData = async (
       SUM (CASE WHEN amount < 0 THEN amount ELSE 0 END) AS "Expense"
     FROM calendar c
     LEFT JOIN transaction t ON DATE_TRUNC('month', t.date) = c.month
-    WHERE t."tagId" IS NULL OR t."tagId" <> (SELECT id FROM tag WHERE name = 'TRANSFER')
+    WHERE t."categoryId" IS NULL OR t."categoryId" <> (SELECT id FROM category WHERE name = 'TRANSFER')
     GROUP BY c.month
     ORDER BY c.month ASC
   `);

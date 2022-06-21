@@ -4,7 +4,7 @@ import { Layout, Menu, Typography } from 'antd';
 import { ItemType } from 'antd/lib/menu/hooks/useItems';
 import React from 'react';
 import { SidebarAccountsList } from '../../Accounts/SidebarAccountsList';
-import { SidebarTagList } from '../../Tags/SidebarTagList';
+import { SidebarCategoryList } from '../../Categories/SidebarCategoryList';
 import { SidebarUploadsList } from '../../Uploads/SidebarUploadsList';
 import { capitalized } from '../../Utils/StringUtils';
 
@@ -26,7 +26,7 @@ const useStyles = makeStyles({
 
 const MENU_ITEMS: ItemType[] = [
   { icon: <BankOutlined />, key: 'accounts' },
-  { icon: <TagOutlined />, key: 'tags' },
+  { icon: <TagOutlined />, key: 'categories' },
   { icon: <UploadOutlined />, key: 'uploads' },
 ];
 
@@ -54,7 +54,7 @@ const Sider = ({ open }: SiderProps): JSX.Element => {
           </Typography.Title>
         </div>
         {activeKey === 'accounts' && <SidebarAccountsList />}
-        {activeKey === 'tags' && <SidebarTagList />}
+        {activeKey === 'categories' && <SidebarCategoryList />}
         {activeKey === 'uploads' && <SidebarUploadsList />}
         <div style={{ flexGrow: 1 }} />
         <Menu
