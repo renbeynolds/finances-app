@@ -28,7 +28,9 @@ export const getCategorySpendingOverTimeData = async (
       SELECT DATE_TRUNC('month', bucket::date) AS month FROM generate_series('${startDateString}', '${endDateString}', '1 month'::interval) bucket
     ),
     category_transactions AS (
-      SELECT * FROM transaction WHERE "categoryId" = ${categoryId}
+      SELECT * FROM transaction t
+      LEFT JOIN category c on t."categoryId" = c.id
+      WHERE c.id = ${categoryId} OR c."parentCategoryId" = ${categoryId}
     )
     SELECT
       TO_CHAR(c.month, 'YYYY-MM') as month,

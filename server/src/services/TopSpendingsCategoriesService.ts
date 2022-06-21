@@ -7,27 +7,23 @@ export const getTopSpendingCategoriesData = async (
 ): Promise<void> => {
   const startDate = req.query.startDate;
   const endDate = req.query.endDate;
-  const uploadId = req.query.uploadId;
   const numCategories = 9;
   const manager = getManager();
-
-  const uploadQuery = uploadId ? `trans."uploadId" = ${uploadId}` : '1 = 1';
 
   const rawData = await manager.query(`
     WITH category_totals AS (
       SELECT
         SUM(trans.amount) AS data,
-        t.id AS categoryid
+        COALESCE(c."parentCategoryId", c.id) AS categoryid
       FROM
         transaction trans
-        LEFT JOIN category t on trans."categoryId" = t.id
+        LEFT JOIN category c on trans."categoryId" = c.id
       WHERE
         trans.amount < 0 AND
-        t.name <> 'TRANSFER' AND
-        trans.date >= '${startDate}' AND trans.date <= '${endDate}' AND
-        ${uploadQuery}
-      GROUP BY t."id"
-      HAVING t."id" IS NOT NULL
+        c.name <> 'TRANSFER' AND
+        trans.date >= '${startDate}' AND trans.date <= '${endDate}'
+      GROUP BY COALESCE(c."parentCategoryId", c.id)
+      HAVING COALESCE(c."parentCategoryId", c.id) IS NOT NULL
     )
     SELECT name, categoryid AS "categoryId", -1 * data AS data, color FROM (
       WITH category_ranks AS (

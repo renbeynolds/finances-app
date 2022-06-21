@@ -1,7 +1,7 @@
 import { TransactionDTO } from '@client/Transactions/TransactionDTO';
 import { PaginatedResponse } from '@client/Utils/PaginatedResponse';
 import { Request, Response } from 'express';
-import { getRepository } from 'typeorm';
+import { Brackets, getRepository } from 'typeorm';
 import { Transaction } from '../entities/Transaction';
 import { PaginatedRequest } from '../middleware/Pagination';
 
@@ -20,9 +20,17 @@ export const searchTransactions = async (
     .createQueryBuilder('trans')
     .leftJoin('trans.category', 'category')
     .leftJoin('trans.upload', 'upload')
-    .where(categoryId ? 'trans.categoryId = :categoryId' : '1=1', {
-      categoryId,
-    })
+    .where(
+      categoryId
+        ? new Brackets((qb) => {
+            qb.where('trans.categoryId = :categoryId', {
+              categoryId,
+            }).orWhere('category.parentCategoryId = :categoryId', {
+              categoryId,
+            });
+          })
+        : '1=1'
+    )
     .andWhere(startDate ? 'trans.date >= :startDate' : '1=1', { startDate })
     .andWhere(endDate ? 'trans.date <= :endDate' : '1=1', { endDate })
     .andWhere(uploadId ? 'upload.id = :uploadId' : '1=1', { uploadId })
