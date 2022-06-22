@@ -1,13 +1,14 @@
 import accounting from 'accounting';
-import { Col, InputNumber, Row, Typography } from 'antd';
-import React, { useState } from 'react';
+import { Col, Row } from 'antd';
+import React from 'react';
+import { AverageOverMonthsSelector } from '../Common/AverageOverMonthsSelector';
 import { NumberIndicator } from '../Common/NumberIndicator';
 import { IncomeVsExpenseChart } from './IncomeVsExpenseChart';
 import { useAverageExpenseData } from './useAverageExpenseData';
 import { useAverageIncomeData } from './useAverageIncomeData';
 
 const Trends = (): JSX.Element => {
-  const [numMonthsToAverage, setNumMonthsToAverage] = useState<number>(3);
+  const [numMonthsToAverage, setNumMonthsToAverage] = React.useState<number>(3);
   const averageIncomeData = useAverageIncomeData(numMonthsToAverage);
   const averageExpenseData = useAverageExpenseData(numMonthsToAverage);
 
@@ -27,24 +28,10 @@ const Trends = (): JSX.Element => {
           row spacing not working correctly:
           https://github.com/ant-design/ant-design/issues/4410 */}
           <Col span={24}>
-            <div style={{ display: 'flex' }}>
-              <Typography.Title level={5}>Average Over Last</Typography.Title>
-              <div>
-                <InputNumber
-                  min={3}
-                  max={12}
-                  value={numMonthsToAverage}
-                  onChange={setNumMonthsToAverage}
-                  size='small'
-                  style={{
-                    marginLeft: '8px',
-                    marginRight: '8px',
-                    width: '56px',
-                  }}
-                />
-              </div>
-              <Typography.Title level={5}>Months</Typography.Title>
-            </div>
+            <AverageOverMonthsSelector
+              value={numMonthsToAverage}
+              onChange={setNumMonthsToAverage}
+            />
           </Col>
           <Col span={8}>
             <NumberIndicator

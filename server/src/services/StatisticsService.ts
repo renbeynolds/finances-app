@@ -50,7 +50,7 @@ export const getAverageExpense = async (
   const months = req.query.months;
 
   const startDate = moment()
-    .endOf('month')
+    .startOf('month')
     .subtract(months as string, 'months')
     .format('MM-DD-YYYY');
 
@@ -86,7 +86,7 @@ export const getAverageIncome = async (
   const months = req.query.months;
 
   const startDate = moment()
-    .endOf('month')
+    .startOf('month')
     .subtract(months as string, 'months')
     .format('MM-DD-YYYY');
 
@@ -110,6 +110,48 @@ export const getAverageIncome = async (
       t.amount > 0
       GROUP BY c.month
     ) sums
+  `);
+
+  res.status(200).send(rawData[0]);
+};
+
+export const getAverageCategorySpending = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
+  const categoryId = parseInt(req.query.categoryId as string);
+  const months = req.query.months;
+
+  const startDate = moment()
+    .startOf('month')
+    .subtract(months as string, 'months')
+    .format('MM-DD-YYYY');
+
+  const endDate = moment()
+    .endOf('month')
+    .subtract(1, 'month')
+    .format('MM-DD-YYYY');
+
+  const rawData = await getManager().query(`
+    WITH calendar AS (
+      SELECT DATE_TRUNC('month', bucket::date) AS month FROM generate_series('${startDate}', '${endDate}', '1 month'::interval) bucket
+    ),
+    category_transactions AS (
+      SELECT * FROM transaction t
+      LEFT JOIN category c on t."categoryId" = c.id
+      WHERE c.id = ${categoryId} OR c."parentCategoryId" = ${categoryId}
+    )
+    SELECT
+      AVG(monthly_spending.total)
+    FROM (
+        SELECT
+        TO_CHAR(c.month, 'YYYY-MM') as month,
+        COALESCE(SUM(t.amount), 0) * -1 as "total"
+      FROM calendar c
+      LEFT JOIN category_transactions t ON DATE_TRUNC('month', t.date) = c.month
+      GROUP BY c.month
+      ORDER BY c.month ASC
+    ) monthly_spending
   `);
 
   res.status(200).send(rawData[0]);
