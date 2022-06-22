@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "dependencies": {},
   "scripts": {
-    "install-all": "concurrently -p name -c \"magenta,blue,yellow\" -n \"server,client,root\" \"cd server && yarn install\" \"cd client && yarn install\" \"yarn install\"",
+    "install-all": "yarn install && concurrently -p name -c \"magenta,blue\" -n \"server,client\" \"cd server && yarn install\" \"cd client && yarn install\"",
     "start": "concurrently -p name -c \"magenta,blue\" -n \"server,client\" \"cd server && yarn start\" \"cd client && yarn start\""
   },
   "devDependencies": {
