@@ -1,5 +1,5 @@
 import accounting from 'accounting';
-import { Col, Row, Space } from 'antd';
+import { Col, Row } from 'antd';
 import React from 'react';
 import { useRecoilValue } from 'recoil';
 import { NumberIndicator } from '../Common/NumberIndicator';
@@ -21,44 +21,43 @@ const Snapshot = (): JSX.Element => {
     React.useState<TransactionType>();
 
   return (
-    <Space direction='vertical' style={{ width: '100%' }}>
-      <DateRangePicker />
-      <Row gutter={16}>
-        <Col span={12}>
-          <TopSpendingCategoriesChart />
-        </Col>
-        <Col span={4}>
-          <NumberIndicator
-            onValueClick={() => setTransactionTypeFilter('income')}
-            title='Income'
-            value={accounting.formatMoney(totalIncomeData.totalIncome)}
-            titleProps={{
-              type: 'success',
-            }}
-          />
-        </Col>
-        <Col span={4}>
-          <NumberIndicator
-            onValueClick={() => setTransactionTypeFilter('expense')}
-            title='Expense'
-            value={accounting.formatMoney(totalExpenseData.totalExpense)}
-            titleProps={{
-              type: 'danger',
-            }}
-          />
-        </Col>
-      </Row>
-      <Row>
-        <Col span={24}>
-          <TransactionTable
-            startDate={startDate}
-            endDate={endDate}
-            type={transactionTypeFilter}
-            setType={setTransactionTypeFilter}
-          />
-        </Col>
-      </Row>
-    </Space>
+    <Row gutter={[16, 16]}>
+      <Col span={24}>
+        <DateRangePicker />
+      </Col>
+      <Col span={12}>
+        <TopSpendingCategoriesChart />
+      </Col>
+      <Col span={4}>
+        <NumberIndicator
+          onValueClick={() => setTransactionTypeFilter('income')}
+          title='Income'
+          value={accounting.formatMoney(totalIncomeData.totalIncome)}
+          titleProps={{
+            type: 'success',
+          }}
+        />
+      </Col>
+      <Col span={4}>
+        <NumberIndicator
+          onValueClick={() => setTransactionTypeFilter('expense')}
+          title='Expense'
+          value={accounting.formatMoney(totalExpenseData.totalExpense)}
+          titleProps={{
+            type: 'danger',
+          }}
+        />
+      </Col>
+      <Col span={4}></Col>
+      <Col span={24}>
+        <TransactionTable
+          startDate={startDate}
+          endDate={endDate}
+          type={transactionTypeFilter}
+          setType={setTransactionTypeFilter}
+        />
+      </Col>
+    </Row>
   );
 };
 

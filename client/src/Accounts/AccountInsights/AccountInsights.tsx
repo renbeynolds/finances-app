@@ -8,14 +8,9 @@ const AccountInsights = (): JSX.Element => {
   const accountId = parseInt(accountIdString!);
 
   return (
-    <Row>
+    <Row gutter={[16, 16]}>
       <Col span={24}>
-        <TransactionTable
-          accountId={accountId}
-          // categoryId={categoryId}
-          // startDate={startDate}
-          // endDate={endDate}
-        />
+        <TransactionTable accountId={accountId} />
       </Col>
     </Row>
   );

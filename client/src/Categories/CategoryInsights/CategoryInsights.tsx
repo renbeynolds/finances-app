@@ -1,4 +1,4 @@
-import { Col, Row, Space } from 'antd';
+import { Col, Row } from 'antd';
 import React from 'react';
 import { useParams } from 'react-router';
 import { useRecoilValue } from 'recoil';
@@ -17,23 +17,22 @@ const CategoryInsights = (): JSX.Element => {
   const endDate = useRecoilValue(endDateFilterAtom);
 
   return (
-    <Space direction='vertical' style={{ width: '100%' }}>
-      <DateRangePicker />
-      <Row>
-        <Col span={12}>
-          <CategorySpendingOverTimeChart categoryId={categoryId} />
-        </Col>
-      </Row>
-      <Row>
-        <Col span={24}>
-          <TransactionTable
-            categoryId={categoryId}
-            startDate={startDate}
-            endDate={endDate}
-          />
-        </Col>
-      </Row>
-    </Space>
+    <Row gutter={[16, 16]}>
+      <Col span={12}>
+        <CategorySpendingOverTimeChart categoryId={categoryId} />
+      </Col>
+      <Col span={12}></Col>
+      <Col span={24}>
+        <DateRangePicker />
+      </Col>
+      <Col span={24}>
+        <TransactionTable
+          categoryId={categoryId}
+          startDate={startDate}
+          endDate={endDate}
+        />
+      </Col>
+    </Row>
   );
 };
 
