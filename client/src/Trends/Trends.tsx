@@ -36,7 +36,8 @@ const Trends = (): JSX.Element => {
           <Col span={8}>
             <NumberIndicator
               title='Expense'
-              value={accounting.formatMoney(averageExpenseData.avg)}
+              value={averageExpenseData.avg}
+              formatValue={accounting.formatMoney}
               titleProps={{
                 type: 'danger',
               }}
@@ -45,7 +46,8 @@ const Trends = (): JSX.Element => {
           <Col span={8}>
             <NumberIndicator
               title='Income'
-              value={accounting.formatMoney(averageIncomeData.avg)}
+              value={averageIncomeData.avg}
+              formatValue={accounting.formatMoney}
               titleProps={{
                 type: 'success',
               }}
@@ -54,7 +56,8 @@ const Trends = (): JSX.Element => {
           <Col span={8}>
             <NumberIndicator
               title='Net'
-              value={accounting.formatMoney(averageNet)}
+              value={averageNet}
+              formatValue={accounting.formatMoney}
               titleProps={{
                 type:
                   averageNet > 0

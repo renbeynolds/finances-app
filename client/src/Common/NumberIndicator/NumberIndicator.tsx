@@ -1,18 +1,25 @@
 import { Card, Typography } from 'antd';
 import { TitleProps } from 'antd/lib/typography/Title';
 import React from 'react';
+import { PercentChangeIndicator } from './PercentChangeIndicator';
 
 interface NumberIndicatorProps {
   onValueClick?: () => void;
-  value: string;
+  value: number;
+  previousValue?: number;
+  desiredChange?: 'increase' | 'decrease';
   title: string;
   titleProps?: TitleProps;
+  formatValue?: (value: number) => string;
 }
 
 const NumberIndicator = ({
   value,
+  previousValue,
+  desiredChange,
   title,
   onValueClick,
+  formatValue,
   titleProps = {},
 }: NumberIndicatorProps): JSX.Element => {
   return (
@@ -29,8 +36,22 @@ const NumberIndicator = ({
           style={{ cursor: onValueClick ? 'pointer' : 'default' }}
           {...titleProps}
         >
-          {value}
+          {formatValue ? formatValue(value) : value}
         </Typography.Title>
+      </div>
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'center',
+        }}
+      >
+        {previousValue && desiredChange && (
+          <PercentChangeIndicator
+            currentValue={value}
+            previousValue={previousValue}
+            desiredChange={desiredChange}
+          />
+        )}
       </div>
     </Card>
   );

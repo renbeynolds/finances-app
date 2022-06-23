@@ -41,7 +41,8 @@ const CategoryInsights = (): JSX.Element => {
           <Col span={8}>
             <NumberIndicator
               title='Total'
-              value={accounting.formatMoney(averageCategorySpending.avg)}
+              formatValue={accounting.formatMoney}
+              value={averageCategorySpending.avg}
             />
           </Col>
         </Row>

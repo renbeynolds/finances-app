@@ -32,7 +32,8 @@ const Snapshot = (): JSX.Element => {
         <NumberIndicator
           onValueClick={() => setTransactionTypeFilter('income')}
           title='Income'
-          value={accounting.formatMoney(totalIncomeData.totalIncome)}
+          value={totalIncomeData.totalIncome}
+          formatValue={accounting.formatMoney}
           titleProps={{
             type: 'success',
           }}
@@ -42,7 +43,8 @@ const Snapshot = (): JSX.Element => {
         <NumberIndicator
           onValueClick={() => setTransactionTypeFilter('expense')}
           title='Expense'
-          value={accounting.formatMoney(totalExpenseData.totalExpense)}
+          value={totalExpenseData.totalExpense}
+          formatValue={accounting.formatMoney}
           titleProps={{
             type: 'danger',
           }}
