@@ -1,5 +1,5 @@
 import { CaretDownOutlined, CaretUpOutlined } from '@ant-design/icons';
-import { Typography } from 'antd';
+import { Tooltip, Typography } from 'antd';
 import React from 'react';
 
 interface PercentChangeIndicatorProps {
@@ -20,19 +20,28 @@ const PercentChangeIndicator = ({
   ).toFixed(1);
 
   const color =
-    desiredChange === 'increase' && changeAmount > 0 ? 'green' : 'red';
+    (desiredChange === 'increase' && changeAmount > 0) ||
+    (desiredChange === 'decrease' && changeAmount < 0)
+      ? 'green'
+      : 'red';
 
   return (
-    <div>
-      {changeAmount > 0 ? (
-        <CaretUpOutlined style={{ color: color, marginRight: '8px' }} />
-      ) : (
-        <CaretDownOutlined style={{ color: color, marginRight: '8px' }} />
-      )}
-      <Typography.Text style={{ color: color }}>
-        {percentChange}%
-      </Typography.Text>
-    </div>
+    <Tooltip
+      title={`Amount has ${
+        changeAmount > 0 ? 'increased' : 'decreased'
+      } by ${percentChange}% compared to the previous number of selected days.`}
+    >
+      <div>
+        {changeAmount > 0 ? (
+          <CaretUpOutlined style={{ color: color, marginRight: '8px' }} />
+        ) : (
+          <CaretDownOutlined style={{ color: color, marginRight: '8px' }} />
+        )}
+        <Typography.Text style={{ color: color }}>
+          {percentChange}%
+        </Typography.Text>
+      </div>
+    </Tooltip>
   );
 };
 
