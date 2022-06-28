@@ -45,7 +45,7 @@ const NumberIndicator = ({
           justifyContent: 'center',
         }}
       >
-        {previousValue && desiredChange && (
+        {previousValue && (
           <PercentChangeIndicator
             currentValue={value}
             previousValue={previousValue}

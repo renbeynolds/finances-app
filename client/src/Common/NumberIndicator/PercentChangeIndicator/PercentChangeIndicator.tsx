@@ -5,7 +5,7 @@ import React from 'react';
 interface PercentChangeIndicatorProps {
   currentValue: number;
   previousValue: number;
-  desiredChange: 'increase' | 'decrease';
+  desiredChange?: 'increase' | 'decrease';
 }
 
 const PercentChangeIndicator = ({
@@ -23,7 +23,9 @@ const PercentChangeIndicator = ({
     (desiredChange === 'increase' && changeAmount > 0) ||
     (desiredChange === 'decrease' && changeAmount < 0)
       ? 'green'
-      : 'red';
+      : desiredChange
+      ? 'red'
+      : undefined;
 
   return (
     <Tooltip
