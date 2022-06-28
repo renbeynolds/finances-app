@@ -35,11 +35,17 @@ const PercentChangeIndicator = ({
     >
       <div>
         {changeAmount > 0 ? (
-          <CaretUpOutlined style={{ color: color, marginRight: '8px' }} />
+          <CaretUpOutlined
+            style={{ color: color, marginRight: '8px' }}
+            data-testid='direction'
+          />
         ) : (
-          <CaretDownOutlined style={{ color: color, marginRight: '8px' }} />
+          <CaretDownOutlined
+            style={{ color: color, marginRight: '8px' }}
+            data-testid='direction'
+          />
         )}
-        <Typography.Text style={{ color: color }}>
+        <Typography.Text style={{ color: color }} data-testid='value'>
           {percentChange}%
         </Typography.Text>
       </div>
