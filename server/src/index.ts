@@ -1,8 +1,5 @@
-import express from 'express';
-import fileUpload from 'express-fileupload';
-import pagination from './middleware/Pagination';
+import app from './app';
 import postgresDB from './postgresDB';
-import rootRouter from './routes/RootRouter';
 
 postgresDB
   .initialize()
@@ -13,15 +10,7 @@ postgresDB
     console.error('Error during Data Source initialization:', err);
   });
 
-const app = express();
-
-app.use(express.json());
-app.use(fileUpload());
-app.use(pagination);
-
-app.use('/api', rootRouter);
-
-const port = process.env.PORT || 3001;
+const port = process.env.PORT;
 app.listen(port, () => {
   console.log(`Server started on port ${port}`);
 });

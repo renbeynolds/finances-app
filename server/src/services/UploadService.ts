@@ -21,52 +21,45 @@ export const createUpload = async (
   const upload = new Upload();
   upload.account = account;
 
-  await postgresDB.manager
-    .transaction(async (transactionalEntityManager) => {
-      const transactions: Transaction[] = [];
-      for (let i = csvData.length - 1; i >= 0; i--) {
-        const obj = csvData[i];
-        const transaction = new Transaction();
-        transaction.upload = upload;
-        transaction.date = new Date(obj[account.dateHeader]);
-        transaction.description = obj[account.descriptionHeader];
-        transaction.amount = accounting.unformat(obj[account.amountHeader]);
-        if (account.amountsInverted) {
-          transaction.amount = -1 * transaction.amount;
-        }
-        transaction.balance =
-          Number(account.balance) + Number(transaction.amount);
-        account.balance = Number(account.balance) + Number(transaction.amount);
-
-        transaction.category = getCategoryForTransaction(
-          categories,
-          transaction
-        );
-
-        transactions.push(transaction);
+  await postgresDB.manager.transaction(async (transactionalEntityManager) => {
+    const transactions: Transaction[] = [];
+    for (let i = csvData.length - 1; i >= 0; i--) {
+      const obj = csvData[i];
+      const transaction = new Transaction();
+      transaction.upload = upload;
+      transaction.date = new Date(obj[account.dateHeader]);
+      transaction.description = obj[account.descriptionHeader];
+      transaction.amount = accounting.unformat(obj[account.amountHeader]);
+      if (account.amountsInverted) {
+        transaction.amount = -1 * transaction.amount;
       }
+      transaction.balance =
+        Number(account.balance) + Number(transaction.amount);
+      account.balance = Number(account.balance) + Number(transaction.amount);
 
-      await transactionalEntityManager.save(upload);
-      await transactionalEntityManager.save(transactions);
-      await transactionalEntityManager.save(account);
-      return res.send(upload);
-    })
-    .catch((error) => {
-      return res.status(400).send({ errors: [error.message] });
-    });
+      transaction.category = getCategoryForTransaction(categories, transaction);
+
+      transactions.push(transaction);
+    }
+
+    await transactionalEntityManager.save(upload);
+    await transactionalEntityManager.save(transactions);
+    await transactionalEntityManager.save(account);
+    return res.send(upload);
+  });
 };
 
 const getCategoryForTransaction = (
   categories: Category[],
   transaction: Transaction
 ): Category => {
-  categories.forEach((category) => {
-    category.prefixRules.forEach((rule) => {
+  for (let category of categories) {
+    for (let rule of category.prefixRules) {
       if (transaction.description.startsWith(rule.prefix)) {
         return category;
       }
-    });
-  });
+    }
+  }
   return null;
 };
 

@@ -8,6 +8,9 @@ import uploadRouter from './UploadRouter';
 
 const rootRouter: Router = Router();
 
+rootRouter.get('/', (req, res) =>
+  res.status(200).send({ message: 'Hello, World!' })
+);
 rootRouter.use('/accounts', accountRouter);
 rootRouter.use('/transactions', transactionRouter);
 rootRouter.use('/categories', categoryRouter);
