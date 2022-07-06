@@ -3,7 +3,8 @@
   "version": "0.1.0",
   "dependencies": {},
   "scripts": {
-    "start": "concurrently -p name -c \"magenta,blue\" -n \"server,client\" \"cd server && yarn start\" \"cd client && yarn start\""
+    "start": "concurrently -p name -c \"magenta,blue\" -n \"server,client\" \"cd server && yarn start\" \"cd client && yarn start\"",
+    "test": "cd client && CI=true yarn test && cd ../server && yarn test"
   },
   "devDependencies": {
     "concurrently": "^6.4.0",
