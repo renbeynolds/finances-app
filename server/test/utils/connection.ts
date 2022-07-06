@@ -1,24 +1,24 @@
+import { PostgreSqlContainer } from 'testcontainers';
 import postgresDB from '../../src/postgresDB';
 
-const connection = {
-  async create() {
-    await postgresDB.initialize();
-  },
+export class TestDB {
+  private container = null;
 
-  async close() {
-    await postgresDB.destroy();
-  },
+  constructor() {}
 
-  async clear() {
-    const entities = postgresDB.entityMetadatas;
-
-    entities.forEach(async (entity) => {
-      const repository = postgresDB.getRepository(entity.name);
-      await repository.query(`DELETE FROM ${entity.tableName}`);
-      await repository.query(
-        `ALTER SEQUENCE ${entity.tableName}_id_seq RESTART WITH 1`
-      );
+  public async create() {
+    this.container = await new PostgreSqlContainer().start();
+    postgresDB.setOptions({
+      host: this.container.getHost(),
+      port: this.container.getPort(),
+      username: this.container.getUsername(),
+      password: this.container.getPassword(),
+      database: this.container.getDatabase(),
     });
-  },
-};
-export default connection;
+    await postgresDB.initialize();
+  }
+
+  public async destroy() {
+    this.container.stop();
+  }
+}

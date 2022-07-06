@@ -1,20 +1,19 @@
 import request from 'supertest';
 import app from '../src/app';
-import connection from './utils/connection';
+import { TestDB } from './utils/connection';
+
+jest.setTimeout(180_000);
+const testDatabase = new TestDB();
 
 beforeAll(async () => {
-  await connection.create();
+  await testDatabase.create();
 });
 
 afterAll(async () => {
-  await connection.close();
+  await testDatabase.destroy();
 });
 
-beforeEach(async () => {
-  await connection.clear();
-});
-
-it('can hit the rest api', async () => {
+it('can create an account', async () => {
   const createAccountCMD = {
     name: 'MyChecking',
     dateHeader: 'date',
