@@ -1,14 +1,12 @@
-import { AccountDTO } from '@client/Accounts/AccountDTO';
-import { CreateAccountCMD } from '@client/Accounts/CreateAccountCMD';
 import { Request, Response } from 'express';
-import { getRepository } from 'typeorm';
 import { Account } from '../entities/Account';
+import postgresDB from '../postgresDB';
 
 export const createAccount = async (
-  req: Request<{}, {}, CreateAccountCMD>,
-  res: Response<AccountDTO>
+  req: Request,
+  res: Response
 ): Promise<void> => {
-  const accountRepository = getRepository(Account);
+  const accountRepository = postgresDB.getRepository(Account);
 
   const account = new Account();
   account.name = req.body.name;
@@ -26,8 +24,8 @@ export const createAccount = async (
 
 export const searchAccounts = async (
   req: Request,
-  res: Response<AccountDTO[]>
+  res: Response
 ): Promise<void> => {
-  const accounts = await getRepository(Account).find();
+  const accounts = await postgresDB.getRepository(Account).find();
   res.send(accounts);
 };

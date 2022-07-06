@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import moment from 'moment';
-import { getManager, getRepository } from 'typeorm';
 import { Transaction } from '../entities/Transaction';
+import postgresDB from '../postgresDB';
 
 export const getTotalExpense = async (
   req: Request,
@@ -10,7 +10,8 @@ export const getTotalExpense = async (
   const startDate = req.query.startDate;
   const endDate = req.query.endDate;
 
-  const result = await getRepository(Transaction)
+  const result = await postgresDB
+    .getRepository(Transaction)
     .createQueryBuilder('trans')
     .leftJoin('trans.category', 'category')
     .where('trans.amount < 0')
@@ -30,7 +31,8 @@ export const getTotalIncome = async (
   const startDate = req.query.startDate;
   const endDate = req.query.endDate;
 
-  const result = await getRepository(Transaction)
+  const result = await postgresDB
+    .getRepository(Transaction)
     .createQueryBuilder('trans')
     .leftJoin('trans.category', 'category')
     .where('trans.amount > 0')
@@ -59,7 +61,7 @@ export const getAverageExpense = async (
     .subtract(1, 'month')
     .format('MM-DD-YYYY');
 
-  const rawData = await getManager().query(`
+  const rawData = await postgresDB.manager.query(`
     WITH calendar AS (
       SELECT DATE_TRUNC('month', bucket::date) AS month FROM generate_series('${startDate}', '${endDate}', '1 month'::interval) bucket
     )
@@ -95,7 +97,7 @@ export const getAverageIncome = async (
     .subtract(1, 'month')
     .format('MM-DD-YYYY');
 
-  const rawData = await getManager().query(`
+  const rawData = await postgresDB.manager.query(`
     WITH calendar AS (
       SELECT DATE_TRUNC('month', bucket::date) AS month FROM generate_series('${startDate}', '${endDate}', '1 month'::interval) bucket
     )
@@ -132,7 +134,7 @@ export const getAverageCategorySpending = async (
     .subtract(1, 'month')
     .format('MM-DD-YYYY');
 
-  const rawData = await getManager().query(`
+  const rawData = await postgresDB.manager.query(`
     WITH calendar AS (
       SELECT DATE_TRUNC('month', bucket::date) AS month FROM generate_series('${startDate}', '${endDate}', '1 month'::interval) bucket
     ),

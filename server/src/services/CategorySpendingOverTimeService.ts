@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import moment from 'moment';
-import { getManager, getRepository } from 'typeorm';
 import { Category } from '../entities';
+import postgresDB from '../postgresDB';
 
 export const getCategorySpendingOverTimeData = async (
   req: Request,
@@ -19,11 +19,12 @@ export const getCategorySpendingOverTimeData = async (
   }
 
   const categoryId = parseInt(req.query.categoryId as string);
-  const manager = getManager();
 
-  const category = await getRepository(Category).findOne(categoryId);
+  const category = await postgresDB
+    .getRepository(Category)
+    .findOneBy({ id: categoryId });
 
-  const rawData = await manager.query(`
+  const rawData = await postgresDB.manager.query(`
     WITH calendar AS (
       SELECT DATE_TRUNC('month', bucket::date) AS month FROM generate_series('${startDateString}', '${endDateString}', '1 month'::interval) bucket
     ),

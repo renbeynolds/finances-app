@@ -1,7 +1,6 @@
-import { IncomeVsExpenseDTO } from '@client/Trends/IncomeVsExpenseChart/useIncomeVsExpenseData';
 import { Request, Response } from 'express';
 import moment from 'moment';
-import { getManager } from 'typeorm';
+import postgresDB from '../postgresDB';
 
 export const getIncomeVsExpenseData = async (
   req: Request,
@@ -14,7 +13,7 @@ export const getIncomeVsExpenseData = async (
 
   const endDate = moment().endOf('month').format('MM-DD-YYYY');
 
-  const rawData: IncomeVsExpenseDTO[] = await getManager().query(`
+  const rawData = await postgresDB.manager.query(`
     WITH calendar AS (
       SELECT DATE_TRUNC('month', bucket::date) AS month FROM generate_series('${startDate}', '${endDate}', '1 month'::interval) bucket
     )

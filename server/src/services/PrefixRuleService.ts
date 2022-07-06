@@ -1,13 +1,13 @@
 import { Request, Response } from 'express';
-import { getRepository } from 'typeorm';
 import { PrefixRule } from '../entities';
+import postgresDB from '../postgresDB';
 
 export const getPrefixRulesForCategory = async (
   req: Request,
   res: Response
 ): Promise<void> => {
-  const categoryId = req.params.categoryId;
-  const rules = await getRepository(PrefixRule).find({
+  const categoryId = parseInt(req.params.categoryId);
+  const rules = await postgresDB.getRepository(PrefixRule).find({
     where: {
       categoryId: categoryId,
     },

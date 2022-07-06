@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { getManager } from 'typeorm';
+import postgresDB from '../postgresDB';
 
 export const getTopSpendingCategoriesData = async (
   req: Request,
@@ -8,9 +8,8 @@ export const getTopSpendingCategoriesData = async (
   const startDate = req.query.startDate;
   const endDate = req.query.endDate;
   const numCategories = 9;
-  const manager = getManager();
 
-  const rawData = await manager.query(`
+  const rawData = await postgresDB.manager.query(`
     WITH category_totals AS (
       SELECT
         SUM(trans.amount) AS data,

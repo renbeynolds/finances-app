@@ -1,13 +1,12 @@
-import { TransactionDTO } from '@client/Transactions/TransactionDTO';
-import { PaginatedResponse } from '@client/Utils/PaginatedResponse';
 import { Request, Response } from 'express';
-import { Brackets, getRepository } from 'typeorm';
+import { Brackets } from 'typeorm';
 import { Transaction } from '../entities/Transaction';
 import { PaginatedRequest } from '../middleware/Pagination';
+import postgresDB from '../postgresDB';
 
 export const searchTransactions = async (
   req: PaginatedRequest,
-  res: Response<PaginatedResponse<TransactionDTO>>
+  res: Response
 ): Promise<void> => {
   const startDate = req.query.startDate;
   const endDate = req.query.endDate;
@@ -16,7 +15,8 @@ export const searchTransactions = async (
   const accountId = req.query.accountId;
   const type = req.query.type;
 
-  const query = await getRepository(Transaction)
+  const query = await postgresDB
+    .getRepository(Transaction)
     .createQueryBuilder('trans')
     .leftJoin('trans.category', 'category')
     .leftJoin('trans.upload', 'upload')
@@ -66,7 +66,7 @@ export const updateTransaction = async (
   const categoryId = req.body.categoryId;
   const comment = req.body.comment;
 
-  const repository = getRepository(Transaction);
+  const repository = postgresDB.getRepository(Transaction);
 
   const updatedTransaction = await repository
     .save({
@@ -74,7 +74,7 @@ export const updateTransaction = async (
       categoryId,
       comment,
     })
-    .then((transaction) => repository.findOne(transaction.id));
+    .then((transaction) => repository.findOneBy({ id: transaction.id }));
 
   res.status(200).send(updatedTransaction);
 };

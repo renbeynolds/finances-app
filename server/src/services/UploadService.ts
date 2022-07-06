@@ -2,24 +2,26 @@ import accounting from 'accounting-js';
 import { UploadFile } from 'antd/lib/upload/interface';
 import csvtojson from 'csvtojson';
 import { Request, Response } from 'express';
-import { getManager, getRepository } from 'typeorm';
 import { Account, Category, Transaction, Upload } from '../entities';
+import postgresDB from '../postgresDB';
 
 export const createUpload = async (
   req: Request,
   res: Response
 ): Promise<void> => {
-  const categories = await getRepository(Category).find({
+  const categories = await postgresDB.getRepository(Category).find({
     relations: ['prefixRules'],
   });
   const accountId = parseInt(req.params.accountId);
-  const account = await getRepository(Account).findOne(accountId);
+  const account = await postgresDB.getRepository(Account).findOne({
+    where: { id: accountId },
+  });
   const csvData = await getCsvDataFromRequest(req);
 
   const upload = new Upload();
   upload.account = account;
 
-  await getManager()
+  await postgresDB.manager
     .transaction(async (transactionalEntityManager) => {
       const transactions: Transaction[] = [];
       for (let i = csvData.length - 1; i >= 0; i--) {
@@ -81,7 +83,7 @@ export const searchUploads = async (
   req: Request,
   res: Response
 ): Promise<void> => {
-  const uploads = await getRepository(Upload).find({
+  const uploads = await postgresDB.getRepository(Upload).find({
     order: {
       createdAt: 'DESC',
     },

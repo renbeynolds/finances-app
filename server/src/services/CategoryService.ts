@@ -1,13 +1,13 @@
 import { Request, Response } from 'express';
-import { getRepository } from 'typeorm';
 import { Category } from '../entities/Category';
 import { PrefixRule } from '../entities/PrefixRule';
+import postgresDB from '../postgresDB';
 
 export const createCategory = async (
   req: Request,
   res: Response
 ): Promise<void> => {
-  const categoryRepository = getRepository(Category);
+  const categoryRepository = postgresDB.getRepository(Category);
 
   const category = new Category();
   category.name = req.body.name;
@@ -30,7 +30,7 @@ export const searchCategories = async (
   req: Request,
   res: Response
 ): Promise<void> => {
-  const categories = await getRepository(Category).find();
+  const categories = await postgresDB.getRepository(Category).find();
   res.send(categories);
 };
 
@@ -38,10 +38,14 @@ export const updateCategory = async (
   req: Request,
   res: Response
 ): Promise<void> => {
-  const categoryRepository = getRepository(Category);
-  const prefixRepository = getRepository(PrefixRule);
+  const categoryId = parseInt(req.params.categoryId);
+  const categoryRepository = postgresDB.getRepository(Category);
+  const prefixRepository = postgresDB.getRepository(PrefixRule);
 
-  const category = await categoryRepository.findOne(req.params.categoryId, {
+  const category = await categoryRepository.findOne({
+    where: {
+      id: categoryId,
+    },
     relations: ['prefixRules'],
   });
   category.name = req.body.name;
