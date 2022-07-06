@@ -1,21 +1,23 @@
-import { createConnection, getConnection } from 'typeorm';
+import postgresDB from '../../src/postgresDB';
 
 const connection = {
   async create() {
-    await createConnection();
+    await postgresDB.initialize();
   },
 
   async close() {
-    await getConnection().close();
+    await postgresDB.destroy();
   },
 
   async clear() {
-    const connection = getConnection();
-    const entities = connection.entityMetadatas;
+    const entities = postgresDB.entityMetadatas;
 
     entities.forEach(async (entity) => {
-      const repository = connection.getRepository(entity.name);
+      const repository = postgresDB.getRepository(entity.name);
       await repository.query(`DELETE FROM ${entity.tableName}`);
+      await repository.query(
+        `ALTER SEQUENCE ${entity.tableName}_id_seq RESTART WITH 1`
+      );
     });
   },
 };
