@@ -18,8 +18,7 @@ export const getTopSpendingCategoriesData = async (
         transaction trans
         LEFT JOIN category c on trans."categoryId" = c.id
       WHERE
-        trans.amount < 0 AND
-        c.name <> 'TRANSFER' AND
+        c.type = 'expense' AND
         trans.date >= '${startDate}' AND trans.date <= '${endDate}'
       GROUP BY COALESCE(c."parentCategoryId", c.id)
       HAVING COALESCE(c."parentCategoryId", c.id) IS NOT NULL

@@ -118,6 +118,21 @@ const CategoryForm = ({ intent }: CategoryFormProps): JSX.Element => {
           initialValue={categoryToEdit?.name}
         />
         <CategoryFormField
+          name='type'
+          label='Type'
+          initialValue={categoryToEdit?.type}
+        >
+          <Select
+            options={[
+              { label: 'expense', value: 'expense' },
+              { label: 'income', value: 'income' },
+              { label: 'transfer', value: 'transfer' },
+            ]}
+          >
+            <Input />
+          </Select>
+        </CategoryFormField>
+        <CategoryFormField
           name='parentCategoryId'
           label='Parent Category'
           initialValue={categoryToEdit?.parentCategoryId}

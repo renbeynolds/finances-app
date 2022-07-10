@@ -20,11 +20,12 @@ export const getIncomeVsExpenseData = async (
     SELECT
       TO_CHAR(c.month, 'YYYY-MM') as month,
       SUM(amount) AS "Total",
-      SUM (CASE WHEN amount > 0 THEN amount ELSE 0 END) AS "Income",
-      SUM (CASE WHEN amount < 0 THEN amount ELSE 0 END) AS "Expense"
+      SUM (CASE WHEN cat.type = 'income' THEN amount ELSE 0 END) AS "Income",
+      SUM (CASE WHEN cat.type = 'expense' THEN amount ELSE 0 END) AS "Expense"
     FROM calendar c
     LEFT JOIN transaction t ON DATE_TRUNC('month', t.date) = c.month
-    WHERE t."categoryId" IS NULL OR t."categoryId" <> (SELECT id FROM category WHERE name = 'TRANSFER')
+    LEFT JOIN category cat ON t."categoryId" = cat.id
+    WHERE cat.type <> 'transfer'
     GROUP BY c.month
     ORDER BY c.month ASC
   `);

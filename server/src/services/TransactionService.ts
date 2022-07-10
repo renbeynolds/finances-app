@@ -37,13 +37,7 @@ export const searchTransactions = async (
     .andWhere(accountId ? 'upload.accountId = :accountId' : '1=1', {
       accountId,
     })
-    .andWhere(type === 'expense' ? 'trans.amount < 0' : '1=1')
-    .andWhere(type === 'income' ? 'trans.amount > 0' : '1=1')
-    .andWhere(
-      type === 'income' || type === 'expense'
-        ? "category.name <> 'TRANSFER'"
-        : '1=1'
-    )
+    .andWhere(type ? 'category.type = :type' : '1=1', { type })
     .orderBy('trans.date', 'DESC')
     .addOrderBy('trans.id', 'DESC')
     .skip(req.pagination.offset)
