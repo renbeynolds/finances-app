@@ -29,9 +29,7 @@ export class Account {
   @Column({ default: false })
   amountsInverted: boolean;
 
-  @Column({
-    default: '#999999',
-  })
+  @Column({ nullable: true })
   color: string;
 
   @OneToMany(() => Upload, (upload) => upload.account)

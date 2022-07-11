@@ -1,6 +1,6 @@
 import { EditOutlined, PlusOutlined } from '@ant-design/icons';
 import { makeStyles } from '@material-ui/styles';
-import { Button, List, Typography } from 'antd';
+import { Button, List, Tag, Typography } from 'antd';
 import cx from 'classnames';
 import _ from 'lodash';
 import React from 'react';
@@ -78,7 +78,7 @@ const SidebarCategoryList = (): JSX.Element => {
               })}
               onClick={() => onSelectCategory(category.id)}
             >
-              <Text>{category.name}</Text>
+              <Tag color={category.color}>{category.name}</Tag>
               <Button
                 type='primary'
                 icon={<EditOutlined />}
@@ -98,9 +98,10 @@ const SidebarCategoryList = (): JSX.Element => {
                 })}
                 onClick={() => onSelectCategory(subcategory.id)}
               >
-                <Text style={{ marginLeft: '8px' }}>
-                  └ &nbsp;{subcategory.name}
-                </Text>
+                <div style={{ marginLeft: '8px' }}>
+                  <Text>└ &nbsp;</Text>
+                  <Tag color={subcategory.color}>{subcategory.name}</Tag>
+                </div>
                 <Button
                   type='primary'
                   icon={<EditOutlined />}

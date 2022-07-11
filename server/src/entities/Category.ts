@@ -8,6 +8,8 @@ import {
 import { PrefixRule } from './PrefixRule';
 import { Transaction } from './Transaction';
 
+export type CategoryType = 'income' | 'expense' | 'transfer';
+
 @Entity()
 export class Category {
   @PrimaryGeneratedColumn()
@@ -18,9 +20,7 @@ export class Category {
   })
   name: string;
 
-  @Column({
-    default: '#999999',
-  })
+  @Column({ nullable: true })
   color: string;
 
   @OneToMany(() => PrefixRule, (rule) => rule.category, { cascade: true })
@@ -33,6 +33,12 @@ export class Category {
     nullable: true,
   })
   parentCategory: Category;
+
+  @Column('text', {
+    nullable: false,
+    default: 'expense',
+  })
+  type: CategoryType;
 
   @Column('int', { nullable: true })
   parentCategoryId: number;

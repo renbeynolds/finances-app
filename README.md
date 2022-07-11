@@ -14,7 +14,7 @@
 * Generating a Migration
   ```bash
   > cd server
-  > yarn run typeorm migration:generate -n <migration_name>
+  > yarn run typeorm migration:generate <migration_name> -d src/postgresDB.ts
   ```
 
 ## Notes
