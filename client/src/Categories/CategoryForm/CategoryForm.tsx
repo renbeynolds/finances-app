@@ -1,4 +1,4 @@
-import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
+import Icon, { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
 import { makeStyles } from '@material-ui/styles';
 import { Button, Col, Form, Input, Row, Select, Spin, Tag } from 'antd';
 import Title from 'antd/lib/typography/Title';
@@ -186,10 +186,34 @@ const CategoryForm = ({ intent }: CategoryFormProps): JSX.Element => {
             name='color'
             initialValue={categoryToEdit?.color}
           />
-          <Tag color={values.color || categoryToEdit?.color}>
+          <Tag
+            color={values.color || categoryToEdit?.color}
+            icon={
+              (values.iconUrl || categoryToEdit?.iconUrl) && (
+                <Icon
+                  component={() => (
+                    <img
+                      style={{
+                        height: '14px',
+                        position: 'relative',
+                        bottom: '3px',
+                        right: '3px',
+                      }}
+                      src={values.iconUrl || categoryToEdit?.iconUrl}
+                    />
+                  )}
+                />
+              )
+            }
+          >
             {values.name || categoryToEdit?.name}
           </Tag>
         </Form.Item>
+        <CategoryFormField
+          name='iconUrl'
+          label='Icon URL'
+          initialValue={categoryToEdit?.iconUrl}
+        />
         <Form.List
           name='prefixRules'
           initialValue={categoryToEdit ? categoryToEdit.prefixRules : []}

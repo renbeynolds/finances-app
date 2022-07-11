@@ -1,4 +1,4 @@
-import { EditOutlined, PlusOutlined } from '@ant-design/icons';
+import Icon, { EditOutlined, PlusOutlined } from '@ant-design/icons';
 import { makeStyles } from '@material-ui/styles';
 import { Button, List, Tag, Typography } from 'antd';
 import cx from 'classnames';
@@ -78,7 +78,28 @@ const SidebarCategoryList = (): JSX.Element => {
               })}
               onClick={() => onSelectCategory(category.id)}
             >
-              <Tag color={category.color}>{category.name}</Tag>
+              <Tag
+                color={category.color}
+                icon={
+                  category.iconUrl && (
+                    <Icon
+                      component={() => (
+                        <img
+                          style={{
+                            height: '14px',
+                            position: 'relative',
+                            bottom: '3px',
+                            right: '3px',
+                          }}
+                          src={category.iconUrl}
+                        />
+                      )}
+                    />
+                  )
+                }
+              >
+                {category.name}
+              </Tag>
               <Button
                 type='primary'
                 icon={<EditOutlined />}
@@ -100,7 +121,28 @@ const SidebarCategoryList = (): JSX.Element => {
               >
                 <div style={{ marginLeft: '8px' }}>
                   <Text>└ &nbsp;</Text>
-                  <Tag color={subcategory.color}>{subcategory.name}</Tag>
+                  <Tag
+                    color={subcategory.color}
+                    icon={
+                      subcategory.iconUrl && (
+                        <Icon
+                          component={() => (
+                            <img
+                              style={{
+                                height: '14px',
+                                position: 'relative',
+                                bottom: '3px',
+                                right: '3px',
+                              }}
+                              src={subcategory.iconUrl}
+                            />
+                          )}
+                        />
+                      )
+                    }
+                  >
+                    {subcategory.name}
+                  </Tag>
                 </div>
                 <Button
                   type='primary'

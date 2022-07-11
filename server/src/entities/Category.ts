@@ -23,6 +23,9 @@ export class Category {
   @Column({ nullable: true })
   color: string;
 
+  @Column({ nullable: true })
+  iconUrl: string;
+
   @OneToMany(() => PrefixRule, (rule) => rule.category, { cascade: true })
   prefixRules: PrefixRule[];
 

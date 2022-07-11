@@ -12,6 +12,7 @@ export const createCategory = async (
   const category = new Category();
   category.name = req.body.name;
   category.color = req.body.color;
+  category.iconUrl = req.body.iconUrl;
   category.type = req.body.type;
   if (req.body.prefixRules) {
     category.prefixRules = req.body.prefixRules.map((p) => new PrefixRule(p));
@@ -52,6 +53,7 @@ export const updateCategory = async (
   category.name = req.body.name;
   category.color = req.body.color;
   category.type = req.body.type;
+  category.iconUrl = req.body.iconUrl;
 
   if (req.body.parentCategoryId) {
     const parentCategory = await categoryRepository.findOneBy({
