@@ -71,6 +71,8 @@ const CategoryForm = ({ intent }: CategoryFormProps): JSX.Element => {
 
   const categoryToEdit = useRouteParamCategory();
 
+  const [values, setValues] = React.useState<any>({});
+
   const categoryOptions: { value: number; label: string }[] =
     categories.state === 'hasValue'
       ? categories.contents.map((t: CategoryDTO) => ({
@@ -113,6 +115,10 @@ const CategoryForm = ({ intent }: CategoryFormProps): JSX.Element => {
     }
   };
 
+  const onValuesChange = (changedValues: any, allValues: any) => {
+    setValues(allValues);
+  };
+
   return (
     <div
       style={{
@@ -129,7 +135,12 @@ const CategoryForm = ({ intent }: CategoryFormProps): JSX.Element => {
           <Title>{capitalized(intent)} Category</Title>
         </Col>
       </Row>
-      <Form onFinish={onFinish} {...layout} form={form}>
+      <Form
+        onFinish={onFinish}
+        {...layout}
+        form={form}
+        onValuesChange={onValuesChange}
+      >
         <CategoryFormField
           name='name'
           label='Name'
@@ -175,8 +186,8 @@ const CategoryForm = ({ intent }: CategoryFormProps): JSX.Element => {
             name='color'
             initialValue={categoryToEdit?.color}
           />
-          <Tag color={form.getFieldValue('color')}>
-            {form.getFieldValue('name')}
+          <Tag color={values.color || categoryToEdit?.color}>
+            {values.name || categoryToEdit?.name}
           </Tag>
         </Form.Item>
         <Form.List

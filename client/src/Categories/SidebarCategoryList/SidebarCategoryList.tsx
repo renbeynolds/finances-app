@@ -100,7 +100,7 @@ const SidebarCategoryList = (): JSX.Element => {
               >
                 <div style={{ marginLeft: '8px' }}>
                   <Text>└ &nbsp;</Text>
-                  <Tag color={category.color}>{subcategory.name}</Tag>
+                  <Tag color={subcategory.color}>{subcategory.name}</Tag>
                 </div>
                 <Button
                   type='primary'

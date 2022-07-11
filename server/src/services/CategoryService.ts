@@ -54,9 +54,9 @@ export const updateCategory = async (
   category.type = req.body.type;
 
   if (req.body.parentCategoryId) {
-    const parentCategory = await categoryRepository.findOne(
-      req.body.parentCategoryId
-    );
+    const parentCategory = await categoryRepository.findOneBy({
+      id: req.body.parentCategoryId,
+    });
     category.parentCategory = parentCategory;
   } else {
     category.parentCategory = null;
