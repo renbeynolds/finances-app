@@ -1,5 +1,6 @@
 import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
-import { Button, Col, Form, Input, Row, Select, Spin } from 'antd';
+import { makeStyles } from '@material-ui/styles';
+import { Button, Col, Form, Input, Row, Select, Spin, Tag } from 'antd';
 import Title from 'antd/lib/typography/Title';
 import _ from 'lodash';
 import React, { useEffect } from 'react';
@@ -44,10 +45,28 @@ type CategoryFormProps = {
   intent: 'create' | 'edit';
 };
 
+const useStyles = makeStyles(() => ({
+  colorItem: {
+    '& .ant-form-item-control-input-content': {
+      height: '32px',
+      display: 'flex',
+      '& .ant-form-item': {
+        flexGrow: 1,
+      },
+    },
+    '& .ant-tag': {
+      height: '22px',
+      marginTop: '5px',
+      marginLeft: '10px',
+    },
+  },
+}));
+
 const CategoryForm = ({ intent }: CategoryFormProps): JSX.Element => {
   const setCategoriesState = useSetRecoilState(categoriesState);
   const categories = useRecoilValueLoadable(categoriesState);
   const navigate = useNavigate();
+  const classes = useStyles();
   const [form] = Form.useForm<CreateCategoryCMD>();
 
   const categoryToEdit = useRouteParamCategory();
@@ -80,7 +99,6 @@ const CategoryForm = ({ intent }: CategoryFormProps): JSX.Element => {
         }
       );
     } else {
-      console.log(values);
       apiPut<CreateCategoryCMD, CategoryDTO>(
         `/api/categories/${categoryToEdit?.id}`,
         values
@@ -152,11 +170,15 @@ const CategoryForm = ({ intent }: CategoryFormProps): JSX.Element => {
             <Input />
           </Select>
         </CategoryFormField>
-        <CategoryFormField
-          name='color'
-          label='Color'
-          initialValue={categoryToEdit?.color}
-        />
+        <Form.Item label='Color' className={classes.colorItem}>
+          <CategoryFormField
+            name='color'
+            initialValue={categoryToEdit?.color}
+          />
+          <Tag color={form.getFieldValue('color')}>
+            {form.getFieldValue('name')}
+          </Tag>
+        </Form.Item>
         <Form.List
           name='prefixRules'
           initialValue={categoryToEdit ? categoryToEdit.prefixRules : []}
