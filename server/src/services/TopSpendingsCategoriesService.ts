@@ -44,7 +44,7 @@ export const getTopSpendingCategoriesData = async (
         ORDER BY rn
       )
       UNION ALL
-      SELECT NULL, 'OTHER', '#999999', SUM(data)
+      SELECT NULL, 'OTHER', NULL, SUM(data)
       FROM category_ranks
       WHERE rn > ${numCategories}
       HAVING COUNT(*) > 0

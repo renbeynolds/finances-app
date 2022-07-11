@@ -20,9 +20,7 @@ export class Category {
   })
   name: string;
 
-  @Column({
-    default: '#999999',
-  })
+  @Column({ nullable: true })
   color: string;
 
   @OneToMany(() => PrefixRule, (rule) => rule.category, { cascade: true })

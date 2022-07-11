@@ -59,7 +59,7 @@ const TopSpendingcategoriesChart = (): JSX.Element => {
 
   const getColor = (entry: TopSpendingCategoryDTO, idx: number) => {
     let color: string | undefined = '';
-    if (_.isEmpty(entry.color) || entry.color === '#999999') {
+    if (_.isEmpty(entry.color)) {
       color = ChartColors[idx];
     } else {
       color = entry.color;
