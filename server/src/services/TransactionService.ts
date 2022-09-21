@@ -14,6 +14,7 @@ export const searchTransactions = async (
   const uploadId = req.query.uploadId;
   const accountId = req.query.accountId;
   const type = req.query.type;
+  const description = req.query.description;
 
   const query = await postgresDB
     .getRepository(Transaction)
@@ -38,6 +39,9 @@ export const searchTransactions = async (
       accountId,
     })
     .andWhere(type ? 'category.type = :type' : '1=1', { type })
+    .andWhere(description ? 'trans.description % :description' : '1=1', {
+      description,
+    })
     .orderBy('trans.date', 'DESC')
     .addOrderBy('trans.id', 'DESC')
     .skip(req.pagination.offset)

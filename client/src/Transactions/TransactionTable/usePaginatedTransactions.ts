@@ -18,6 +18,7 @@ export const usePaginatedTransactions = (
   categoryId?: number,
   uploadId?: number,
   accountId?: number,
+  description?: string,
   type?: TransactionType
 ) => {
   const [state, setState] = React.useState<RequestState>({
@@ -34,10 +35,11 @@ export const usePaginatedTransactions = (
       const categoryIdQuery = categoryId ? `&categoryId=${categoryId}` : '';
       const uploadIdQuery = uploadId ? `&uploadId=${uploadId}` : '';
       const accountIdQuery = accountId ? `&accountId=${accountId}` : '';
+      const descriptionQuery = description ? `&description=${description}` : '';
       const typeQuery = type ? `&type=${type}` : '';
 
       const response = await apiGet<PaginatedResponse<TransactionDTO>>(
-        `/api/transactions?limit=${PAGE_SIZE}&offset=${offset}${startDateQuery}${endDateQuery}${categoryIdQuery}${uploadIdQuery}${typeQuery}${accountIdQuery}`
+        `/api/transactions?limit=${PAGE_SIZE}&offset=${offset}${startDateQuery}${endDateQuery}${categoryIdQuery}${uploadIdQuery}${typeQuery}${descriptionQuery}${accountIdQuery}`
       );
       setState({
         data: response.data,
@@ -54,6 +56,7 @@ export const usePaginatedTransactions = (
     endDate,
     categoryId,
     accountId,
+    description,
     uploadId,
     type,
   ]);

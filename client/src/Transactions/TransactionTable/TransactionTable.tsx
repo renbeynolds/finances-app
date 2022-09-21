@@ -1,6 +1,7 @@
+import { SearchOutlined } from '@ant-design/icons';
 import { makeStyles } from '@material-ui/styles';
 import accounting from 'accounting';
-import { Table } from 'antd';
+import { Button, Input, Space, Table } from 'antd';
 import { TablePaginationConfig } from 'antd/lib/table';
 import { FilterValue } from 'antd/lib/table/interface';
 import cx from 'classnames';
@@ -62,6 +63,23 @@ const TransactionTable = ({
   const classes = useStyles();
   const [pageNumber, setPageNumber] = useState<number>(1);
 
+  const descriptionSearchInput = React.useRef(null);
+  const [descriptionSearch, setDescriptionSearch] = React.useState<
+    string | undefined
+  >();
+
+  const handleDescriptionSearch = (
+    searchValue: string | undefined,
+    confirm: () => void,
+    clearFilters: () => void
+  ) => {
+    confirm();
+    setDescriptionSearch(searchValue);
+    if (!searchValue) {
+      clearFilters();
+    }
+  };
+
   useEffect(() => {
     setPageNumber(1);
   }, [setPageNumber, startDate, endDate, type]);
@@ -74,6 +92,7 @@ const TransactionTable = ({
       categoryId,
       uploadId,
       accountId,
+      descriptionSearch,
       type
     );
 
@@ -94,6 +113,78 @@ const TransactionTable = ({
       }
     : {};
 
+  const getDescriptionSearchProps = () => ({
+    filterDropdown: ({
+      setSelectedKeys,
+      selectedKeys,
+      confirm,
+      clearFilters,
+    }: any) => (
+      <div
+        style={{
+          padding: 8,
+        }}
+      >
+        <Input
+          ref={descriptionSearchInput}
+          placeholder={'Search'}
+          value={selectedKeys[0]}
+          onChange={(e) =>
+            setSelectedKeys(e.target.value ? [e.target.value] : [])
+          }
+          onPressEnter={() =>
+            handleDescriptionSearch(selectedKeys[0], confirm, clearFilters)
+          }
+          style={{
+            marginBottom: 8,
+            display: 'block',
+          }}
+        />
+        <Space>
+          <Button
+            type='primary'
+            onClick={() =>
+              handleDescriptionSearch(selectedKeys[0], confirm, clearFilters)
+            }
+            icon={<SearchOutlined />}
+            size='small'
+            style={{
+              width: 90,
+            }}
+          >
+            Search
+          </Button>
+          <Button
+            onClick={() =>
+              handleDescriptionSearch(undefined, confirm, clearFilters)
+            }
+            size='small'
+            style={{
+              width: 90,
+            }}
+          >
+            Reset
+          </Button>
+        </Space>
+      </div>
+    ),
+    filterIcon: (filtered: boolean) => {
+      return (
+        <SearchOutlined
+          style={{
+            color: descriptionSearch ? '#1890ff' : undefined,
+          }}
+        />
+      );
+    },
+    onFilterDropdownOpenChange: (visible: any) => {
+      if (visible) {
+        // @ts-ignore
+        setTimeout(() => descriptionSearchInput.current?.select(), 100);
+      }
+    },
+  });
+
   const columns = [
     {
       title: 'Date',
@@ -104,6 +195,7 @@ const TransactionTable = ({
       title: 'Description',
       dataIndex: 'description',
       ellipsis: true,
+      ...getDescriptionSearchProps(),
     },
     {
       title: 'Comment',
