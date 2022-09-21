@@ -3,6 +3,7 @@ import { Col, Row } from 'antd';
 import React from 'react';
 import { AverageOverMonthsSelector } from '../Common/AverageOverMonthsSelector';
 import { NumberIndicator } from '../Common/NumberIndicator';
+import { AccountsTotalChart } from './AccountsTotalChart';
 import { IncomeVsExpenseChart } from './IncomeVsExpenseChart';
 import { useAverageExpenseData } from './useAverageExpenseData';
 import { useAverageIncomeData } from './useAverageIncomeData';
@@ -27,8 +28,8 @@ const Trends = (): JSX.Element => {
       <Col span={12}>
         <Row gutter={[16, 16]}>
           {/* Putting everything "in one row" is a workaround for vertical
-          row spacing not working correctly:
-          https://github.com/ant-design/ant-design/issues/4410 */}
+            row spacing not working correctly:
+            https://github.com/ant-design/ant-design/issues/4410 */}
           <Col span={24}>
             <AverageOverMonthsSelector
               value={numMonthsToAverage!}
@@ -71,6 +72,9 @@ const Trends = (): JSX.Element => {
             />
           </Col>
         </Row>
+      </Col>
+      <Col span={12}>
+        <AccountsTotalChart />
       </Col>
     </Row>
   );

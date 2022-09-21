@@ -11,3 +11,6 @@ export const capitalized = (input: string): string => {
 
 export const formatMonthString = (input: string): string =>
   moment(input).format('MMM YYYY');
+
+export const formatDayString = (input: string): string =>
+  moment(input).format('MMM, DD YYYY');
