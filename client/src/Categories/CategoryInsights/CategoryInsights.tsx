@@ -16,13 +16,15 @@ import { useAverageCategorySpendingData } from './useAverageCategorySpendingData
 
 const CategoryInsights = (): JSX.Element => {
   const { categoryId: categoryIdString } = useParams();
-  const [numMonthsToAverage, setNumMonthsToAverage] = React.useState<number>(3);
+  const [numMonthsToAverage, setNumMonthsToAverage] = React.useState<
+    number | null
+  >(3);
   const categoryId = parseInt(categoryIdString!);
   const startDate = useRecoilValue(startDateFilterAtom);
   const endDate = useRecoilValue(endDateFilterAtom);
   const averageCategorySpending = useAverageCategorySpendingData(
     categoryId,
-    numMonthsToAverage
+    numMonthsToAverage!
   );
 
   return (
@@ -34,7 +36,7 @@ const CategoryInsights = (): JSX.Element => {
         <Row gutter={[16, 16]}>
           <Col span={24}>
             <AverageOverMonthsSelector
-              value={numMonthsToAverage}
+              value={numMonthsToAverage!}
               onChange={setNumMonthsToAverage}
             />
           </Col>

@@ -3,7 +3,7 @@ import React from 'react';
 
 interface AverageOverMonthsSelectorProps {
   value: number;
-  onChange: (newValue: number) => void;
+  onChange: (newValue: number | null) => void;
 }
 
 const AverageOverMonthsSelector = ({

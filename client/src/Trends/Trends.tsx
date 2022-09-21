@@ -8,9 +8,11 @@ import { useAverageExpenseData } from './useAverageExpenseData';
 import { useAverageIncomeData } from './useAverageIncomeData';
 
 const Trends = (): JSX.Element => {
-  const [numMonthsToAverage, setNumMonthsToAverage] = React.useState<number>(3);
-  const averageIncomeData = useAverageIncomeData(numMonthsToAverage);
-  const averageExpenseData = useAverageExpenseData(numMonthsToAverage);
+  const [numMonthsToAverage, setNumMonthsToAverage] = React.useState<
+    number | null
+  >(3);
+  const averageIncomeData = useAverageIncomeData(numMonthsToAverage!);
+  const averageExpenseData = useAverageExpenseData(numMonthsToAverage!);
 
   const averageNet =
     averageIncomeData.avg && averageExpenseData.avg
@@ -29,7 +31,7 @@ const Trends = (): JSX.Element => {
           https://github.com/ant-design/ant-design/issues/4410 */}
           <Col span={24}>
             <AverageOverMonthsSelector
-              value={numMonthsToAverage}
+              value={numMonthsToAverage!}
               onChange={setNumMonthsToAverage}
             />
           </Col>
