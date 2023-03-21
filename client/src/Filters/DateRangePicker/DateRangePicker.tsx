@@ -1,5 +1,5 @@
 import { DatePicker, Space, Typography } from 'antd';
-import moment from 'moment';
+import dayjs from 'dayjs';
 import React, { useCallback, useEffect } from 'react';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 import {
@@ -42,7 +42,7 @@ const DateRangePicker = (): JSX.Element => {
   return (
     <Space direction='horizontal'>
       <DatePicker.RangePicker
-        value={[moment(startDateFilter), moment(endDateFilter)]}
+        value={[dayjs(startDateFilter), dayjs(endDateFilter)]}
         ranges={DateRanges}
         allowClear={false}
         onChange={(dates) => {

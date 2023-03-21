@@ -33,7 +33,7 @@ const SidebarAccountsList = (): JSX.Element => {
   };
 
   const onUploadTransactionsClick = (
-    event: React.MouseEvent<HTMLButtonElement>,
+    event: React.MouseEvent,
     accountId: number
   ) => {
     event.stopPropagation();
@@ -91,7 +91,7 @@ const SidebarAccountsList = (): JSX.Element => {
                     shape='circle'
                     icon={<UploadOutlined />}
                     size='small'
-                    onClick={(event: React.MouseEvent<HTMLButtonElement>) =>
+                    onClick={(event: React.MouseEvent) =>
                       onUploadTransactionsClick(event, account.id)
                     }
                   />

@@ -32,10 +32,7 @@ const SidebarCategoryList = (): JSX.Element => {
     navigate('/categories/new');
   };
 
-  const onEditCategoryClick = (
-    event: React.MouseEvent<HTMLButtonElement>,
-    categoryId: number
-  ) => {
+  const onEditCategoryClick = (event: React.MouseEvent, categoryId: number) => {
     event.stopPropagation();
     navigate(`/categories/${categoryId}/edit`);
   };
@@ -105,7 +102,7 @@ const SidebarCategoryList = (): JSX.Element => {
                 icon={<EditOutlined />}
                 shape='circle'
                 ghost
-                onClick={(event: React.MouseEvent<HTMLButtonElement>) =>
+                onClick={(event: React.MouseEvent) =>
                   onEditCategoryClick(event, category.id)
                 }
                 size='small'
@@ -149,7 +146,7 @@ const SidebarCategoryList = (): JSX.Element => {
                   icon={<EditOutlined />}
                   shape='circle'
                   ghost
-                  onClick={(event: React.MouseEvent<HTMLButtonElement>) =>
+                  onClick={(event: React.MouseEvent) =>
                     onEditCategoryClick(event, subcategory.id)
                   }
                   size='small'

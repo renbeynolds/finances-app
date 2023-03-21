@@ -1,7 +1,7 @@
 import { makeStyles } from '@material-ui/styles';
 import { List, Typography } from 'antd';
 import cx from 'classnames';
-import moment from 'moment';
+import dayjs from 'dayjs';
 import React from 'react';
 import { useLocation, useNavigate } from 'react-router';
 import { useRecoilValueLoadable } from 'recoil';
@@ -34,7 +34,7 @@ const SidebarUploadsList = (): JSX.Element => {
   const uploadsWithDate: UploadListItem[] = uploads.contents.map(
     (u: UploadListItem) => ({
       ...u,
-      createdAt: moment(u.createdAt).format('MMM DD, YYYY HH:mm:ss'),
+      createdAt: dayjs(u.createdAt).format('MMM DD, YYYY HH:mm:ss'),
     })
   );
 

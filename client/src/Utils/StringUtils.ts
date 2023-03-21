@@ -1,4 +1,4 @@
-import moment from 'moment';
+import dayjs from 'dayjs';
 
 export const capitalized = (input: string): string => {
   const words = input.split(' ');
@@ -10,7 +10,7 @@ export const capitalized = (input: string): string => {
 };
 
 export const formatMonthString = (input: string): string =>
-  moment(input).format('MMM YYYY');
+  dayjs(input).format('MMM YYYY');
 
 export const formatDayString = (input: string): string =>
-  moment(input).format('MMM, DD YYYY');
+  dayjs(input).format('MMM, DD YYYY');
