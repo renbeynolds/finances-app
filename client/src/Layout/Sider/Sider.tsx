@@ -14,12 +14,16 @@ const SIDER_WIDTH = 300;
 
 const useStyles = makeStyles({
   menu: {
-    '& .ant-menu-title-content': {
-      display: 'none',
+    '& .ant-menu-item-icon': {
+      position: 'relative',
+      left: 21,
     },
-    '& .ant-menu-item:after': {
-      left: 0,
-      right: 0,
+    '& .ant-menu-item': {
+      padding: 0,
+      width: 56,
+    },
+    '& .ant-menu-item::after': {
+      insetInline: '0px !important',
     },
   },
 });

@@ -55,7 +55,7 @@ const DateRangePicker = (): JSX.Element => {
       {rangeName && (
         <Typography.Title
           level={5}
-          style={{ lineHeight: '32px', marginBottom: 0 }}
+          style={{ lineHeight: '32px', marginTop: 0, marginBottom: 0 }}
         >
           {rangeName}
         </Typography.Title>

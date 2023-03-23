@@ -12,7 +12,9 @@ const AverageOverMonthsSelector = ({
 }: AverageOverMonthsSelectorProps): JSX.Element => {
   return (
     <div style={{ display: 'flex' }}>
-      <Typography.Title level={5}>Average Over Last</Typography.Title>
+      <Typography.Title level={5} style={{ marginTop: 0, marginBottom: 0 }}>
+        Average Over Last
+      </Typography.Title>
       <div>
         <InputNumber
           min={3}
@@ -27,7 +29,9 @@ const AverageOverMonthsSelector = ({
           }}
         />
       </div>
-      <Typography.Title level={5}>Months</Typography.Title>
+      <Typography.Title level={5} style={{ marginTop: 0, marginBottom: 0 }}>
+        Months
+      </Typography.Title>
     </div>
   );
 };

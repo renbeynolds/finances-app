@@ -52,6 +52,7 @@ const Header = ({
       <div style={{ float: 'left', paddingRight: '25px' }}>
         <Button
           ghost
+          type='primary'
           icon={siderOpen ? <MenuFoldOutlined /> : <MenuUnfoldOutlined />}
           style={{ border: 'none' }}
           onClick={siderOpen ? onSiderClose : onSiderOpen}

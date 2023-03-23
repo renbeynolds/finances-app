@@ -84,9 +84,6 @@ const SidebarCategoryList = (): JSX.Element => {
                         <img
                           style={{
                             height: '14px',
-                            position: 'relative',
-                            bottom: '3px',
-                            right: '3px',
                           }}
                           src={category.iconUrl}
                         />
@@ -127,9 +124,6 @@ const SidebarCategoryList = (): JSX.Element => {
                             <img
                               style={{
                                 height: '14px',
-                                position: 'relative',
-                                bottom: '3px',
-                                right: '3px',
                               }}
                               src={subcategory.iconUrl}
                             />
