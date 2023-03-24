@@ -1,6 +1,6 @@
 import { presetDarkPalettes } from '@ant-design/colors';
 import accounting from 'accounting';
-import Card from 'antd/lib/card';
+import { Card } from 'antd';
 import React from 'react';
 import {
   Bar,

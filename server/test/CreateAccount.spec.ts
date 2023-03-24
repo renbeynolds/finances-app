@@ -27,7 +27,7 @@ it('can create an account', async () => {
     ...createAccountCMD,
     id: 1,
     amountsInverted: false,
-    color: '#999999',
+    color: null,
     startingAmount: '0.00',
     balance: '0.00',
   });
