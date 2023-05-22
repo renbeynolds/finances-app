@@ -15,18 +15,18 @@ const DateRangePicker = (): JSX.Element => {
   const endDateFilter = useRecoilValue(endDateFilterAtom);
   const setStartDateFilter = useSetRecoilState(startDateFilterAtom);
   const setEndDateFilter = useSetRecoilState(endDateFilterAtom);
-  const [rangeName, setRangeName] = React.useState<string | null>(
+  const [rangeName, setRangeName] = React.useState<React.ReactNode | null>(
     DEFAULT_DATE_RANGE_NAME
   );
 
   const checkAndSetRangeName = useCallback(
     (start: string, end: string) => {
-      for (var entry of Object.entries(DateRanges)) {
+      for (var entry of DateRanges) {
         if (
-          entry[1][0].format(DATE_FILTER_FORMAT) === start &&
-          entry[1][1].format(DATE_FILTER_FORMAT) === end
+          entry.value[0].format(DATE_FILTER_FORMAT) === start &&
+          entry.value[1].format(DATE_FILTER_FORMAT) === end
         ) {
-          setRangeName(entry[0]);
+          setRangeName(entry.label);
           return;
         }
       }
@@ -43,7 +43,7 @@ const DateRangePicker = (): JSX.Element => {
     <Space direction='horizontal'>
       <DatePicker.RangePicker
         value={[dayjs(startDateFilter), dayjs(endDateFilter)]}
-        ranges={DateRanges}
+        presets={DateRanges}
         allowClear={false}
         onChange={(dates) => {
           const newStartDateFilter = dates?.[0]?.format(DATE_FILTER_FORMAT)!;
