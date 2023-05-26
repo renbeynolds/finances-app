@@ -32,6 +32,11 @@ export const createUpload = async (
       transaction.amount = accounting.unformat(obj[account.amountHeader]);
       if (account.amountsType == 'posamtexp') {
         transaction.amount = -1 * transaction.amount;
+      } else if (
+        account.amountsType == 'septypecol' &&
+        obj[account.typeHeader] == 'Debit'
+      ) {
+        transaction.amount = -1 * transaction.amount;
       }
       transaction.balance =
         Number(account.balance) + Number(transaction.amount);

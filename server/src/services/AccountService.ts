@@ -19,7 +19,6 @@ export const createAccount = async (
   account.balance = req.body.startingAmount;
   account.color = req.body.color;
 
-  console.log(account);
   await accountRepository.save(account);
   res.send(account);
 };

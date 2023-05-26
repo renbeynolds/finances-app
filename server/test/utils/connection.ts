@@ -19,6 +19,6 @@ export class TestDB {
   }
 
   public async destroy() {
-    this.container.stop();
+    await this.container.stop();
   }
 }
