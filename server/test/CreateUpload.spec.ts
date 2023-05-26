@@ -18,7 +18,7 @@ afterAll(async () => {
 
 it('uploads transactions correctly', async () => {
   const accounts = await postgresDB.manager.query(
-    `INSERT INTO account (name, "dateHeader", "descriptionHeader", "amountHeader") VALUES ('test', 'date', 'desc', 'amt') RETURNING *`
+    `INSERT INTO account (name, "dateHeader", "descriptionHeader", "amountHeader", "amountsType") VALUES ('test', 'date', 'desc', 'amt', 'negamtexp') RETURNING *`
   );
   const categories = await postgresDB.manager.query(
     `INSERT INTO category (name) VALUES ('electricity'), ('auto insurance') RETURNING *`

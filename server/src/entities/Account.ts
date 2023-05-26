@@ -1,6 +1,12 @@
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { Upload } from './Upload';
 
+export enum AccountAmountsType {
+  NEGATIVE_AMOUNT_EXPENSE = 'negamtexp',
+  POSITIVE_AMOUNT_EXPENSE = 'posamtexp',
+  SEPARATE_TYPE_COLUMN = 'septypecol',
+}
+
 @Entity()
 export class Account {
   @PrimaryGeneratedColumn()
@@ -20,14 +26,20 @@ export class Account {
   @Column()
   amountHeader: string;
 
+  @Column({ nullable: true })
+  typeHeader: string;
+
   @Column('numeric', { default: 0, precision: 12, scale: 2 })
   startingAmount: number;
 
   @Column('numeric', { default: 0, precision: 12, scale: 2 })
   balance: number;
 
-  @Column({ default: false })
-  amountsInverted: boolean;
+  @Column({
+    type: 'enum',
+    enum: AccountAmountsType,
+  })
+  amountsType: AccountAmountsType;
 
   @Column({ nullable: true })
   color: string;

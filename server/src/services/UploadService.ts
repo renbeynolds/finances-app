@@ -30,7 +30,7 @@ export const createUpload = async (
       transaction.date = new Date(obj[account.dateHeader]);
       transaction.description = obj[account.descriptionHeader];
       transaction.amount = accounting.unformat(obj[account.amountHeader]);
-      if (account.amountsInverted) {
+      if (account.amountsType == 'posamtexp') {
         transaction.amount = -1 * transaction.amount;
       }
       transaction.balance =

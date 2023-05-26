@@ -7,7 +7,13 @@ export const createAccountValidations = [
     .notEmpty()
     .withMessage('Description Header is required'),
   body('amountHeader').notEmpty().withMessage('Amount Header is required'),
-  body('amountsInverted').isBoolean().optional(),
+  body('amountsType').notEmpty().isIn(['negamtexp', 'posamtexp', 'septypecol']),
+  body('typeHeader')
+    .if(body('amountsType').equals('septypecol'))
+    .notEmpty()
+    .withMessage(
+      'Type Header is required when amounts type is separate column'
+    ),
   body('startingAmount')
     .isNumeric()
     .custom((value) => {
