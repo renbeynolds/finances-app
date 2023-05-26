@@ -59,7 +59,7 @@ it('Requires typeHeader when amountsType is septypecol', async () => {
 
 it('Can create account with separate amount type column', async () => {
   const createAccountCMD = {
-    name: 'MyChecking',
+    name: 'MySavings',
     dateHeader: 'date',
     descriptionHeader: 'desc',
     amountsType: 'septypecol',
@@ -71,7 +71,7 @@ it('Can create account with separate amount type column', async () => {
   expect(res.status).toEqual(200);
   expect(res.body).toEqual({
     ...createAccountCMD,
-    id: 1,
+    id: 2,
     amountsType: 'septypecol',
     color: null,
     startingAmount: '0.00',

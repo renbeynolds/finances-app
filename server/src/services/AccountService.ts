@@ -14,10 +14,12 @@ export const createAccount = async (
   account.descriptionHeader = req.body.descriptionHeader;
   account.amountHeader = req.body.amountHeader;
   account.amountsType = req.body.amountsType;
+  account.typeHeader = req.body.typeHeader;
   account.startingAmount = req.body.startingAmount;
   account.balance = req.body.startingAmount;
   account.color = req.body.color;
 
+  console.log(account);
   await accountRepository.save(account);
   res.send(account);
 };
