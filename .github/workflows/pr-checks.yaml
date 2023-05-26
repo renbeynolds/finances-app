@@ -12,4 +12,6 @@ jobs:
         with:
           node-version: '16.5.0'
       - run: |
-          cd client && yarn test
+          cd client
+          yarn install
+          yarn test
