@@ -3,7 +3,8 @@ export interface CreateAccountCMD {
   dateHeader: string;
   descriptionHeader: string;
   amountHeader: string;
-  amountsInverted: boolean;
+  amountsType: 'negamtexp' | 'posamtexp' | 'septypecol';
+  typeHeader?: string;
   startingAmount: number;
   color: string;
 }

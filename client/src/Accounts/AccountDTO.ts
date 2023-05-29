@@ -6,6 +6,6 @@ export interface AccountDTO {
   amountHeader: string;
   startingAmount: number;
   balance: number;
-  amountsInverted: boolean;
+  amountsType: 'negamtexp' | 'posamtexp' | 'septypecol';
   color: string;
 }

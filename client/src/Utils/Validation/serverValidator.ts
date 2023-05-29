@@ -15,6 +15,8 @@ export const serverValidator = <InputType>(
       .then((response) => response.json())
       .then((data: IValidationData) => {
         const fieldErrors = _.filter(data.errors, { param: fieldName });
+        console.log(data.errors);
+        console.log(fieldErrors);
         if (fieldErrors.length > 0) {
           setError(fieldErrors[0].msg);
           return Promise.reject(fieldErrors[0].msg);

@@ -16,9 +16,9 @@ afterAll(async () => {
   await testDatabase.destroy();
 });
 
-it('uploads transactions correctly', async () => {
+it('Auto categorizes correctly', async () => {
   const accounts = await postgresDB.manager.query(
-    `INSERT INTO account (name, "dateHeader", "descriptionHeader", "amountHeader") VALUES ('test', 'date', 'desc', 'amt') RETURNING *`
+    `INSERT INTO account (name, "dateHeader", "descriptionHeader", "amountHeader", "amountsType") VALUES ('test', 'date', 'desc', 'amt', 'negamtexp') RETURNING *`
   );
   const categories = await postgresDB.manager.query(
     `INSERT INTO category (name) VALUES ('electricity'), ('auto insurance') RETURNING *`
@@ -29,7 +29,7 @@ it('uploads transactions correctly', async () => {
 
   const res = await request(app)
     .post(`/api/accounts/${accounts[0].id}/uploads`)
-    .attach('file', path.resolve(__dirname, './uploads/test.csv'));
+    .attach('file', path.resolve(__dirname, './uploads/negamtexp_test.csv'));
 
   expect(res.body.id).toEqual(1);
 
@@ -47,4 +47,21 @@ it('uploads transactions correctly', async () => {
   expect(transactions[0].categoryId).toEqual(categories[0].id);
   expect(transactions[1].categoryId).toEqual(categories[1].id);
   expect(transactions[2].categoryId).toBeNull();
+});
+
+it('Computes correct balance using septypecol', async () => {
+  const accounts = await postgresDB.manager.query(
+    `INSERT INTO account (name, "dateHeader", "descriptionHeader", "amountHeader", "amountsType", "typeHeader") VALUES ('test2', 'date', 'desc', 'amt', 'septypecol', 'type') RETURNING *`
+  );
+
+  const res = await request(app)
+    .post(`/api/accounts/${accounts[0].id}/uploads`)
+    .attach('file', path.resolve(__dirname, './uploads/septypecol_test.csv'));
+
+  expect(res.body.id).toEqual(2);
+
+  expect(
+    (await postgresDB.getRepository(Account).findOneBy({ id: accounts[0].id }))
+      .balance
+  ).toEqual('-130.00');
 });
