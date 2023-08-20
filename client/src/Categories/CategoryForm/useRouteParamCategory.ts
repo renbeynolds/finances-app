@@ -15,7 +15,7 @@ export const useRouteParamCategory = () => {
 
   useEffect(() => {
     const fetchPrefixRules = async () => {
-      if (category.state === 'hasValue') {
+      if (category.state === 'hasValue' && category.contents !== null) {
         const prefixRules = await getCategoryPrefixRules(
           category.contents?.id!
         );
