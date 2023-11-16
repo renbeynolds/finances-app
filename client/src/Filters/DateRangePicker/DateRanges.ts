@@ -6,7 +6,7 @@ type DateRange = [dayjs.Dayjs, dayjs.Dayjs];
 const dateRanges: { label: React.ReactNode; value: DateRange }[] = [
   {
     label: 'This Month',
-    value: [dayjs().startOf('month'), dayjs()],
+    value: [dayjs().startOf('month'), dayjs().endOf('month')],
   },
   {
     label: 'Last Month',

@@ -1,4 +1,5 @@
-import { DatePicker, Space, Typography } from 'antd';
+import { DatePicker, Space, Typography, Button } from 'antd';
+import { CaretLeftOutlined, CaretRightOutlined } from '@ant-design/icons';
 import dayjs from 'dayjs';
 import React, { useCallback, useEffect } from 'react';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
@@ -9,6 +10,7 @@ import {
   startDateFilterAtom,
 } from '../FilterState';
 import DateRanges from './DateRanges';
+import { isFullMonth } from '../../Utils/DateUtils';
 
 const DateRangePicker = (): JSX.Element => {
   const startDateFilter = useRecoilValue(startDateFilterAtom);
@@ -18,6 +20,7 @@ const DateRangePicker = (): JSX.Element => {
   const [rangeName, setRangeName] = React.useState<React.ReactNode | null>(
     DEFAULT_DATE_RANGE_NAME
   );
+  const [fullMonth, setFullMonth] = React.useState<bool>(false);
 
   const checkAndSetRangeName = useCallback(
     (start: string, end: string) => {
@@ -30,14 +33,51 @@ const DateRangePicker = (): JSX.Element => {
           return;
         }
       }
+
+      if (isFullMonth(start, end)) {
+        setRangeName(dayjs(start).format('MMM YY'));
+        return;
+      }
+
       setRangeName(null);
     },
     [setRangeName]
   );
 
+  const moveOneMonthBack = useCallback(() => {
+    setStartDateFilter(
+      dayjs(startDateFilter)
+        .subtract(15, 'day')
+        .startOf('month')
+        .format(DATE_FILTER_FORMAT)
+    );
+    setEndDateFilter(
+      dayjs(startDateFilter)
+        .subtract(15, 'day')
+        .endOf('month')
+        .format(DATE_FILTER_FORMAT)
+    );
+  }, [startDateFilter, endDateFilter, setStartDateFilter, setEndDateFilter]);
+
+  const moveOneMonthForward = useCallback(() => {
+    setStartDateFilter(
+      dayjs(endDateFilter)
+        .add(15, 'day')
+        .startOf('month')
+        .format(DATE_FILTER_FORMAT)
+    );
+    setEndDateFilter(
+      dayjs(endDateFilter)
+        .add(15, 'day')
+        .endOf('month')
+        .format(DATE_FILTER_FORMAT)
+    );
+  }, [startDateFilter, endDateFilter, setStartDateFilter, setEndDateFilter]);
+
   useEffect(() => {
     checkAndSetRangeName(startDateFilter, endDateFilter);
-  }, [checkAndSetRangeName, startDateFilter, endDateFilter]);
+    setFullMonth(isFullMonth(startDateFilter, endDateFilter));
+  }, [checkAndSetRangeName, startDateFilter, endDateFilter, setFullMonth]);
 
   return (
     <Space direction='horizontal'>
@@ -53,12 +93,28 @@ const DateRangePicker = (): JSX.Element => {
         }}
       />
       {rangeName && (
-        <Typography.Title
-          level={5}
-          style={{ lineHeight: '32px', marginTop: 0, marginBottom: 0 }}
-        >
-          {rangeName}
-        </Typography.Title>
+        <>
+          {fullMonth && (
+            <Button
+              type='link'
+              icon={<CaretLeftOutlined />}
+              onClick={moveOneMonthBack}
+            />
+          )}
+          <Typography.Title
+            level={5}
+            style={{ lineHeight: '32px', marginTop: 0, marginBottom: 0 }}
+          >
+            {rangeName}
+          </Typography.Title>
+          {fullMonth && (
+            <Button
+              type='link'
+              icon={<CaretRightOutlined />}
+              onClick={moveOneMonthForward}
+            />
+          )}
+        </>
       )}
     </Space>
   );
