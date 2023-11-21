@@ -2,8 +2,16 @@ import { presetDarkPalettes } from '@ant-design/colors';
 import accounting from 'accounting';
 import { Card } from 'antd';
 import React from 'react';
+import dayjs from 'dayjs';
+import { useSetRecoilState } from 'recoil';
+import { useNavigate } from 'react-router-dom';
+import {
+  endDateFilterAtom,
+  startDateFilterAtom,
+} from '../../Filters/FilterState';
 import {
   Bar,
+  Cell,
   CartesianGrid,
   ComposedChart,
   Line,
@@ -17,6 +25,15 @@ import { useIncomeVsExpenseData } from './useIncomeVsExpenseData';
 
 const IncomeVsExpenseChart = (): JSX.Element => {
   const data = useIncomeVsExpenseData();
+  const setStartDateFilter = useSetRecoilState(startDateFilterAtom);
+  const setEndDateFilter = useSetRecoilState(endDateFilterAtom);
+  const navigate = useNavigate();
+
+  const handleClick = (data, index) => {
+    setStartDateFilter(dayjs(data.month, 'YYYY-MM').startOf('month'));
+    setEndDateFilter(dayjs(data.month, 'YYYY-MM').endOf('month'));
+    navigate('/snapshot')
+  }
 
   return (
     <Card title='Income vs Expense' bordered={false}>
@@ -45,12 +62,22 @@ const IncomeVsExpenseChart = (): JSX.Element => {
             dataKey='Income'
             fill={presetDarkPalettes.green.primary}
             stackId='stack'
-          />
+            onClick={handleClick}
+          >
+            {data.map((entry, index) => (
+              <Cell cursor="pointer" />
+            ))}
+          </Bar>
           <Bar
             dataKey='Expense'
             fill={presetDarkPalettes.red.primary}
             stackId='stack'
-          />
+            onClick={handleClick}
+          >
+            {data.map((entry, index) => (
+              <Cell cursor="pointer" />
+            ))}
+          </Bar>
           <Line
             dataKey='Total'
             stroke='#fff'
