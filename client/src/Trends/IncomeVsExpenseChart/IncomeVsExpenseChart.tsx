@@ -32,8 +32,8 @@ const IncomeVsExpenseChart = (): JSX.Element => {
   const handleClick = (data, index) => {
     setStartDateFilter(dayjs(data.month, 'YYYY-MM').startOf('month'));
     setEndDateFilter(dayjs(data.month, 'YYYY-MM').endOf('month'));
-    navigate('/snapshot')
-  }
+    navigate('/snapshot');
+  };
 
   return (
     <Card title='Income vs Expense' bordered={false}>
@@ -65,7 +65,7 @@ const IncomeVsExpenseChart = (): JSX.Element => {
             onClick={handleClick}
           >
             {data.map((entry, index) => (
-              <Cell cursor="pointer" />
+              <Cell cursor='pointer' />
             ))}
           </Bar>
           <Bar
@@ -75,7 +75,7 @@ const IncomeVsExpenseChart = (): JSX.Element => {
             onClick={handleClick}
           >
             {data.map((entry, index) => (
-              <Cell cursor="pointer" />
+              <Cell cursor='pointer' />
             ))}
           </Bar>
           <Line

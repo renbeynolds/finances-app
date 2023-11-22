@@ -43,6 +43,31 @@ export const getTotalIncome = async (
   res.status(200).send(result);
 };
 
+export const getCategoryTotal = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
+  const startDate = req.query.startDate;
+  const endDate = req.query.endDate;
+  const categoryId = req.query.categoryId;
+
+  const result = await postgresDB
+    .getRepository(Transaction)
+    .createQueryBuilder('trans')
+    .leftJoin('trans.category', 'category')
+    .where('category.id = :categoryId', { categoryId })
+    .andWhere('trans.date >= :startDate', { startDate })
+    .andWhere('trans.date <= :endDate', { endDate })
+    .groupBy('category.name')
+    .addGroupBy('category.type')
+    .select('ABS(SUM(trans.amount))', 'total')
+    .addSelect('category.name', 'categoryName')
+    .addSelect('category.type', 'categoryType')
+    .getRawOne();
+
+  res.status(200).send(result);
+};
+
 export const getAverageExpense = async (
   req: Request,
   res: Response

@@ -1,7 +1,7 @@
 import accounting from 'accounting';
 import { Card, Typography } from 'antd';
 import _ from 'lodash';
-import React, { ReactNode, useState } from 'react';
+import { ReactNode, useState } from 'react';
 import { useNavigate } from 'react-router';
 import { Cell, Legend, Pie, PieChart, ResponsiveContainer } from 'recharts';
 import { Props } from 'recharts/types/component/DefaultLegendContent';
@@ -10,8 +10,10 @@ import ActivePieShape from './ActivePieShape';
 import { TopSpendingCategoryDTO } from './TopSpendingCategoryDTO';
 import { useTopSpendingCategoriesData } from './useTopSpendingCategoriesData';
 
-const renderLegend = (props: Props): ReactNode => {
-  const { payload } = props;
+const renderLegend = (
+  props: Props & { setActiveIndex: (arg0: number) => void }
+): ReactNode => {
+  const { payload, setActiveIndex } = props;
 
   return (
     <>
@@ -24,13 +26,18 @@ const renderLegend = (props: Props): ReactNode => {
         const value = accounting.formatMoney(entry?.payload?.data);
 
         return (
-          <div key={index} style={{ display: 'flex' }}>
+          <div
+            key={index}
+            style={{ display: 'flex', cursor: 'pointer' }}
+            onMouseEnter={() => setActiveIndex(index)}
+          >
             <div
               style={{
                 backgroundColor: entry.color,
                 width: '13px',
                 height: '13px',
                 marginTop: '4px',
+                cursor: 'pointer',
               }}
             />
             <Typography.Text style={{ paddingLeft: '8px', flexGrow: 1 }}>
@@ -52,7 +59,13 @@ const renderLegend = (props: Props): ReactNode => {
   );
 };
 
-const TopSpendingcategoriesChart = (): JSX.Element => {
+type TopSpendingCategoriesChartProps = {
+  setActiveCategoryId: (categoryId: number) => void;
+};
+
+const TopSpendingcategoriesChart = ({
+  setActiveCategoryId,
+}: TopSpendingCategoriesChartProps): JSX.Element => {
   const navigate = useNavigate();
   const data = useTopSpendingCategoriesData();
   const [activeIndex, setActiveIndex] = useState(0);
@@ -71,6 +84,11 @@ const TopSpendingcategoriesChart = (): JSX.Element => {
     navigate(`/categories/${e.payload.payload.categoryId}`);
   };
 
+  const setActiveCategory = (index: number, categoryId: number) => {
+    setActiveIndex(index);
+    setActiveCategoryId(categoryId);
+  };
+
   return (
     <Card title='Top Spending Categories' bordered={false}>
       <ResponsiveContainer height={300}>
@@ -82,7 +100,9 @@ const TopSpendingcategoriesChart = (): JSX.Element => {
             fill='#8884d8'
             paddingAngle={1}
             dataKey='data'
-            onMouseEnter={(data, idx) => setActiveIndex(idx)}
+            onMouseEnter={(data, idx) =>
+              setActiveCategory(idx, data.categoryId)
+            }
             onClick={onSliceClick}
             activeIndex={activeIndex}
             activeShape={ActivePieShape}
@@ -95,7 +115,7 @@ const TopSpendingcategoriesChart = (): JSX.Element => {
             layout='vertical'
             verticalAlign='middle'
             align='right'
-            content={renderLegend}
+            content={(props) => renderLegend({ ...props, setActiveIndex })}
           />
         </PieChart>
       </ResponsiveContainer>

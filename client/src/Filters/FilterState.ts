@@ -34,7 +34,7 @@ export const startDateFilterPreviousAtom = selector<string>({
       return startDate
         .subtract(15, 'day')
         .startOf('month')
-        .format(DATE_FILTER_FORMAT)
+        .format(DATE_FILTER_FORMAT);
     }
 
     const daysBetween = endDate.diff(startDate, 'days');
@@ -56,12 +56,10 @@ export const endDateFilterPreviousAtom = selector<string>({
       return startDate
         .subtract(15, 'day')
         .endOf('month')
-        .format(DATE_FILTER_FORMAT)
+        .format(DATE_FILTER_FORMAT);
     }
 
     const daysBetween = endDate.diff(startDate, 'days');
-    return endDate
-      .subtract(daysBetween + 1, 'days')
-      .format(DATE_FILTER_FORMAT);
+    return endDate.subtract(daysBetween + 1, 'days').format(DATE_FILTER_FORMAT);
   },
 });

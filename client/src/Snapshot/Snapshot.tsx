@@ -1,5 +1,5 @@
 import accounting from 'accounting';
-import { Col, Row } from 'antd';
+import { Col, Row, Space } from 'antd';
 import React from 'react';
 import { useRecoilValue } from 'recoil';
 import { NumberIndicator } from '../Common/NumberIndicator';
@@ -12,6 +12,7 @@ import {
 } from '../Filters/FilterState';
 import { TransactionTable } from '../Transactions/TransactionTable';
 import { TopSpendingCategoriesChart } from './TopSpendingCategoriesChart';
+import { useCategoryTotalData } from './useCategoryTotalData';
 import { useTotalExpenseData } from './useTotalExpenseData';
 import { useTotalIncomeData } from './useTotalIncomeData';
 
@@ -29,26 +30,58 @@ const Snapshot = (): JSX.Element => {
   const [transactionTypeFilter, setTransactionTypeFilter] =
     React.useState<TransactionType>();
 
+  const [activeCategoryId, setActiveCategoryId] = React.useState<
+    number | undefined
+  >();
+
+  const categoryTotalData = useCategoryTotalData(
+    activeCategoryId,
+    startDate,
+    endDate
+  );
+
+  const categoryTotalDataPrev = useCategoryTotalData(
+    activeCategoryId,
+    startDatePrev,
+    endDatePrev
+  );
+
   return (
     <Row gutter={[16, 16]}>
       <Col span={24}>
         <DateRangePicker />
       </Col>
       <Col span={12}>
-        <TopSpendingCategoriesChart />
+        <TopSpendingCategoriesChart setActiveCategoryId={setActiveCategoryId} />
       </Col>
       <Col span={4}>
-        <NumberIndicator
-          onValueClick={() => setTransactionTypeFilter('income')}
-          title='Income'
-          value={totalIncomeData.totalIncome}
-          previousValue={totalIncomeDataPrev.totalIncome}
-          desiredChange={'increase'}
-          formatValue={accounting.formatMoney}
-          titleProps={{
-            type: 'success',
-          }}
-        />
+        <Space direction='vertical' size='middle' style={{ width: '100%' }}>
+          <NumberIndicator
+            onValueClick={() => setTransactionTypeFilter('income')}
+            title='Income'
+            value={totalIncomeData.totalIncome}
+            previousValue={totalIncomeDataPrev.totalIncome}
+            desiredChange={'increase'}
+            formatValue={accounting.formatMoney}
+            titleProps={{
+              type: 'success',
+            }}
+          />
+          {categoryTotalData && categoryTotalDataPrev && (
+            <NumberIndicator
+              onValueClick={() => setTransactionTypeFilter('income')}
+              title={categoryTotalData.categoryName}
+              value={categoryTotalData.total}
+              previousValue={categoryTotalDataPrev.total}
+              desiredChange={
+                categoryTotalData.categoryType === 'income'
+                  ? 'increase'
+                  : 'decrease'
+              }
+              formatValue={accounting.formatMoney}
+            />
+          )}
+        </Space>
       </Col>
       <Col span={4}>
         <NumberIndicator
@@ -63,6 +96,7 @@ const Snapshot = (): JSX.Element => {
           }}
         />
       </Col>
+
       <Col span={4}></Col>
       <Col span={24}>
         <TransactionTable

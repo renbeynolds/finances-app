@@ -3,6 +3,7 @@ import {
   getAverageCategorySpending,
   getAverageExpense,
   getAverageIncome,
+  getCategoryTotal,
   getTotalExpense,
   getTotalIncome,
 } from '../services/StatisticsService';
@@ -13,6 +14,7 @@ router.get('/total_expense', getTotalExpense);
 router.get('/total_income', getTotalIncome);
 router.get('/average_expense', getAverageExpense);
 router.get('/average_income', getAverageIncome);
+router.get('/category_total', getCategoryTotal);
 router.get('/average_category_spending', getAverageCategorySpending);
 
 export default router;
