@@ -23,8 +23,8 @@ const layout = {
 
 const AccountForm = (): JSX.Element => {
   const setAccountsState = useSetRecoilState(accountsState);
-  const [typeHeaderVisible, setTypeHeaderVisible] =
-    React.useState<Boolean>(false);
+  const [selectedAmountsType, setSelectedAmountsType] =
+    React.useState<String>('');
   const [errors, setErrors] = React.useState<IValidationError[]>([{}]);
   const navigate = useNavigate();
 
@@ -38,9 +38,7 @@ const AccountForm = (): JSX.Element => {
   };
 
   const onValuesChange = (changedValues: any, allValues: CreateAccountCMD) => {
-    if (allValues.amountsType === 'septypecol') {
-      setTypeHeaderVisible(true);
-    }
+    setSelectedAmountsType(allValues.amountsType);
 
     fetch('/api/accounts?validateOnly=true', {
       method: 'POST',
@@ -82,11 +80,6 @@ const AccountForm = (): JSX.Element => {
           errors={errors}
         />
         <AccountFormField
-          name='amountHeader'
-          label='Amount Header'
-          errors={errors}
-        />
-        <AccountFormField
           name='amountsType'
           label='Amounts Type'
           errors={errors}
@@ -94,10 +87,34 @@ const AccountForm = (): JSX.Element => {
           <Select>
             <Option value='negamtexp'>Negative Amount = Expense</Option>
             <Option value='posamtexp'>Postive Amount = Expense</Option>
-            <Option value='septypecol'>Separate Income vs. Expense Col.</Option>
+            <Option value='septypecol'>Separate Type Column</Option>
+            <Option value='sepincexp'>
+              Separate Income & Expense Columns.
+            </Option>
           </Select>
         </AccountFormField>
-        {typeHeaderVisible && (
+        {selectedAmountsType != 'sepincexp' && (
+          <AccountFormField
+            name='amountHeader'
+            label='Amount Header'
+            errors={errors}
+          />
+        )}
+        {selectedAmountsType === 'sepincexp' && (
+          <>
+            <AccountFormField
+              name='incomeHeader'
+              label='Income Header'
+              errors={errors}
+            />
+            <AccountFormField
+              name='expenseHeader'
+              label='Expense Header'
+              errors={errors}
+            />
+          </>
+        )}
+        {selectedAmountsType === 'septypecol' && (
           <AccountFormField
             name='typeHeader'
             label='Type Header'

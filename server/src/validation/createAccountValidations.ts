@@ -6,13 +6,30 @@ export const createAccountValidations = [
   body('descriptionHeader')
     .notEmpty()
     .withMessage('Description Header is required'),
-  body('amountHeader').notEmpty().withMessage('Amount Header is required'),
-  body('amountsType').notEmpty().isIn(['negamtexp', 'posamtexp', 'septypecol']),
+  body('amountsType')
+    .notEmpty()
+    .isIn(['negamtexp', 'posamtexp', 'septypecol', 'sepincexp']),
   body('typeHeader')
     .if(body('amountsType').equals('septypecol'))
     .notEmpty()
     .withMessage(
       'Type Header is required when amounts type is separate column'
+    ),
+  body('amountHeader')
+    .if(body('amountsType').not().equals('sepincexp'))
+    .notEmpty()
+    .withMessage('Amount Header is required'),
+  body('incomeHeader')
+    .if(body('amountsType').equals('sepincexp'))
+    .notEmpty()
+    .withMessage(
+      'Income Header is required when type is separate income and expense columns'
+    ),
+  body('expenseHeader')
+    .if(body('amountsType').equals('sepincexp'))
+    .notEmpty()
+    .withMessage(
+      'Expense Header is required when type is separate income and expense columns'
     ),
   body('startingAmount')
     .isNumeric()

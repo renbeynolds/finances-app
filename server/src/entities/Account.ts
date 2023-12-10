@@ -5,6 +5,7 @@ export enum AccountAmountsType {
   NEGATIVE_AMOUNT_EXPENSE = 'negamtexp',
   POSITIVE_AMOUNT_EXPENSE = 'posamtexp',
   SEPARATE_TYPE_COLUMN = 'septypecol',
+  SEPARATE_INCOME_EXPENSE_COLUMNS = 'sepincexp',
 }
 
 @Entity()
@@ -23,8 +24,14 @@ export class Account {
   @Column()
   descriptionHeader: string;
 
-  @Column()
+  @Column({ nullable: true })
   amountHeader: string;
+
+  @Column({ nullable: true })
+  incomeHeader: string;
+
+  @Column({ nullable: true })
+  expenseHeader: string;
 
   @Column({ nullable: true })
   typeHeader: string;

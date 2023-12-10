@@ -29,8 +29,16 @@ export const createUpload = async (
       transaction.upload = upload;
       transaction.date = new Date(obj[account.dateHeader]);
       transaction.description = obj[account.descriptionHeader];
-      transaction.amount = accounting.unformat(obj[account.amountHeader]);
-      if (account.amountsType == 'posamtexp') {
+
+      if (account.amountsType != 'sepincexp') {
+        transaction.amount = accounting.unformat(obj[account.amountHeader]);
+      }
+
+      if (account.amountsType == 'sepincexp') {
+        transaction.amount = accounting.unformat(
+          obj[account.incomeHeader] || obj[account.expenseHeader]
+        );
+      } else if (account.amountsType == 'posamtexp') {
         transaction.amount = -1 * transaction.amount;
       } else if (
         account.amountsType == 'septypecol' &&
@@ -38,6 +46,7 @@ export const createUpload = async (
       ) {
         transaction.amount = -1 * transaction.amount;
       }
+
       transaction.balance =
         Number(account.balance) + Number(transaction.amount);
       account.balance = Number(account.balance) + Number(transaction.amount);
