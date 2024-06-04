@@ -1,5 +1,8 @@
 import express from 'express';
-import { getAccountsTotalData } from '../services/AccountsTotalService';
+import {
+  getAccountBalanceOverTimeData,
+  getAccountsTotalData,
+} from '../services/AccountsTotalService';
 import { getCategorySpendingOverTimeData } from '../services/CategorySpendingOverTimeService';
 import { getIncomeVsExpenseData } from '../services/IncomeVsExpenseService';
 import { getTopSpendingCategoriesData } from '../services/TopSpendingsCategoriesService';
@@ -10,5 +13,6 @@ router.get('/income_vs_expense', getIncomeVsExpenseData);
 router.get('/top_spending_categories', getTopSpendingCategoriesData);
 router.get('/category_spending_over_time', getCategorySpendingOverTimeData);
 router.get('/accounts_total', getAccountsTotalData);
+router.get('/account_balance', getAccountBalanceOverTimeData);
 
 export default router;
