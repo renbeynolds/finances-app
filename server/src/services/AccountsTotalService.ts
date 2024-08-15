@@ -6,8 +6,14 @@ export const getAccountBalanceOverTimeData = async (
   req: Request,
   res: Response
 ): Promise<void> => {
-  const startDate = moment().subtract(1, 'year').format('MM-DD-YYYY');
-  const endDate = moment().format('MM-DD-YYYY');
+  const startDate = moment()
+    .endOf('month')
+    .subtract(13, 'months')
+    .format('MM-DD-YYYY');
+  const endDate = moment()
+    .endOf('month')
+    .subtract(1, 'month')
+    .format('MM-DD-YYYY');
 
   const accountId = parseInt(req.query.accountId as string);
 

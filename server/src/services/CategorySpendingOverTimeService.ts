@@ -7,8 +7,8 @@ export const getCategorySpendingOverTimeData = async (
   req: Request,
   res: Response
 ): Promise<void> => {
-  const endDate = moment().endOf('month');
-  const startDate = moment().endOf('month').subtract(1, 'year');
+  const startDate = moment().endOf('month').subtract(13, 'months');
+  const endDate = moment().endOf('month').subtract(1, 'month');
 
   const endDateString = endDate.format('MM-DD-YYYY');
   const startDateString = startDate.format('MM-DD-YYYY');
