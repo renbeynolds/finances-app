@@ -1,9 +1,10 @@
 package controller
 
 import (
-	"github.com/renbeynolds/finances-app/service"
+	"github.com/gin-gonic/gin"
 )
 
-type AccountController struct {
-	accountService service.AccountService
+type AccountController interface {
+	Create(*gin.Context)
+	FindAll(*gin.Context)
 }

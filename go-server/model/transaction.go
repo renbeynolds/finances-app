@@ -8,12 +8,12 @@ import (
 
 type Transaction struct {
   gorm.Model
-	UploadID uint
+	UploadID uint `gorm:"not null"`
 	CategoryID uint
-	Date time.Time
-	Description string
+	Date time.Time `gorm:"type:DATE; not null"`
+	Description string `gorm:"not null"`
 	Comment *string
-	Amount int64
-	Balance int64
-	BalanceCorrection int64 `gorm:"default:0"`
+	Amount int64 `gorm:"not null"`
+	Balance int64 `gorm:"not null"`
+	BalanceCorrection int64 `gorm:"not null; default:0"`
 }

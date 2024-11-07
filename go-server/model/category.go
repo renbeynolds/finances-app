@@ -6,11 +6,11 @@ import (
 
 type Category struct {
   gorm.Model
-	Name string `gorm:"unique"`
-	Color *string // nullable
-	IconURL *string // nullable
+	Name string `gorm:"unique;not null"`
+	Color *string
+	IconURL *string
 	Transactions []Transaction
-	Type string
+	Type string `gorm:"default:expense;not null"`
 	ParentCategoryID *uint
   SubCategories      []Category `gorm:"foreignkey:ParentCategoryID"`
 	PrefixRules []PrefixRule

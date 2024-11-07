@@ -1,7 +1,10 @@
 package repository
 
 import (
+	"fmt"
+
 	"github.com/renbeynolds/finances-app/model"
+	"github.com/renbeynolds/finances-app/util"
 	"gorm.io/gorm"
 )
 
@@ -13,7 +16,23 @@ func NewAccountRepositoryImpl(Db *gorm.DB) AccountRepository {
 	return &AccountRepositoryImpl{Db: Db}
 }
 
-func (r AccountRepositoryImpl) FindAll() []model.Account {
+func (r *AccountRepositoryImpl) Insert(account model.Account) model.Account {
+	result := r.Db.Create(&account)
+	util.ErrorPanic(result.Error)
+	return account
+}
+
+func (r *AccountRepositoryImpl) FindById(accountId int) (model.Account, error) {
+	var account model.Account
+	result := r.Db.Find(&account, accountId)
+	if result != nil {
+		return account, nil
+	} else {
+		return account, fmt.Errorf("account not found")
+	}
+}
+
+func (r *AccountRepositoryImpl) FindAll() []model.Account {
 	var Accounts []model.Account
 	r.Db.Find(&Accounts)
 	return Accounts

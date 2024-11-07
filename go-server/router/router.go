@@ -17,6 +17,7 @@ func NewRouter(healthController controller.HealthController, accountController c
 
 		accountsGroup := apiGroup.Group("/accounts")
 		{
+			accountsGroup.POST("/", accountController.Create)
 			accountsGroup.GET("/", accountController.FindAll)
 		}
 	}

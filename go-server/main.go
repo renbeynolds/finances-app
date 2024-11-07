@@ -29,12 +29,12 @@ func main() {
 
 	accountRepository := repository.NewAccountRepositoryImpl(db)
 
-	accountService := service.NewAccountServiceImpl(accountRepository, validate)
+	accountService := service.NewAccountServiceImpl(accountRepository)
 
 	healthController := controller.NewHealthController()
-	accountController := controller.NewAccountController(accountService)
+	accountController := controller.NewAccountControllerImpl(accountService, validate)
 
-	router := router.NewRouter(*healthController, *accountController)
+	router := router.NewRouter(*healthController, accountController)
 
  router.Run(":8080")
 }

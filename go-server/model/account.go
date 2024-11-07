@@ -6,16 +6,16 @@ import (
 
 type Account struct {
   gorm.Model
-	Name string `gorm:"unique"`
-	DateHeader string
-	DescriptionHeader string
-	AmountHeader *string // nullable
-	IncomeHeader *string // nullable
-	ExpenseHeader *string // nullable
-	TypeHeader *string // nullable
-	StartingAmount int64
-	Balance int64
-	AmountsType string // TODO: Enum?
+	Name string `gorm:"unique;not null"`
+	DateHeader string `gorm:"not null"`
+	DescriptionHeader string `gorm:"not null"`
+	AmountHeader *string
+	IncomeHeader *string
+	ExpenseHeader *string
+	TypeHeader *string
+	StartingAmount int64 `gorm:"not null;default:0"`
+	Balance int64 `gorm:"not null;default:0"`
+	AmountsType string `gorm:"not null"` // TODO: enum?
 	Color *string
 	Uploads []Upload
 }
