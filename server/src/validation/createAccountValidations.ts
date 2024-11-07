@@ -1,24 +1,24 @@
 import { body } from 'express-validator';
 
 export const createAccountValidations = [
-  body('name').notEmpty().withMessage('Name is required'),
-  body('dateHeader').notEmpty().withMessage('Date Header is required'),
-  body('descriptionHeader')
-    .notEmpty()
-    .withMessage('Description Header is required'),
-  body('amountsType')
-    .notEmpty()
-    .isIn(['negamtexp', 'posamtexp', 'septypecol', 'sepincexp']),
-  body('typeHeader')
-    .if(body('amountsType').equals('septypecol'))
-    .notEmpty()
-    .withMessage(
-      'Type Header is required when amounts type is separate column'
-    ),
-  body('amountHeader')
-    .if(body('amountsType').not().equals('sepincexp'))
-    .notEmpty()
-    .withMessage('Amount Header is required'),
+  // body('name').notEmpty().withMessage('Name is required'),
+  // body('dateHeader').notEmpty().withMessage('Date Header is required'),
+  // body('descriptionHeader')
+  //   .notEmpty()
+  //   .withMessage('Description Header is required'),
+  // body('amountsType')
+  //   .notEmpty()
+  //   .isIn(['negamtexp', 'posamtexp', 'septypecol', 'sepincexp']),
+  // body('typeHeader')
+  //   .if(body('amountsType').equals('septypecol'))
+  //   .notEmpty()
+  //   .withMessage(
+  //     'Type Header is required when amounts type is separate column'
+  //   ),
+  // body('amountHeader')
+  //   .if(body('amountsType').not().equals('sepincexp'))
+  //   .notEmpty()
+  //   .withMessage('Amount Header is required'),
   body('incomeHeader')
     .if(body('amountsType').equals('sepincexp'))
     .notEmpty()
