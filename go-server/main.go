@@ -1,9 +1,8 @@
 package main
 
 import (
-	"github.com/go-playground/validator/v10"
 	"github.com/renbeynolds/finances-app/controller"
-	"github.com/renbeynolds/finances-app/data/request"
+	"github.com/renbeynolds/finances-app/data/validation"
 	"github.com/renbeynolds/finances-app/model"
 	"github.com/renbeynolds/finances-app/repository"
 	"github.com/renbeynolds/finances-app/router"
@@ -20,8 +19,7 @@ func main() {
     panic("failed to connect database")
   }
 
-	validate := validator.New()
-	validate.RegisterStructValidation(request.CreateAccountRequestStructLevelValidation, request.CreateAccountRequest{})
+	validate := validation.NewValidator()
 
 	db.AutoMigrate(&model.Account{})
 	db.AutoMigrate(&model.Upload{})
