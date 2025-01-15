@@ -38,6 +38,18 @@ func (t *AccountServiceImpl) FindAll() []response.AccountResponse {
 		account := response.AccountResponse{
 			Id:   int(value.ID),
 			Name: value.Name,
+			DateHeader: value.DateHeader,
+			DescriptionHeader: value.DescriptionHeader,
+			StartingAmount: value.StartingAmount,
+			Balance: value.Balance,
+			AmountsType: value.AmountsType,
+		}
+
+		if value.AmountHeader != nil {
+			account.AmountHeader = *value.AmountHeader
+		}
+		if value.Color != nil {
+			account.Color = *value.Color
 		}
 		accounts = append(accounts, account)
 	}
