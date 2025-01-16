@@ -22,15 +22,15 @@ const ListItemAvatar = styled(MuiListItemAvatar)({
   marginRight: 12,
 });
 
-interface SelectContentProps {
+interface SideMenuContentSelectorProps {
   selectedContent: string;
   setSelectedContent: React.Dispatch<React.SetStateAction<string>>;
 }
 
-export default function SelectContent({
+export default function SideMenuContentSelector({
   selectedContent,
   setSelectedContent,
-}: SelectContentProps) {
+}: SideMenuContentSelectorProps) {
   const handleChange = (event: SelectChangeEvent) => {
     setSelectedContent(event.target.value as string);
   };

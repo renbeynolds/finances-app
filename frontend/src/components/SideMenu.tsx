@@ -3,10 +3,10 @@ import Divider from '@mui/material/Divider';
 import MuiDrawer, { drawerClasses } from '@mui/material/Drawer';
 import { styled } from '@mui/material/styles';
 import React from 'react';
-import AccountsMenu from './AccountsMenu';
-import SelectContent from './SelectContent';
+import AccountsList from './AccountsList';
+import SideMenuContentSelector from './SideMenuContentSelector';
 
-const drawerWidth = 240;
+export const drawerWidth = 240;
 
 const Drawer = styled(MuiDrawer)({
   width: drawerWidth,
@@ -26,7 +26,7 @@ export default function SideMenu() {
     <Drawer
       variant='permanent'
       sx={{
-        display: { xs: 'none', md: 'block' },
+        display: 'block',
         [`& .${drawerClasses.paper}`]: {
           backgroundColor: 'background.paper',
         },
@@ -39,7 +39,7 @@ export default function SideMenu() {
           p: 1.5,
         }}
       >
-        <SelectContent
+        <SideMenuContentSelector
           selectedContent={selectedContent}
           setSelectedContent={setSelectedContent}
         />
@@ -53,7 +53,7 @@ export default function SideMenu() {
           flexDirection: 'column',
         }}
       >
-        <AccountsMenu />
+        <AccountsList />
       </Box>
     </Drawer>
   );
