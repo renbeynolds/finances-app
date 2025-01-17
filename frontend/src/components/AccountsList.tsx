@@ -1,9 +1,5 @@
-import UploadFileIcon from '@mui/icons-material/UploadFile';
-import IconButton from '@mui/material/IconButton';
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemText from '@mui/material/ListItemText';
+import { Button, Stack, Text } from '@mantine/core';
+import { IconUpload } from '@tabler/icons-react';
 import currency from 'currency.js';
 import useSWR from 'swr';
 import { AccountsEndpoint, AccountsFetcher } from '../Fetchers';
@@ -15,35 +11,31 @@ export default function AccountsList() {
   if (isLoading) return <div>loading...</div>;
 
   return (
-    <List dense>
+    <Stack align='stretch' justify='flex-start' gap='md' mt='md'>
       {data!.data.map((account, index) => (
-        <ListItem
+        <Button
           key={index}
-          disablePadding
-          sx={{ display: 'block' }}
-          secondaryAction={
-            <IconButton edge='end' aria-label='upload' color='primary'>
-              <UploadFileIcon />
-            </IconButton>
-          }
+          variant='outline'
+          h='3rem'
+          justify='space-between'
+          rightSection={<IconUpload size={14} />}
         >
-          <ListItemButton selected={index === 0}>
-            <ListItemText
-              slotProps={{
-                secondary: {
-                  sx: {
-                    color: account.balance > 0 ? 'success.main' : 'error.main',
-                  },
-                },
-              }}
-              primary={account.name}
-              secondary={currency(account.balance, {
+          <Stack gap='0'>
+            <Text size='l' c='white'>
+              {account.name}
+            </Text>
+            <Text
+              size='xs'
+              style={{ textAlign: 'left' }}
+              c={account.balance > 0 ? 'green' : 'red'}
+            >
+              {currency(account.balance, {
                 fromCents: true,
               }).format()}
-            />
-          </ListItemButton>
-        </ListItem>
+            </Text>
+          </Stack>
+        </Button>
       ))}
-    </List>
+    </Stack>
   );
 }
