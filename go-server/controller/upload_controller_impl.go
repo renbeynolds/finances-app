@@ -9,17 +9,17 @@ import (
 
 type UploadControllerImpl struct {
 	uploadService service.UploadService
-	validate *validator.Validate
+	validate      *validator.Validate
 }
 
 func NewUploadControllerImpl(service service.UploadService, validate *validator.Validate) UploadController {
 	return &UploadControllerImpl{
 		uploadService: service,
-		validate: validate,
+		validate:      validate,
 	}
 }
 
 func (controller *UploadControllerImpl) FindAll(ctx *gin.Context) {
 	foundUploads := controller.uploadService.FindAll()
-	response.SendStatusOK(foundUploads, ctx)
+	response.SendStatusOK(foundUploads, nil, ctx)
 }

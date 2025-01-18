@@ -5,7 +5,7 @@ import (
 )
 
 type PrefixRule struct {
-  gorm.Model
-	Prefix string `gorm:"not null"`
-	CategoryID uint `gorm:"not null"`
+	gorm.Model
+	Prefix     string `gorm:"not null"`
+	CategoryID uint   `gorm:"not null"`
 }

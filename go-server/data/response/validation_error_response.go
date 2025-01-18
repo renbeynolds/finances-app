@@ -1,6 +1,6 @@
 package response
 
 type ValidationErrorResponse struct {
-	Param string
+	Param   string
 	Message string
 }

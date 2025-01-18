@@ -5,7 +5,7 @@ import (
 )
 
 type Upload struct {
-  gorm.Model
-	AccountID uint `gorm:"not null"`
+	gorm.Model
+	AccountID    uint `gorm:"not null"`
 	Transactions []Transaction
 }

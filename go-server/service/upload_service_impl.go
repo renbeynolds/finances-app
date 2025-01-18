@@ -8,7 +8,7 @@ import (
 
 type UploadServiceImpl struct {
 	UploadRepository repository.UploadRepository
-	Validate *validator.Validate
+	Validate         *validator.Validate
 }
 
 func NewUploadServiceImpl(uploadRepository repository.UploadRepository) UploadService {
@@ -23,7 +23,7 @@ func (t *UploadServiceImpl) FindAll() []response.UploadResponse {
 	var uploads []response.UploadResponse
 	for _, value := range result {
 		upload := response.UploadResponse{
-			Id:   int(value.ID),
+			Id: int(value.ID),
 		}
 		uploads = append(uploads, upload)
 	}

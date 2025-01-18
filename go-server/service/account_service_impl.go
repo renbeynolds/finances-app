@@ -10,7 +10,7 @@ import (
 
 type AccountServiceImpl struct {
 	AccountRepository repository.AccountRepository
-	Validate *validator.Validate
+	Validate          *validator.Validate
 }
 
 func NewAccountServiceImpl(accountRepository repository.AccountRepository) AccountService {
@@ -25,7 +25,7 @@ func (t *AccountServiceImpl) Create(account request.CreateAccountRequest) respon
 	}
 	accountModel = t.AccountRepository.Insert(accountModel)
 	return response.AccountResponse{
-		Id: int(accountModel.ID),
+		Id:   int(accountModel.ID),
 		Name: accountModel.Name,
 	}
 }
@@ -36,13 +36,13 @@ func (t *AccountServiceImpl) FindAll() []response.AccountResponse {
 	var accounts []response.AccountResponse
 	for _, value := range result {
 		account := response.AccountResponse{
-			Id:   int(value.ID),
-			Name: value.Name,
-			DateHeader: value.DateHeader,
+			Id:                int(value.ID),
+			Name:              value.Name,
+			DateHeader:        value.DateHeader,
 			DescriptionHeader: value.DescriptionHeader,
-			StartingAmount: value.StartingAmount,
-			Balance: value.Balance,
-			AmountsType: value.AmountsType,
+			StartingAmount:    value.StartingAmount,
+			Balance:           value.Balance,
+			AmountsType:       value.AmountsType,
 		}
 
 		if value.AmountHeader != nil {

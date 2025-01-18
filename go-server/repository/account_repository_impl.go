@@ -33,7 +33,7 @@ func (r *AccountRepositoryImpl) FindById(accountId int) (model.Account, error) {
 }
 
 func (r *AccountRepositoryImpl) FindAll() []model.Account {
-	var Accounts []model.Account
-	r.Db.Find(&Accounts)
-	return Accounts
+	var accounts []model.Account
+	r.Db.Find(&accounts)
+	return accounts
 }

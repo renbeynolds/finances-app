@@ -14,7 +14,7 @@ func NewUploadRepositoryImpl(Db *gorm.DB) UploadRepository {
 }
 
 func (r *UploadRepositoryImpl) FindAll() []model.Upload {
-	var Uploads []model.Upload
-	r.Db.Find(&Uploads)
-	return Uploads
+	var uploads []model.Upload
+	r.Db.Find(&uploads)
+	return uploads
 }

@@ -31,9 +31,9 @@ func Validate(validate *validator.Validate, obj interface{}, msgBuilder Validati
 		}
 
 		webResponse := response.Response{
-			Code: http.StatusBadRequest,
+			Code:   http.StatusBadRequest,
 			Status: "Error",
-			Data: validationErrors,
+			Data:   validationErrors,
 		}
 		ctx.Header("Content-Type", "application/json")
 		ctx.JSON(http.StatusBadRequest, webResponse)

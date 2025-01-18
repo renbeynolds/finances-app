@@ -16,8 +16,8 @@ var dsn = "host=localhost user=username password=password dbname=database port=5
 func main() {
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
-    panic("failed to connect database")
-  }
+		panic("failed to connect database")
+	}
 
 	validate := validation.NewValidator()
 
@@ -29,15 +29,21 @@ func main() {
 
 	accountRepository := repository.NewAccountRepositoryImpl(db)
 	uploadRepository := repository.NewUploadRepositoryImpl(db)
+	categoryRepository := repository.NewCategoryRepositoryImpl(db)
+	transactionRepository := repository.NewTransactionRepositoryImpl(db)
 
 	accountService := service.NewAccountServiceImpl(accountRepository)
 	uploadService := service.NewUploadServiceImpl(uploadRepository)
+	categoryService := service.NewCategoryServiceImpl(categoryRepository)
+	transactionService := service.NewTransactionServiceImpl(transactionRepository)
 
 	healthController := controller.NewHealthController()
 	accountController := controller.NewAccountControllerImpl(accountService, validate)
 	uploadController := controller.NewUploadControllerImpl(uploadService, validate)
+	categoryController := controller.NewCategoryControllerImpl(categoryService, validate)
+	transactionController := controller.NewTransactionControllerImpl(transactionService, validate)
 
-	router := router.NewRouter(*healthController, accountController, uploadController)
+	router := router.NewRouter(*healthController, accountController, uploadController, categoryController, transactionController)
 
- router.Run(":8080")
+	router.Run(":8080")
 }

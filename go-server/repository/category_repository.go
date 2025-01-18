@@ -4,6 +4,6 @@ import (
 	"github.com/renbeynolds/finances-app/model"
 )
 
-type UploadRepository interface {
-	FindAll() []model.Upload
+type CategoryRepository interface {
+	FindAll() []model.Category
 }

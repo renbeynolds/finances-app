@@ -4,7 +4,6 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type AccountController interface {
-	Create(*gin.Context)
+type CategoryController interface {
 	FindAll(*gin.Context)
 }

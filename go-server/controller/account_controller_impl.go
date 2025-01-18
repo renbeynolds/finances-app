@@ -12,13 +12,13 @@ import (
 
 type AccountControllerImpl struct {
 	accountService service.AccountService
-	validate *validator.Validate
+	validate       *validator.Validate
 }
 
 func NewAccountControllerImpl(service service.AccountService, validate *validator.Validate) AccountController {
 	return &AccountControllerImpl{
 		accountService: service,
-		validate: validate,
+		validate:       validate,
 	}
 }
 
@@ -37,10 +37,10 @@ func (controller *AccountControllerImpl) Create(ctx *gin.Context) {
 	}
 
 	newAccount := controller.accountService.Create(createAccountRequest)
-	response.SendStatusOK(newAccount, ctx)
+	response.SendStatusOK(newAccount, nil, ctx)
 }
 
 func (controller *AccountControllerImpl) FindAll(ctx *gin.Context) {
 	foundAccounts := controller.accountService.FindAll()
-	response.SendStatusOK(foundAccounts, ctx)
+	response.SendStatusOK(foundAccounts, nil, ctx)
 }

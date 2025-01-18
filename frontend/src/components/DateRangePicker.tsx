@@ -6,8 +6,7 @@ export default function DateRangePicker() {
   return (
     <DatePickerInput
       type='range'
-      label='Pick dates range'
-      placeholder='Pick dates range'
+      placeholder='Select Date Range'
       value={value}
       onChange={setValue}
     />
