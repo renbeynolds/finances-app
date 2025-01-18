@@ -5,7 +5,7 @@ import (
 	"github.com/renbeynolds/finances-app/controller"
 )
 
-func NewRouter(healthController controller.HealthController, accountController controller.AccountController) *gin.Engine {
+func NewRouter(healthController controller.HealthController, accountController controller.AccountController, uploadController controller.UploadController) *gin.Engine {
 	router := gin.Default()
 
 	apiGroup := router.Group("/api")
@@ -19,6 +19,11 @@ func NewRouter(healthController controller.HealthController, accountController c
 		{
 			accountsGroup.POST("/", accountController.Create)
 			accountsGroup.GET("/", accountController.FindAll)
+		}
+
+		uploadsGroup := apiGroup.Group("/uploads")
+		{
+			uploadsGroup.GET("/", uploadController.FindAll)
 		}
 	}
 

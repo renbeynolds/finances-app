@@ -28,13 +28,16 @@ func main() {
 	db.AutoMigrate(&model.PrefixRule{})
 
 	accountRepository := repository.NewAccountRepositoryImpl(db)
+	uploadRepository := repository.NewUploadRepositoryImpl(db)
 
 	accountService := service.NewAccountServiceImpl(accountRepository)
+	uploadService := service.NewUploadServiceImpl(uploadRepository)
 
 	healthController := controller.NewHealthController()
 	accountController := controller.NewAccountControllerImpl(accountService, validate)
+	uploadController := controller.NewUploadControllerImpl(uploadService, validate)
 
-	router := router.NewRouter(*healthController, accountController)
+	router := router.NewRouter(*healthController, accountController, uploadController)
 
  router.Run(":8080")
 }
