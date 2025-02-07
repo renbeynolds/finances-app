@@ -1,9 +1,9 @@
 export type Transaction = {
   id: number;
-  categoryId: number | null;
+  categoryId: number | undefined;
   date: string;
   description: string;
-  comment: string | null;
+  comment: string | undefined;
   amount: number;
   balance: number;
 };

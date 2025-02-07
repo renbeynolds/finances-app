@@ -1,8 +1,6 @@
 package controller
 
 import (
-	"fmt"
-
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
 	"github.com/renbeynolds/finances-app/data/response"
@@ -27,7 +25,6 @@ func (controller *TransactionControllerImpl) FindAll(ctx *gin.Context) {
 		Page:  ctx.GetInt("page"),
 		Limit: ctx.GetInt("limit"),
 	}
-	foundCategories := controller.transactionService.FindAll(&pagination)
-	fmt.Println(pagination.TotalPages)
-	response.SendStatusOK(foundCategories, &pagination, ctx)
+	foundTransactions := controller.transactionService.FindAll(&pagination)
+	response.SendStatusOK(foundTransactions, &pagination, ctx)
 }

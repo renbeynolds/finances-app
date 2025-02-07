@@ -1,8 +1,8 @@
 import { Button, Stack, Text } from '@mantine/core';
 import { IconUpload } from '@tabler/icons-react';
-import currency from 'currency.js';
 import useSWR from 'swr';
 import { AccountsEndpoint, AccountsFetcher } from '../Fetchers';
+import { FormatMoney } from '../utils';
 
 export default function AccountsList() {
   const { data, error, isLoading } = useSWR(AccountsEndpoint, AccountsFetcher);
@@ -29,9 +29,7 @@ export default function AccountsList() {
               style={{ textAlign: 'left' }}
               c={account.balance > 0 ? 'green' : 'red'}
             >
-              {currency(account.balance, {
-                fromCents: true,
-              }).format()}
+              {FormatMoney(account.balance)}
             </Text>
           </Stack>
         </Button>
