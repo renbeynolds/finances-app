@@ -5,6 +5,7 @@ import (
 	"github.com/go-playground/validator/v10"
 	"github.com/renbeynolds/finances-app/data/response"
 	"github.com/renbeynolds/finances-app/service"
+	"github.com/renbeynolds/finances-app/util/filter"
 	"github.com/renbeynolds/finances-app/util/paginate"
 )
 
@@ -21,10 +22,16 @@ func NewTransactionControllerImpl(service service.TransactionService, validate *
 }
 
 func (controller *TransactionControllerImpl) FindAll(ctx *gin.Context) {
+	dateFilter := filter.DateFilter{
+		From: ctx.Query("from"),
+		To:   ctx.Query("to"),
+	}
+
 	pagination := paginate.Pagination{
 		Page:  ctx.GetInt("page"),
 		Limit: ctx.GetInt("limit"),
 	}
-	foundTransactions := controller.transactionService.FindAll(&pagination)
+
+	foundTransactions := controller.transactionService.FindAll(&pagination, &dateFilter)
 	response.SendStatusOK(foundTransactions, &pagination, ctx)
 }

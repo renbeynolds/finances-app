@@ -1,5 +1,4 @@
 import { Button, Stack, Text } from '@mantine/core';
-import { IconUpload } from '@tabler/icons-react';
 import useSWR from 'swr';
 import { UploadsEndpoint, UploadsFetcher } from '../Fetchers';
 
@@ -12,13 +11,7 @@ export default function UploadsList() {
   return (
     <Stack align='stretch' justify='flex-start' gap='md'>
       {data!.data.map((upload, index) => (
-        <Button
-          key={index}
-          variant='outline'
-          h='3rem'
-          justify='space-between'
-          rightSection={<IconUpload size={14} />}
-        >
+        <Button key={index} variant='outline' h='3rem' justify='space-between'>
           <Stack gap='0'>
             <Text size='l' c='white'>
               {upload.id}

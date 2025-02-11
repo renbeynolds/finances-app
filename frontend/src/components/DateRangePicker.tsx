@@ -1,14 +1,21 @@
 import { DatePickerInput } from '@mantine/dates';
-import { useState } from 'react';
+import { useContext } from 'react';
+import {
+  DateFilterContext,
+  SetDateFilterContext,
+} from '../context/DateFilterContext';
 
 export default function DateRangePicker() {
-  const [value, setValue] = useState<[Date | null, Date | null]>([null, null]);
+  const dateFilter = useContext(DateFilterContext);
+  const setDateFilter = useContext(SetDateFilterContext);
+
   return (
     <DatePickerInput
       type='range'
       placeholder='Select Date Range'
-      value={value}
-      onChange={setValue}
+      value={dateFilter}
+      valueFormat='YYYY-MM-DD'
+      onChange={setDateFilter}
     />
   );
 }

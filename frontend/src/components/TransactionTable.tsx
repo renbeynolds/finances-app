@@ -2,6 +2,7 @@ import { Text } from '@mantine/core';
 import { DataTable } from 'mantine-datatable';
 import * as React from 'react';
 import useSWR from 'swr';
+import { DateFilterContext } from '../context/DateFilterContext';
 import { TransactionsEndpoint, TransactionsFetcher } from '../Fetchers';
 import { FormatMoney } from '../utils';
 
@@ -9,9 +10,15 @@ const pageSize = 10;
 
 export default function TransactionTable() {
   const [page, setPage] = React.useState(1);
+  const dateFilter = React.useContext(DateFilterContext);
+
+  const dateFilterFormatted: [string | null, string | null] = [
+    dateFilter[0]?.toISOString().split('T')[0] || '',
+    dateFilter[1]?.toISOString().split('T')[0] || '',
+  ];
 
   const { data, error, isLoading } = useSWR(
-    `${TransactionsEndpoint}?page=${page}&limit=${pageSize}`,
+    `${TransactionsEndpoint}?page=${page}&limit=${pageSize}&from=${dateFilterFormatted[0]}&to=${dateFilterFormatted[1]}`,
     TransactionsFetcher
   );
 

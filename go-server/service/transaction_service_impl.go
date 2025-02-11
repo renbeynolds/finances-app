@@ -4,6 +4,7 @@ import (
 	"github.com/go-playground/validator/v10"
 	"github.com/renbeynolds/finances-app/data/response"
 	"github.com/renbeynolds/finances-app/repository"
+	"github.com/renbeynolds/finances-app/util/filter"
 	"github.com/renbeynolds/finances-app/util/paginate"
 )
 
@@ -18,8 +19,8 @@ func NewTransactionServiceImpl(categoryRepository repository.TransactionReposito
 	}
 }
 
-func (t *TransactionServiceImpl) FindAll(pagination *paginate.Pagination) []response.TransactionResponse {
-	result := t.TransactionRepository.FindAll(pagination)
+func (t *TransactionServiceImpl) FindAll(pagination *paginate.Pagination, dateFilter *filter.DateFilter) []response.TransactionResponse {
+	result := t.TransactionRepository.FindAll(pagination, dateFilter)
 
 	var transactions []response.TransactionResponse
 	for _, value := range result {
