@@ -20,6 +20,7 @@ func NewRouter(
 	uploadController controller.UploadController,
 	categoryController controller.CategoryController,
 	transactionController controller.TransactionController,
+	insightController controller.InsightController,
 ) *gin.Engine {
 	router := gin.Default()
 
@@ -49,6 +50,11 @@ func NewRouter(
 		transactionsGroup := apiGroup.Group("/transactions")
 		{
 			transactionsGroup.GET("/", paginator, transactionController.FindAll)
+		}
+
+		insightsGroup := apiGroup.Group("/insights")
+		{
+			insightsGroup.GET("/top_spending_categories", insightController.GetTopSpendingCategories)
 		}
 	}
 
