@@ -26,7 +26,7 @@ export default function Layout() {
           {/* Page Selection */}
         </Group>
       </AppShell.Header>
-      <AppShell.Navbar p='md' bg='dark'>
+      <AppShell.Navbar p='md'>
         <SideMenuContentSelector
           selectedContent={selectedContent}
           setSelectedContent={setSelectedContent}

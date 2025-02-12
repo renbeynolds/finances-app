@@ -15,8 +15,6 @@ const data = [
 
 const iconProps = {
   stroke: 1.5,
-  color: 'currentColor',
-  opacity: 0.6,
   size: 18,
 };
 

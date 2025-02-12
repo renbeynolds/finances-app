@@ -19,27 +19,5 @@ func NewInsightServiceImpl(insightRepository repository.InsightRepository) Insig
 }
 
 func (t *InsightServiceImpl) GetTopSpendingCategories(dateFilter *filter.DateFilter) []response.TopSpendingCategoryResponse {
-	t.InsightRepository.GetTopSpendingCategories(dateFilter)
-	return []response.TopSpendingCategoryResponse{
-		{
-			Id:   1,
-			Name: "Groceries",
-		},
-		{
-			Id:   2,
-			Name: "Restaurants",
-		},
-		{
-			Id:   3,
-			Name: "Gas",
-		},
-		{
-			Id:   4,
-			Name: "Rent",
-		},
-		{
-			Id:   5,
-			Name: "Utilities",
-		},
-	}
+	return t.InsightRepository.GetTopSpendingCategories(dateFilter)
 }

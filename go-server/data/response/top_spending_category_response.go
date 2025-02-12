@@ -1,6 +1,7 @@
 package response
 
 type TopSpendingCategoryResponse struct {
-	Id   int    `json:"id"`
-	Name string `json:"name"`
+	Id    int    `json:"id"`
+	Name  string `json:"name"`
+	Value int64  `json:"value"`
 }

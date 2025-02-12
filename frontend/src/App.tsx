@@ -1,3 +1,4 @@
+import '@mantine/charts/styles.css';
 import { MantineProvider } from '@mantine/core';
 import '@mantine/core/styles.css';
 import '@mantine/dates/styles.css';
@@ -9,6 +10,7 @@ import {
   DateFilterContext,
   SetDateFilterContext,
 } from './context/DateFilterContext';
+import { theme } from './Theme';
 
 export default function App() {
   const [dateFilter, setDateFilter] = useState<[Date | null, Date | null]>([
@@ -17,7 +19,7 @@ export default function App() {
   ]);
 
   return (
-    <MantineProvider defaultColorScheme='dark'>
+    <MantineProvider theme={theme} defaultColorScheme='dark'>
       <DateFilterContext.Provider value={dateFilter}>
         <SetDateFilterContext.Provider value={setDateFilter}>
           <Layout />

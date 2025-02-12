@@ -1,8 +1,7 @@
 package repository
 
 import (
-	"fmt"
-
+	"github.com/renbeynolds/finances-app/data/response"
 	"github.com/renbeynolds/finances-app/util/filter"
 	"gorm.io/gorm"
 )
@@ -15,15 +14,11 @@ func NewInsightRepositoryImpl(Db *gorm.DB) InsightRepository {
 	return &InsightRepositoryImpl{Db: Db}
 }
 
-type Result struct {
-	Id     int
-	Name   string
-	Amount int64
-}
+func (r *InsightRepositoryImpl) GetTopSpendingCategories(dateFilter *filter.DateFilter) []response.TopSpendingCategoryResponse {
 
-func (r *InsightRepositoryImpl) GetTopSpendingCategories(dateFilter *filter.DateFilter) {
+	const numCategories = 10
 
-	var result []Result
+	var result []response.TopSpendingCategoryResponse
 
 	r.Db.Raw(`
     WITH category_totals AS (
@@ -39,7 +34,7 @@ func (r *InsightRepositoryImpl) GetTopSpendingCategories(dateFilter *filter.Date
       GROUP BY COALESCE(c.parent_category_id, c.id)
       HAVING COALESCE(c.parent_category_id, c.id) IS NOT NULL
     )
-    SELECT name, categoryid AS id, -1 * data AS amount, color FROM (
+    SELECT name, categoryid AS id, -1 * data AS value, color FROM (
       WITH category_ranks AS (
         SELECT
           categoryid,
@@ -65,6 +60,7 @@ func (r *InsightRepositoryImpl) GetTopSpendingCategories(dateFilter *filter.Date
       WHERE rn > ?
       HAVING COUNT(*) > 0
     ) ranking
-	`, dateFilter.From, dateFilter.To, 2, 2).Scan(&result)
-	fmt.Println(result)
+	`, dateFilter.From, dateFilter.To, numCategories, numCategories).Scan(&result)
+
+	return result
 }

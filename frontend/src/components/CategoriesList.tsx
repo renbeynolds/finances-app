@@ -16,9 +16,7 @@ export default function CategoriesList() {
       {data!.data.map((category, index) => (
         <Button key={index} variant='outline' h='3rem' justify='space-between'>
           <Stack gap='0'>
-            <Text size='l' c='white'>
-              {category.name}
-            </Text>
+            <Text size='l'>{category.name}</Text>
           </Stack>
         </Button>
       ))}

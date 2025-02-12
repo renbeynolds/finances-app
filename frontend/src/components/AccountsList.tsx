@@ -21,9 +21,7 @@ export default function AccountsList() {
           rightSection={<IconUpload size={14} />}
         >
           <Stack gap='0'>
-            <Text size='l' c='white'>
-              {account.name}
-            </Text>
+            <Text size='l'>{account.name}</Text>
             <Text
               size='xs'
               style={{ textAlign: 'left' }}

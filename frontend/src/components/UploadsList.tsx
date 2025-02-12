@@ -13,9 +13,7 @@ export default function UploadsList() {
       {data!.data.map((upload, index) => (
         <Button key={index} variant='outline' h='3rem' justify='space-between'>
           <Stack gap='0'>
-            <Text size='l' c='white'>
-              {upload.id}
-            </Text>
+            <Text size='l'>{upload.id}</Text>
           </Stack>
         </Button>
       ))}
