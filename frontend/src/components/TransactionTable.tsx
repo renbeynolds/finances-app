@@ -12,13 +12,8 @@ export default function TransactionTable() {
   const [page, setPage] = React.useState(1);
   const dateFilter = React.useContext(DateFilterContext);
 
-  const dateFilterFormatted: [string | null, string | null] = [
-    dateFilter[0]?.toISOString().split('T')[0] || '',
-    dateFilter[1]?.toISOString().split('T')[0] || '',
-  ];
-
   const { data, error, isLoading } = useSWR(
-    `${TransactionsEndpoint}?page=${page}&limit=${pageSize}&from=${dateFilterFormatted[0]}&to=${dateFilterFormatted[1]}`,
+    `${TransactionsEndpoint}?page=${page}&limit=${pageSize}&from=${dateFilter[0]}&to=${dateFilter[1]}`,
     TransactionsFetcher
   );
 

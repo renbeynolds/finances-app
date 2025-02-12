@@ -10,13 +10,8 @@ import {
 export default function TopSpendingCategoriesChart() {
   const dateFilter = React.useContext(DateFilterContext);
 
-  const dateFilterFormatted: [string | null, string | null] = [
-    dateFilter[0]?.toISOString().split('T')[0] || '',
-    dateFilter[1]?.toISOString().split('T')[0] || '',
-  ];
-
   const { data, error, isLoading } = useSWR(
-    `${TopSpendingCategoriesEndpoint}?from=${dateFilterFormatted[0]}&to=${dateFilterFormatted[1]}`,
+    `${TopSpendingCategoriesEndpoint}?from=${dateFilter[0]}&to=${dateFilter[1]}`,
     TopSpendingCategoriesFetcher
   );
 

@@ -2,28 +2,29 @@ import '@mantine/charts/styles.css';
 import { MantineProvider } from '@mantine/core';
 import '@mantine/core/styles.css';
 import '@mantine/dates/styles.css';
-import dayjs from 'dayjs';
 import 'mantine-datatable/styles.layer.css';
-import { useState } from 'react';
+import React from 'react';
 import Layout from './components/Layout';
 import {
   DateFilterContext,
-  SetDateFilterContext,
+  DateFilterDispatchContext,
+  DateFilterReducer,
+  DefaultDateFilter,
 } from './context/DateFilterContext';
 import { theme } from './Theme';
 
 export default function App() {
-  const [dateFilter, setDateFilter] = useState<[Date | null, Date | null]>([
-    dayjs().startOf('month').toDate(),
-    dayjs().endOf('month').toDate(),
-  ]);
+  const [dateFilter, dateFilterDispatch] = React.useReducer(
+    DateFilterReducer,
+    DefaultDateFilter
+  );
 
   return (
     <MantineProvider theme={theme} defaultColorScheme='dark'>
       <DateFilterContext.Provider value={dateFilter}>
-        <SetDateFilterContext.Provider value={setDateFilter}>
+        <DateFilterDispatchContext.Provider value={dateFilterDispatch}>
           <Layout />
-        </SetDateFilterContext.Provider>
+        </DateFilterDispatchContext.Provider>
       </DateFilterContext.Provider>
     </MantineProvider>
   );
