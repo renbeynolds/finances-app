@@ -6,5 +6,5 @@ import (
 )
 
 type InsightService interface {
-	GetTopSpendingCategories(dateFilter *filter.DateFilter) []response.TopSpendingCategoryResponse
+	GetTopSpendingCategories(filters *filter.TransactionFilters) []response.TopSpendingCategoryResponse
 }

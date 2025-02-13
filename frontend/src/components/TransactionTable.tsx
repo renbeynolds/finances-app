@@ -1,4 +1,5 @@
-import { Text } from '@mantine/core';
+import { ActionIcon, Text, TextInput } from '@mantine/core';
+import { IconSearch, IconX } from '@tabler/icons-react';
 import { DataTable } from 'mantine-datatable';
 import * as React from 'react';
 import useSWR from 'swr';
@@ -10,10 +11,16 @@ const pageSize = 10;
 
 export default function TransactionTable() {
   const [page, setPage] = React.useState(1);
+  const [descriptionSearch, setDescriptionSearch] = React.useState('');
+  const [descriptionFilter, setDescriptionFilter] = React.useState('');
   const dateFilter = React.useContext(DateFilterContext);
 
+  React.useEffect(() => {
+    setPage(1);
+  }, [setPage, descriptionFilter, dateFilter]);
+
   const { data, error, isLoading } = useSWR(
-    `${TransactionsEndpoint}?page=${page}&limit=${pageSize}&from=${dateFilter[0]}&to=${dateFilter[1]}`,
+    `${TransactionsEndpoint}?page=${page}&limit=${pageSize}&from=${dateFilter[0]}&to=${dateFilter[1]}&description=${descriptionFilter}`,
     TransactionsFetcher
   );
 
@@ -36,6 +43,15 @@ export default function TransactionTable() {
           accessor: 'description',
           ellipsis: true,
           cellsStyle: () => ({ maxWidth: '400px' }),
+          filter: ({ close }) => (
+            <DescriptionFilterPopup
+              setDescriptionFilter={setDescriptionFilter}
+              descriptionSearch={descriptionSearch}
+              setDescriptionSearch={setDescriptionSearch}
+              close={close}
+            />
+          ),
+          filtering: descriptionSearch !== '',
         },
         { accessor: 'comment' },
         {
@@ -58,3 +74,60 @@ export default function TransactionTable() {
     />
   );
 }
+
+type DescriptionFilterPopupProps = {
+  setDescriptionFilter: (value: string) => void;
+  descriptionSearch: string;
+  setDescriptionSearch: (value: string) => void;
+  close: () => void;
+};
+
+const DescriptionFilterPopup = ({
+  setDescriptionFilter,
+  descriptionSearch,
+  setDescriptionSearch,
+  close,
+}: DescriptionFilterPopupProps) => {
+  const enterFunction = React.useCallback(
+    (event: KeyboardEvent) => {
+      if (event.key === 'Enter') {
+        setDescriptionFilter(descriptionSearch);
+        close();
+      }
+    },
+    [close, setDescriptionFilter, descriptionSearch]
+  );
+
+  React.useEffect(() => {
+    document.addEventListener('keypress', enterFunction);
+    return () => {
+      document.removeEventListener('keypress', enterFunction);
+    };
+  }, [enterFunction]);
+
+  return (
+    <TextInput
+      label='Description'
+      description='Fuzzy search'
+      placeholder='Enter search string...'
+      leftSection={<IconSearch size={16} />}
+      rightSection={
+        <ActionIcon
+          size='sm'
+          variant='transparent'
+          c='dimmed'
+          onClick={() => {
+            setDescriptionSearch('');
+            setDescriptionFilter('');
+            close();
+          }}
+        >
+          <IconX size={14} />
+        </ActionIcon>
+      }
+      value={descriptionSearch}
+      onBlur={(e) => setDescriptionFilter(e.currentTarget.value)}
+      onChange={(e) => setDescriptionSearch(e.currentTarget.value)}
+    />
+  );
+};

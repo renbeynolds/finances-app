@@ -22,9 +22,10 @@ func NewTransactionControllerImpl(service service.TransactionService, validate *
 }
 
 func (controller *TransactionControllerImpl) FindAll(ctx *gin.Context) {
-	dateFilter := filter.DateFilter{
-		From: ctx.Query("from"),
-		To:   ctx.Query("to"),
+	filters := filter.TransactionFilters{
+		From:        ctx.Query("from"),
+		To:          ctx.Query("to"),
+		Description: ctx.Query("description"),
 	}
 
 	pagination := paginate.Pagination{
@@ -32,6 +33,6 @@ func (controller *TransactionControllerImpl) FindAll(ctx *gin.Context) {
 		Limit: ctx.GetInt("limit"),
 	}
 
-	foundTransactions := controller.transactionService.FindAll(&pagination, &dateFilter)
+	foundTransactions := controller.transactionService.FindAll(&pagination, &filters)
 	response.SendStatusOK(foundTransactions, &pagination, ctx)
 }

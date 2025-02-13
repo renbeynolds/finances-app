@@ -19,8 +19,8 @@ func NewTransactionServiceImpl(categoryRepository repository.TransactionReposito
 	}
 }
 
-func (t *TransactionServiceImpl) FindAll(pagination *paginate.Pagination, dateFilter *filter.DateFilter) []response.TransactionResponse {
-	result := t.TransactionRepository.FindAll(pagination, dateFilter)
+func (t *TransactionServiceImpl) FindAll(pagination *paginate.Pagination, filters *filter.TransactionFilters) []response.TransactionResponse {
+	result := t.TransactionRepository.FindAll(pagination, filters)
 
 	var transactions []response.TransactionResponse
 	for _, value := range result {

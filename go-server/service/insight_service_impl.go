@@ -18,6 +18,6 @@ func NewInsightServiceImpl(insightRepository repository.InsightRepository) Insig
 	}
 }
 
-func (t *InsightServiceImpl) GetTopSpendingCategories(dateFilter *filter.DateFilter) []response.TopSpendingCategoryResponse {
-	return t.InsightRepository.GetTopSpendingCategories(dateFilter)
+func (t *InsightServiceImpl) GetTopSpendingCategories(filters *filter.TransactionFilters) []response.TopSpendingCategoryResponse {
+	return t.InsightRepository.GetTopSpendingCategories(filters)
 }

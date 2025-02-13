@@ -14,7 +14,7 @@ func NewInsightRepositoryImpl(Db *gorm.DB) InsightRepository {
 	return &InsightRepositoryImpl{Db: Db}
 }
 
-func (r *InsightRepositoryImpl) GetTopSpendingCategories(dateFilter *filter.DateFilter) []response.TopSpendingCategoryResponse {
+func (r *InsightRepositoryImpl) GetTopSpendingCategories(filters *filter.TransactionFilters) []response.TopSpendingCategoryResponse {
 
 	const numCategories = 10
 
@@ -60,7 +60,7 @@ func (r *InsightRepositoryImpl) GetTopSpendingCategories(dateFilter *filter.Date
       WHERE rn > ?
       HAVING COUNT(*) > 0
     ) ranking
-	`, dateFilter.From, dateFilter.To, numCategories, numCategories).Scan(&result)
+	`, filters.From, filters.To, numCategories, numCategories).Scan(&result)
 
 	return result
 }

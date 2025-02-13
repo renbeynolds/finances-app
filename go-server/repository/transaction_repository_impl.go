@@ -16,10 +16,10 @@ func NewTransactionRepositoryImpl(Db *gorm.DB) TransactionRepository {
 	return &TransactionRepositoryImpl{Db: Db}
 }
 
-func (r *TransactionRepositoryImpl) FindAll(pagination *paginate.Pagination, dateFilter *filter.DateFilter) []model.Transaction {
+func (r *TransactionRepositoryImpl) FindAll(pagination *paginate.Pagination, filters *filter.TransactionFilters) []model.Transaction {
 	var transactions []model.Transaction
 	r.Db.Scopes(
-		paginate.Paginate(transactions, pagination, r.Db, filter.Filter(transactions, dateFilter, r.Db)),
+		paginate.Paginate(transactions, pagination, r.Db, filter.FilterTransactions(transactions, filters, r.Db)),
 	).Order(clause.OrderBy{Columns: []clause.OrderByColumn{
 		{Column: clause.Column{Name: "date"}, Desc: true},
 		{Column: clause.Column{Name: "id"}, Desc: true},

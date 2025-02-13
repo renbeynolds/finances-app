@@ -7,5 +7,5 @@ import (
 )
 
 type TransactionService interface {
-	FindAll(pagination *paginate.Pagination, dateFilter *filter.DateFilter) []response.TransactionResponse
+	FindAll(pagination *paginate.Pagination, filters *filter.TransactionFilters) []response.TransactionResponse
 }

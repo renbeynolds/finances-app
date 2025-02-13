@@ -21,11 +21,11 @@ func NewInsightControllerImpl(service service.InsightService, validate *validato
 }
 
 func (controller *InsightControllerImpl) GetTopSpendingCategories(ctx *gin.Context) {
-	dateFilter := filter.DateFilter{
+	filters := filter.TransactionFilters{
 		From: ctx.Query("from"),
 		To:   ctx.Query("to"),
 	}
 
-	topSpendingCategories := controller.insightService.GetTopSpendingCategories(&dateFilter)
+	topSpendingCategories := controller.insightService.GetTopSpendingCategories(&filters)
 	response.SendStatusOK(topSpendingCategories, nil, ctx)
 }

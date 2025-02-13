@@ -7,5 +7,5 @@ import (
 )
 
 type TransactionRepository interface {
-	FindAll(pagination *paginate.Pagination, dateFilter *filter.DateFilter) []model.Transaction
+	FindAll(pagination *paginate.Pagination, filters *filter.TransactionFilters) []model.Transaction
 }
