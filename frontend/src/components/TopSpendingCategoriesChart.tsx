@@ -1,6 +1,14 @@
-import { Paper, useMantineTheme } from '@mantine/core';
+import { Group, Paper, Text, useMantineTheme } from '@mantine/core';
 import React from 'react';
-import { Cell, Pie, PieChart, ResponsiveContainer, Sector } from 'recharts';
+import {
+  Cell,
+  Legend,
+  Pie,
+  PieChart,
+  ResponsiveContainer,
+  Sector,
+} from 'recharts';
+import { Props } from 'recharts/types/component/DefaultLegendContent';
 import { PieSectorDataItem } from 'recharts/types/polar/Pie';
 import useSWR from 'swr';
 import { DateFilterContext } from '../context/DateFilterContext';
@@ -46,6 +54,12 @@ export default function TopSpendingCategoriesChart() {
               <Cell key={index} fill={chartColors[index]} stroke='none' />
             ))}
           </Pie>
+          <Legend
+            layout='vertical'
+            verticalAlign='middle'
+            align='right'
+            content={(props) => CustomLegend({ ...props, setActiveIndex })}
+          />
         </PieChart>
       </ResponsiveContainer>
     </Paper>
@@ -80,9 +94,6 @@ const ActivePieShape = ({
 
   return (
     <g style={{ cursor: 'pointer' }}>
-      {/* <text x={cx} y={cy} dy={-15} textAnchor='middle' fill={fill}>
-        {payload.name}
-      </text> */}
       <text
         x={cx}
         y={cy}
@@ -133,5 +144,38 @@ const ActivePieShape = ({
         {payload.name}
       </text>
     </g>
+  );
+};
+
+const CustomLegend = (
+  props: Props & { setActiveIndex: (arg0: number) => void }
+) => {
+  const { payload, setActiveIndex } = props;
+
+  return (
+    <>
+      {payload?.map((entry, index) => {
+        // @ts-ignore
+        const percentage = `(${(entry?.payload?.percent * 100).toFixed(2)}%)`;
+        const amount = FormatMoney(entry?.payload?.value);
+
+        return (
+          <Group key={index} onMouseEnter={() => setActiveIndex(index)}>
+            <div
+              style={{
+                backgroundColor: entry.color,
+                width: '1rem',
+                height: '1rem',
+              }}
+            />
+            <Text flex={1}>{entry.value}</Text>
+            <Text>{amount}</Text>
+            <Text c='dimmed' w='70px'>
+              {percentage}
+            </Text>
+          </Group>
+        );
+      })}
+    </>
   );
 };
