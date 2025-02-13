@@ -43,7 +43,7 @@ export default function Layout() {
           {selectedContent === 'uploads' && <UploadsList />}
         </div>
       </AppShell.Navbar>
-      <AppShell.Main>
+      <AppShell.Main bg='dark'>
         <Snapshot />
       </AppShell.Main>
     </AppShell>
