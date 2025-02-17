@@ -1,4 +1,4 @@
-import { Card, Stack, Text } from '@mantine/core';
+import { Card, Stack, Text, Title } from '@mantine/core';
 import React from 'react';
 import useSWR from 'swr';
 import { IncomeVsAverageEndpoint, IncomeVsAverageFetcher } from '../Fetchers';
@@ -22,12 +22,14 @@ export default function AmountVsAverage() {
   return (
     <Card>
       <Card.Section withBorder inheritPadding py='xs'>
-        <Text fw={500}>Income</Text>
+        <Title order={4}>Income</Title>
       </Card.Section>
       <Card.Section inheritPadding py='xs'>
         <Stack>
-          <Text>Amount: {FormatMoney(data!.data.amount)}</Text>
-          <Text>
+          <Title ta='center' order={2}>
+            {FormatMoney(data!.data.amount)}
+          </Title>
+          <Text ta='center'>
             {AVERAGE_OVER_N_MONTHS} Month Average:{' '}
             {FormatMoney(data!.data.average)}
           </Text>

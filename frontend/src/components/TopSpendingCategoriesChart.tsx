@@ -21,26 +21,31 @@ import { FormatMoney } from '../utils';
 import { getChartColors } from '../utils/chartcolors';
 
 export default function TopSpendingCategoriesChart() {
-  const dateFilter = React.useContext(DateFilterContext);
   const theme = useMantineTheme();
+  const chartColors = getChartColors(theme);
+  const dateFilter = React.useContext(DateFilterContext);
   const [activeIndex, setActiveIndex] = React.useState(0);
+  const [chartData, setChartData] = React.useState<TopSpendingCategory[]>([]);
 
   const { data, error, isLoading } = useSWR(
     `${TopSpendingCategoriesEndpoint}?from=${dateFilter[0]}&to=${dateFilter[1]}`,
     TopSpendingCategoriesFetcher
   );
 
-  if (error) return <div>failed to load</div>;
-  if (isLoading) return <div>loading...</div>;
+  React.useEffect(() => {
+    if (!error && !isLoading && data) {
+      setChartData(data.data);
+    }
+  }, [data, error, isLoading, setChartData]);
 
-  const chartColors = getChartColors(theme);
+  if (error) return <div>failed to load</div>;
 
   return (
     <Paper shadow='sm' p='lg'>
       <ResponsiveContainer height={300}>
         <PieChart>
           <Pie
-            data={data!.data}
+            data={chartData}
             innerRadius={60}
             outerRadius={95}
             fill='#8884d8'
@@ -51,7 +56,7 @@ export default function TopSpendingCategoriesChart() {
             activeShape={ActivePieShape}
             cx={'40%'}
           >
-            {data!.data.map((entry: TopSpendingCategory, index: number) => (
+            {chartData.map((_, index: number) => (
               <Cell key={index} fill={chartColors[index]} stroke='none' />
             ))}
           </Pie>

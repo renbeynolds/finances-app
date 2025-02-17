@@ -4,6 +4,8 @@ import { DataTable } from 'mantine-datatable';
 import * as React from 'react';
 import useSWR from 'swr';
 import { DateFilterContext } from '../context/DateFilterContext';
+import { Response } from '../data/Response';
+import { Transaction } from '../data/Transaction';
 import { TransactionsEndpoint, TransactionsFetcher } from '../Fetchers';
 import { FormatMoney } from '../utils';
 
@@ -14,6 +16,7 @@ export default function TransactionTable() {
   const [descriptionSearch, setDescriptionSearch] = React.useState('');
   const [descriptionFilter, setDescriptionFilter] = React.useState('');
   const dateFilter = React.useContext(DateFilterContext);
+  const [response, setResponse] = React.useState<Response<Transaction[]>>();
 
   React.useEffect(() => {
     setPage(1);
@@ -24,8 +27,14 @@ export default function TransactionTable() {
     TransactionsFetcher
   );
 
+  React.useEffect(() => {
+    if (!error && !isLoading && data) {
+      setResponse(data);
+    }
+  }, [data, error, isLoading, setResponse]);
+
+  if (!response) return <div>loading...</div>;
   if (error) return <div>failed to load</div>;
-  if (isLoading) return <div>loading...</div>;
 
   return (
     <DataTable
@@ -33,10 +42,10 @@ export default function TransactionTable() {
       borderRadius='sm'
       withColumnBorders
       page={page}
-      totalRecords={data!.totalRecords}
+      totalRecords={response!.totalRecords}
       recordsPerPage={pageSize}
       onPageChange={(p) => setPage(p)}
-      records={data!.data}
+      records={response!.data}
       columns={[
         { accessor: 'date', width: '125px' },
         {
