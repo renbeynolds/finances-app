@@ -43,12 +43,19 @@ export default function MonthPicker() {
         placeholder='Select Month'
         value={value}
         onChange={setValue}
+        maxDate={new Date()}
         w={150}
       />
       <ActionIcon
         variant='transparent'
         aria-label='Next Month'
         onClick={handleNextMonth}
+        style={{
+          background: 'transparent',
+        }}
+        disabled={
+          dayjs(value).format('YYYY-MM-DD') === dayjs().format('YYYY-MM-DD')
+        }
       >
         <IconCaretRight style={{ width: '70%', height: '70%' }} stroke={1.5} />
       </ActionIcon>

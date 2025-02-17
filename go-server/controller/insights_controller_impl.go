@@ -31,6 +31,11 @@ func (controller *InsightControllerImpl) GetTopSpendingCategories(ctx *gin.Conte
 }
 
 func (controller *InsightControllerImpl) GetIncomeVsAverage(ctx *gin.Context) {
-	net := controller.insightService.GetIncomeVsAverage(ctx.Query("from"), ctx.Query("to"), ctx.Query("avg_from"), ctx.Query("avg_to"))
+	net := controller.insightService.GetAmountVsAverage("income", ctx.Query("from"), ctx.Query("to"), ctx.Query("avg_from"), ctx.Query("avg_to"))
+	response.SendStatusOK(net, nil, ctx)
+}
+
+func (controller *InsightControllerImpl) GetExpenseVsAverage(ctx *gin.Context) {
+	net := controller.insightService.GetAmountVsAverage("expense", ctx.Query("from"), ctx.Query("to"), ctx.Query("avg_from"), ctx.Query("avg_to"))
 	response.SendStatusOK(net, nil, ctx)
 }

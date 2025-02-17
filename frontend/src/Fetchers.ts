@@ -32,7 +32,8 @@ export const TopSpendingCategoriesFetcher: Fetcher<
 > = (url) => fetch(url).then((res) => res.json());
 
 export const IncomeVsAverageEndpoint = '/api/insights/income_vs_average';
-export const IncomeVsAverageFetcher: Fetcher<
+export const ExpenseVsAverageEndpoint = '/api/insights/expense_vs_average';
+export const AmountVsAverageFetcher: Fetcher<
   Response<AmountVsAverage>,
   string
 > = (url) => fetch(url).then((res) => res.json());

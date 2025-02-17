@@ -7,4 +7,5 @@ import (
 type InsightController interface {
 	GetTopSpendingCategories(ctx *gin.Context)
 	GetIncomeVsAverage(ctx *gin.Context)
+	GetExpenseVsAverage(ctx *gin.Context)
 }

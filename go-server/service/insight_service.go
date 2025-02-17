@@ -7,5 +7,5 @@ import (
 
 type InsightService interface {
 	GetTopSpendingCategories(filters *filter.TransactionFilters) []response.TopSpendingCategoryResponse
-	GetIncomeVsAverage(from, to, avgFrom, avgTo string) response.AmountVsAverageResponse
+	GetAmountVsAverage(amountType, from, to, avgFrom, avgTo string) response.AmountVsAverageResponse
 }

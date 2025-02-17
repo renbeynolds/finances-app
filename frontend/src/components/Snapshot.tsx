@@ -1,4 +1,5 @@
 import { SimpleGrid, Stack } from '@mantine/core';
+import { ExpenseVsAverageEndpoint, IncomeVsAverageEndpoint } from '../Fetchers';
 import AmountVsAverage from './AmountVsAverage';
 import MonthPicker from './MonthPicker';
 import TopSpendingCategoriesChart from './TopSpendingCategoriesChart';
@@ -10,7 +11,18 @@ export default function Snapshot() {
       <MonthPicker />
       <SimpleGrid cols={2}>
         <TopSpendingCategoriesChart />
-        <AmountVsAverage />
+        <SimpleGrid cols={2}>
+          <AmountVsAverage
+            title='Income'
+            endpoint={IncomeVsAverageEndpoint}
+            color='green'
+          />
+          <AmountVsAverage
+            title='Expense'
+            endpoint={ExpenseVsAverageEndpoint}
+            color='red'
+          />
+        </SimpleGrid>
       </SimpleGrid>
       <TransactionTable />
     </Stack>
