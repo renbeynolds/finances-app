@@ -1,4 +1,6 @@
+import { ActionIcon, Group } from '@mantine/core';
 import { MonthPickerInput } from '@mantine/dates';
+import { IconCaretLeft, IconCaretRight } from '@tabler/icons-react';
 import dayjs from 'dayjs';
 import React, { useContext } from 'react';
 import { DateFilterDispatchContext } from '../context/DateFilterContext';
@@ -20,11 +22,36 @@ export default function MonthPicker() {
     }
   }, [dispatchDateFilter, value]);
 
+  const handlePrevMonth = () => {
+    setValue(dayjs(value).subtract(1, 'month').toDate());
+  };
+
+  const handleNextMonth = () => {
+    setValue(dayjs(value).add(1, 'month').toDate());
+  };
+
   return (
-    <MonthPickerInput
-      placeholder='Select Month'
-      value={value}
-      onChange={setValue}
-    />
+    <Group gap='0'>
+      <ActionIcon
+        variant='transparent'
+        aria-label='Previous Month'
+        onClick={handlePrevMonth}
+      >
+        <IconCaretLeft style={{ width: '70%', height: '70%' }} stroke={1.5} />
+      </ActionIcon>
+      <MonthPickerInput
+        placeholder='Select Month'
+        value={value}
+        onChange={setValue}
+        w={150}
+      />
+      <ActionIcon
+        variant='transparent'
+        aria-label='Next Month'
+        onClick={handleNextMonth}
+      >
+        <IconCaretRight style={{ width: '70%', height: '70%' }} stroke={1.5} />
+      </ActionIcon>
+    </Group>
   );
 }

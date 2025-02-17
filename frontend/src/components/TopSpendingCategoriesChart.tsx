@@ -58,6 +58,7 @@ export default function TopSpendingCategoriesChart() {
           <Legend
             layout='vertical'
             verticalAlign='middle'
+            width={375}
             align='right'
             content={(props) =>
               CustomLegend({ ...props, activeIndex, setActiveIndex })
