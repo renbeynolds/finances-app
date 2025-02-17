@@ -55,6 +55,7 @@ func NewRouter(
 		insightsGroup := apiGroup.Group("/insights")
 		{
 			insightsGroup.GET("/top_spending_categories", insightController.GetTopSpendingCategories)
+			insightsGroup.GET("/income_vs_average", insightController.GetIncomeVsAverage)
 		}
 	}
 

@@ -64,3 +64,39 @@ func (r *InsightRepositoryImpl) GetTopSpendingCategories(filters *filter.Transac
 
 	return result
 }
+
+func (r *InsightRepositoryImpl) GetIncomeVsAverage(from, to, avgFrom, avgTo string) response.AmountVsAverageResponse {
+	var amount int64
+	var average int64
+
+	r.Db.Raw(`
+		SELECT COALESCE(SUM(t.amount), 0) as amount
+		FROM transactions t
+		LEFT JOIN categories c ON t.category_id = c.id
+		WHERE
+			c.type = 'income' AND
+			t.date >= ? AND t.date <= ?
+	`, from, to).Scan(&amount)
+
+	r.Db.Raw(`
+	  WITH calendar AS (
+      SELECT DATE_TRUNC('month', bucket::date) AS month FROM generate_series(?, ?, '1 month'::interval) bucket
+    )
+    SELECT
+      TRUNC(AVG(sums.total)) as average
+    FROM (
+      SELECT
+        SUM(amount) AS "total"
+      FROM calendar c
+      LEFT JOIN transactions t ON DATE_TRUNC('month', t.date) = c.month
+      LEFT JOIN categories cat ON t.category_id = cat.id
+      WHERE cat.type = 'income'
+      GROUP BY c.month
+    ) sums
+	`, avgFrom, avgTo).Scan(&average)
+
+	return response.AmountVsAverageResponse{
+		Amount:  amount,
+		Average: average,
+	}
+}

@@ -1,15 +1,16 @@
 import { SimpleGrid, Stack } from '@mantine/core';
-import DateRangePicker from './DateRangePicker';
+import AmountVsAverage from './AmountVsAverage';
+import MonthPicker from './MonthPicker';
 import TopSpendingCategoriesChart from './TopSpendingCategoriesChart';
 import TransactionTable from './TransactionTable';
 
 export default function Snapshot() {
   return (
     <Stack>
-      <DateRangePicker />
+      <MonthPicker />
       <SimpleGrid cols={2}>
         <TopSpendingCategoriesChart />
-        <div>foo</div>
+        <AmountVsAverage />
       </SimpleGrid>
       <TransactionTable />
     </Stack>

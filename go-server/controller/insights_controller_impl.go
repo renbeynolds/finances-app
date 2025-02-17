@@ -29,3 +29,8 @@ func (controller *InsightControllerImpl) GetTopSpendingCategories(ctx *gin.Conte
 	topSpendingCategories := controller.insightService.GetTopSpendingCategories(&filters)
 	response.SendStatusOK(topSpendingCategories, nil, ctx)
 }
+
+func (controller *InsightControllerImpl) GetIncomeVsAverage(ctx *gin.Context) {
+	net := controller.insightService.GetIncomeVsAverage(ctx.Query("from"), ctx.Query("to"), ctx.Query("avg_from"), ctx.Query("avg_to"))
+	response.SendStatusOK(net, nil, ctx)
+}

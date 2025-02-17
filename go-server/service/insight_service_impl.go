@@ -21,3 +21,7 @@ func NewInsightServiceImpl(insightRepository repository.InsightRepository) Insig
 func (t *InsightServiceImpl) GetTopSpendingCategories(filters *filter.TransactionFilters) []response.TopSpendingCategoryResponse {
 	return t.InsightRepository.GetTopSpendingCategories(filters)
 }
+
+func (t *InsightServiceImpl) GetIncomeVsAverage(from, to, avgFrom, avgTo string) response.AmountVsAverageResponse {
+	return t.InsightRepository.GetIncomeVsAverage(from, to, avgFrom, avgTo)
+}
