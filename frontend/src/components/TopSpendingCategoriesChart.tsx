@@ -36,7 +36,7 @@ export default function TopSpendingCategoriesChart() {
   const chartColors = getChartColors(theme);
 
   return (
-    <Paper shadow='sm'>
+    <Paper shadow='sm' p='lg'>
       <ResponsiveContainer height={300}>
         <PieChart>
           <Pie
@@ -49,6 +49,7 @@ export default function TopSpendingCategoriesChart() {
             onMouseEnter={(_, idx) => setActiveIndex(idx)}
             activeIndex={activeIndex}
             activeShape={ActivePieShape}
+            cx={'40%'}
           >
             {data!.data.map((entry: TopSpendingCategory, index: number) => (
               <Cell key={index} fill={chartColors[index]} stroke='none' />
@@ -58,7 +59,9 @@ export default function TopSpendingCategoriesChart() {
             layout='vertical'
             verticalAlign='middle'
             align='right'
-            content={(props) => CustomLegend({ ...props, setActiveIndex })}
+            content={(props) =>
+              CustomLegend({ ...props, activeIndex, setActiveIndex })
+            }
           />
         </PieChart>
       </ResponsiveContainer>
@@ -72,26 +75,11 @@ const ActivePieShape = ({
   innerRadius,
   outerRadius,
   startAngle,
-  midAngle,
   endAngle,
   fill,
-  payload,
   percent,
   value,
 }: PieSectorDataItem) => {
-  const theme = useMantineTheme();
-
-  const RADIAN = Math.PI / 180;
-  const sin = Math.sin(-RADIAN * midAngle!);
-  const cos = Math.cos(-RADIAN * midAngle!);
-  const sx = cx! + (outerRadius! + 10) * cos;
-  const sy = cy! + (outerRadius! + 10) * sin;
-  const mx = cx! + (outerRadius! + 30) * cos;
-  const my = cy! + (outerRadius! + 30) * sin;
-  const ex = mx + (cos >= 0 ? 1 : -1) * 22;
-  const ey = my;
-  const textAnchor = cos >= 0 ? 'start' : 'end';
-
   return (
     <g style={{ cursor: 'pointer' }}>
       <text
@@ -128,29 +116,14 @@ const ActivePieShape = ({
         outerRadius={outerRadius! + 10}
         fill={fill}
       />
-      <path
-        d={`M${sx},${sy}L${mx},${my}L${ex},${ey}`}
-        stroke={fill}
-        fill='none'
-      />
-      <circle cx={ex} cy={ey} r={2} fill={fill} stroke='none' />
-      <text
-        x={ex + (cos >= 0 ? 1 : -1) * 12}
-        y={ey}
-        textAnchor={textAnchor}
-        dy={6}
-        fill={theme.white}
-      >
-        {payload.name}
-      </text>
     </g>
   );
 };
 
 const CustomLegend = (
-  props: Props & { setActiveIndex: (arg0: number) => void }
+  props: Props & { setActiveIndex: (arg0: number) => void; activeIndex: number }
 ) => {
-  const { payload, setActiveIndex } = props;
+  const { payload, activeIndex, setActiveIndex } = props;
 
   return (
     <>
@@ -168,7 +141,9 @@ const CustomLegend = (
                 height: '1rem',
               }}
             />
-            <Text flex={1}>{entry.value}</Text>
+            <Text flex={1} td={index === activeIndex ? 'underline' : undefined}>
+              {entry.value}
+            </Text>
             <Text>{amount}</Text>
             <Text c='dimmed' w='70px'>
               {percentage}
