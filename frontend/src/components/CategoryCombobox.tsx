@@ -1,41 +1,59 @@
-import { Combobox, Pill, PillsInput, useCombobox } from '@mantine/core';
+import {
+  ActionIcon,
+  Badge,
+  Combobox,
+  Pill,
+  PillsInput,
+  useCombobox,
+} from '@mantine/core';
+import { IconX } from '@tabler/icons-react';
 import { useState } from 'react';
 import { UseLazyCategories } from '../context/CategoriesContext';
+import { Transaction } from '../data/Transaction';
 
-export default function CategoryCombobox() {
+interface CategoryComboboxProps {
+  transaction: Transaction;
+}
+
+export default function CategoryCombobox({
+  transaction,
+}: CategoryComboboxProps) {
   const combobox = useCombobox({
     onDropdownClose: () => combobox.resetSelectedOption(),
     onDropdownOpen: () => combobox.updateSelectedOptionIndex('active'),
   });
   const categories = UseLazyCategories();
   const [search, setSearch] = useState('');
-  const [value, setValue] = useState<string[]>([]);
+  const [value, setValue] = useState<string[]>(
+    transaction.categoryId ? [`${transaction.categoryId}`] : []
+  );
 
-  const handleValueSelect = (val: string) =>
-    setValue((current) =>
-      current.includes(val)
-        ? current.filter((v) => v !== val)
-        : [...current, val]
-    );
+  const handleValueSelect = (val: string) => {
+    combobox.closeDropdown();
+    setSearch('');
+    setValue([val]);
+  };
 
-  const handleValueRemove = (val: string) =>
-    setValue((current) => current.filter((v) => v !== val));
+  const handleValueRemove = (val: string) => setValue([]);
 
   const values = value.map((item) => (
-    <Pill
+    <Badge
       key={item}
-      withRemoveButton
-      onRemove={() => handleValueRemove(item)}
-      c='blue'
+      bg='blue'
+      rightSection={
+        <ActionIcon size='xs' onClick={() => handleValueRemove(item)}>
+          <IconX />
+        </ActionIcon>
+      }
     >
-      {item}
-    </Pill>
+      {categories.find((c) => c.id === parseInt(item))?.name}
+    </Badge>
   ));
 
   const options = categories
     .filter((c) => c.name.toLowerCase().includes(search.toLowerCase().trim()))
     .map((category) => (
-      <Combobox.Option key={category.id} value={category.name}>
+      <Combobox.Option key={category.id} value={`${category.id}`}>
         {category.name}
       </Combobox.Option>
     ));
@@ -46,13 +64,9 @@ export default function CategoryCombobox() {
         <PillsInput onClick={() => combobox.openDropdown()}>
           <Pill.Group>
             {values}
-
             <Combobox.EventsTarget>
               <PillsInput.Field
-                onFocus={() => combobox.openDropdown()}
-                onBlur={() => combobox.closeDropdown()}
                 value={search}
-                placeholder='Search values'
                 onChange={(event) => {
                   combobox.updateSelectedOptionIndex();
                   setSearch(event.currentTarget.value);
@@ -70,11 +84,11 @@ export default function CategoryCombobox() {
       </Combobox.DropdownTarget>
 
       <Combobox.Dropdown>
-        <Combobox.Options>
+        <Combobox.Options mah={200} style={{ overflowY: 'auto' }}>
           {options.length > 0 ? (
             options
           ) : (
-            <Combobox.Empty>Nothing found...</Combobox.Empty>
+            <Combobox.Empty>No Categories</Combobox.Empty>
           )}
         </Combobox.Options>
       </Combobox.Dropdown>

@@ -85,7 +85,7 @@ export default function TransactionTable() {
           title: 'Category',
           width: '350px',
           render: (record) => (
-            <CategoryCombobox />
+            <CategoryCombobox transaction={record} />
             // <Badge>
             //   {categories.find((c) => c.id === record.categoryId)?.name}
             // </Badge>
