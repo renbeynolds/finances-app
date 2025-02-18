@@ -8,6 +8,7 @@ import { Response } from '../data/Response';
 import { Transaction } from '../data/Transaction';
 import { TransactionsEndpoint, TransactionsFetcher } from '../Fetchers';
 import { FormatMoney } from '../utils';
+import CategoryCombobox from './CategoryComboBox';
 
 const pageSize = 10;
 
@@ -71,12 +72,23 @@ export default function TransactionTable() {
             </Text>
           ),
         },
+        // {
+        //   accessor: 'balance',
+        //   render: (record) => (
+        //     <Text size='sm' c={record.balance > 0 ? 'green' : 'red'}>
+        //       {FormatMoney(record.balance)}
+        //     </Text>
+        //   ),
+        // },
         {
-          accessor: 'balance',
+          accessor: 'categoryId',
+          title: 'Category',
+          width: '350px',
           render: (record) => (
-            <Text size='sm' c={record.balance > 0 ? 'green' : 'red'}>
-              {FormatMoney(record.balance)}
-            </Text>
+            <CategoryCombobox />
+            // <Badge>
+            //   {categories.find((c) => c.id === record.categoryId)?.name}
+            // </Badge>
           ),
         },
       ]}
