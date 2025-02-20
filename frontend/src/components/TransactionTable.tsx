@@ -7,6 +7,7 @@ import { DateFilterContext } from '../context/DateFilterContext';
 import { Response } from '../data/Response';
 import { Transaction } from '../data/Transaction';
 import { TransactionsEndpoint, TransactionsFetcher } from '../Fetchers';
+import { requestUpdateTransaction } from '../Requests';
 import { FormatMoney } from '../utils';
 import CategoryCombobox from './CategoryComboBox';
 
@@ -23,9 +24,22 @@ export default function TransactionTable() {
     setPage(1);
   }, [setPage, descriptionFilter, dateFilter]);
 
-  const { data, error, isLoading } = useSWR(
+  const { data, error, isLoading, mutate } = useSWR(
     `${TransactionsEndpoint}?page=${page}&limit=${pageSize}&from=${dateFilter[0]}&to=${dateFilter[1]}&description=${descriptionFilter}`,
     TransactionsFetcher
+  );
+
+  const updateTransaction = React.useCallback(
+    async (transaction: Transaction) => {
+      const updatedTransaction = await requestUpdateTransaction(transaction);
+      mutate({
+        ...data!,
+        data: data!.data.map((t) =>
+          t.id === updatedTransaction.id ? updatedTransaction : t
+        ),
+      });
+    },
+    [mutate, data]
   );
 
   React.useEffect(() => {
@@ -72,23 +86,23 @@ export default function TransactionTable() {
             </Text>
           ),
         },
-        // {
-        //   accessor: 'balance',
-        //   render: (record) => (
-        //     <Text size='sm' c={record.balance > 0 ? 'green' : 'red'}>
-        //       {FormatMoney(record.balance)}
-        //     </Text>
-        //   ),
-        // },
+        {
+          accessor: 'balance',
+          render: (record) => (
+            <Text size='sm' c={record.balance > 0 ? 'green' : 'red'}>
+              {FormatMoney(record.balance)}
+            </Text>
+          ),
+        },
         {
           accessor: 'categoryId',
           title: 'Category',
           width: '350px',
           render: (record) => (
-            <CategoryCombobox transaction={record} />
-            // <Badge>
-            //   {categories.find((c) => c.id === record.categoryId)?.name}
-            // </Badge>
+            <CategoryCombobox
+              transaction={record}
+              updateTransaction={updateTransaction}
+            />
           ),
         },
       ]}

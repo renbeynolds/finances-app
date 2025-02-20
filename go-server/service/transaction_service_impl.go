@@ -2,8 +2,10 @@ package service
 
 import (
 	"github.com/go-playground/validator/v10"
+	"github.com/renbeynolds/finances-app/data/request"
 	"github.com/renbeynolds/finances-app/data/response"
 	"github.com/renbeynolds/finances-app/repository"
+	"github.com/renbeynolds/finances-app/util"
 	"github.com/renbeynolds/finances-app/util/filter"
 	"github.com/renbeynolds/finances-app/util/paginate"
 )
@@ -26,6 +28,7 @@ func (t *TransactionServiceImpl) FindAll(pagination *paginate.Pagination, filter
 	for _, value := range result {
 		transaction := response.TransactionResponse{
 			Id:          int(value.ID),
+			UploadId:    int(value.UploadID),
 			Date:        value.Date.Format("2006-01-02"),
 			Description: value.Description,
 			Amount:      value.Amount,
@@ -41,4 +44,29 @@ func (t *TransactionServiceImpl) FindAll(pagination *paginate.Pagination, filter
 	}
 
 	return transactions
+}
+
+func (t *TransactionServiceImpl) Update(transaction request.UpdateTransactionRequest) response.TransactionResponse {
+	transactionData, err := t.TransactionRepository.FindById(transaction.ID)
+	util.ErrorPanic(err)
+	transactionData.CategoryID = transaction.CategoryID
+	transactionData.Comment = transaction.Comment
+	updatedTransaction := t.TransactionRepository.Update(transactionData)
+
+	response := response.TransactionResponse{
+		Id:          int(updatedTransaction.ID),
+		UploadId:    int(updatedTransaction.UploadID),
+		Date:        updatedTransaction.Date.Format("2006-01-02"),
+		Description: updatedTransaction.Description,
+		Amount:      updatedTransaction.Amount,
+		Balance:     updatedTransaction.Balance,
+	}
+	if updatedTransaction.CategoryID != nil {
+		response.CategoryId = *updatedTransaction.CategoryID
+	}
+	if updatedTransaction.Comment != nil {
+		response.Comment = *updatedTransaction.Comment
+	}
+
+	return response
 }

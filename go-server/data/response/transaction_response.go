@@ -2,6 +2,7 @@ package response
 
 type TransactionResponse struct {
 	Id          int    `json:"id"`
+	UploadId    int    `json:"uploadId"`
 	CategoryId  uint   `json:"categoryId,omitempty"`
 	Date        string `json:"date"`
 	Description string `json:"description"`

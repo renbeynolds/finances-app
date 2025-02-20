@@ -26,3 +26,14 @@ func (r *TransactionRepositoryImpl) FindAll(pagination *paginate.Pagination, fil
 	}}).Find(&transactions)
 	return transactions
 }
+
+func (r *TransactionRepositoryImpl) FindById(id uint) (*model.Transaction, error) {
+	var transaction model.Transaction
+	err := r.Db.First(&transaction, id).Error
+	return &transaction, err
+}
+
+func (r *TransactionRepositoryImpl) Update(transaction *model.Transaction) *model.Transaction {
+	r.Db.Save(transaction)
+	return transaction
+}

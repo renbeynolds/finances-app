@@ -13,10 +13,12 @@ import { Transaction } from '../data/Transaction';
 
 interface CategoryComboboxProps {
   transaction: Transaction;
+  updateTransaction: (transaction: Transaction) => void;
 }
 
 export default function CategoryCombobox({
   transaction,
+  updateTransaction,
 }: CategoryComboboxProps) {
   const combobox = useCombobox({
     onDropdownClose: () => combobox.resetSelectedOption(),
@@ -30,18 +32,32 @@ export default function CategoryCombobox({
 
   const handleValueSelect = (val: string) => {
     combobox.closeDropdown();
+    updateTransaction({
+      ...transaction,
+      categoryId: parseInt(val),
+    });
     setSearch('');
     setValue([val]);
   };
 
-  const handleValueRemove = (val: string) => setValue([]);
+  const handleValueRemove = (val: string) => {
+    updateTransaction({
+      ...transaction,
+      categoryId: undefined,
+    });
+    setValue([]);
+  };
 
   const values = value.map((item) => (
     <Badge
       key={item}
-      bg='blue'
+      bg={categories.find((c) => c.id === parseInt(item))?.color}
       rightSection={
-        <ActionIcon size='xs' onClick={() => handleValueRemove(item)}>
+        <ActionIcon
+          size='xs'
+          onClick={() => handleValueRemove(item)}
+          bg='transparent'
+        >
           <IconX />
         </ActionIcon>
       }

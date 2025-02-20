@@ -6,4 +6,5 @@ import (
 
 type TransactionController interface {
 	FindAll(*gin.Context)
+	Update(*gin.Context)
 }
