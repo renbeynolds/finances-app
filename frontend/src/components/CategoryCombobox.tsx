@@ -51,7 +51,7 @@ export default function CategoryCombobox({
   const values = value.map((item) => (
     <Badge
       key={item}
-      bg={categories.find((c) => c.id === parseInt(item))?.color}
+      bg={categories.find((c) => c.id === parseInt(item))?.color || 'gray'}
       rightSection={
         <ActionIcon
           size='xs'
