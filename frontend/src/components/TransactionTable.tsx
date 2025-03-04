@@ -1,4 +1,4 @@
-import { ActionIcon, Text, TextInput } from '@mantine/core';
+import { ActionIcon, NumberInput, Stack, Text, TextInput } from '@mantine/core';
 import { IconSearch, IconX } from '@tabler/icons-react';
 import { DataTable } from 'mantine-datatable';
 import * as React from 'react';
@@ -17,6 +17,9 @@ export default function TransactionTable() {
   const [page, setPage] = React.useState(1);
   const [descriptionSearch, setDescriptionSearch] = React.useState('');
   const [descriptionFilter, setDescriptionFilter] = React.useState('');
+  const [amountFilter, setAmountFilter] = React.useState<
+    [number | undefined, number | undefined]
+  >([undefined, undefined]);
   const dateFilter = React.useContext(DateFilterContext);
   const [response, setResponse] = React.useState<Response<Transaction[]>>();
 
@@ -51,6 +54,8 @@ export default function TransactionTable() {
   if (!response) return <div>loading...</div>;
   if (error) return <div>failed to load</div>;
 
+  console.log(amountFilter);
+
   return (
     <DataTable
       withTableBorder
@@ -84,6 +89,12 @@ export default function TransactionTable() {
             <Text size='sm' c={record.amount > 0 ? 'green' : 'red'}>
               {FormatMoney(record.amount)}
             </Text>
+          ),
+          filter: () => (
+            <AmountFilterPopup
+              amountFilter={amountFilter}
+              setAmountFilter={setAmountFilter}
+            />
           ),
         },
         {
@@ -164,5 +175,42 @@ const DescriptionFilterPopup = ({
       onBlur={(e) => setDescriptionFilter(e.currentTarget.value)}
       onChange={(e) => setDescriptionSearch(e.currentTarget.value)}
     />
+  );
+};
+
+type AmountFilterPopupProps = {
+  amountFilter: [number | undefined, number | undefined];
+  setAmountFilter: (value: [number | undefined, number | undefined]) => void;
+};
+
+const AmountFilterPopup = ({
+  amountFilter,
+  setAmountFilter,
+}: AmountFilterPopupProps) => {
+  return (
+    <Stack>
+      <NumberInput
+        label='Min'
+        prefix='$'
+        allowDecimal={false}
+        placeholder='$0'
+        value={amountFilter[0]}
+        onChange={(value) => {
+          const newFilterValue = value === '' ? undefined : Number(value);
+          setAmountFilter([newFilterValue, amountFilter[1]]);
+        }}
+      />
+      <NumberInput
+        label='Max'
+        prefix='$'
+        allowDecimal={false}
+        placeholder='$0'
+        value={amountFilter[1]}
+        onChange={(value) => {
+          const newFilterValue = value === '' ? undefined : Number(value);
+          setAmountFilter([amountFilter[0], newFilterValue]);
+        }}
+      />
+    </Stack>
   );
 };
