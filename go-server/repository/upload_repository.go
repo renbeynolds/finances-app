@@ -5,5 +5,6 @@ import (
 )
 
 type UploadRepository interface {
+	Insert(upload model.Upload) model.Upload
 	FindAll() []model.Upload
 }

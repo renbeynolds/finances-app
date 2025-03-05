@@ -2,8 +2,8 @@ import { AppShell, Group } from '@mantine/core';
 import React from 'react';
 import AccountsList from './AccountsList';
 import CategoriesList from './CategoriesList';
+import MainContent from './MainContent';
 import SideMenuContentSelector from './SideMenuContentSelector';
-import Snapshot from './Snapshot';
 import UploadsList from './UploadsList';
 
 export default function Layout() {
@@ -44,7 +44,7 @@ export default function Layout() {
         </div>
       </AppShell.Navbar>
       <AppShell.Main bg='dark'>
-        <Snapshot />
+        <MainContent />
       </AppShell.Main>
     </AppShell>
   );

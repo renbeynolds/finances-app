@@ -20,7 +20,7 @@ func NewCategoryServiceImpl(categoryRepository repository.CategoryRepository) Ca
 func (t *CategoryServiceImpl) FindAll() []response.CategoryResponse {
 	result := t.CategoryRepository.FindAll()
 
-	var categories []response.CategoryResponse
+	categories := []response.CategoryResponse{}
 	for _, value := range result {
 		category := response.CategoryResponse{
 			Id:   int(value.ID),

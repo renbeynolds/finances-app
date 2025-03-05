@@ -1,11 +1,13 @@
 import { Button, Stack, Text } from '@mantine/core';
 import { IconUpload } from '@tabler/icons-react';
+import { useNavigate } from 'react-router';
 import useSWR from 'swr';
 import { AccountsEndpoint, AccountsFetcher } from '../Fetchers';
 import { FormatMoney } from '../utils';
 
 export default function AccountsList() {
   const { data, error, isLoading } = useSWR(AccountsEndpoint, AccountsFetcher);
+  const navigate = useNavigate();
 
   if (error) return <div>failed to load</div>;
   if (isLoading) return <div>loading...</div>;
@@ -19,6 +21,7 @@ export default function AccountsList() {
           h='3rem'
           justify='space-between'
           rightSection={<IconUpload size={14} />}
+          onClick={() => navigate(`/${account.id}/upload`)}
         >
           <Stack gap='0'>
             <Text size='l'>{account.name}</Text>

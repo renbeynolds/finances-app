@@ -22,7 +22,13 @@ func (r *AccountRepositoryImpl) Insert(account model.Account) model.Account {
 	return account
 }
 
-func (r *AccountRepositoryImpl) FindById(accountId int) (model.Account, error) {
+func (r *AccountRepositoryImpl) Update(account model.Account) model.Account {
+	result := r.Db.Save(&account)
+	util.ErrorPanic(result.Error)
+	return account
+}
+
+func (r *AccountRepositoryImpl) FindById(accountId uint) (model.Account, error) {
 	var account model.Account
 	result := r.Db.Find(&account, accountId)
 	if result != nil {
@@ -35,5 +41,8 @@ func (r *AccountRepositoryImpl) FindById(accountId int) (model.Account, error) {
 func (r *AccountRepositoryImpl) FindAll() []model.Account {
 	var accounts []model.Account
 	r.Db.Find(&accounts)
+	if accounts == nil {
+		return []model.Account{}
+	}
 	return accounts
 }

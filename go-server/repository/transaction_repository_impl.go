@@ -24,6 +24,9 @@ func (r *TransactionRepositoryImpl) FindAll(pagination *paginate.Pagination, fil
 		{Column: clause.Column{Name: "date"}, Desc: true},
 		{Column: clause.Column{Name: "id"}, Desc: true},
 	}}).Find(&transactions)
+	if transactions == nil {
+		return []model.Transaction{}
+	}
 	return transactions
 }
 

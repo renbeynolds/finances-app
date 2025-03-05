@@ -1,6 +1,7 @@
 import { MantineProvider } from '@mantine/core';
 import '@mantine/core/styles.css';
 import '@mantine/dates/styles.css';
+import '@mantine/notifications/styles.css';
 import 'mantine-datatable/styles.layer.css';
 import React from 'react';
 import Layout from './components/Layout';
@@ -21,12 +22,12 @@ import { theme } from './Theme';
 export default function App() {
   const [dateFilter, dateFilterDispatch] = React.useReducer(
     DateFilterReducer,
-    DefaultDateFilter
+    DefaultDateFilter,
   );
 
   const [categories, categoriesDispatchContext] = React.useReducer(
     CategoriesReducer,
-    DefaultCategories
+    DefaultCategories,
   );
 
   return (

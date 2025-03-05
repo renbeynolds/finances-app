@@ -6,6 +6,7 @@ import (
 
 type AccountRepository interface {
 	Insert(account model.Account) model.Account
-	FindById(accountId int) (model.Account, error)
+	Update(account model.Account) model.Account
+	FindById(accountId uint) (model.Account, error)
 	FindAll() []model.Account
 }

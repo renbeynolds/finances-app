@@ -40,6 +40,7 @@ func NewRouter(
 		uploadsGroup := apiGroup.Group("/uploads")
 		{
 			uploadsGroup.GET("/", uploadController.FindAll)
+			uploadsGroup.POST("/", uploadController.Create)
 		}
 
 		categoriesGroup := apiGroup.Group("/categories")

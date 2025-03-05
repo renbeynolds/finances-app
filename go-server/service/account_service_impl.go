@@ -21,8 +21,26 @@ func NewAccountServiceImpl(accountRepository repository.AccountRepository) Accou
 
 func (t *AccountServiceImpl) Create(account request.CreateAccountRequest) response.AccountResponse {
 	accountModel := model.Account{
-		Name: account.Name,
+		Name:              account.Name,
+		DateHeader:        account.DateHeader,
+		DescriptionHeader: account.DescriptionHeader,
+		AmountsType:       account.AmountsType,
+		StartingAmount:    account.StartingAmount,
+		Balance:           account.StartingAmount,
 	}
+	if account.TypeHeader != "" {
+		accountModel.TypeHeader = &account.TypeHeader
+	}
+	if account.AmountHeader != "" {
+		accountModel.AmountHeader = &account.AmountHeader
+	}
+	if account.IncomeHeader != "" {
+		accountModel.IncomeHeader = &account.IncomeHeader
+	}
+	if account.ExpenseHeader != "" {
+		accountModel.ExpenseHeader = &account.ExpenseHeader
+	}
+
 	accountModel = t.AccountRepository.Insert(accountModel)
 	return response.AccountResponse{
 		Id:   int(accountModel.ID),
@@ -33,7 +51,7 @@ func (t *AccountServiceImpl) Create(account request.CreateAccountRequest) respon
 func (t *AccountServiceImpl) FindAll() []response.AccountResponse {
 	result := t.AccountRepository.FindAll()
 
-	var accounts []response.AccountResponse
+	accounts := []response.AccountResponse{}
 	for _, value := range result {
 		account := response.AccountResponse{
 			Id:                int(value.ID),

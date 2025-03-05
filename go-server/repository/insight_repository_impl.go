@@ -62,6 +62,10 @@ func (r *InsightRepositoryImpl) GetTopSpendingCategories(filters *filter.Transac
     ) ranking
 	`, filters.From, filters.To, numCategories, numCategories).Scan(&result)
 
+	if result == nil {
+		result = []response.TopSpendingCategoryResponse{}
+	}
+
 	return result
 }
 
@@ -83,7 +87,7 @@ func (r *InsightRepositoryImpl) GetAmountVsAverage(amountType, from, to, avgFrom
       SELECT DATE_TRUNC('month', bucket::date) AS month FROM generate_series(?, ?, '1 month'::interval) bucket
     )
     SELECT
-      TRUNC(ABS(AVG(sums.total))) as average
+      COALESCE(TRUNC(ABS(AVG(sums.total))), 0) as average
     FROM (
       SELECT
         SUM(amount) AS "total"

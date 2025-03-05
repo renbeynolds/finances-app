@@ -9,5 +9,5 @@ type CreateAccountRequest struct {
 	AmountHeader      string `json:"amountHeader"`
 	IncomeHeader      string `json:"incomeHeader"`
 	ExpenseHeader     string `json:"expenseHeader"`
-	StartingAmount    string `json:"startingAmount"` // TODO: Validate this is 2 decimal number
+	StartingAmount    int64  `json:"startingAmount"` // TODO: Validate this is 2 decimal number
 }

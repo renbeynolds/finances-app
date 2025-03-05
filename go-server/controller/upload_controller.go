@@ -6,4 +6,5 @@ import (
 
 type UploadController interface {
 	FindAll(*gin.Context)
+	Create(*gin.Context)
 }
