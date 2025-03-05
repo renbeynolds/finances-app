@@ -15,6 +15,6 @@ func NewCategoryRepositoryImpl(Db *gorm.DB) CategoryRepository {
 
 func (r *CategoryRepositoryImpl) FindAll() []model.Category {
 	var categories []model.Category
-	r.Db.Find(&categories)
+	r.Db.Preload("PrefixRules").Find(&categories)
 	return categories
 }

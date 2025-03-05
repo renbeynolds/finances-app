@@ -34,7 +34,7 @@ func main() {
 	insightRepository := repository.NewInsightRepositoryImpl(db)
 
 	accountService := service.NewAccountServiceImpl(accountRepository)
-	uploadService := service.NewUploadServiceImpl(uploadRepository, accountRepository)
+	uploadService := service.NewUploadServiceImpl(uploadRepository, accountRepository, categoryRepository)
 	categoryService := service.NewCategoryServiceImpl(categoryRepository)
 	transactionService := service.NewTransactionServiceImpl(transactionRepository)
 	insightService := service.NewInsightServiceImpl(insightRepository)

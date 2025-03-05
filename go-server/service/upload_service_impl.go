@@ -16,15 +16,17 @@ import (
 )
 
 type UploadServiceImpl struct {
-	UploadRepository  repository.UploadRepository
-	AccountRepository repository.AccountRepository
-	Validate          *validator.Validate
+	UploadRepository   repository.UploadRepository
+	AccountRepository  repository.AccountRepository
+	CategoryRepository repository.CategoryRepository
+	Validate           *validator.Validate
 }
 
-func NewUploadServiceImpl(uploadRepository repository.UploadRepository, accountRepository repository.AccountRepository) UploadService {
+func NewUploadServiceImpl(uploadRepository repository.UploadRepository, accountRepository repository.AccountRepository, categoryRepository repository.CategoryRepository) UploadService {
 	return &UploadServiceImpl{
-		UploadRepository:  uploadRepository,
-		AccountRepository: accountRepository,
+		UploadRepository:   uploadRepository,
+		AccountRepository:  accountRepository,
+		CategoryRepository: categoryRepository,
 	}
 }
 
@@ -46,8 +48,9 @@ func (t *UploadServiceImpl) Create(upload request.CreateUploadRequest) response.
 	account, err := t.AccountRepository.FindById(upload.AccountID)
 	if err != nil {
 		// TODO
-		fmt.Println(account.Name)
 	}
+
+	categories := t.CategoryRepository.FindAll()
 
 	multipartFileContent, err := upload.CSV.Open()
 	if err != nil {
@@ -62,7 +65,7 @@ func (t *UploadServiceImpl) Create(upload request.CreateUploadRequest) response.
 
 	header, err := getCSVHeader(account, records[0])
 	if err != nil {
-		// TODO
+		fmt.Errorf("error getting csv header: %v", err)
 	}
 
 	transactions := []model.Transaction{}
@@ -86,6 +89,11 @@ func (t *UploadServiceImpl) Create(upload request.CreateUploadRequest) response.
 			// TODO
 		}
 		transaction.Amount = amount
+
+		category := getTransactionCategory(categories, header, record)
+		if category != nil {
+			transaction.CategoryID = &category.ID
+		}
 
 		transaction.Balance = account.Balance + transaction.Amount
 		account.Balance = transaction.Balance
@@ -213,4 +221,16 @@ func getTransactionAmount(account model.Account, header CSVHeader, record []stri
 	}
 
 	return value, nil
+}
+
+func getTransactionCategory(categories []model.Category, header CSVHeader, record []string) *model.Category {
+	description := record[header.DescriptionIndex]
+	for _, category := range categories {
+		for _, prefixRule := range category.PrefixRules {
+			if strings.HasPrefix(description, prefixRule.Prefix) {
+				return &category
+			}
+		}
+	}
+	return nil
 }
