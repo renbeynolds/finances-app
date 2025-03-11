@@ -5,7 +5,7 @@ import UploadForm from './UploadForm';
 export default function MainContent() {
   return (
     <Routes>
-      <Route path='/' element={<Snapshot />} />
+      <Route path='/snapshot' element={<Snapshot />} />
       <Route path={':accountId'}>
         <Route path='upload' element={<UploadForm />} />
       </Route>
