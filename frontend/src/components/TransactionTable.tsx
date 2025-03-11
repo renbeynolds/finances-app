@@ -1,5 +1,4 @@
-import { ActionIcon, NumberInput, Stack, Text, TextInput } from '@mantine/core';
-import { IconSearch, IconX } from '@tabler/icons-react';
+import { Text } from '@mantine/core';
 import { DataTable } from 'mantine-datatable';
 import * as React from 'react';
 import useSWR from 'swr';
@@ -10,12 +9,13 @@ import { TransactionsEndpoint, TransactionsFetcher } from '../Fetchers';
 import { requestUpdateTransaction } from '../Requests';
 import { FormatMoney } from '../utils';
 import CategoryCombobox from './CategoryComboBox';
+import TransactionTableAmountFilter from './TransactionTableAmountFilter';
+import TransactionTableDescriptionFilter from './TransactionTableDescriptionFilter';
 
 const pageSize = 10;
 
 export default function TransactionTable() {
   const [page, setPage] = React.useState(1);
-  const [descriptionSearch, setDescriptionSearch] = React.useState('');
   const [descriptionFilter, setDescriptionFilter] = React.useState('');
   const [amountFilter, setAmountFilter] = React.useState<
     [number | undefined, number | undefined]
@@ -28,8 +28,11 @@ export default function TransactionTable() {
   }, [setPage, descriptionFilter, dateFilter]);
 
   const { data, error, isLoading, mutate } = useSWR(
-    `${TransactionsEndpoint}?page=${page}&limit=${pageSize}&from=${dateFilter[0]}&to=${dateFilter[1]}&description=${descriptionFilter}`,
-    TransactionsFetcher
+    `${TransactionsEndpoint}?page=${page}&limit=${pageSize}` +
+      `&from=${dateFilter[0]}&to=${dateFilter[1]}` +
+      `&description=${descriptionFilter}` +
+      `&min=${amountFilter[0] !== undefined ? amountFilter[0] : ''}&max=${amountFilter[1] !== undefined ? amountFilter[1] : ''}`,
+    TransactionsFetcher,
   );
 
   const updateTransaction = React.useCallback(
@@ -38,11 +41,11 @@ export default function TransactionTable() {
       mutate({
         ...data!,
         data: data!.data.map((t) =>
-          t.id === updatedTransaction.id ? updatedTransaction : t
+          t.id === updatedTransaction.id ? updatedTransaction : t,
         ),
       });
     },
-    [mutate, data]
+    [mutate, data],
   );
 
   React.useEffect(() => {
@@ -53,8 +56,6 @@ export default function TransactionTable() {
 
   if (!response) return <div>loading...</div>;
   if (error) return <div>failed to load</div>;
-
-  console.log(amountFilter);
 
   return (
     <DataTable
@@ -73,14 +74,13 @@ export default function TransactionTable() {
           ellipsis: true,
           cellsStyle: () => ({ maxWidth: '400px' }),
           filter: ({ close }) => (
-            <DescriptionFilterPopup
+            <TransactionTableDescriptionFilter
+              descriptionFilter={descriptionFilter}
               setDescriptionFilter={setDescriptionFilter}
-              descriptionSearch={descriptionSearch}
-              setDescriptionSearch={setDescriptionSearch}
               close={close}
             />
           ),
-          filtering: descriptionSearch !== '',
+          filtering: descriptionFilter !== '',
         },
         { accessor: 'comment' },
         {
@@ -90,12 +90,15 @@ export default function TransactionTable() {
               {FormatMoney(record.amount)}
             </Text>
           ),
-          filter: () => (
-            <AmountFilterPopup
+          filter: ({ close }) => (
+            <TransactionTableAmountFilter
               amountFilter={amountFilter}
               setAmountFilter={setAmountFilter}
+              close={close}
             />
           ),
+          filtering:
+            amountFilter[0] !== undefined || amountFilter[1] !== undefined,
         },
         {
           accessor: 'balance',
@@ -120,97 +123,3 @@ export default function TransactionTable() {
     />
   );
 }
-
-type DescriptionFilterPopupProps = {
-  setDescriptionFilter: (value: string) => void;
-  descriptionSearch: string;
-  setDescriptionSearch: (value: string) => void;
-  close: () => void;
-};
-
-const DescriptionFilterPopup = ({
-  setDescriptionFilter,
-  descriptionSearch,
-  setDescriptionSearch,
-  close,
-}: DescriptionFilterPopupProps) => {
-  const enterFunction = React.useCallback(
-    (event: KeyboardEvent) => {
-      if (event.key === 'Enter') {
-        setDescriptionFilter(descriptionSearch);
-        close();
-      }
-    },
-    [close, setDescriptionFilter, descriptionSearch]
-  );
-
-  React.useEffect(() => {
-    document.addEventListener('keypress', enterFunction);
-    return () => {
-      document.removeEventListener('keypress', enterFunction);
-    };
-  }, [enterFunction]);
-
-  return (
-    <TextInput
-      label='Description'
-      description='Fuzzy search'
-      placeholder='Enter search string...'
-      leftSection={<IconSearch size={16} />}
-      rightSection={
-        <ActionIcon
-          size='sm'
-          variant='transparent'
-          c='dimmed'
-          onClick={() => {
-            setDescriptionSearch('');
-            setDescriptionFilter('');
-            close();
-          }}
-        >
-          <IconX size={14} />
-        </ActionIcon>
-      }
-      value={descriptionSearch}
-      onBlur={(e) => setDescriptionFilter(e.currentTarget.value)}
-      onChange={(e) => setDescriptionSearch(e.currentTarget.value)}
-    />
-  );
-};
-
-type AmountFilterPopupProps = {
-  amountFilter: [number | undefined, number | undefined];
-  setAmountFilter: (value: [number | undefined, number | undefined]) => void;
-};
-
-const AmountFilterPopup = ({
-  amountFilter,
-  setAmountFilter,
-}: AmountFilterPopupProps) => {
-  return (
-    <Stack>
-      <NumberInput
-        label='Min'
-        prefix='$'
-        allowDecimal={false}
-        placeholder='$0'
-        value={amountFilter[0]}
-        onChange={(value) => {
-          const newFilterValue = value === '' ? undefined : Number(value);
-          setAmountFilter([newFilterValue, amountFilter[1]]);
-        }}
-      />
-      <NumberInput
-        label='Max'
-        prefix='$'
-        allowDecimal={false}
-        placeholder='$0'
-        value={amountFilter[1]}
-        onChange={(value) => {
-          const newFilterValue = value === '' ? undefined : Number(value);
-          setAmountFilter([amountFilter[0], newFilterValue]);
-        }}
-      />
-    </Stack>
-  );
-};

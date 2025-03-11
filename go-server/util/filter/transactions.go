@@ -1,11 +1,17 @@
 package filter
 
-import "gorm.io/gorm"
+import (
+	"strconv"
+
+	"gorm.io/gorm"
+)
 
 type TransactionFilters struct {
 	From        string
 	To          string
 	Description string
+	Min         string
+	Max         string
 }
 
 func FilterTransactions(value interface{}, filters *TransactionFilters, db *gorm.DB) func(db *gorm.DB) *gorm.DB {
@@ -13,6 +19,20 @@ func FilterTransactions(value interface{}, filters *TransactionFilters, db *gorm
 		filtered := db.Debug().Where("date >= ? AND date <= ?", filters.From, filters.To)
 		if filters.Description != "" {
 			filtered = filtered.Where("description % ?", filters.Description)
+		}
+		if filters.Min != "" {
+			minAmount, err := strconv.Atoi(filters.Min)
+			if err != nil {
+				// TODO
+			}
+			filtered = filtered.Where("amount >= ?", minAmount*100)
+		}
+		if filters.Max != "" {
+			maxAmount, err := strconv.Atoi(filters.Max)
+			if err != nil {
+				// TODO
+			}
+			filtered = filtered.Where("amount <= ?", maxAmount*100)
 		}
 		return filtered
 	}
