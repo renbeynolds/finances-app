@@ -12,6 +12,7 @@ type TransactionFilters struct {
 	Description string
 	Min         string
 	Max         string
+	Comment     string
 }
 
 func FilterTransactions(value interface{}, filters *TransactionFilters, db *gorm.DB) func(db *gorm.DB) *gorm.DB {
@@ -19,6 +20,9 @@ func FilterTransactions(value interface{}, filters *TransactionFilters, db *gorm
 		filtered := db.Debug().Where("date >= ? AND date <= ?", filters.From, filters.To)
 		if filters.Description != "" {
 			filtered = filtered.Where("description % ?", filters.Description)
+		}
+		if filters.Comment != "" {
+			filtered = filtered.Where("comment % ?", filters.Comment)
 		}
 		if filters.Min != "" {
 			minAmount, err := strconv.Atoi(filters.Min)

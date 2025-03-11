@@ -11,15 +11,15 @@ import { useState } from 'react';
 import { UseLazyCategories } from '../context/CategoriesContext';
 import { Transaction } from '../data/Transaction';
 
-interface CategoryComboboxProps {
+interface TransactionTableCategoryComboboxProps {
   transaction: Transaction;
   updateTransaction: (transaction: Transaction) => void;
 }
 
-export default function CategoryCombobox({
+export default function TransactionTableCategoryCombobox({
   transaction,
   updateTransaction,
-}: CategoryComboboxProps) {
+}: TransactionTableCategoryComboboxProps) {
   const combobox = useCombobox({
     onDropdownClose: () => combobox.resetSelectedOption(),
     onDropdownOpen: () => combobox.updateSelectedOptionIndex('active'),
@@ -27,7 +27,7 @@ export default function CategoryCombobox({
   const categories = UseLazyCategories();
   const [search, setSearch] = useState('');
   const [value, setValue] = useState<string[]>(
-    transaction.categoryId ? [`${transaction.categoryId}`] : []
+    transaction.categoryId ? [`${transaction.categoryId}`] : [],
   );
 
   const handleValueSelect = (val: string) => {

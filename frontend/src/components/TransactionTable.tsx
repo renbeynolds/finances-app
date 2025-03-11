@@ -8,8 +8,10 @@ import { Transaction } from '../data/Transaction';
 import { TransactionsEndpoint, TransactionsFetcher } from '../Fetchers';
 import { requestUpdateTransaction } from '../Requests';
 import { FormatMoney } from '../utils';
-import CategoryCombobox from './CategoryComboBox';
 import TransactionTableAmountFilter from './TransactionTableAmountFilter';
+import TransactionTableCategoryCombobox from './TransactionTableCategoryCombobox';
+import TransactionTableCommentBox from './TransactionTableCommentBox';
+import TransactionTableCommentFilter from './TransactionTableCommentFilter';
 import TransactionTableDescriptionFilter from './TransactionTableDescriptionFilter';
 
 const pageSize = 10;
@@ -17,6 +19,7 @@ const pageSize = 10;
 export default function TransactionTable() {
   const [page, setPage] = React.useState(1);
   const [descriptionFilter, setDescriptionFilter] = React.useState('');
+  const [commentFilter, setCommentFilter] = React.useState('');
   const [amountFilter, setAmountFilter] = React.useState<
     [number | undefined, number | undefined]
   >([undefined, undefined]);
@@ -25,13 +28,14 @@ export default function TransactionTable() {
 
   React.useEffect(() => {
     setPage(1);
-  }, [setPage, descriptionFilter, dateFilter]);
+  }, [setPage, descriptionFilter, dateFilter, amountFilter, commentFilter]);
 
   const { data, error, isLoading, mutate } = useSWR(
     `${TransactionsEndpoint}?page=${page}&limit=${pageSize}` +
       `&from=${dateFilter[0]}&to=${dateFilter[1]}` +
       `&description=${descriptionFilter}` +
-      `&min=${amountFilter[0] !== undefined ? amountFilter[0] : ''}&max=${amountFilter[1] !== undefined ? amountFilter[1] : ''}`,
+      `&min=${amountFilter[0] !== undefined ? amountFilter[0] : ''}&max=${amountFilter[1] !== undefined ? amountFilter[1] : ''}` +
+      `&comment=${commentFilter}`,
     TransactionsFetcher,
   );
 
@@ -82,7 +86,23 @@ export default function TransactionTable() {
           ),
           filtering: descriptionFilter !== '',
         },
-        { accessor: 'comment' },
+        {
+          accessor: 'comment',
+          render: (record) => (
+            <TransactionTableCommentBox
+              transaction={record}
+              updateTransaction={updateTransaction}
+            />
+          ),
+          filter: ({ close }) => (
+            <TransactionTableCommentFilter
+              commentFilter={commentFilter}
+              setCommentFilter={setCommentFilter}
+              close={close}
+            />
+          ),
+          filtering: commentFilter !== '',
+        },
         {
           accessor: 'amount',
           render: (record) => (
@@ -113,7 +133,7 @@ export default function TransactionTable() {
           title: 'Category',
           width: '350px',
           render: (record) => (
-            <CategoryCombobox
+            <TransactionTableCategoryCombobox
               transaction={record}
               updateTransaction={updateTransaction}
             />
