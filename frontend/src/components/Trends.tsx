@@ -1,5 +1,10 @@
-import { Text } from '@mantine/core';
+import { SimpleGrid } from '@mantine/core';
+import IncomeVsExpenseChart from './IncomeVsExpenseChart';
 
 export default function Trends() {
-  return <Text>Trends</Text>;
+  return (
+    <SimpleGrid cols={2}>
+      <IncomeVsExpenseChart />
+    </SimpleGrid>
+  );
 }

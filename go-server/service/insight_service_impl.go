@@ -25,3 +25,7 @@ func (t *InsightServiceImpl) GetTopSpendingCategories(filters *filter.Transactio
 func (t *InsightServiceImpl) GetAmountVsAverage(amountType, from, to, avgFrom, avgTo string) response.AmountVsAverageResponse {
 	return t.InsightRepository.GetAmountVsAverage(amountType, from, to, avgFrom, avgTo)
 }
+
+func (t *InsightServiceImpl) GetIncomeVsExpense(from, to string) []response.IncomeVsExpenseResponse {
+	return t.InsightRepository.GetIncomeVsExpense(from, to)
+}
