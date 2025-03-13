@@ -15,3 +15,6 @@ export const PreviousNMonths = (dateRange: [string, string], n: number) => {
 
 export const FormatMonthString = (input: string): string =>
   dayjs(input).format('MMM YYYY');
+
+export const FormatDayString = (input: string): string =>
+  dayjs(input).format('MMM, DD YYYY');

@@ -54,3 +54,13 @@ func (controller *AccountControllerImpl) FindByID(ctx *gin.Context) {
 	foundAccount := controller.accountService.FindByID(uint(id))
 	response.SendStatusOK(foundAccount, nil, ctx)
 }
+
+func (controller *AccountControllerImpl) GetBalanceOverTime(ctx *gin.Context) {
+	accountId := ctx.Param("accountId")
+	from := ctx.Query("from")
+	to := ctx.Query("to")
+	id, err := strconv.Atoi(accountId)
+	util.ErrorPanic(err)
+	balanceOverTime := controller.accountService.GetBalanceOverTime(uint(id), from, to)
+	response.SendStatusOK(balanceOverTime, nil, ctx)
+}

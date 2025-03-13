@@ -90,3 +90,7 @@ func (t *AccountServiceImpl) FindByID(id uint) response.AccountResponse {
 		Balance:           account.Balance,
 	}
 }
+
+func (t *AccountServiceImpl) GetBalanceOverTime(id uint, from, to string) []response.AmountOverTimeResponse {
+	return t.AccountRepository.GetBalanceOverTime(id, from, to)
+}

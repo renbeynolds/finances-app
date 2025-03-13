@@ -1,5 +1,6 @@
 import { Fetcher } from 'swr';
 import { Account } from './data/Account';
+import { AmountOverTime } from './data/AmountOverTime';
 import { AmountVsAverage } from './data/AmountVsAverage';
 import { Category } from './data/Category';
 import { IncomeVsExpense } from './data/IncomeVsExpense';
@@ -14,6 +15,16 @@ export const AccountsFetcher: Fetcher<Response<Account[]>, string> = (url) =>
 
 export const AccountFetcher: Fetcher<Response<Account>, string> = (url) =>
   fetch(url).then((res) => res.json());
+
+export const AccountBalanceOverTimeEndpoint = (
+  accountId: string,
+  from: string,
+  to: string,
+) => `/api/accounts/${accountId}/balance_over_time?from=${from}&to=${to}`;
+export const AmountOverTimeFetcher: Fetcher<
+  Response<AmountOverTime[]>,
+  string
+> = (url) => fetch(url).then((res) => res.json());
 
 export const UploadsEndpoint = '/api/uploads';
 export const UploadsFetcher: Fetcher<Response<Upload[]>, string> = (url) =>
