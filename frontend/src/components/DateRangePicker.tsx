@@ -1,5 +1,5 @@
 import { ActionIcon, Group, Menu } from '@mantine/core';
-import { DatePickerInput } from '@mantine/dates';
+import { DatePickerInput, DatesRangeValue } from '@mantine/dates';
 import { IconCalendarBolt } from '@tabler/icons-react';
 import dayjs from 'dayjs';
 import React, { useContext } from 'react';
@@ -47,17 +47,21 @@ export default function DateRangePicker() {
 
   const dispatchDateFilter = useContext(DateFilterDispatchContext);
 
-  React.useEffect(() => {
-    if (dispatchDateFilter && value[0] && value[1]) {
-      dispatchDateFilter({
-        type: 'SET',
-        payload: [
-          value[0].toISOString().split('T')[0],
-          value[1].toISOString().split('T')[0],
-        ],
-      });
-    }
-  }, [dispatchDateFilter, value]);
+  const handleChange = React.useCallback(
+    (value: DatesRangeValue) => {
+      setValue(value);
+      if (dispatchDateFilter && value[0] && value[1]) {
+        dispatchDateFilter({
+          type: 'SET',
+          payload: [
+            value[0].toISOString().split('T')[0],
+            value[1].toISOString().split('T')[0],
+          ],
+        });
+      }
+    },
+    [dispatchDateFilter, setValue],
+  );
 
   return (
     <Group>
@@ -66,7 +70,10 @@ export default function DateRangePicker() {
         placeholder='Select Date Range'
         value={value}
         maxDate={new Date()}
-        onChange={setValue}
+        onChange={handleChange}
+        popoverProps={{
+          withinPortal: false,
+        }}
       />
       <Menu>
         <Menu.Target>
@@ -78,7 +85,7 @@ export default function DateRangePicker() {
           {dateRanges.map((range, index) => (
             <Menu.Item
               key={index}
-              onClick={() => setValue([range.value[0], range.value[1]])}
+              onClick={() => handleChange([range.value[0], range.value[1]])}
             >
               {range.label}
             </Menu.Item>

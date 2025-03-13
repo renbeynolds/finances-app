@@ -8,6 +8,7 @@ import { Transaction } from '../data/Transaction';
 import { TransactionsEndpoint, TransactionsFetcher } from '../Fetchers';
 import { requestUpdateTransaction } from '../Requests';
 import { FormatMoney } from '../utils';
+import DateRangePicker from './DateRangePicker';
 import TransactionTableAmountFilter from './TransactionTableAmountFilter';
 import TransactionTableCategoryCombobox from './TransactionTableCategoryCombobox';
 import TransactionTableCommentBox from './TransactionTableCommentBox';
@@ -18,9 +19,13 @@ const pageSize = 10;
 
 type TransactionTableProps = {
   accountId?: string;
+  hideDateFilter?: boolean;
 };
 
-export default function TransactionTable({ accountId }: TransactionTableProps) {
+export default function TransactionTable({
+  accountId,
+  hideDateFilter,
+}: TransactionTableProps) {
   const [page, setPage] = React.useState(1);
   const [descriptionFilter, setDescriptionFilter] = React.useState('');
   const [commentFilter, setCommentFilter] = React.useState('');
@@ -84,7 +89,12 @@ export default function TransactionTable({ accountId }: TransactionTableProps) {
       onPageChange={(p) => setPage(p)}
       records={response!.data}
       columns={[
-        { accessor: 'date', width: '125px' },
+        {
+          accessor: 'date',
+          width: '125px',
+          filter: hideDateFilter ? undefined : () => <DateRangePicker />,
+          filtering: !hideDateFilter,
+        },
         {
           accessor: 'description',
           ellipsis: true,
@@ -131,14 +141,6 @@ export default function TransactionTable({ accountId }: TransactionTableProps) {
           ),
           filtering:
             amountFilter[0] !== undefined || amountFilter[1] !== undefined,
-        },
-        {
-          accessor: 'balance',
-          render: (record) => (
-            <Text size='sm' c={record.balance > 0 ? 'green' : 'red'}>
-              {FormatMoney(record.balance)}
-            </Text>
-          ),
         },
         {
           accessor: 'categoryId',

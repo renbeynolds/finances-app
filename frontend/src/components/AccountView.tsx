@@ -11,7 +11,6 @@ import {
   AmountOverTimeFetcher,
 } from '../Fetchers';
 import AmountOverTimeChart from './AmountOverTimeChart';
-import DateRangePicker from './DateRangePicker';
 import TransactionTable from './TransactionTable';
 import UploadForm from './UploadForm';
 
@@ -41,10 +40,7 @@ export default function AccountView() {
     <>
       <Stack>
         <Group justify='space-between'>
-          <Group>
-            <Title order={2}>{accountData?.data.name}</Title>
-            <DateRangePicker />
-          </Group>
+          <Title order={2}>{accountData?.data.name}</Title>
           <Button
             onClick={() => setUploadModalOpened(true)}
             rightSection={<IconUpload />}

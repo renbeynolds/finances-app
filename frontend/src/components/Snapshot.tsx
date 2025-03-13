@@ -24,7 +24,7 @@ export default function Snapshot() {
           />
         </SimpleGrid>
       </SimpleGrid>
-      <TransactionTable />
+      <TransactionTable hideDateFilter />
     </Stack>
   );
 }

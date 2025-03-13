@@ -3,6 +3,7 @@ import {
   IconBuildingBank,
   IconCalendarMonth,
   IconCategory,
+  IconDatabaseSearch,
   IconTrendingUp,
   IconUpload,
 } from '@tabler/icons-react';
@@ -46,6 +47,12 @@ export default function Layout() {
             </Tabs.Tab>
             <Tabs.Tab value='trends' leftSection={<IconTrendingUp size={12} />}>
               Trends
+            </Tabs.Tab>
+            <Tabs.Tab
+              value='explore'
+              leftSection={<IconDatabaseSearch size={12} />}
+            >
+              Explore
             </Tabs.Tab>
             <Tabs.Tab
               value='accounts'
