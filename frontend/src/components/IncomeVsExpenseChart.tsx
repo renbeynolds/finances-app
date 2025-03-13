@@ -1,5 +1,7 @@
 import { Paper, Title, useMantineTheme } from '@mantine/core';
+import dayjs from 'dayjs';
 import React from 'react';
+import { useNavigate } from 'react-router';
 import {
   Bar,
   CartesianGrid,
@@ -12,16 +14,28 @@ import {
   YAxis,
 } from 'recharts';
 import useSWR from 'swr';
+import { DateFilterDispatchContext } from '../context/DateFilterContext';
 import { IncomeVsExpense } from '../data/IncomeVsExpense';
 import { IncomeVsExpenseEndpoint, IncomeVsExpenseFetcher } from '../Fetchers';
 import { FormatMoney, FormatMoneyThousands, FormatMonthString } from '../utils';
 
 export default function IncomeVsExpenseChart() {
   const theme = useMantineTheme();
+  const dispatchDateFilter = React.useContext(DateFilterDispatchContext);
   const [chartData, setChartData] = React.useState<IncomeVsExpense[]>([]);
+  const navigate = useNavigate();
+
+  const startDate = dayjs()
+    .startOf('month')
+    .subtract(13, 'month')
+    .format('YYYY-MM-DD');
+  const endDate = dayjs()
+    .startOf('month')
+    .subtract(1, 'day')
+    .format('YYYY-MM-DD');
 
   const { data, error, isLoading } = useSWR(
-    `${IncomeVsExpenseEndpoint}?from=2024-01-01&to=2024-12-31`,
+    `${IncomeVsExpenseEndpoint}?from=${startDate}&to=${endDate}`,
     IncomeVsExpenseFetcher,
   );
 
@@ -31,7 +45,21 @@ export default function IncomeVsExpenseChart() {
     }
   }, [data, error, isLoading, setChartData]);
 
-  const handleClick = () => {};
+  const handleClick = React.useCallback(
+    (entry: IncomeVsExpense) => {
+      if (dispatchDateFilter) {
+        dispatchDateFilter({
+          type: 'SET',
+          payload: [
+            dayjs(entry.month).startOf('month').format('YYYY-MM-DD'),
+            dayjs(entry.month).endOf('month').format('YYYY-MM-DD'),
+          ],
+        });
+        navigate('/snapshot');
+      }
+    },
+    [dispatchDateFilter, navigate],
+  );
 
   if (error) return <div>failed to load</div>;
 
@@ -64,7 +92,11 @@ export default function IncomeVsExpenseChart() {
             onClick={handleClick}
           >
             {chartData.map((entry, index) => (
-              <Cell cursor='pointer' />
+              <Cell
+                key={index}
+                cursor='pointer'
+                onClick={() => handleClick(entry)}
+              />
             ))}
           </Bar>
           <Bar
@@ -74,7 +106,11 @@ export default function IncomeVsExpenseChart() {
             onClick={handleClick}
           >
             {chartData.map((entry, index) => (
-              <Cell cursor='pointer' />
+              <Cell
+                key={index}
+                cursor='pointer'
+                onClick={() => handleClick(entry)}
+              />
             ))}
           </Bar>
           <Line

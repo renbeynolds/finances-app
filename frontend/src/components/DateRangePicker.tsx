@@ -2,14 +2,16 @@ import { DatePickerInput } from '@mantine/dates';
 import dayjs from 'dayjs';
 import React, { useContext } from 'react';
 import {
+  DateFilterContext,
   DateFilterDispatchContext,
-  DefaultDateFilter,
 } from '../context/DateFilterContext';
 
 export default function DateRangePicker() {
+  const dateFilter = React.useContext(DateFilterContext);
+
   const [value, setValue] = React.useState<[Date | null, Date | null]>([
-    dayjs(DefaultDateFilter[0]).toDate(),
-    dayjs(DefaultDateFilter[1]).toDate(),
+    dayjs(dateFilter[0]).toDate(),
+    dayjs(dateFilter[1]).toDate(),
   ]);
 
   const dispatchDateFilter = useContext(DateFilterDispatchContext);

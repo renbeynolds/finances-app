@@ -32,41 +32,34 @@ export default function Layout() {
       padding='md'
     >
       <AppShell.Header>
-        <Tabs h='100%'>
+        <Tabs
+          h='100%'
+          value={location.pathname.split('/')[1]}
+          onChange={(value) => navigate(`/${value}`)}
+        >
           <Tabs.List h='100%'>
             <Tabs.Tab
               value='snapshot'
               leftSection={<IconCalendarMonth size={12} />}
-              onClick={() => navigate('/snapshot')}
             >
               Snapshot
             </Tabs.Tab>
-            <Tabs.Tab
-              value='trends'
-              leftSection={<IconTrendingUp size={12} />}
-              onClick={() => navigate('/trends')}
-            >
+            <Tabs.Tab value='trends' leftSection={<IconTrendingUp size={12} />}>
               Trends
             </Tabs.Tab>
             <Tabs.Tab
               value='accounts'
               leftSection={<IconBuildingBank size={12} />}
-              onClick={() => navigate('/accounts')}
             >
               Accounts
             </Tabs.Tab>
             <Tabs.Tab
               value='categories'
               leftSection={<IconCategory size={12} />}
-              onClick={() => navigate('/categories')}
             >
               Categories
             </Tabs.Tab>
-            <Tabs.Tab
-              value='uploads'
-              leftSection={<IconUpload size={12} />}
-              onClick={() => navigate('/uploads')}
-            >
+            <Tabs.Tab value='uploads' leftSection={<IconUpload size={12} />}>
               Uploads
             </Tabs.Tab>
           </Tabs.List>

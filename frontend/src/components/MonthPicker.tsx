@@ -2,13 +2,19 @@ import { ActionIcon, Group } from '@mantine/core';
 import { MonthPickerInput } from '@mantine/dates';
 import { IconCaretLeft, IconCaretRight } from '@tabler/icons-react';
 import dayjs from 'dayjs';
-import React, { useContext } from 'react';
-import { DateFilterDispatchContext } from '../context/DateFilterContext';
+import React from 'react';
+import {
+  DateFilterContext,
+  DateFilterDispatchContext,
+} from '../context/DateFilterContext';
 
 export default function MonthPicker() {
-  const [value, setValue] = React.useState<Date | null>(new Date());
+  const dateFilter = React.useContext(DateFilterContext);
+  const dispatchDateFilter = React.useContext(DateFilterDispatchContext);
 
-  const dispatchDateFilter = useContext(DateFilterDispatchContext);
+  const [value, setValue] = React.useState<Date | null>(
+    dayjs(dateFilter[0]).toDate(),
+  );
 
   React.useEffect(() => {
     if (dispatchDateFilter && value) {
@@ -53,9 +59,7 @@ export default function MonthPicker() {
         style={{
           background: 'transparent',
         }}
-        disabled={
-          dayjs(value).format('YYYY-MM-DD') === dayjs().format('YYYY-MM-DD')
-        }
+        disabled={dayjs(value).format('YYYY-MM') === dayjs().format('YYYY-MM')}
       >
         <IconCaretRight style={{ width: '70%', height: '70%' }} stroke={1.5} />
       </ActionIcon>
