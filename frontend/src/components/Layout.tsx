@@ -17,7 +17,7 @@ export default function Layout() {
   const location = useLocation();
 
   const sidebarVisible =
-    location.pathname === '/accounts' ||
+    location.pathname.startsWith('/accounts') ||
     location.pathname === '/categories' ||
     location.pathname === '/uploads';
 
@@ -73,7 +73,7 @@ export default function Layout() {
               overflowY: 'auto',
             }}
           >
-            {location.pathname === '/accounts' && <AccountsList />}
+            {location.pathname.startsWith('/accounts') && <AccountsList />}
             {location.pathname === '/categories' && <CategoriesList />}
             {location.pathname === '/uploads' && <UploadsList />}
           </div>

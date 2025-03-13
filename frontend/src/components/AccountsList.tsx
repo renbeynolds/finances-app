@@ -1,12 +1,13 @@
-import { Button, Stack, Text } from '@mantine/core';
-import { IconUpload } from '@tabler/icons-react';
-import { useNavigate } from 'react-router';
+import { NavLink, Stack, useMantineTheme } from '@mantine/core';
+import { useLocation, useNavigate } from 'react-router';
 import useSWR from 'swr';
 import { AccountsEndpoint, AccountsFetcher } from '../Fetchers';
 import { FormatMoney } from '../utils';
 
 export default function AccountsList() {
   const { data, error, isLoading } = useSWR(AccountsEndpoint, AccountsFetcher);
+  const theme = useMantineTheme();
+  const location = useLocation();
   const navigate = useNavigate();
 
   if (error) return <div>failed to load</div>;
@@ -15,25 +16,20 @@ export default function AccountsList() {
   return (
     <Stack align='stretch' justify='flex-start' gap='md'>
       {data!.data.map((account, index) => (
-        <Button
-          key={index}
-          variant='outline'
-          h='3rem'
-          justify='space-between'
-          rightSection={<IconUpload size={14} />}
-          onClick={() => navigate(`/${account.id}/upload`)}
-        >
-          <Stack gap='0'>
-            <Text size='l'>{account.name}</Text>
-            <Text
-              size='xs'
-              style={{ textAlign: 'left' }}
-              c={account.balance > 0 ? 'green' : 'red'}
-            >
-              {FormatMoney(account.balance)}
-            </Text>
-          </Stack>
-        </Button>
+        <NavLink
+          active={location.pathname === `/accounts/${account.id}`}
+          onClick={() => navigate(`/accounts/${account.id}`)}
+          label={account.name}
+          description={FormatMoney(account.balance)}
+          styles={{
+            description: {
+              color:
+                account.balance > 0
+                  ? theme.colors.green[6]
+                  : theme.colors.red[6],
+            },
+          }}
+        />
       ))}
     </Stack>
   );
