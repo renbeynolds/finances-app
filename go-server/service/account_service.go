@@ -8,4 +8,5 @@ import (
 type AccountService interface {
 	Create(account request.CreateAccountRequest) response.AccountResponse
 	FindAll() []response.AccountResponse
+	FindByID(id uint) response.AccountResponse
 }

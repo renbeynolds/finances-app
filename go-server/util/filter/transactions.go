@@ -13,6 +13,7 @@ type TransactionFilters struct {
 	Min         string
 	Max         string
 	Comment     string
+	AccountID   string
 }
 
 func FilterTransactions(value interface{}, filters *TransactionFilters, db *gorm.DB) func(db *gorm.DB) *gorm.DB {
@@ -37,6 +38,10 @@ func FilterTransactions(value interface{}, filters *TransactionFilters, db *gorm
 				// TODO
 			}
 			filtered = filtered.Where("amount <= ?", maxAmount*100)
+		}
+		if filters.AccountID != "" {
+			filtered = filtered.Joins("LEFT JOIN uploads u ON transactions.upload_id = u.id")
+			filtered = filtered.Where("u.account_id = ?", filters.AccountID)
 		}
 		return filtered
 	}

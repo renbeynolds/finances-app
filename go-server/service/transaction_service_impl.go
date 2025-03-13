@@ -47,7 +47,7 @@ func (t *TransactionServiceImpl) FindAll(pagination *paginate.Pagination, filter
 }
 
 func (t *TransactionServiceImpl) Update(transaction request.UpdateTransactionRequest) response.TransactionResponse {
-	transactionData, err := t.TransactionRepository.FindById(transaction.ID)
+	transactionData, err := t.TransactionRepository.FindByID(transaction.ID)
 	util.ErrorPanic(err)
 	transactionData.CategoryID = transaction.CategoryID
 	transactionData.Comment = transaction.Comment

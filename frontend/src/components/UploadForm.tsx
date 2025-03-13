@@ -1,20 +1,21 @@
-import { Button, Center, FileInput, Stack, Title } from '@mantine/core';
+import { Button, FileInput, Stack } from '@mantine/core';
 import { useForm } from '@mantine/form';
 import { notifications } from '@mantine/notifications';
-import { useParams } from 'react-router';
 
 interface UploadFormValues {
   csv: File | null;
   accountId: string;
 }
 
-export default function UploadForm() {
-  const { accountId } = useParams();
+type UploadFormProps = {
+  accountId: string;
+};
 
+export default function UploadForm({ accountId }: UploadFormProps) {
   const form = useForm<UploadFormValues>({
     initialValues: {
       csv: null,
-      accountId: accountId || '',
+      accountId: accountId,
     },
     validate: {
       csv: (value) => (!value ? 'CSV is required' : null),
@@ -54,23 +55,18 @@ export default function UploadForm() {
   };
 
   return (
-    <Center>
+    <form onSubmit={form.onSubmit((values) => handleSubmit(values))}>
       <Stack>
-        <Title order={1}>New CSV Upload</Title>
-        <form onSubmit={form.onSubmit((values) => handleSubmit(values))}>
-          <Stack>
-            <FileInput
-              {...form.getInputProps('csv')}
-              placeholder='Select File'
-              accept='.csv'
-              required
-            />
-            <Button type='submit' loading={form.submitting}>
-              Upload
-            </Button>
-          </Stack>
-        </form>
+        <FileInput
+          {...form.getInputProps('csv')}
+          placeholder='Select File'
+          accept='.csv'
+          required
+        />
+        <Button type='submit' loading={form.submitting}>
+          Upload
+        </Button>
       </Stack>
-    </Center>
+    </form>
   );
 }

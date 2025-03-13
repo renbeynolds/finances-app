@@ -20,7 +20,7 @@ func (r *TransactionRepositoryImpl) FindAll(pagination *paginate.Pagination, fil
 	var transactions []model.Transaction
 	r.Db.Scopes(
 		paginate.Paginate(transactions, pagination, r.Db, filter.FilterTransactions(transactions, filters, r.Db)),
-	).Order(clause.OrderBy{Columns: []clause.OrderByColumn{
+	).Select("transactions.*").Order(clause.OrderBy{Columns: []clause.OrderByColumn{
 		{Column: clause.Column{Name: "date"}, Desc: true},
 		{Column: clause.Column{Name: "id"}, Desc: true},
 	}}).Find(&transactions)
@@ -30,7 +30,7 @@ func (r *TransactionRepositoryImpl) FindAll(pagination *paginate.Pagination, fil
 	return transactions
 }
 
-func (r *TransactionRepositoryImpl) FindById(id uint) (*model.Transaction, error) {
+func (r *TransactionRepositoryImpl) FindByID(id uint) (*model.Transaction, error) {
 	var transaction model.Transaction
 	err := r.Db.First(&transaction, id).Error
 	return &transaction, err

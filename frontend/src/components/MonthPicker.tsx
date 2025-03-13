@@ -13,7 +13,7 @@ export default function MonthPicker() {
   const dispatchDateFilter = React.useContext(DateFilterDispatchContext);
 
   const [value, setValue] = React.useState<Date | null>(
-    dayjs(dateFilter[0]).toDate(),
+    dayjs(dateFilter[1]).toDate(),
   );
 
   React.useEffect(() => {

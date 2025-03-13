@@ -28,7 +28,7 @@ func (r *AccountRepositoryImpl) Update(account model.Account) model.Account {
 	return account
 }
 
-func (r *AccountRepositoryImpl) FindById(accountId uint) (model.Account, error) {
+func (r *AccountRepositoryImpl) FindByID(accountId uint) (model.Account, error) {
 	var account model.Account
 	result := r.Db.Find(&account, accountId)
 	if result != nil {

@@ -74,3 +74,19 @@ func (t *AccountServiceImpl) FindAll() []response.AccountResponse {
 
 	return accounts
 }
+
+func (t *AccountServiceImpl) FindByID(id uint) response.AccountResponse {
+	account, err := t.AccountRepository.FindByID(id)
+	if err != nil {
+		// TODO
+	}
+	return response.AccountResponse{
+		Id:                int(account.ID),
+		Name:              account.Name,
+		DateHeader:        account.DateHeader,
+		DescriptionHeader: account.DescriptionHeader,
+		AmountsType:       account.AmountsType,
+		StartingAmount:    account.StartingAmount,
+		Balance:           account.Balance,
+	}
+}

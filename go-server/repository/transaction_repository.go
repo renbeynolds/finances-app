@@ -8,6 +8,6 @@ import (
 
 type TransactionRepository interface {
 	FindAll(pagination *paginate.Pagination, filters *filter.TransactionFilters) []model.Transaction
-	FindById(id uint) (*model.Transaction, error)
+	FindByID(id uint) (*model.Transaction, error)
 	Update(transaction *model.Transaction) *model.Transaction
 }

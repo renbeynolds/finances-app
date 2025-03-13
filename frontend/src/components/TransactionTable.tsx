@@ -16,7 +16,11 @@ import TransactionTableDescriptionFilter from './TransactionTableDescriptionFilt
 
 const pageSize = 10;
 
-export default function TransactionTable() {
+type TransactionTableProps = {
+  accountId?: string;
+};
+
+export default function TransactionTable({ accountId }: TransactionTableProps) {
   const [page, setPage] = React.useState(1);
   const [descriptionFilter, setDescriptionFilter] = React.useState('');
   const [commentFilter, setCommentFilter] = React.useState('');
@@ -28,14 +32,22 @@ export default function TransactionTable() {
 
   React.useEffect(() => {
     setPage(1);
-  }, [setPage, descriptionFilter, dateFilter, amountFilter, commentFilter]);
+  }, [
+    setPage,
+    accountId,
+    descriptionFilter,
+    dateFilter,
+    amountFilter,
+    commentFilter,
+  ]);
 
   const { data, error, isLoading, mutate } = useSWR(
     `${TransactionsEndpoint}?page=${page}&limit=${pageSize}` +
       `&from=${dateFilter[0]}&to=${dateFilter[1]}` +
       `&description=${descriptionFilter}` +
       `&min=${amountFilter[0] !== undefined ? amountFilter[0] : ''}&max=${amountFilter[1] !== undefined ? amountFilter[1] : ''}` +
-      `&comment=${commentFilter}`,
+      `&comment=${commentFilter}` +
+      `&account_id=${accountId !== undefined ? accountId : ''}`,
     TransactionsFetcher,
   );
 

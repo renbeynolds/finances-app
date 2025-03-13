@@ -1,6 +1,8 @@
 package controller
 
 import (
+	"strconv"
+
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
 	"github.com/renbeynolds/finances-app/data/request"
@@ -43,4 +45,12 @@ func (controller *AccountControllerImpl) Create(ctx *gin.Context) {
 func (controller *AccountControllerImpl) FindAll(ctx *gin.Context) {
 	foundAccounts := controller.accountService.FindAll()
 	response.SendStatusOK(foundAccounts, nil, ctx)
+}
+
+func (controller *AccountControllerImpl) FindByID(ctx *gin.Context) {
+	accountId := ctx.Param("accountId")
+	id, err := strconv.Atoi(accountId)
+	util.ErrorPanic(err)
+	foundAccount := controller.accountService.FindByID(uint(id))
+	response.SendStatusOK(foundAccount, nil, ctx)
 }

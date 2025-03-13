@@ -45,7 +45,7 @@ func (t *UploadServiceImpl) FindAll() []response.UploadResponse {
 }
 
 func (t *UploadServiceImpl) Create(upload request.CreateUploadRequest) response.UploadResponse {
-	account, err := t.AccountRepository.FindById(upload.AccountID)
+	account, err := t.AccountRepository.FindByID(upload.AccountID)
 	if err != nil {
 		// TODO
 	}

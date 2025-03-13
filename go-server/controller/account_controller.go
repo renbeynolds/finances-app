@@ -7,4 +7,5 @@ import (
 type AccountController interface {
 	Create(*gin.Context)
 	FindAll(*gin.Context)
+	FindByID(*gin.Context)
 }

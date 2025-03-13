@@ -12,6 +12,9 @@ export const AccountsEndpoint = '/api/accounts';
 export const AccountsFetcher: Fetcher<Response<Account[]>, string> = (url) =>
   fetch(url).then((res) => res.json());
 
+export const AccountFetcher: Fetcher<Response<Account>, string> = (url) =>
+  fetch(url).then((res) => res.json());
+
 export const UploadsEndpoint = '/api/uploads';
 export const UploadsFetcher: Fetcher<Response<Upload[]>, string> = (url) =>
   fetch(url).then((res) => res.json());

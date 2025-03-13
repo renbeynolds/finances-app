@@ -8,6 +8,7 @@ export default function MainContent() {
     <Routes>
       <Route path='/snapshot' element={<Snapshot />} />
       <Route path='/trends' element={<Trends />} />
+      <Route path='/accounts' element={<div />} />
       <Route path='/accounts/:accountId' element={<AccountView />} />
     </Routes>
   );

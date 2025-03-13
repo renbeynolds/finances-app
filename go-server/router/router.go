@@ -35,6 +35,7 @@ func NewRouter(
 		{
 			accountsGroup.POST("/", accountController.Create)
 			accountsGroup.GET("/", accountController.FindAll)
+			accountsGroup.GET("/:accountId", accountController.FindByID)
 		}
 
 		uploadsGroup := apiGroup.Group("/uploads")
