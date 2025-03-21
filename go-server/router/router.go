@@ -56,6 +56,7 @@ func NewRouter(
 		transactionsGroup := apiGroup.Group("/transactions")
 		{
 			transactionsGroup.GET("/", paginator, transactionController.FindAll)
+			transactionsGroup.GET("/total", transactionController.GetFilteredTransactionsTotal)
 			transactionsGroup.PATCH("/:transactionId", transactionController.Update)
 		}
 

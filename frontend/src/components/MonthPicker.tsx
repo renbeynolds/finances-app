@@ -4,29 +4,31 @@ import { IconCaretLeft, IconCaretRight } from '@tabler/icons-react';
 import dayjs from 'dayjs';
 import React from 'react';
 import {
-  DateFilterContext,
-  DateFilterDispatchContext,
-} from '../context/DateFilterContext';
+  TransactionFiltersContext,
+  TransactionFiltersDispatchContext,
+} from '../context/TransactionFiltersContext';
 
 export default function MonthPicker() {
-  const dateFilter = React.useContext(DateFilterContext);
-  const dispatchDateFilter = React.useContext(DateFilterDispatchContext);
+  const transactionFilters = React.useContext(TransactionFiltersContext);
+  const dispatchTransactionFilters = React.useContext(
+    TransactionFiltersDispatchContext,
+  );
 
   const [value, setValue] = React.useState<Date | null>(
-    dayjs(dateFilter[1]).toDate(),
+    dayjs(transactionFilters.Date[1]).toDate(),
   );
 
   React.useEffect(() => {
-    if (dispatchDateFilter && value) {
-      dispatchDateFilter({
-        type: 'SET',
+    if (dispatchTransactionFilters && value) {
+      dispatchTransactionFilters({
+        type: 'SET_DATE_FILTER',
         payload: [
           dayjs(value).startOf('month').format('YYYY-MM-DD'),
           dayjs(value).endOf('month').format('YYYY-MM-DD'),
         ],
       });
     }
-  }, [dispatchDateFilter, value]);
+  }, [dispatchTransactionFilters, value]);
 
   const handlePrevMonth = () => {
     setValue(dayjs(value).subtract(1, 'month').toDate());

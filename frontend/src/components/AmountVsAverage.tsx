@@ -2,7 +2,7 @@ import { Card, Stack, Text, Title } from '@mantine/core';
 import React from 'react';
 import useSWR from 'swr';
 import { AmountVsAverageFetcher } from '../Fetchers';
-import { DateFilterContext } from '../context/DateFilterContext';
+import { TransactionFiltersContext } from '../context/TransactionFiltersContext';
 import { FormatMoney, PreviousNMonths } from '../utils';
 
 const AVERAGE_OVER_N_MONTHS = 12;
@@ -18,12 +18,15 @@ export default function AmountVsAverage({
   endpoint,
   color,
 }: AmountVsAverageProps) {
-  const dateFilter = React.useContext(DateFilterContext);
-  const averageOver = PreviousNMonths(dateFilter, AVERAGE_OVER_N_MONTHS);
+  const transactionFilters = React.useContext(TransactionFiltersContext);
+  const averageOver = PreviousNMonths(
+    transactionFilters.Date,
+    AVERAGE_OVER_N_MONTHS,
+  );
 
   const { data, error, isLoading } = useSWR(
-    `${endpoint}?from=${dateFilter[0]}&to=${dateFilter[1]}&avg_from=${averageOver[0]}&avg_to=${averageOver[1]}`,
-    AmountVsAverageFetcher
+    `${endpoint}?from=${transactionFilters.Date[0]}&to=${transactionFilters.Date[1]}&avg_from=${averageOver[0]}&avg_to=${averageOver[1]}`,
+    AmountVsAverageFetcher,
   );
 
   if (error) return <div>failed to load</div>;

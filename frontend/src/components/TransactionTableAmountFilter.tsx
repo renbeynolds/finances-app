@@ -1,16 +1,17 @@
 import { Button, NumberInput, Stack } from '@mantine/core';
 import { IconX } from '@tabler/icons-react';
 import * as React from 'react';
+import { TransactionFiltersAction } from '../context/TransactionFiltersContext';
 
 type TransactionTableAmountFilterProps = {
   amountFilter: [number | undefined, number | undefined];
-  setAmountFilter: (value: [number | undefined, number | undefined]) => void;
+  dispatchTransactionFilters: React.Dispatch<TransactionFiltersAction> | null;
   close: () => void;
 };
 
 export default function TransactionTableAmountFilter({
   amountFilter,
-  setAmountFilter,
+  dispatchTransactionFilters,
   close,
 }: TransactionTableAmountFilterProps) {
   const [amountValues, setAmountValues] =
@@ -18,12 +19,15 @@ export default function TransactionTableAmountFilter({
 
   const enterFunction = React.useCallback(
     (event: KeyboardEvent) => {
-      if (event.key === 'Enter') {
-        setAmountFilter(amountValues);
+      if (event.key === 'Enter' && dispatchTransactionFilters) {
+        dispatchTransactionFilters({
+          type: 'SET_AMOUNT_FILTER',
+          payload: amountValues,
+        });
         close();
       }
     },
-    [close, setAmountFilter, amountValues],
+    [close, dispatchTransactionFilters, amountValues],
   );
 
   React.useEffect(() => {
@@ -46,7 +50,10 @@ export default function TransactionTableAmountFilter({
           setAmountValues([newFilterValue, amountValues[1]]);
         }}
         onBlur={() => {
-          setAmountFilter(amountValues);
+          dispatchTransactionFilters!({
+            type: 'SET_AMOUNT_FILTER',
+            payload: amountValues,
+          });
         }}
       />
       <NumberInput
@@ -60,14 +67,20 @@ export default function TransactionTableAmountFilter({
           setAmountValues([amountValues[0], newFilterValue]);
         }}
         onBlur={() => {
-          setAmountFilter(amountValues);
+          dispatchTransactionFilters!({
+            type: 'SET_AMOUNT_FILTER',
+            payload: amountValues,
+          });
         }}
       />
       <Button
         variant='light'
         leftSection={<IconX size={14} />}
         onClick={() => {
-          setAmountFilter([undefined, undefined]);
+          dispatchTransactionFilters!({
+            type: 'SET_AMOUNT_FILTER',
+            payload: [undefined, undefined],
+          });
           close();
         }}
       >

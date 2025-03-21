@@ -14,14 +14,16 @@ import {
   YAxis,
 } from 'recharts';
 import useSWR from 'swr';
-import { DateFilterDispatchContext } from '../context/DateFilterContext';
+import { TransactionFiltersDispatchContext } from '../context/TransactionFiltersContext';
 import { IncomeVsExpense } from '../data/IncomeVsExpense';
 import { IncomeVsExpenseEndpoint, IncomeVsExpenseFetcher } from '../Fetchers';
 import { FormatMoney, FormatMoneyThousands, FormatMonthString } from '../utils';
 
 export default function IncomeVsExpenseChart() {
   const theme = useMantineTheme();
-  const dispatchDateFilter = React.useContext(DateFilterDispatchContext);
+  const dispatchTransactionFilters = React.useContext(
+    TransactionFiltersDispatchContext,
+  );
   const [chartData, setChartData] = React.useState<IncomeVsExpense[]>([]);
   const navigate = useNavigate();
 
@@ -47,9 +49,9 @@ export default function IncomeVsExpenseChart() {
 
   const handleClick = React.useCallback(
     (entry: IncomeVsExpense) => {
-      if (dispatchDateFilter) {
-        dispatchDateFilter({
-          type: 'SET',
+      if (dispatchTransactionFilters) {
+        dispatchTransactionFilters({
+          type: 'SET_DATE_FILTER',
           payload: [
             dayjs(entry.month).startOf('month').format('YYYY-MM-DD'),
             dayjs(entry.month).endOf('month').format('YYYY-MM-DD'),
@@ -58,7 +60,7 @@ export default function IncomeVsExpenseChart() {
         navigate('/snapshot');
       }
     },
-    [dispatchDateFilter, navigate],
+    [dispatchTransactionFilters, navigate],
   );
 
   if (error) return <div>failed to load</div>;

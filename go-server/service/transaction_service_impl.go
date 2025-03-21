@@ -70,3 +70,7 @@ func (t *TransactionServiceImpl) Update(transaction request.UpdateTransactionReq
 
 	return response
 }
+
+func (t *TransactionServiceImpl) GetFilteredTransactionsTotal(filters *filter.TransactionFilters) int64 {
+	return t.TransactionRepository.GetFilteredTransactionsTotal(filters)
+}

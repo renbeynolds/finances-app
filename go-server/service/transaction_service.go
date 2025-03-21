@@ -10,4 +10,5 @@ import (
 type TransactionService interface {
 	FindAll(pagination *paginate.Pagination, filters *filter.TransactionFilters) []response.TransactionResponse
 	Update(transaction request.UpdateTransactionRequest) response.TransactionResponse
+	GetFilteredTransactionsTotal(filters *filter.TransactionFilters) int64
 }

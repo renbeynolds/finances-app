@@ -1,28 +1,32 @@
 import { ActionIcon, TextInput } from '@mantine/core';
 import { IconSearch, IconX } from '@tabler/icons-react';
 import * as React from 'react';
+import { TransactionFiltersAction } from '../context/TransactionFiltersContext';
 
 type TransactionTableCommentFilterProps = {
   commentFilter: string;
-  setCommentFilter: (value: string) => void;
+  dispatchTransactionFilters: React.Dispatch<TransactionFiltersAction> | null;
   close: () => void;
 };
 
 export default function TransactionTableCommentFilter({
   commentFilter,
-  setCommentFilter,
+  dispatchTransactionFilters,
   close,
 }: TransactionTableCommentFilterProps) {
   const [commentSearch, setCommentSearch] = React.useState(commentFilter);
 
   const enterFunction = React.useCallback(
     (event: KeyboardEvent) => {
-      if (event.key === 'Enter') {
-        setCommentFilter(commentSearch);
+      if (event.key === 'Enter' && dispatchTransactionFilters) {
+        dispatchTransactionFilters({
+          type: 'SET_COMMENT_FILTER',
+          payload: commentSearch,
+        });
         close();
       }
     },
-    [close, setCommentFilter, commentSearch],
+    [close, dispatchTransactionFilters, commentSearch],
   );
 
   React.useEffect(() => {
@@ -44,7 +48,10 @@ export default function TransactionTableCommentFilter({
           variant='transparent'
           c='dimmed'
           onClick={() => {
-            setCommentFilter('');
+            dispatchTransactionFilters!({
+              type: 'SET_COMMENT_FILTER',
+              payload: '',
+            });
             close();
           }}
         >
@@ -52,7 +59,12 @@ export default function TransactionTableCommentFilter({
         </ActionIcon>
       }
       value={commentSearch}
-      onBlur={() => setCommentFilter(commentSearch)}
+      onBlur={() => {
+        dispatchTransactionFilters!({
+          type: 'SET_COMMENT_FILTER',
+          payload: commentSearch,
+        });
+      }}
       onChange={(e) => setCommentSearch(e.currentTarget.value)}
     />
   );

@@ -11,7 +11,7 @@ import {
 import { Props } from 'recharts/types/component/DefaultLegendContent';
 import { PieSectorDataItem } from 'recharts/types/polar/Pie';
 import useSWR from 'swr';
-import { DateFilterContext } from '../context/DateFilterContext';
+import { TransactionFiltersContext } from '../context/TransactionFiltersContext';
 import { TopSpendingCategory } from '../data/TopSpendingCategory';
 import {
   TopSpendingCategoriesEndpoint,
@@ -23,13 +23,13 @@ import { getChartColors } from '../utils/chartcolors';
 export default function TopSpendingCategoriesChart() {
   const theme = useMantineTheme();
   const chartColors = getChartColors(theme);
-  const dateFilter = React.useContext(DateFilterContext);
+  const transactionFilters = React.useContext(TransactionFiltersContext);
   const [activeIndex, setActiveIndex] = React.useState(0);
   const [chartData, setChartData] = React.useState<TopSpendingCategory[]>([]);
 
   const { data, error, isLoading } = useSWR(
-    `${TopSpendingCategoriesEndpoint}?from=${dateFilter[0]}&to=${dateFilter[1]}`,
-    TopSpendingCategoriesFetcher
+    `${TopSpendingCategoriesEndpoint}?from=${transactionFilters.Date[0]}&to=${transactionFilters.Date[1]}`,
+    TopSpendingCategoriesFetcher,
   );
 
   React.useEffect(() => {
@@ -127,7 +127,10 @@ const ActivePieShape = ({
 };
 
 const CustomLegend = (
-  props: Props & { setActiveIndex: (arg0: number) => void; activeIndex: number }
+  props: Props & {
+    setActiveIndex: (arg0: number) => void;
+    activeIndex: number;
+  },
 ) => {
   const { payload, activeIndex, setActiveIndex } = props;
 

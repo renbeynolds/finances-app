@@ -2,11 +2,11 @@ import { ActionIcon, Group, Menu } from '@mantine/core';
 import { DatePickerInput, DatesRangeValue } from '@mantine/dates';
 import { IconCalendarBolt } from '@tabler/icons-react';
 import dayjs from 'dayjs';
-import React, { useContext } from 'react';
+import React from 'react';
 import {
-  DateFilterContext,
-  DateFilterDispatchContext,
-} from '../context/DateFilterContext';
+  TransactionFiltersContext,
+  TransactionFiltersDispatchContext,
+} from '../context/TransactionFiltersContext';
 
 const dateRanges: { label: React.ReactNode; value: [Date, Date] }[] = [
   {
@@ -38,21 +38,22 @@ const dateRanges: { label: React.ReactNode; value: [Date, Date] }[] = [
 ];
 
 export default function DateRangePicker() {
-  const dateFilter = React.useContext(DateFilterContext);
+  const transactionFilters = React.useContext(TransactionFiltersContext);
+  const dispatchTransactionFilters = React.useContext(
+    TransactionFiltersDispatchContext,
+  );
 
   const [value, setValue] = React.useState<[Date | null, Date | null]>([
-    dayjs(dateFilter[0]).toDate(),
-    dayjs(dateFilter[1]).toDate(),
+    dayjs(transactionFilters.Date[0]).toDate(),
+    dayjs(transactionFilters.Date[1]).toDate(),
   ]);
-
-  const dispatchDateFilter = useContext(DateFilterDispatchContext);
 
   const handleChange = React.useCallback(
     (value: DatesRangeValue) => {
       setValue(value);
-      if (dispatchDateFilter && value[0] && value[1]) {
-        dispatchDateFilter({
-          type: 'SET',
+      if (dispatchTransactionFilters && value[0] && value[1]) {
+        dispatchTransactionFilters!({
+          type: 'SET_DATE_FILTER',
           payload: [
             value[0].toISOString().split('T')[0],
             value[1].toISOString().split('T')[0],
@@ -60,7 +61,7 @@ export default function DateRangePicker() {
         });
       }
     },
-    [dispatchDateFilter, setValue],
+    [dispatchTransactionFilters, setValue],
   );
 
   return (

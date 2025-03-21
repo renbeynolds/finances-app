@@ -40,3 +40,10 @@ func (r *TransactionRepositoryImpl) Update(transaction *model.Transaction) *mode
 	r.Db.Save(transaction)
 	return transaction
 }
+
+func (r *TransactionRepositoryImpl) GetFilteredTransactionsTotal(filters *filter.TransactionFilters) int64 {
+	var total int64
+	r.Db.Model(&model.Transaction{}).Scopes(filter.FilterTransactions(nil, filters, r.Db)).
+		Select("SUM(amount) as total").Scan(&total)
+	return total
+}

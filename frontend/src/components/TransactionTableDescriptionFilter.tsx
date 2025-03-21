@@ -1,16 +1,17 @@
 import { ActionIcon, TextInput } from '@mantine/core';
 import { IconSearch, IconX } from '@tabler/icons-react';
 import * as React from 'react';
+import { TransactionFiltersAction } from '../context/TransactionFiltersContext';
 
 type TransactionTableDescriptionFilterProps = {
   descriptionFilter: string;
-  setDescriptionFilter: (value: string) => void;
+  dispatchTransactionFilters: React.Dispatch<TransactionFiltersAction> | null;
   close: () => void;
 };
 
 export default function TransactionTableDescriptionFilter({
   descriptionFilter,
-  setDescriptionFilter,
+  dispatchTransactionFilters,
   close,
 }: TransactionTableDescriptionFilterProps) {
   const [descriptionSearch, setDescriptionSearch] =
@@ -18,12 +19,15 @@ export default function TransactionTableDescriptionFilter({
 
   const enterFunction = React.useCallback(
     (event: KeyboardEvent) => {
-      if (event.key === 'Enter') {
-        setDescriptionFilter(descriptionSearch);
+      if (event.key === 'Enter' && dispatchTransactionFilters) {
+        dispatchTransactionFilters({
+          type: 'SET_DESCRIPTION_FILTER',
+          payload: descriptionSearch,
+        });
         close();
       }
     },
-    [close, setDescriptionFilter, descriptionSearch],
+    [close, dispatchTransactionFilters, descriptionSearch],
   );
 
   React.useEffect(() => {
@@ -46,7 +50,10 @@ export default function TransactionTableDescriptionFilter({
           c='dimmed'
           onClick={() => {
             setDescriptionSearch('');
-            setDescriptionFilter('');
+            dispatchTransactionFilters!({
+              type: 'SET_DESCRIPTION_FILTER',
+              payload: '',
+            });
             close();
           }}
         >
@@ -54,7 +61,12 @@ export default function TransactionTableDescriptionFilter({
         </ActionIcon>
       }
       value={descriptionSearch}
-      onBlur={(e) => setDescriptionFilter(e.currentTarget.value)}
+      onBlur={() => {
+        dispatchTransactionFilters!({
+          type: 'SET_DESCRIPTION_FILTER',
+          payload: descriptionSearch,
+        });
+      }}
       onChange={(e) => setDescriptionSearch(e.currentTarget.value)}
     />
   );

@@ -69,3 +69,18 @@ func (controller *TransactionControllerImpl) Update(ctx *gin.Context) {
 	updatedTransaction := controller.transactionService.Update(updateTransactionRequest)
 	response.SendStatusOK(updatedTransaction, nil, ctx)
 }
+
+func (controller *TransactionControllerImpl) GetFilteredTransactionsTotal(ctx *gin.Context) {
+	filters := filter.TransactionFilters{
+		From:        ctx.Query("from"),
+		To:          ctx.Query("to"),
+		Description: ctx.Query("description"),
+		Comment:     ctx.Query("comment"),
+		Min:         ctx.Query("min"),
+		Max:         ctx.Query("max"),
+		AccountID:   ctx.Query("account_id"),
+	}
+
+	total := controller.transactionService.GetFilteredTransactionsTotal(&filters)
+	response.SendStatusOK(total, nil, ctx)
+}

@@ -39,6 +39,10 @@ export const TransactionsFetcher: Fetcher<Response<Transaction[]>, string> = (
   url,
 ) => fetch(url).then((res) => res.json());
 
+export const FilteredTransactionsTotalEndpoint = '/api/transactions/total';
+export const AmountFetcher: Fetcher<Response<number>, string> = (url) =>
+  fetch(url).then((res) => res.json());
+
 export const TopSpendingCategoriesEndpoint =
   '/api/insights/top_spending_categories';
 export const TopSpendingCategoriesFetcher: Fetcher<

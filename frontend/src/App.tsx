@@ -12,17 +12,17 @@ import {
   DefaultCategories,
 } from './context/CategoriesContext';
 import {
-  DateFilterContext,
-  DateFilterDispatchContext,
-  DateFilterReducer,
-  DefaultDateFilter,
-} from './context/DateFilterContext';
+  DefaultTransactionFilters,
+  TransactionFiltersContext,
+  TransactionFiltersDispatchContext,
+  TransactionFiltersReducer,
+} from './context/TransactionFiltersContext';
 import { theme } from './Theme';
 
 export default function App() {
-  const [dateFilter, dateFilterDispatch] = React.useReducer(
-    DateFilterReducer,
-    DefaultDateFilter,
+  const [transactionFilters, transactionFiltersDispatch] = React.useReducer(
+    TransactionFiltersReducer,
+    DefaultTransactionFilters,
   );
 
   const [categories, categoriesDispatchContext] = React.useReducer(
@@ -32,8 +32,10 @@ export default function App() {
 
   return (
     <MantineProvider theme={theme} defaultColorScheme='dark'>
-      <DateFilterContext.Provider value={dateFilter}>
-        <DateFilterDispatchContext.Provider value={dateFilterDispatch}>
+      <TransactionFiltersContext.Provider value={transactionFilters}>
+        <TransactionFiltersDispatchContext.Provider
+          value={transactionFiltersDispatch}
+        >
           <CategoriesContext.Provider value={categories}>
             <CategoriesDispatchContext.Provider
               value={categoriesDispatchContext}
@@ -41,8 +43,8 @@ export default function App() {
               <Layout />
             </CategoriesDispatchContext.Provider>
           </CategoriesContext.Provider>
-        </DateFilterDispatchContext.Provider>
-      </DateFilterContext.Provider>
+        </TransactionFiltersDispatchContext.Provider>
+      </TransactionFiltersContext.Provider>
     </MantineProvider>
   );
 }

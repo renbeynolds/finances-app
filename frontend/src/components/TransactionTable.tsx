@@ -2,7 +2,10 @@ import { Text } from '@mantine/core';
 import { DataTable } from 'mantine-datatable';
 import * as React from 'react';
 import useSWR from 'swr';
-import { DateFilterContext } from '../context/DateFilterContext';
+import {
+  TransactionFiltersContext,
+  TransactionFiltersDispatchContext,
+} from '../context/TransactionFiltersContext';
 import { Response } from '../data/Response';
 import { Transaction } from '../data/Transaction';
 import { TransactionsEndpoint, TransactionsFetcher } from '../Fetchers';
@@ -26,32 +29,23 @@ export default function TransactionTable({
   accountId,
   hideDateFilter,
 }: TransactionTableProps) {
+  const transactionFilters = React.useContext(TransactionFiltersContext);
+  const dispatchTransactionFilters = React.useContext(
+    TransactionFiltersDispatchContext,
+  );
   const [page, setPage] = React.useState(1);
-  const [descriptionFilter, setDescriptionFilter] = React.useState('');
-  const [commentFilter, setCommentFilter] = React.useState('');
-  const [amountFilter, setAmountFilter] = React.useState<
-    [number | undefined, number | undefined]
-  >([undefined, undefined]);
-  const dateFilter = React.useContext(DateFilterContext);
   const [response, setResponse] = React.useState<Response<Transaction[]>>();
 
   React.useEffect(() => {
     setPage(1);
-  }, [
-    setPage,
-    accountId,
-    descriptionFilter,
-    dateFilter,
-    amountFilter,
-    commentFilter,
-  ]);
+  }, [setPage, accountId, transactionFilters]);
 
   const { data, error, isLoading, mutate } = useSWR(
     `${TransactionsEndpoint}?page=${page}&limit=${pageSize}` +
-      `&from=${dateFilter[0]}&to=${dateFilter[1]}` +
-      `&description=${descriptionFilter}` +
-      `&min=${amountFilter[0] !== undefined ? amountFilter[0] : ''}&max=${amountFilter[1] !== undefined ? amountFilter[1] : ''}` +
-      `&comment=${commentFilter}` +
+      `&from=${transactionFilters.Date[0]}&to=${transactionFilters.Date[1]}` +
+      `&description=${transactionFilters.Description}` +
+      `&min=${transactionFilters.Amount[0] !== undefined ? transactionFilters.Amount[0] : ''}&max=${transactionFilters.Amount[1] !== undefined ? transactionFilters.Amount[1] : ''}` +
+      `&comment=${transactionFilters.Comment}` +
       `&account_id=${accountId !== undefined ? accountId : ''}`,
     TransactionsFetcher,
   );
@@ -101,12 +95,12 @@ export default function TransactionTable({
           cellsStyle: () => ({ maxWidth: '400px' }),
           filter: ({ close }) => (
             <TransactionTableDescriptionFilter
-              descriptionFilter={descriptionFilter}
-              setDescriptionFilter={setDescriptionFilter}
+              descriptionFilter={transactionFilters.Description}
+              dispatchTransactionFilters={dispatchTransactionFilters}
               close={close}
             />
           ),
-          filtering: descriptionFilter !== '',
+          filtering: transactionFilters.Description !== '',
         },
         {
           accessor: 'comment',
@@ -118,12 +112,12 @@ export default function TransactionTable({
           ),
           filter: ({ close }) => (
             <TransactionTableCommentFilter
-              commentFilter={commentFilter}
-              setCommentFilter={setCommentFilter}
+              commentFilter={transactionFilters.Comment}
+              dispatchTransactionFilters={dispatchTransactionFilters}
               close={close}
             />
           ),
-          filtering: commentFilter !== '',
+          filtering: transactionFilters.Comment !== '',
         },
         {
           accessor: 'amount',
@@ -134,13 +128,14 @@ export default function TransactionTable({
           ),
           filter: ({ close }) => (
             <TransactionTableAmountFilter
-              amountFilter={amountFilter}
-              setAmountFilter={setAmountFilter}
+              amountFilter={transactionFilters.Amount}
+              dispatchTransactionFilters={dispatchTransactionFilters}
               close={close}
             />
           ),
           filtering:
-            amountFilter[0] !== undefined || amountFilter[1] !== undefined,
+            transactionFilters.Amount[0] !== undefined ||
+            transactionFilters.Amount[1] !== undefined,
         },
         {
           accessor: 'categoryId',
