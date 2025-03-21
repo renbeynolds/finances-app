@@ -92,3 +92,11 @@ ALTER TABLE uploads ALTER COLUMN created_at DROP NOT NULL;
 -- Miscellaneous
 DROP TABLE migration_history;
 DROP TABLE typeorm_metadata;
+CREATE TABLE public.goose_db_version (
+    id integer NOT NULL,
+    version_id bigint NOT NULL,
+    is_applied boolean NOT NULL,
+    tstamp timestamp without time zone DEFAULT now() NOT NULL
+);
+INSERT INTO goose_db_version (id, version_id, is_applied, tstamp) VALUES (1, 0, true, NOW());
+INSERT INTO goose_db_version (id, version_id, is_applied, tstamp) VALUES (2, 1, true, NOW());

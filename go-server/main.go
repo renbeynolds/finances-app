@@ -1,9 +1,11 @@
 package main
 
 import (
+	"embed"
+
+	"github.com/pressly/goose/v3"
 	"github.com/renbeynolds/finances-app/controller"
 	"github.com/renbeynolds/finances-app/data/validation"
-	"github.com/renbeynolds/finances-app/model"
 	"github.com/renbeynolds/finances-app/repository"
 	"github.com/renbeynolds/finances-app/router"
 	"github.com/renbeynolds/finances-app/service"
@@ -13,19 +15,29 @@ import (
 
 var dsn = "host=localhost user=username password=password dbname=database port=5432 sslmode=disable TimeZone=America/New_York"
 
+//go:embed migrations/*.sql
+var embedMigrations embed.FS
+
 func main() {
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
 		panic("failed to connect database")
 	}
 
-	validate := validation.NewValidator()
+	goose.SetBaseFS(embedMigrations)
+	if err := goose.SetDialect("postgres"); err != nil {
+		panic(err)
+	}
 
-	db.AutoMigrate(&model.Account{})
-	db.AutoMigrate(&model.Upload{})
-	db.AutoMigrate(&model.Category{})
-	db.AutoMigrate(&model.Transaction{})
-	db.AutoMigrate(&model.PrefixRule{})
+	rawDB, err := db.DB()
+	if err != nil {
+		panic(err)
+	}
+	if err := goose.Up(rawDB, "migrations"); err != nil {
+		panic(err)
+	}
+
+	validate := validation.NewValidator()
 
 	accountRepository := repository.NewAccountRepositoryImpl(db)
 	uploadRepository := repository.NewUploadRepositoryImpl(db)

@@ -21,6 +21,6 @@ Old Version: 5d8073d8faa1f26769807bbeea76a52d5ed974f0
 
 * Generating a Migration
   ```bash
-  > cd server
-  > yarn run typeorm migration:generate <migration_name> -d src/postgresDB.ts
+  > go install github.com/pressly/goose/v3/cmd/goose@latest
+  > goose -s -dir go-server/migrations create [NAME] sql
   ```
