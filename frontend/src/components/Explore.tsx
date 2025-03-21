@@ -1,35 +1,25 @@
-// import React from 'react';
-// import useSWR from 'swr';
-// import { DateFilterContext } from '../context/DateFilterContext';
-// import { AmountFetcher, FilteredTransactionsTotalEndpoint } from '../Fetchers';
+import { SimpleGrid, Stack } from '@mantine/core';
+import React from 'react';
+import useSWR from 'swr';
+import { TransactionFiltersContext } from '../context/TransactionFiltersContext';
+import { AmountFetcher, FilteredTransactionsTotalEndpoint } from '../Fetchers';
+import AmountCard from './AmountCard';
 import TransactionTable from './TransactionTable';
 
 export default function Explore() {
-  // const dateFilter = React.useContext(DateFilterContext);
+  const transactionFilters = React.useContext(TransactionFiltersContext);
 
-  // const { data, error, isLoading, mutate } = useSWR(
-  //   `${FilteredTransactionsTotalEndpoint}?` +
-  //     `&from=${dateFilter[0]}&to=${dateFilter[1]}` +
-  //     `&description=${descriptionFilter}` +
-  //     `&min=${amountFilter[0] !== undefined ? amountFilter[0] : ''}&max=${amountFilter[1] !== undefined ? amountFilter[1] : ''}` +
-  //     `&comment=${commentFilter}` +
-  //     `&account_id=`,
-  //   AmountFetcher,
-  // );
+  const { data, error, isLoading } = useSWR(
+    FilteredTransactionsTotalEndpoint(transactionFilters),
+    AmountFetcher,
+  );
 
-  // React.useEffect(() => {
-  //   console.log('mutate');
-  //   mutate();
-  // }, [
-  //   mutate,
-  //   // accountId,
-  //   descriptionFilter,
-  //   dateFilter,
-  //   amountFilter,
-  //   commentFilter,
-  // ]);
-
-  // console.log(data);
-
-  return <TransactionTable />;
+  return (
+    <Stack>
+      <SimpleGrid cols={2}>
+        <AmountCard title='Total' amount={data?.data} isLoading={isLoading} />
+      </SimpleGrid>
+      <TransactionTable />
+    </Stack>
+  );
 }

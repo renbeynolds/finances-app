@@ -4,7 +4,7 @@ import { createContext, Dispatch } from 'react';
 type DateFilter = [string, string];
 type AmountFilter = [number | undefined, number | undefined];
 
-type TransactionFilters = {
+export type TransactionFilters = {
   Date: DateFilter;
   Description: string;
   Comment: string;

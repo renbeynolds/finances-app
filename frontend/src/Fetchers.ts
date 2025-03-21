@@ -1,4 +1,5 @@
 import { Fetcher } from 'swr';
+import { TransactionFilters } from './context/TransactionFiltersContext';
 import { Account } from './data/Account';
 import { AmountOverTime } from './data/AmountOverTime';
 import { AmountVsAverage } from './data/AmountVsAverage';
@@ -34,12 +35,32 @@ export const CategoriesEndpoint = '/api/categories';
 export const CategoriesFetcher: Fetcher<Response<Category[]>, string> = (url) =>
   fetch(url).then((res) => res.json());
 
-export const TransactionsEndpoint = '/api/transactions';
+const transactionFiltersToQueryParams = (
+  transactionFilters: TransactionFilters,
+) =>
+  `from=${transactionFilters.Date[0]}&to=${transactionFilters.Date[1]}` +
+  `&description=${transactionFilters.Description}` +
+  `&min=${transactionFilters.Amount[0] !== undefined ? transactionFilters.Amount[0] : ''}&max=${transactionFilters.Amount[1] !== undefined ? transactionFilters.Amount[1] : ''}` +
+  `&comment=${transactionFilters.Comment}`;
+
+export const TransactionsEndpoint = (
+  page: number,
+  pageSize: number,
+  transactionFilters: TransactionFilters,
+  accountId?: string,
+) =>
+  `/api/transactions?page=${page}&limit=${pageSize}&` +
+  transactionFiltersToQueryParams(transactionFilters) +
+  `&account_id=${accountId !== undefined ? accountId : ''}`;
 export const TransactionsFetcher: Fetcher<Response<Transaction[]>, string> = (
   url,
 ) => fetch(url).then((res) => res.json());
 
-export const FilteredTransactionsTotalEndpoint = '/api/transactions/total';
+export const FilteredTransactionsTotalEndpoint = (
+  transactionFilters: TransactionFilters,
+) =>
+  `/api/transactions/total?` +
+  transactionFiltersToQueryParams(transactionFilters);
 export const AmountFetcher: Fetcher<Response<number>, string> = (url) =>
   fetch(url).then((res) => res.json());
 

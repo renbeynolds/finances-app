@@ -41,12 +41,7 @@ export default function TransactionTable({
   }, [setPage, accountId, transactionFilters]);
 
   const { data, error, isLoading, mutate } = useSWR(
-    `${TransactionsEndpoint}?page=${page}&limit=${pageSize}` +
-      `&from=${transactionFilters.Date[0]}&to=${transactionFilters.Date[1]}` +
-      `&description=${transactionFilters.Description}` +
-      `&min=${transactionFilters.Amount[0] !== undefined ? transactionFilters.Amount[0] : ''}&max=${transactionFilters.Amount[1] !== undefined ? transactionFilters.Amount[1] : ''}` +
-      `&comment=${transactionFilters.Comment}` +
-      `&account_id=${accountId !== undefined ? accountId : ''}`,
+    TransactionsEndpoint(page, pageSize, transactionFilters, accountId),
     TransactionsFetcher,
   );
 
