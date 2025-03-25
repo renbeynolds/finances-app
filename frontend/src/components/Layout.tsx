@@ -77,6 +77,7 @@ export default function Layout() {
           <div
             style={{
               maxHeight: 'calc(100vh - 5rem)',
+              height: '100%',
               overflowY: 'auto',
             }}
           >
