@@ -64,3 +64,26 @@ func (controller *AccountControllerImpl) GetBalanceOverTime(ctx *gin.Context) {
 	balanceOverTime := controller.accountService.GetBalanceOverTime(uint(id), from, to)
 	response.SendStatusOK(balanceOverTime, nil, ctx)
 }
+
+func (controller *AccountControllerImpl) Update(ctx *gin.Context) {
+	updateAccountRequest := request.UpdateAccountRequest{}
+	err := ctx.ShouldBindJSON(&updateAccountRequest)
+	util.ErrorPanic(err)
+
+	if !validation.Validate(
+		controller.validate,
+		updateAccountRequest,
+		validation.UpdateAccountRequestValidationMessageBuilder,
+		ctx,
+	) {
+		return
+	}
+
+	accountId := ctx.Param("accountId")
+	id, err := strconv.Atoi(accountId)
+	util.ErrorPanic(err)
+
+	updateAccountRequest.ID = uint(id)
+	updatedAccount := controller.accountService.Update(updateAccountRequest)
+	response.SendStatusOK(updatedAccount, nil, ctx)
+}

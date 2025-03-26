@@ -3,8 +3,7 @@ import { useForm } from '@mantine/form';
 import { notifications } from '@mantine/notifications';
 
 interface UploadFormValues {
-  csv: File | null;
-  accountId: string;
+  csv: File;
 }
 
 type UploadFormProps = {
@@ -13,22 +12,15 @@ type UploadFormProps = {
 
 export default function UploadForm({ accountId }: UploadFormProps) {
   const form = useForm<UploadFormValues>({
-    initialValues: {
-      csv: null,
-      accountId: accountId,
-    },
     validate: {
       csv: (value) => (!value ? 'CSV is required' : null),
-      accountId: (value) => (!value ? 'Account ID is required' : null),
     },
   });
 
   const handleSubmit = async (values: UploadFormValues) => {
-    if (!values.csv) return;
-
     const formData = new FormData();
     formData.append('csv', values.csv);
-    formData.append('accountId', values.accountId);
+    formData.append('accountId', accountId);
 
     try {
       const response = await fetch('/api/uploads', {

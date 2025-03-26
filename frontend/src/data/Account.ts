@@ -2,10 +2,11 @@ export type Account = {
   id: number;
   name: string;
   dateHeader: string;
+  dateFormat: string;
   descriptionHeader: string;
-  amountHeader: string;
+  amountExpression: string;
   startingAmount: number;
   balance: number;
-  amountsType: 'negamtexp' | 'posamtexp' | 'septypecol';
   color: string;
+  loginUrl: string;
 };

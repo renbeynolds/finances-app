@@ -1,5 +1,14 @@
-import { Button, Group, Modal, SimpleGrid, Stack, Title } from '@mantine/core';
-import { IconUpload } from '@tabler/icons-react';
+import {
+  ActionIcon,
+  Anchor,
+  Button,
+  Group,
+  Modal,
+  SimpleGrid,
+  Stack,
+  Title,
+} from '@mantine/core';
+import { IconEdit, IconUpload } from '@tabler/icons-react';
 import dayjs from 'dayjs';
 import React from 'react';
 import { useParams } from 'react-router';
@@ -10,13 +19,16 @@ import {
   AccountsEndpoint,
   AmountOverTimeFetcher,
 } from '../Fetchers';
+import AccountForm from './AccountForm';
 import AmountOverTimeChart from './AmountOverTimeChart';
+import ConditionalWrap from './ConditionalWrap';
 import TransactionTable from './TransactionTable';
 import UploadForm from './UploadForm';
 
 export default function AccountView() {
   const { accountId } = useParams();
   const [uploadModalOpened, setUploadModalOpened] = React.useState(false);
+  const [accountModalOpened, setAccountModalOpened] = React.useState(false);
 
   const {
     data: accountData,
@@ -40,7 +52,25 @@ export default function AccountView() {
     <>
       <Stack>
         <Group justify='space-between'>
-          <Title order={2}>{accountData?.data.name}</Title>
+          <Group>
+            <ConditionalWrap
+              condition={accountData?.data.loginUrl !== ''}
+              wrap={(wrappedChildren) => (
+                <Anchor href={accountData?.data.loginUrl} target='_blank'>
+                  {wrappedChildren}
+                </Anchor>
+              )}
+            >
+              <Title order={2}>{accountData?.data.name}</Title>
+            </ConditionalWrap>
+            <ActionIcon
+              size='m'
+              variant='outline'
+              onClick={() => setAccountModalOpened(true)}
+            >
+              <IconEdit style={{ width: '70%' }} />
+            </ActionIcon>
+          </Group>
           <Button
             onClick={() => setUploadModalOpened(true)}
             rightSection={<IconUpload />}
@@ -59,6 +89,16 @@ export default function AccountView() {
         title='New Upload'
       >
         <UploadForm accountId={String(accountId)} />
+      </Modal>
+      <Modal
+        opened={accountModalOpened}
+        onClose={() => setAccountModalOpened(false)}
+        title='Edit Account'
+      >
+        <AccountForm
+          account={accountData!.data}
+          close={() => setAccountModalOpened(false)}
+        />
       </Modal>
     </>
   );

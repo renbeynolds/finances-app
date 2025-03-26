@@ -51,7 +51,7 @@ export default function TransactionTable({
       mutate({
         ...data!,
         data: data!.data.map((t) =>
-          t.id === updatedTransaction.id ? updatedTransaction : t,
+          t.id === updatedTransaction.data.id ? updatedTransaction.data : t,
         ),
       });
     },
@@ -131,6 +131,14 @@ export default function TransactionTable({
           filtering:
             transactionFilters.Amount[0] !== undefined ||
             transactionFilters.Amount[1] !== undefined,
+        },
+        {
+          accessor: 'balance',
+          render: (record) => (
+            <Text size='sm' c={record.balance > 0 ? 'green' : 'red'}>
+              {FormatMoney(record.balance)}
+            </Text>
+          ),
         },
         {
           accessor: 'categoryId',

@@ -5,13 +5,11 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
-	"github.com/renbeynolds/finances-app/data/request"
 	"github.com/renbeynolds/finances-app/data/response"
 )
 
 func NewValidator() *validator.Validate {
 	validate := validator.New()
-	validate.RegisterStructValidation(createAccountRequestStructLevelValidation, request.CreateAccountRequest{})
 	return validate
 }
 

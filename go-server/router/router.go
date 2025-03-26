@@ -38,6 +38,7 @@ func NewRouter(
 			accountGroup := accountsGroup.Group("/:accountId")
 			{
 				accountGroup.GET("/", accountController.FindByID)
+				accountGroup.PATCH("/", accountController.Update)
 				accountGroup.GET("/balance_over_time", accountController.GetBalanceOverTime)
 			}
 		}

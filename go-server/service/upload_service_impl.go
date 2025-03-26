@@ -3,16 +3,16 @@ package service
 import (
 	"encoding/csv"
 	"fmt"
-	"slices"
 	"strings"
 	"time"
 
+	"github.com/expr-lang/expr"
 	"github.com/go-playground/validator/v10"
 	"github.com/renbeynolds/finances-app/data/request"
 	"github.com/renbeynolds/finances-app/data/response"
 	"github.com/renbeynolds/finances-app/model"
 	"github.com/renbeynolds/finances-app/repository"
-	"github.com/renbeynolds/finances-app/util/money"
+	"github.com/renbeynolds/finances-app/util"
 )
 
 type UploadServiceImpl struct {
@@ -62,35 +62,28 @@ func (t *UploadServiceImpl) Create(upload request.CreateUploadRequest) response.
 	if err != nil {
 		// TODO
 	}
-
-	header, err := getCSVHeader(account, records[0])
-	if err != nil {
-		fmt.Errorf("error getting csv header: %v", err)
-	}
-
+	csvData := util.ParseCSV(records)
 	transactions := []model.Transaction{}
 
-	for idx, record := range records {
-		if idx == 0 {
-			continue
-		}
+	for idx := len(csvData) - 1; idx >= 0; idx-- {
+		record := csvData[idx]
 		transaction := model.Transaction{
-			Description: record[header.DescriptionIndex],
+			Description: record[account.DescriptionHeader],
 		}
 
-		date, err := time.Parse("2006/01/02", record[header.DateIndex]) // TODO: date format
+		date, err := time.Parse(account.DateFormat, record[account.DateHeader])
 		if err != nil {
-			// TODO
+			fmt.Println(err)
 		}
 		transaction.Date = date
 
-		amount, err := getTransactionAmount(account, header, record)
+		amount, err := getTransactionAmount(account.AmountExpression, record)
 		if err != nil {
 			// TODO
 		}
 		transaction.Amount = amount
 
-		category := getTransactionCategory(categories, header, record)
+		category := getTransactionCategory(categories, account, record)
 		if category != nil {
 			transaction.CategoryID = &category.ID
 		}
@@ -115,116 +108,34 @@ func (t *UploadServiceImpl) Create(upload request.CreateUploadRequest) response.
 	}
 }
 
-type CSVHeader struct {
-	DateIndex        int
-	DescriptionIndex int
-	AmountIndex      *int
-	IncomeIndex      *int
-	ExpenseIndex     *int
-	TypeIndex        *int
+func getTransactionAmount(amountExpression string, record map[string]string) (int64, error) {
+	program, err := expr.Compile(amountExpression, expr.Env(record), expr.Function("ParseMoney", func(params ...any) (any, error) {
+		return util.ParseMoney(params[0].(string))
+	}, util.ParseMoney))
+	if err != nil {
+		return 0, err
+	}
+
+	output, err := expr.Run(program, record)
+	if err != nil {
+		return 0, err
+	}
+
+	amount64, ok := output.(int64)
+	if ok {
+		return amount64, nil
+	}
+
+	amount, ok := output.(int)
+	if ok {
+		return int64(amount), nil
+	}
+
+	return 0, fmt.Errorf("amount is not an integer")
 }
 
-func getCSVHeader(account model.Account, header []string) (CSVHeader, error) {
-	csvHeader := CSVHeader{}
-	dateIndex := slices.Index(header, account.DateHeader)
-	if dateIndex == -1 {
-		return csvHeader, fmt.Errorf("date column not found")
-	}
-	csvHeader.DateIndex = dateIndex
-
-	descriptionIndex := slices.Index(header, account.DescriptionHeader)
-	if descriptionIndex == -1 {
-		return csvHeader, fmt.Errorf("description column not found")
-	}
-	csvHeader.DescriptionIndex = descriptionIndex
-
-	if account.AmountHeader != nil {
-		amountIndex := slices.Index(header, *account.AmountHeader)
-		if amountIndex == -1 {
-			return csvHeader, fmt.Errorf("amount column not found")
-		}
-		csvHeader.AmountIndex = &amountIndex
-	}
-
-	if account.IncomeHeader != nil {
-		incomeIndex := slices.Index(header, *account.IncomeHeader)
-		if incomeIndex == -1 {
-			return csvHeader, fmt.Errorf("income column not found")
-		}
-		csvHeader.IncomeIndex = &incomeIndex
-	}
-
-	if account.ExpenseHeader != nil {
-		expenseIndex := slices.Index(header, *account.ExpenseHeader)
-		if expenseIndex == -1 {
-			return csvHeader, fmt.Errorf("income column not found")
-		}
-		csvHeader.ExpenseIndex = &expenseIndex
-	}
-
-	if account.TypeHeader != nil {
-		typeIndex := slices.Index(header, *account.TypeHeader)
-		if typeIndex == -1 {
-			return csvHeader, fmt.Errorf("income column not found")
-		}
-		csvHeader.TypeIndex = &typeIndex
-	}
-
-	return csvHeader, nil
-}
-
-func getTransactionAmount(account model.Account, header CSVHeader, record []string) (int64, error) {
-	var value int64
-	var err error
-
-	switch account.AmountsType {
-	case model.SeparateIncomeExpenseColumns:
-		income := record[*header.IncomeIndex]
-		expense := record[*header.ExpenseIndex]
-		if strings.TrimSpace(income) != "" {
-			value, err = money.ParseMoney(income)
-			if err != nil {
-				return 0, err
-			}
-		} else if strings.TrimSpace(expense) != "" {
-			value, err = money.ParseMoney(expense)
-			if err != nil {
-				return 0, err
-			}
-		}
-
-	case model.PositiveAmountExpense:
-		value, err = money.ParseMoney(record[*header.AmountIndex])
-		if err != nil {
-			return 0, err
-		}
-		value = value * -1
-
-	case model.NegativeAmountExpense:
-		value, err = money.ParseMoney(record[*header.AmountIndex])
-		if err != nil {
-			return 0, err
-		}
-
-	case model.SeparateTypeColumn:
-		value, err = money.ParseMoney(record[*header.AmountIndex])
-		if err != nil {
-			return 0, err
-		}
-		if record[*header.TypeIndex] == "Debit" {
-			value = value * -1
-		}
-
-	default:
-		return 0, fmt.Errorf("invalid amounts type")
-
-	}
-
-	return value, nil
-}
-
-func getTransactionCategory(categories []model.Category, header CSVHeader, record []string) *model.Category {
-	description := record[header.DescriptionIndex]
+func getTransactionCategory(categories []model.Category, account model.Account, record map[string]string) *model.Category {
+	description := record[account.DescriptionHeader]
 	for _, category := range categories {
 		for _, prefixRule := range category.PrefixRules {
 			if strings.HasPrefix(description, prefixRule.Prefix) {

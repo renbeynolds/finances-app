@@ -8,5 +8,6 @@ type AccountController interface {
 	Create(*gin.Context)
 	FindAll(*gin.Context)
 	FindByID(*gin.Context)
+	Update(*gin.Context)
 	GetBalanceOverTime(*gin.Context)
 }

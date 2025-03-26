@@ -39,7 +39,9 @@ export default function AccountsList() {
                   color:
                     account.balance > 0
                       ? theme.colors.green[6]
-                      : theme.colors.red[6],
+                      : account.balance < 0
+                        ? theme.colors.red[6]
+                        : theme.colors.gray[5],
                 },
               }}
             />
@@ -56,9 +58,9 @@ export default function AccountsList() {
       <Modal
         opened={accountModalOpened}
         onClose={() => setAccountModalOpened(false)}
-        title='Edit Account'
+        title='Create Account'
       >
-        <AccountForm />
+        <AccountForm close={() => setAccountModalOpened(false)} />
       </Modal>
     </>
   );
