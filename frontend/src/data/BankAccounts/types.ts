@@ -1,4 +1,4 @@
-export type Account = {
+export type BankAccount = {
   id: number;
   name: string;
   dateHeader: string;

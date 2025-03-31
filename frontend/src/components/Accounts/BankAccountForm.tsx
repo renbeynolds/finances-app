@@ -1,8 +1,11 @@
 import { Button, Stack, TextInput } from '@mantine/core';
 import { useForm } from '@mantine/form';
-import { requestCreateAccount, requestUpdateAccount } from '../Requests';
+import {
+  requestCreateBankAccount,
+  requestUpdateBankAccount,
+} from '../../data/BankAccounts/requests';
 
-export interface AccountFormValues {
+export interface BankAccountFormValues {
   name: string;
   dateHeader: string;
   dateFormat: string;
@@ -11,25 +14,28 @@ export interface AccountFormValues {
   loginUrl: string;
 }
 
-type AccountFormProps = {
-  account?: AccountFormValues & { id: number };
+type BankAccountFormProps = {
+  bankAccount?: BankAccountFormValues & { id: number };
   close: () => void;
 };
 
-export default function AccountForm({ account, close }: AccountFormProps) {
-  const form = useForm<AccountFormValues>({
-    initialValues: account,
+export default function BankAccountForm({
+  bankAccount,
+  close,
+}: BankAccountFormProps) {
+  const form = useForm<BankAccountFormValues>({
+    initialValues: bankAccount,
     validate: {},
   });
 
-  const handleSubmit = async (values: AccountFormValues) => {
-    if (!account) {
-      const response = await requestCreateAccount(values);
+  const handleSubmit = async (values: BankAccountFormValues) => {
+    if (!bankAccount) {
+      const response = await requestCreateBankAccount(values);
       if (response.code === 200) {
         close();
       }
     } else {
-      const response = await requestUpdateAccount(account.id, values);
+      const response = await requestUpdateBankAccount(bankAccount.id, values);
       if (response.code === 200) {
         close();
       }

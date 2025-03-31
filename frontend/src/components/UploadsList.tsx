@@ -9,14 +9,26 @@ export default function UploadsList() {
   if (isLoading) return <div>loading...</div>;
 
   return (
-    <Stack align='stretch' justify='flex-start' gap='md'>
-      {data!.data.map((upload, index) => (
-        <Button key={index} variant='outline' h='3rem' justify='space-between'>
-          <Stack gap='0'>
-            <Text size='l'>{upload.id}</Text>
-          </Stack>
-        </Button>
-      ))}
-    </Stack>
+    <div
+      style={{
+        height: '100%',
+        overflowY: 'auto',
+      }}
+    >
+      <Stack align='stretch' justify='flex-start' gap='md'>
+        {data!.data.map((upload, index) => (
+          <Button
+            key={index}
+            variant='outline'
+            h='3rem'
+            justify='space-between'
+          >
+            <Stack gap='0'>
+              <Text size='l'>{upload.id}</Text>
+            </Stack>
+          </Button>
+        ))}
+      </Stack>
+    </div>
   );
 }

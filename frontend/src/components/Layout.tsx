@@ -3,12 +3,12 @@ import {
   IconBuildingBank,
   IconCalendarMonth,
   IconCategory,
+  IconChartHistogram,
   IconDatabaseSearch,
-  IconTrendingUp,
   IconUpload,
 } from '@tabler/icons-react';
 import { useLocation, useNavigate } from 'react-router';
-import AccountsList from './AccountsList';
+import AccountsList from './Accounts/AccountsList';
 import CategoriesList from './CategoriesList';
 import MainContent from './MainContent';
 import UploadsList from './UploadsList';
@@ -45,7 +45,10 @@ export default function Layout() {
             >
               Snapshot
             </Tabs.Tab>
-            <Tabs.Tab value='trends' leftSection={<IconTrendingUp size={12} />}>
+            <Tabs.Tab
+              value='trends'
+              leftSection={<IconChartHistogram size={12} />}
+            >
               Trends
             </Tabs.Tab>
             <Tabs.Tab
@@ -78,7 +81,6 @@ export default function Layout() {
             style={{
               maxHeight: 'calc(100vh - 5rem)',
               height: '100%',
-              overflowY: 'auto',
             }}
           >
             {location.pathname.startsWith('/accounts') && <AccountsList />}

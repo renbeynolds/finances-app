@@ -21,6 +21,7 @@ func NewRouter(
 	categoryController controller.CategoryController,
 	transactionController controller.TransactionController,
 	insightController controller.InsightController,
+	investmentAccountController controller.InvestmentAccountController,
 ) *gin.Engine {
 	router := gin.Default()
 
@@ -40,6 +41,17 @@ func NewRouter(
 				accountGroup.GET("/", accountController.FindByID)
 				accountGroup.PATCH("/", accountController.Update)
 				accountGroup.GET("/balance_over_time", accountController.GetBalanceOverTime)
+			}
+		}
+
+		investmentAccountsGroup := apiGroup.Group("/investment_accounts")
+		{
+			investmentAccountsGroup.POST("/", investmentAccountController.Create)
+			investmentAccountsGroup.GET("/", investmentAccountController.FindAll)
+			investmentAccountGroup := investmentAccountsGroup.Group("/:accountId")
+			{
+				investmentAccountGroup.GET("/", investmentAccountController.FindByID)
+				investmentAccountGroup.POST("/balance", investmentAccountController.RecordBalance)
 			}
 		}
 

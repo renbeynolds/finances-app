@@ -18,17 +18,17 @@ import {
   AccountFetcher,
   AccountsEndpoint,
   AmountOverTimeFetcher,
-} from '../Fetchers';
-import AccountForm from './AccountForm';
-import AmountOverTimeChart from './AmountOverTimeChart';
-import ConditionalWrap from './ConditionalWrap';
-import TransactionTable from './TransactionTable';
-import UploadForm from './UploadForm';
+} from '../../Fetchers';
+import AmountOverTimeChart from '../AmountOverTimeChart';
+import ConditionalWrap from '../ConditionalWrap';
+import TransactionTable from '../TransactionTable';
+import UploadForm from '../UploadForm';
+import BankAccountForm from './BankAccountForm';
 
-export default function AccountView() {
+export default function BankAccountView() {
   const { accountId } = useParams();
   const [uploadModalOpened, setUploadModalOpened] = React.useState(false);
-  const [accountModalOpened, setAccountModalOpened] = React.useState(false);
+  const [editModalOpened, setEditModalOpened] = React.useState(false);
 
   const {
     data: accountData,
@@ -66,7 +66,7 @@ export default function AccountView() {
             <ActionIcon
               size='m'
               variant='outline'
-              onClick={() => setAccountModalOpened(true)}
+              onClick={() => setEditModalOpened(true)}
             >
               <IconEdit style={{ width: '70%' }} />
             </ActionIcon>
@@ -91,13 +91,13 @@ export default function AccountView() {
         <UploadForm accountId={String(accountId)} />
       </Modal>
       <Modal
-        opened={accountModalOpened}
-        onClose={() => setAccountModalOpened(false)}
+        opened={editModalOpened}
+        onClose={() => setEditModalOpened(false)}
         title='Edit Account'
       >
-        <AccountForm
-          account={accountData!.data}
-          close={() => setAccountModalOpened(false)}
+        <BankAccountForm
+          bankAccount={accountData!.data}
+          close={() => setEditModalOpened(false)}
         />
       </Modal>
     </>

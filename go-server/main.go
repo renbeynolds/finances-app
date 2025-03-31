@@ -44,12 +44,15 @@ func main() {
 	categoryRepository := repository.NewCategoryRepositoryImpl(db)
 	transactionRepository := repository.NewTransactionRepositoryImpl(db)
 	insightRepository := repository.NewInsightRepositoryImpl(db)
+	investmentAccountRepository := repository.NewInvestmentAccountRepositoryImpl(db)
+	investmentAccountBalanceRepository := repository.NewInvestmentAccountBalanceRepositoryImpl(db)
 
 	accountService := service.NewAccountServiceImpl(accountRepository)
 	uploadService := service.NewUploadServiceImpl(uploadRepository, accountRepository, categoryRepository)
 	categoryService := service.NewCategoryServiceImpl(categoryRepository)
 	transactionService := service.NewTransactionServiceImpl(transactionRepository)
 	insightService := service.NewInsightServiceImpl(insightRepository)
+	investmentAccountService := service.NewInvestmentAccountServiceImpl(investmentAccountRepository, investmentAccountBalanceRepository)
 
 	healthController := controller.NewHealthController()
 	insightController := controller.NewInsightControllerImpl(insightService, validate)
@@ -57,8 +60,9 @@ func main() {
 	uploadController := controller.NewUploadControllerImpl(uploadService, validate)
 	categoryController := controller.NewCategoryControllerImpl(categoryService, validate)
 	transactionController := controller.NewTransactionControllerImpl(transactionService, validate)
+	investmentAccountController := controller.NewInvestmentAccountControllerImpl(investmentAccountService, validate)
 
-	router := router.NewRouter(*healthController, accountController, uploadController, categoryController, transactionController, insightController)
+	router := router.NewRouter(*healthController, accountController, uploadController, categoryController, transactionController, insightController, investmentAccountController)
 
 	router.Run(":8080")
 }
