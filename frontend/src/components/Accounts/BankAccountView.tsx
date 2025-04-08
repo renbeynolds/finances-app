@@ -88,7 +88,10 @@ export default function BankAccountView() {
         onClose={() => setUploadModalOpened(false)}
         title='New Upload'
       >
-        <UploadForm accountId={String(accountId)} />
+        <UploadForm
+          accountId={String(accountId)}
+          close={() => setUploadModalOpened(false)}
+        />
       </Modal>
       <Modal
         opened={editModalOpened}

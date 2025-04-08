@@ -1,6 +1,7 @@
 import { Button, FileInput, Stack } from '@mantine/core';
 import { useForm } from '@mantine/form';
-import { notifications } from '@mantine/notifications';
+import { Response } from '../data/Response';
+import { Upload } from '../data/Upload';
 
 interface UploadFormValues {
   csv: File;
@@ -8,9 +9,10 @@ interface UploadFormValues {
 
 type UploadFormProps = {
   accountId: string;
+  close: () => void;
 };
 
-export default function UploadForm({ accountId }: UploadFormProps) {
+export default function UploadForm({ accountId, close }: UploadFormProps) {
   const form = useForm<UploadFormValues>({
     validate: {
       csv: (value) => (!value ? 'CSV is required' : null),
@@ -22,27 +24,15 @@ export default function UploadForm({ accountId }: UploadFormProps) {
     formData.append('csv', values.csv);
     formData.append('accountId', accountId);
 
-    try {
-      const response = await fetch('/api/uploads', {
-        method: 'POST',
-        body: formData,
-      });
+    const response: Response<Upload> = await fetch('/api/uploads', {
+      method: 'POST',
+      body: formData,
+    }).then((res) => res.json());
 
-      if (!response.ok) throw new Error('Upload failed');
+    console.log(response);
 
-      notifications.show({
-        title: 'Success',
-        message: 'File uploaded successfully',
-        color: 'green',
-      });
-
-      form.reset();
-    } catch (error) {
-      notifications.show({
-        title: 'Error',
-        message: 'Failed to upload file',
-        color: 'red',
-      });
+    if (response.code === 200) {
+      close();
     }
   };
 

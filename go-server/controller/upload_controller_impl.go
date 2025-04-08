@@ -30,6 +30,10 @@ func (controller *UploadControllerImpl) Create(ctx *gin.Context) {
 	createUploadRequest := request.CreateUploadRequest{}
 	err := ctx.ShouldBind(&createUploadRequest)
 	util.ErrorPanic(err)
-	newUpload := controller.uploadService.Create(createUploadRequest)
-	response.SendStatusOK(newUpload, nil, ctx)
+	newUpload, err := controller.uploadService.Create(createUploadRequest)
+	if err != nil {
+		response.SendStatusBadRequest(err, ctx)
+	} else {
+		response.SendStatusOK(newUpload, nil, ctx)
+	}
 }

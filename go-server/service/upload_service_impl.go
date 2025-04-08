@@ -4,8 +4,8 @@ import (
 	"encoding/csv"
 	"fmt"
 	"strings"
-	"time"
 
+	"github.com/araddon/dateparse"
 	"github.com/expr-lang/expr"
 	"github.com/go-playground/validator/v10"
 	"github.com/renbeynolds/finances-app/data/request"
@@ -44,23 +44,23 @@ func (t *UploadServiceImpl) FindAll() []response.UploadResponse {
 	return uploads
 }
 
-func (t *UploadServiceImpl) Create(upload request.CreateUploadRequest) response.UploadResponse {
+func (t *UploadServiceImpl) Create(upload request.CreateUploadRequest) (*response.UploadResponse, error) {
 	account, err := t.AccountRepository.FindByID(upload.AccountID)
 	if err != nil {
-		// TODO
+		return nil, fmt.Errorf("error finding account: %v", err)
 	}
 
 	categories := t.CategoryRepository.FindAll()
 
 	multipartFileContent, err := upload.CSV.Open()
 	if err != nil {
-		// TODO
+		return nil, fmt.Errorf("error opening file: %v", err)
 	}
 
 	csvReader := csv.NewReader(multipartFileContent)
 	records, err := csvReader.ReadAll()
 	if err != nil {
-		// TODO
+		return nil, fmt.Errorf("error reading csv file: %v", err)
 	}
 	csvData := util.ParseCSV(records)
 	transactions := []model.Transaction{}
@@ -71,15 +71,15 @@ func (t *UploadServiceImpl) Create(upload request.CreateUploadRequest) response.
 			Description: record[account.DescriptionHeader],
 		}
 
-		date, err := time.Parse(account.DateFormat, record[account.DateHeader])
+		date, err := dateparse.ParseLocal(record[account.DateHeader])
 		if err != nil {
-			fmt.Println(err)
+			return nil, fmt.Errorf("error parsing date: %v", err)
 		}
 		transaction.Date = date
 
 		amount, err := getTransactionAmount(account.AmountExpression, record)
 		if err != nil {
-			// TODO
+			return nil, fmt.Errorf("error parsing amount: %v", err)
 		}
 		transaction.Amount = amount
 
@@ -103,9 +103,9 @@ func (t *UploadServiceImpl) Create(upload request.CreateUploadRequest) response.
 
 	t.AccountRepository.Update(account)
 
-	return response.UploadResponse{
+	return &response.UploadResponse{
 		Id: int(uploadModel.ID),
-	}
+	}, nil
 }
 
 func getTransactionAmount(amountExpression string, record map[string]string) (int64, error) {

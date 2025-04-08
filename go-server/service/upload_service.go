@@ -7,5 +7,5 @@ import (
 
 type UploadService interface {
 	FindAll() []response.UploadResponse
-	Create(upload request.CreateUploadRequest) response.UploadResponse
+	Create(upload request.CreateUploadRequest) (*response.UploadResponse, error)
 }

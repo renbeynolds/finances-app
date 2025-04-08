@@ -26,3 +26,13 @@ func SendStatusOK(data interface{}, pagination *paginate.Pagination, ctx *gin.Co
 	ctx.Header("Content-Type", "application/json")
 	ctx.JSON(http.StatusOK, webResponse)
 }
+
+func SendStatusBadRequest(err error, ctx *gin.Context) {
+	webResponse := Response{
+		Code:   400,
+		Status: "Bad Request",
+		Data:   err.Error(),
+	}
+	ctx.Header("Content-Type", "application/json")
+	ctx.JSON(http.StatusBadRequest, webResponse)
+}
