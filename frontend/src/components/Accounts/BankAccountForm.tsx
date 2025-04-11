@@ -8,7 +8,6 @@ import {
 export interface BankAccountFormValues {
   name: string;
   dateHeader: string;
-  dateFormat: string;
   descriptionHeader: string;
   amountExpression: string;
   loginUrl: string;
@@ -54,11 +53,6 @@ export default function BankAccountForm({
           {...form.getInputProps('dateHeader')}
           placeholder='Date Header'
           label='Date Header'
-        />
-        <TextInput
-          {...form.getInputProps('dateFormat')}
-          placeholder='Date Format'
-          label='Date Format'
         />
         <TextInput
           {...form.getInputProps('descriptionHeader')}

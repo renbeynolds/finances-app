@@ -120,6 +120,7 @@ func (r *InsightRepositoryImpl) GetIncomeVsExpense(from, to string) []response.I
 		FROM calendar c
 		LEFT JOIN transactions t ON DATE_TRUNC('month', t.date) = c.month
 		LEFT JOIN categories cat ON t.category_id = cat.id
+    WHERE cat.type IN ('income', 'expense')
 		GROUP BY c.month
 		ORDER BY c.month ASC
 	`, from, to).Scan(&result)

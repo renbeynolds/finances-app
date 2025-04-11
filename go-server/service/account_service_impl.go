@@ -24,7 +24,6 @@ func (t *AccountServiceImpl) Create(account request.CreateAccountRequest) respon
 	accountModel := model.Account{
 		Name:              account.Name,
 		DateHeader:        account.DateHeader,
-		DateFormat:        account.DateFormat,
 		DescriptionHeader: account.DescriptionHeader,
 		AmountExpression:  account.AmountExpression,
 		StartingAmount:    account.StartingAmount,
@@ -58,7 +57,6 @@ func (t *AccountServiceImpl) Update(account request.UpdateAccountRequest) respon
 	util.ErrorPanic(err)
 	accountData.Name = account.Name
 	accountData.DateHeader = account.DateHeader
-	accountData.DateFormat = account.DateFormat
 	accountData.DescriptionHeader = account.DescriptionHeader
 	accountData.AmountExpression = account.AmountExpression
 	accountData.LoginURL = account.LoginURL
@@ -71,7 +69,6 @@ func modelToResponse(model model.Account) response.AccountResponse {
 		Id:                int(model.ID),
 		Name:              model.Name,
 		DateHeader:        model.DateHeader,
-		DateFormat:        model.DateFormat,
 		DescriptionHeader: model.DescriptionHeader,
 		AmountExpression:  model.AmountExpression,
 		StartingAmount:    model.StartingAmount,
