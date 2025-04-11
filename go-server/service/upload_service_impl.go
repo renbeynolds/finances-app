@@ -58,6 +58,7 @@ func (t *UploadServiceImpl) Create(upload request.CreateUploadRequest) (*respons
 	}
 
 	csvReader := csv.NewReader(multipartFileContent)
+	csvReader.FieldsPerRecord = -1 // Allow variable number of fields
 	records, err := csvReader.ReadAll()
 	if err != nil {
 		return nil, fmt.Errorf("error reading csv file: %v", err)
