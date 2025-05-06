@@ -22,12 +22,16 @@ const pageSize = 10;
 
 type TransactionTableProps = {
   accountId?: string;
+  uploadId?: string;
   hideDateFilter?: boolean;
+  ignoreDateRange?: boolean;
 };
 
 export default function TransactionTable({
   accountId,
+  uploadId,
   hideDateFilter,
+  ignoreDateRange,
 }: TransactionTableProps) {
   const transactionFilters = React.useContext(TransactionFiltersContext);
   const dispatchTransactionFilters = React.useContext(
@@ -38,10 +42,17 @@ export default function TransactionTable({
 
   React.useEffect(() => {
     setPage(1);
-  }, [setPage, accountId, transactionFilters]);
+  }, [setPage, accountId, uploadId, transactionFilters]);
 
   const { data, error, isLoading, mutate } = useSWR(
-    TransactionsEndpoint(page, pageSize, transactionFilters, accountId),
+    TransactionsEndpoint(
+      page,
+      pageSize,
+      transactionFilters,
+      accountId,
+      uploadId,
+      ignoreDateRange,
+    ),
     TransactionsFetcher,
   );
 

@@ -1,7 +1,7 @@
 import { Button, FileInput, Stack } from '@mantine/core';
 import { useForm } from '@mantine/form';
-import { Response } from '../data/Response';
-import { Upload } from '../data/Upload';
+import { Response } from '../../data/Response';
+import { Upload } from '../../data/Upload';
 
 interface UploadFormValues {
   csv: File;

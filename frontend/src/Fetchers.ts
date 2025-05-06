@@ -1,6 +1,5 @@
 import { Fetcher } from 'swr';
 import { TransactionFilters } from './context/TransactionFiltersContext';
-import { Account } from './data/Account';
 import { AmountOverTime } from './data/AmountOverTime';
 import { AmountVsAverage } from './data/AmountVsAverage';
 import { Category } from './data/Category';
@@ -9,13 +8,6 @@ import { Response } from './data/Response';
 import { TopSpendingCategory } from './data/TopSpendingCategory';
 import { Transaction } from './data/Transaction';
 import { Upload } from './data/Upload';
-
-export const AccountsEndpoint = '/api/accounts';
-export const AccountsFetcher: Fetcher<Response<Account[]>, string> = (url) =>
-  fetch(url).then((res) => res.json());
-
-export const AccountFetcher: Fetcher<Response<Account>, string> = (url) =>
-  fetch(url).then((res) => res.json());
 
 export const AccountBalanceOverTimeEndpoint = (
   accountId: string,
@@ -37,21 +29,27 @@ export const CategoriesFetcher: Fetcher<Response<Category[]>, string> = (url) =>
 
 const transactionFiltersToQueryParams = (
   transactionFilters: TransactionFilters,
+  ignoreDateRange: boolean,
 ) =>
-  `from=${transactionFilters.Date[0]}&to=${transactionFilters.Date[1]}` +
-  `&description=${transactionFilters.Description}` +
-  `&min=${transactionFilters.Amount[0] !== undefined ? transactionFilters.Amount[0] : ''}&max=${transactionFilters.Amount[1] !== undefined ? transactionFilters.Amount[1] : ''}` +
-  `&comment=${transactionFilters.Comment}`;
+  ignoreDateRange
+    ? ''
+    : `from=${transactionFilters.Date[0]}&to=${transactionFilters.Date[1]}` +
+      `&description=${transactionFilters.Description}` +
+      `&min=${transactionFilters.Amount[0] !== undefined ? transactionFilters.Amount[0] : ''}&max=${transactionFilters.Amount[1] !== undefined ? transactionFilters.Amount[1] : ''}` +
+      `&comment=${transactionFilters.Comment}`;
 
 export const TransactionsEndpoint = (
   page: number,
   pageSize: number,
   transactionFilters: TransactionFilters,
   accountId?: string,
+  uploadId?: string,
+  ignoreDateRange: boolean = false,
 ) =>
   `/api/transactions?page=${page}&limit=${pageSize}&` +
-  transactionFiltersToQueryParams(transactionFilters) +
-  `&account_id=${accountId !== undefined ? accountId : ''}`;
+  transactionFiltersToQueryParams(transactionFilters, ignoreDateRange) +
+  `&account_id=${accountId !== undefined ? accountId : ''}` +
+  `&upload_id=${uploadId !== undefined ? uploadId : ''}`;
 export const TransactionsFetcher: Fetcher<Response<Transaction[]>, string> = (
   url,
 ) => fetch(url).then((res) => res.json());
@@ -60,7 +58,7 @@ export const FilteredTransactionsTotalEndpoint = (
   transactionFilters: TransactionFilters,
 ) =>
   `/api/transactions/total?` +
-  transactionFiltersToQueryParams(transactionFilters);
+  transactionFiltersToQueryParams(transactionFilters, false);
 export const AmountFetcher: Fetcher<Response<number>, string> = (url) =>
   fetch(url).then((res) => res.json());
 

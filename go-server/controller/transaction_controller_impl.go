@@ -35,6 +35,7 @@ func (controller *TransactionControllerImpl) FindAll(ctx *gin.Context) {
 		Min:         ctx.Query("min"),
 		Max:         ctx.Query("max"),
 		AccountID:   ctx.Query("account_id"),
+		UploadID:    ctx.Query("upload_id"),
 	}
 
 	pagination := paginate.Pagination{

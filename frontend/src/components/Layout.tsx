@@ -11,7 +11,7 @@ import { useLocation, useNavigate } from 'react-router';
 import AccountsList from './Accounts/AccountsList';
 import CategoriesList from './CategoriesList';
 import MainContent from './MainContent';
-import UploadsList from './UploadsList';
+import UploadsList from './Uploads/UploadsList';
 
 export default function Layout() {
   const navigate = useNavigate();
@@ -20,7 +20,7 @@ export default function Layout() {
   const sidebarVisible =
     location.pathname.startsWith('/accounts') ||
     location.pathname === '/categories' ||
-    location.pathname === '/uploads';
+    location.pathname.startsWith('/uploads');
 
   return (
     <AppShell
@@ -85,7 +85,7 @@ export default function Layout() {
           >
             {location.pathname.startsWith('/accounts') && <AccountsList />}
             {location.pathname === '/categories' && <CategoriesList />}
-            {location.pathname === '/uploads' && <UploadsList />}
+            {location.pathname.startsWith('/uploads') && <UploadsList />}
           </div>
         </AppShell.Navbar>
       )}

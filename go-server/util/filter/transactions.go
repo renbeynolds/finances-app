@@ -14,11 +14,15 @@ type TransactionFilters struct {
 	Max         string
 	Comment     string
 	AccountID   string
+	UploadID    string
 }
 
 func FilterTransactions(value interface{}, filters *TransactionFilters, db *gorm.DB) func(db *gorm.DB) *gorm.DB {
 	return func(db *gorm.DB) *gorm.DB {
-		filtered := db.Debug().Where("date >= ? AND date <= ?", filters.From, filters.To)
+		filtered := db.Debug()
+		if filters.From != "" && filters.To != "" {
+			filtered = db.Where("date >= ? AND date <= ?", filters.From, filters.To)
+		}
 		if filters.Description != "" {
 			filtered = filtered.Where("description % ?", filters.Description)
 		}
@@ -38,6 +42,9 @@ func FilterTransactions(value interface{}, filters *TransactionFilters, db *gorm
 				// TODO
 			}
 			filtered = filtered.Where("amount <= ?", maxAmount*100)
+		}
+		if filters.UploadID != "" {
+			filtered = filtered.Where("upload_id = ?", filters.UploadID)
 		}
 		if filters.AccountID != "" {
 			filtered = filtered.Joins("LEFT JOIN uploads u ON transactions.upload_id = u.id")

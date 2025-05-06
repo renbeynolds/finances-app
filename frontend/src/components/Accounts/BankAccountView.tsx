@@ -14,15 +14,17 @@ import React from 'react';
 import { useParams } from 'react-router';
 import useSWR from 'swr';
 import {
+  BankAccountFetcher,
+  BankAccountsEndpoint,
+} from '../../data/BankAccounts/fetchers';
+import {
   AccountBalanceOverTimeEndpoint,
-  AccountFetcher,
-  AccountsEndpoint,
   AmountOverTimeFetcher,
 } from '../../Fetchers';
 import AmountOverTimeChart from '../AmountOverTimeChart';
 import ConditionalWrap from '../ConditionalWrap';
 import TransactionTable from '../TransactionTable';
-import UploadForm from '../UploadForm';
+import UploadForm from '../Uploads/UploadForm';
 import BankAccountForm from './BankAccountForm';
 
 export default function BankAccountView() {
@@ -34,7 +36,7 @@ export default function BankAccountView() {
     data: accountData,
     error: accountError,
     isLoading: accountIsLoading,
-  } = useSWR(`${AccountsEndpoint}/${accountId}`, AccountFetcher);
+  } = useSWR(`${BankAccountsEndpoint}/${accountId}`, BankAccountFetcher);
 
   const balanceOverTimeResponse = useSWR(
     AccountBalanceOverTimeEndpoint(

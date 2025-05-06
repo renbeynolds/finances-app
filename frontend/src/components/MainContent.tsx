@@ -4,6 +4,7 @@ import InvestmentAccountView from './Accounts/InvestmentAccountView';
 import Explore from './Explore';
 import Snapshot from './Snapshot';
 import Trends from './Trends';
+import UploadView from './Uploads/UploadView';
 
 export default function MainContent() {
   return (
@@ -17,6 +18,7 @@ export default function MainContent() {
         path='/accounts/investment/:accountId'
         element={<InvestmentAccountView />}
       />
+      <Route path='/uploads/:uploadId' element={<UploadView />} />
     </Routes>
   );
 }
