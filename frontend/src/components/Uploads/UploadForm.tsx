@@ -1,5 +1,6 @@
 import { Button, FileInput, Stack } from '@mantine/core';
 import { useForm } from '@mantine/form';
+import { useNavigate } from 'react-router';
 import { Response } from '../../data/Response';
 import { Upload } from '../../data/Upload';
 
@@ -13,6 +14,8 @@ type UploadFormProps = {
 };
 
 export default function UploadForm({ accountId, close }: UploadFormProps) {
+  const navigate = useNavigate();
+
   const form = useForm<UploadFormValues>({
     validate: {
       csv: (value) => (!value ? 'CSV is required' : null),
@@ -29,10 +32,9 @@ export default function UploadForm({ accountId, close }: UploadFormProps) {
       body: formData,
     }).then((res) => res.json());
 
-    console.log(response);
-
     if (response.code === 200) {
       close();
+      navigate(`/uploads/${response.data.id}`);
     }
   };
 
