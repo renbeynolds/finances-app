@@ -1,5 +1,6 @@
 package response
 
 type UploadResponse struct {
-	Id int `json:"id"`
+	Id        int    `json:"id"`
+	CreatedAt string `json:"createdAt"`
 }

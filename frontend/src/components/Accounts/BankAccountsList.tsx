@@ -36,27 +36,28 @@ export default function BankAccountsList() {
       onClick={() => setExpanded((e) => !e)}
       label='Bank Accounts'
       leftSection={<IconTransactionDollar size={16} stroke={1.5} />}
-      childrenOffset={28}
     >
-      {data!.data.map((account, index) => (
-        <NavLink
-          key={index}
-          active={location.pathname === `/accounts/bank/${account.id}`}
-          onClick={() => navigate(`/accounts/bank/${account.id}`)}
-          label={account.name}
-          description={FormatMoney(account.balance)}
-          styles={{
-            description: {
-              color:
-                account.balance > 0
-                  ? theme.colors.green[6]
-                  : account.balance < 0
-                    ? theme.colors.red[6]
-                    : theme.colors.gray[5],
-            },
-          }}
-        />
-      ))}
+      {data!.data
+        .sort((a, b) => (a.name < b.name ? -1 : 1))
+        .map((account, index) => (
+          <NavLink
+            key={index}
+            active={location.pathname === `/accounts/bank/${account.id}`}
+            onClick={() => navigate(`/accounts/bank/${account.id}`)}
+            label={account.name}
+            description={FormatMoney(account.balance)}
+            styles={{
+              description: {
+                color:
+                  account.balance > 0
+                    ? theme.colors.green[6]
+                    : account.balance < 0
+                      ? theme.colors.red[6]
+                      : theme.colors.gray[5],
+              },
+            }}
+          />
+        ))}
     </NavLink>
   );
 }

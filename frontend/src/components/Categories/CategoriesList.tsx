@@ -1,4 +1,4 @@
-import { Button, Stack, Text } from '@mantine/core';
+import { NavLink, Stack } from '@mantine/core';
 import React from 'react';
 import { useLocation, useNavigate } from 'react-router';
 import { UseLazyCategories } from '../../context/CategoriesContext';
@@ -22,21 +22,16 @@ export default function CategoriesList() {
       }}
     >
       <Stack align='stretch' justify='flex-start' gap='md'>
-        {categories.map((category, index) => (
-          <Button
-            key={index}
-            variant='outline'
-            h='3rem'
-            justify='space-between'
-            onClick={() => {
-              navigate(`/categories/${category.id}`);
-            }}
-          >
-            <Stack gap='0'>
-              <Text size='l'>{category.name}</Text>
-            </Stack>
-          </Button>
-        ))}
+        {categories
+          .sort((a, b) => (a.name < b.name ? -1 : 1))
+          .map((category, index) => (
+            <NavLink
+              key={index}
+              active={location.pathname === `/categories/${category.id}`}
+              onClick={() => navigate(`/categories/${category.id}`)}
+              label={category.name}
+            />
+          ))}
       </Stack>
     </div>
   );

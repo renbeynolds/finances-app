@@ -1,4 +1,4 @@
-import { Button, Stack, Text } from '@mantine/core';
+import { NavLink, Stack } from '@mantine/core';
 import React from 'react';
 import { useLocation, useNavigate } from 'react-router';
 import useSWR from 'swr';
@@ -29,19 +29,13 @@ export default function UploadsList() {
         {data!.data
           .sort((a, b) => b.id - a.id)
           .map((upload, index) => (
-            <Button
+            <NavLink
               key={index}
-              variant='outline'
-              h='3rem'
-              justify='space-between'
-              onClick={() => {
-                navigate(`/uploads/${upload.id}`);
-              }}
-            >
-              <Stack gap='0'>
-                <Text size='l'>{upload.id}</Text>
-              </Stack>
-            </Button>
+              active={location.pathname === `/uploads/${upload.id}`}
+              onClick={() => navigate(`/uploads/${upload.id}`)}
+              label={upload.id}
+              description={upload.createdAt}
+            />
           ))}
       </Stack>
     </div>

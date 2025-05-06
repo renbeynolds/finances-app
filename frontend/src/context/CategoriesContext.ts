@@ -1,7 +1,10 @@
 import React, { createContext, Dispatch } from 'react';
 import useSWR from 'swr';
-import { Category } from '../data/Category';
-import { CategoriesEndpoint, CategoriesFetcher } from '../Fetchers';
+import {
+  CategoriesEndpoint,
+  CategoriesFetcher,
+} from '../data/Categories/fetchers';
+import { Category } from '../data/Categories/types';
 
 type CategoriesAction = {
   type: 'SET';
@@ -17,7 +20,7 @@ export const CategoriesDispatchContext =
 
 export const CategoriesReducer = (
   state: Category[],
-  action: CategoriesAction
+  action: CategoriesAction,
 ) => {
   switch (action.type) {
     case 'SET':
@@ -33,7 +36,7 @@ export const UseLazyCategories = () => {
 
   const { data, error, isLoading } = useSWR(
     categories.length === 0 ? CategoriesEndpoint : null,
-    CategoriesFetcher
+    CategoriesFetcher,
   );
 
   React.useEffect(() => {

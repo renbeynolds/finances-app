@@ -36,7 +36,8 @@ func (t *UploadServiceImpl) FindAll() []response.UploadResponse {
 	uploads := []response.UploadResponse{}
 	for _, value := range result {
 		upload := response.UploadResponse{
-			Id: int(value.ID),
+			Id:        int(value.ID),
+			CreatedAt: value.CreatedAt.Format("2006-01-02 15:04:05"),
 		}
 		uploads = append(uploads, upload)
 	}
@@ -105,7 +106,8 @@ func (t *UploadServiceImpl) Create(upload request.CreateUploadRequest) (*respons
 	t.AccountRepository.Update(account)
 
 	return &response.UploadResponse{
-		Id: int(uploadModel.ID),
+		Id:        int(uploadModel.ID),
+		CreatedAt: uploadModel.CreatedAt.Format("2006-01-02 15:04:05"),
 	}, nil
 }
 

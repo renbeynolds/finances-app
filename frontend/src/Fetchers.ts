@@ -2,7 +2,6 @@ import { Fetcher } from 'swr';
 import { TransactionFilters } from './context/TransactionFiltersContext';
 import { AmountOverTime } from './data/AmountOverTime';
 import { AmountVsAverage } from './data/AmountVsAverage';
-import { Category } from './data/Category';
 import { IncomeVsExpense } from './data/IncomeVsExpense';
 import { Response } from './data/Response';
 import { TopSpendingCategory } from './data/TopSpendingCategory';
@@ -21,10 +20,6 @@ export const AmountOverTimeFetcher: Fetcher<
 
 export const UploadsEndpoint = '/api/uploads';
 export const UploadsFetcher: Fetcher<Response<Upload[]>, string> = (url) =>
-  fetch(url).then((res) => res.json());
-
-export const CategoriesEndpoint = '/api/categories';
-export const CategoriesFetcher: Fetcher<Response<Category[]>, string> = (url) =>
   fetch(url).then((res) => res.json());
 
 const transactionFiltersToQueryParams = (

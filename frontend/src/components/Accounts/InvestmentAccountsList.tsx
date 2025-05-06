@@ -30,27 +30,28 @@ export default function InvestmentAccountsList() {
       onClick={() => setExpanded((e) => !e)}
       label='Investment Accounts'
       leftSection={<IconTrendingUp size={16} stroke={1.5} />}
-      childrenOffset={28}
     >
-      {data!.data.map((account, index) => (
-        <NavLink
-          key={index}
-          label={account.name}
-          active={location.pathname === `/accounts/investment/${account.id}`}
-          onClick={() => navigate(`/accounts/investment/${account.id}`)}
-          description={FormatMoney(account.balance)}
-          styles={{
-            description: {
-              color:
-                account.balance > 0
-                  ? theme.colors.green[6]
-                  : account.balance < 0
-                    ? theme.colors.red[6]
-                    : theme.colors.gray[5],
-            },
-          }}
-        />
-      ))}
+      {data!.data
+        .sort((a, b) => (a.name < b.name ? -1 : 1))
+        .map((account, index) => (
+          <NavLink
+            key={index}
+            label={account.name}
+            active={location.pathname === `/accounts/investment/${account.id}`}
+            onClick={() => navigate(`/accounts/investment/${account.id}`)}
+            description={FormatMoney(account.balance)}
+            styles={{
+              description: {
+                color:
+                  account.balance > 0
+                    ? theme.colors.green[6]
+                    : account.balance < 0
+                      ? theme.colors.red[6]
+                      : theme.colors.gray[5],
+              },
+            }}
+          />
+        ))}
     </NavLink>
   );
 }
