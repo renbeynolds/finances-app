@@ -23,6 +23,7 @@ const pageSize = 10;
 type TransactionTableProps = {
   accountId?: string;
   uploadId?: string;
+  categoryId?: string;
   hideDateFilter?: boolean;
   ignoreDateRange?: boolean;
 };
@@ -30,6 +31,7 @@ type TransactionTableProps = {
 export default function TransactionTable({
   accountId,
   uploadId,
+  categoryId,
   hideDateFilter,
   ignoreDateRange,
 }: TransactionTableProps) {
@@ -42,7 +44,7 @@ export default function TransactionTable({
 
   React.useEffect(() => {
     setPage(1);
-  }, [setPage, accountId, uploadId, transactionFilters]);
+  }, [setPage, accountId, uploadId, categoryId, transactionFilters]);
 
   const { data, error, isLoading, mutate } = useSWR(
     TransactionsEndpoint(
@@ -51,6 +53,7 @@ export default function TransactionTable({
       transactionFilters,
       accountId,
       uploadId,
+      categoryId,
       ignoreDateRange,
     ),
     TransactionsFetcher,

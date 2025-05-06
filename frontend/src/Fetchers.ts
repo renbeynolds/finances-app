@@ -44,12 +44,14 @@ export const TransactionsEndpoint = (
   transactionFilters: TransactionFilters,
   accountId?: string,
   uploadId?: string,
+  categoryId?: string,
   ignoreDateRange: boolean = false,
 ) =>
   `/api/transactions?page=${page}&limit=${pageSize}&` +
   transactionFiltersToQueryParams(transactionFilters, ignoreDateRange) +
   `&account_id=${accountId !== undefined ? accountId : ''}` +
-  `&upload_id=${uploadId !== undefined ? uploadId : ''}`;
+  `&upload_id=${uploadId !== undefined ? uploadId : ''}` +
+  `&category_id=${categoryId !== undefined ? categoryId : ''}`;
 export const TransactionsFetcher: Fetcher<Response<Transaction[]>, string> = (
   url,
 ) => fetch(url).then((res) => res.json());

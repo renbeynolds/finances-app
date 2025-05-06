@@ -15,6 +15,7 @@ type TransactionFilters struct {
 	Comment     string
 	AccountID   string
 	UploadID    string
+	CategoryID  string
 }
 
 func FilterTransactions(value interface{}, filters *TransactionFilters, db *gorm.DB) func(db *gorm.DB) *gorm.DB {
@@ -49,6 +50,9 @@ func FilterTransactions(value interface{}, filters *TransactionFilters, db *gorm
 		if filters.AccountID != "" {
 			filtered = filtered.Joins("LEFT JOIN uploads u ON transactions.upload_id = u.id")
 			filtered = filtered.Where("u.account_id = ?", filters.AccountID)
+		}
+		if filters.CategoryID != "" {
+			filtered = filtered.Where("category_id = ?", filters.CategoryID)
 		}
 		return filtered
 	}

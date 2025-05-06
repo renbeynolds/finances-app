@@ -1,6 +1,7 @@
 import { Route, Routes } from 'react-router';
 import BankAccountView from './Accounts/BankAccountView';
 import InvestmentAccountView from './Accounts/InvestmentAccountView';
+import CategoryView from './Categories/CategoryView';
 import Explore from './Explore';
 import Snapshot from './Snapshot';
 import Trends from './Trends';
@@ -19,6 +20,7 @@ export default function MainContent() {
         element={<InvestmentAccountView />}
       />
       <Route path='/uploads/:uploadId' element={<UploadView />} />
+      <Route path='/categories/:categoryId' element={<CategoryView />} />
     </Routes>
   );
 }
