@@ -81,7 +81,10 @@ export default function BankAccountView() {
           </Button>
         </Group>
         <SimpleGrid cols={2}>
-          <AmountOverTimeChart response={balanceOverTimeResponse} />
+          <AmountOverTimeChart
+            response={balanceOverTimeResponse}
+            title='Balance'
+          />
         </SimpleGrid>
         <TransactionTable accountId={accountId} />
       </Stack>

@@ -44,3 +44,8 @@ func (controller *InsightControllerImpl) GetIncomeVsExpense(ctx *gin.Context) {
 	incomeVsExpense := controller.insightService.GetIncomeVsExpense(ctx.Query("from"), ctx.Query("to"))
 	response.SendStatusOK(incomeVsExpense, nil, ctx)
 }
+
+func (controller *InsightControllerImpl) GetNetWorth(ctx *gin.Context) {
+	netWorth := controller.insightService.GetNetWorth(ctx.Query("from"), ctx.Query("to"))
+	response.SendStatusOK(netWorth, nil, ctx)
+}

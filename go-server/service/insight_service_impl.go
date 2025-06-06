@@ -29,3 +29,7 @@ func (t *InsightServiceImpl) GetAmountVsAverage(amountType, from, to, avgFrom, a
 func (t *InsightServiceImpl) GetIncomeVsExpense(from, to string) []response.IncomeVsExpenseResponse {
 	return t.InsightRepository.GetIncomeVsExpense(from, to)
 }
+
+func (t *InsightServiceImpl) GetNetWorth(from, to string) []response.AmountOverTimeResponse {
+	return t.InsightRepository.GetNetWorth(from, to)
+}

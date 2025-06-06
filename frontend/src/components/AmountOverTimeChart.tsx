@@ -1,4 +1,4 @@
-import { Loader, Paper, useMantineTheme } from '@mantine/core';
+import { Loader, Paper, Title, useMantineTheme } from '@mantine/core';
 import {
   Area,
   AreaChart,
@@ -11,13 +11,20 @@ import {
 import { SWRResponse } from 'swr';
 import { AmountOverTime } from '../data/AmountOverTime';
 import { Response } from '../data/Response';
-import { FormatDayString, FormatMoney, FormatMoneyThousands } from '../utils';
+import {
+  FormatDayString,
+  FormatMoney,
+  FormatMoneyThousands,
+  FormatMonthString,
+} from '../utils';
 
 type AmountOverTimeChartProps = {
+  title: string;
   response: SWRResponse<Response<AmountOverTime[]>, any, any>;
 };
 
 export default function AmountOverTimeChart({
+  title,
   response,
 }: AmountOverTimeChartProps) {
   const theme = useMantineTheme();
@@ -25,13 +32,14 @@ export default function AmountOverTimeChart({
 
   return (
     <Paper shadow='sm' p='lg'>
+      <Title order={3}>{title}</Title>
       {response.isLoading ? (
         <Loader color='blue' />
       ) : (
         <ResponsiveContainer height={300}>
           <AreaChart data={response.data!.data}>
             <CartesianGrid strokeDasharray='3 3' />
-            <XAxis dataKey='date' tickFormatter={FormatDayString} />
+            <XAxis dataKey='date' tickFormatter={FormatMonthString} />
             <YAxis
               tickFormatter={(value: number) => FormatMoneyThousands(value)}
             />

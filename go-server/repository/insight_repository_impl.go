@@ -127,3 +127,68 @@ func (r *InsightRepositoryImpl) GetIncomeVsExpense(from, to string) []response.I
 
 	return result
 }
+
+// May 7th net worth should be 680490.75
+func (r *InsightRepositoryImpl) GetNetWorth(from, to string) []response.AmountOverTimeResponse {
+	var result []response.AmountOverTimeResponse
+
+	r.Db.Raw(`
+		WITH calendar AS (
+			SELECT DATE_TRUNC('day', bucket::date) AS day FROM generate_series(?, ?, '1 day'::interval) bucket
+		),
+		latest_account_balances AS (
+			SELECT
+				c.day,
+				a.id AS account_id,
+				COALESCE((
+					SELECT t.balance
+					FROM transactions t
+          LEFT JOIN uploads u ON t.upload_id = u.id
+					WHERE u.account_id = a.id AND t.date <= c.day
+					ORDER BY t.date DESC, t.id DESC
+					LIMIT 1
+				), a.balance) AS balance
+			FROM calendar c
+			CROSS JOIN accounts a
+		),
+		latest_investment_balances AS (
+			SELECT
+				c.day,
+				ia.id AS investment_account_id,
+				(
+					SELECT iab.balance
+					FROM investment_account_balances iab
+					WHERE iab.investment_account_id = ia.id AND iab.date <= c.day
+					ORDER BY iab.date DESC, iab.id DESC
+					LIMIT 1
+				) AS balance
+			FROM calendar c
+			CROSS JOIN investment_accounts ia
+		),
+		daily_totals AS (
+			SELECT
+				c.day,
+				COALESCE(SUM(lab.balance), 0) AS account_balance,
+				COALESCE(SUM(lib.balance), 0) AS investment_balance
+			FROM calendar c
+			LEFT JOIN (
+				SELECT day, SUM(balance) as balance
+				FROM latest_account_balances
+				GROUP BY day
+			) lab ON c.day = lab.day
+			LEFT JOIN (
+				SELECT day, SUM(balance) as balance
+				FROM latest_investment_balances
+				GROUP BY day
+			) lib ON c.day = lib.day
+			GROUP BY c.day
+		)
+		SELECT
+			(account_balance + investment_balance) AS amount,
+			TO_CHAR(day, 'YYYY-MM-DD') AS date
+		FROM daily_totals
+		ORDER BY day ASC
+	`, from, to).Scan(&result)
+
+	return result
+}

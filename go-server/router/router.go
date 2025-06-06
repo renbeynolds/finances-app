@@ -79,6 +79,7 @@ func NewRouter(
 			insightsGroup.GET("/income_vs_average", insightController.GetIncomeVsAverage)
 			insightsGroup.GET("/expense_vs_average", insightController.GetExpenseVsAverage)
 			insightsGroup.GET("/income_vs_expense", insightController.GetIncomeVsExpense)
+			insightsGroup.GET("/net_worth", insightController.GetNetWorth)
 		}
 	}
 
