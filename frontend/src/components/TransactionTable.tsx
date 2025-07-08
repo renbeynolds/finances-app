@@ -1,4 +1,5 @@
 import { Text } from '@mantine/core';
+import dayjs from 'dayjs';
 import { DataTable } from 'mantine-datatable';
 import * as React from 'react';
 import useSWR from 'swr';
@@ -97,6 +98,16 @@ export default function TransactionTable({
           width: '125px',
           filter: hideDateFilter ? undefined : () => <DateRangePicker />,
           filtering: !hideDateFilter,
+        },
+        {
+          accessor: 'date',
+          title: 'DoW',
+          width: '75px',
+          render: (record) => (
+            <Text size='sm' c='dimmed'>
+              {dayjs(record.date).format('ddd')}
+            </Text>
+          ),
         },
         {
           accessor: 'description',
