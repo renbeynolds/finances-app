@@ -76,9 +76,10 @@ func (t *InvestmentAccountServiceImpl) RecordBalance(id uint, request request.Re
 
 func investmentAccountModelToResponse(model model.InvestmentAccount) response.InvestmentAccountResponse {
 	response := response.InvestmentAccountResponse{
-		Id:      int(model.ID),
-		Name:    model.Name,
-		Balance: model.Balance,
+		Id:        int(model.ID),
+		Name:      model.Name,
+		Balance:   model.Balance,
+		UpdatedAt: model.UpdatedAt.Format(time.RFC3339),
 	}
 	return response
 }

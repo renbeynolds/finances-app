@@ -1,5 +1,7 @@
-import { NavLink, useMantineTheme } from '@mantine/core';
+import { Group, NavLink, useMantineTheme } from '@mantine/core';
 import { IconTrendingUp } from '@tabler/icons-react';
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
 import React from 'react';
 import { useLocation, useNavigate } from 'react-router';
 import useSWR from 'swr';
@@ -8,6 +10,8 @@ import {
   InvestmentAccountsFetcher,
 } from '../../data/InvestmentAccounts/fetchers';
 import { FormatMoney } from '../../utils';
+
+dayjs.extend(relativeTime);
 
 export default function InvestmentAccountsList() {
   const { data, error, isLoading } = useSWR(
@@ -39,7 +43,14 @@ export default function InvestmentAccountsList() {
             label={account.name}
             active={location.pathname === `/accounts/investment/${account.id}`}
             onClick={() => navigate(`/accounts/investment/${account.id}`)}
-            description={FormatMoney(account.balance)}
+            description={
+              <Group justify='space-between' w='100%'>
+                <span>{FormatMoney(account.balance)}</span>
+                <span style={{ color: theme.colors.gray[5] }}>
+                  {dayjs(account.updatedAt).fromNow()}
+                </span>
+              </Group>
+            }
             styles={{
               description: {
                 color:
