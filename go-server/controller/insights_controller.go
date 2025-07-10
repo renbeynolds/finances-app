@@ -10,4 +10,6 @@ type InsightController interface {
 	GetExpenseVsAverage(ctx *gin.Context)
 	GetIncomeVsExpense(ctx *gin.Context)
 	GetNetWorth(ctx *gin.Context)
+	GetCategoryOverTime(ctx *gin.Context)
+	GetCategoriesOverTime(ctx *gin.Context)
 }

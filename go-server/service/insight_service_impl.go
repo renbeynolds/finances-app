@@ -33,3 +33,11 @@ func (t *InsightServiceImpl) GetIncomeVsExpense(from, to string) []response.Inco
 func (t *InsightServiceImpl) GetNetWorth(from, to string) []response.AmountOverTimeResponse {
 	return t.InsightRepository.GetNetWorth(from, to)
 }
+
+func (t *InsightServiceImpl) GetCategoryOverTime(from, to string, categoryId int) []response.AmountOverTimeResponse {
+	return t.InsightRepository.GetCategoryOverTime(from, to, categoryId)
+}
+
+func (t *InsightServiceImpl) GetCategoriesOverTime(from, to string) []response.CategoriesOverTimeResponse {
+	return t.InsightRepository.GetCategoriesOverTime(from, to)
+}

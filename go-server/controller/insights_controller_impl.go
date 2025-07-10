@@ -1,10 +1,13 @@
 package controller
 
 import (
+	"strconv"
+
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
 	"github.com/renbeynolds/finances-app/data/response"
 	"github.com/renbeynolds/finances-app/service"
+	"github.com/renbeynolds/finances-app/util"
 	"github.com/renbeynolds/finances-app/util/filter"
 )
 
@@ -48,4 +51,17 @@ func (controller *InsightControllerImpl) GetIncomeVsExpense(ctx *gin.Context) {
 func (controller *InsightControllerImpl) GetNetWorth(ctx *gin.Context) {
 	netWorth := controller.insightService.GetNetWorth(ctx.Query("from"), ctx.Query("to"))
 	response.SendStatusOK(netWorth, nil, ctx)
+}
+
+func (controller *InsightControllerImpl) GetCategoryOverTime(ctx *gin.Context) {
+	categoryId := ctx.Query("category_id")
+	id, err := strconv.Atoi(categoryId)
+	util.ErrorPanic(err)
+	categoryOverTime := controller.insightService.GetCategoryOverTime(ctx.Query("from"), ctx.Query("to"), id)
+	response.SendStatusOK(categoryOverTime, nil, ctx)
+}
+
+func (controller *InsightControllerImpl) GetCategoriesOverTime(ctx *gin.Context) {
+	categoriesOverTime := controller.insightService.GetCategoriesOverTime(ctx.Query("from"), ctx.Query("to"))
+	response.SendStatusOK(categoriesOverTime, nil, ctx)
 }

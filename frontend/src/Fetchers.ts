@@ -8,6 +8,12 @@ import { TopSpendingCategory } from './data/TopSpendingCategory';
 import { Transaction } from './data/Transaction';
 import { Upload } from './data/Upload';
 
+export const CategoryOverTimeEndpoint = (
+  from: string,
+  to: string,
+  categoryId: string,
+) =>
+  `/api/insights/category_over_time?from=${from}&to=${to}&category_id=${categoryId}`;
 export const NetWorthOverTimeEndpoint = (from: string, to: string) =>
   `/api/insights/net_worth?from=${from}&to=${to}`;
 export const AccountBalanceOverTimeEndpoint = (

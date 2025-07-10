@@ -6,3 +6,9 @@ export type Category = {
   iconUrl: string | undefined;
   parentCategoryId: number | undefined;
 };
+
+export type CategoriesOverTime = {
+  categoryId: number;
+  date: string;
+  amount: number;
+};

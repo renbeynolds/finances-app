@@ -134,7 +134,7 @@ func (r *InsightRepositoryImpl) GetNetWorth(from, to string) []response.AmountOv
 
 	r.Db.Raw(`
 		WITH calendar AS (
-			SELECT DATE_TRUNC('day', bucket::date) AS day FROM generate_series(?, ?, '1 day'::interval) bucket
+			SELECT DATE_TRUNC('day', bucket::date) AS day FROM generate_series(?, ?, '1 week'::interval) bucket
 		),
 		latest_account_balances AS (
 			SELECT
@@ -189,6 +189,46 @@ func (r *InsightRepositoryImpl) GetNetWorth(from, to string) []response.AmountOv
 		FROM daily_totals
 		ORDER BY day ASC
 	`, from, to).Scan(&result)
+
+	return result
+}
+
+func (r *InsightRepositoryImpl) GetCategoryOverTime(from, to string, categoryId int) []response.AmountOverTimeResponse {
+	var result []response.AmountOverTimeResponse
+
+	r.Db.Raw(`
+		WITH calendar AS (
+			SELECT DATE_TRUNC('month', bucket::date) AS month FROM generate_series(?, ?, '1 month'::interval) bucket
+		)
+    SELECT
+      COALESCE(ABS(SUM(t.amount)), 0) AS amount,
+      TO_CHAR(c.month, 'YYYY-MM') as date
+    FROM calendar c
+		LEFT JOIN transactions t ON DATE_TRUNC('month', t.date) = c.month AND t.category_id = ?
+		GROUP BY c.month
+		ORDER BY c.month ASC
+  `, from, to, categoryId).Scan(&result)
+
+	return result
+}
+
+func (r *InsightRepositoryImpl) GetCategoriesOverTime(from, to string) []response.CategoriesOverTimeResponse {
+	var result []response.CategoriesOverTimeResponse
+
+	r.Db.Raw(`
+		WITH calendar AS (
+			SELECT DATE_TRUNC('month', bucket::date) AS month FROM generate_series(?, ?, '1 month'::interval) bucket
+		)
+    SELECT
+      TO_CHAR(c.month, 'YYYY-MM') as date,
+      t.category_id,
+      COALESCE(ABS(SUM(t.amount)), 0) AS amount
+    FROM calendar c
+		LEFT JOIN transactions t ON DATE_TRUNC('month', t.date) = c.month
+    WHERE t.category_id IS NOT NULL
+		GROUP BY c.month, t.category_id
+		ORDER BY c.month ASC
+  `, from, to).Scan(&result)
 
 	return result
 }

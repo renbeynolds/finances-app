@@ -3,6 +3,7 @@ import dayjs from 'dayjs';
 import useSWR from 'swr';
 import { AmountOverTimeFetcher, NetWorthOverTimeEndpoint } from '../Fetchers';
 import AmountOverTimeChart from './AmountOverTimeChart';
+import CategoriesOverTimeChart from './CategoriesOverTimeChart';
 import IncomeVsExpenseChart from './IncomeVsExpenseChart';
 
 export default function Trends() {
@@ -21,6 +22,7 @@ export default function Trends() {
         response={netWorthOverTimeResponse}
         title='Net Worth'
       />
+      <CategoriesOverTimeChart />
     </SimpleGrid>
   );
 }
