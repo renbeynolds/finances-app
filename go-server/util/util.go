@@ -57,7 +57,7 @@ func ParseMoney(s string) (int64, error) {
 	if err != nil {
 		return 0, err
 	}
-	if d < 0 {
+	if d < 0 || n[0] == "-0" {
 		c = -c
 	}
 	return d*100 + int64(c), nil

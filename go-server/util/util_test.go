@@ -31,6 +31,7 @@ func Test_ParseMoney(t *testing.T) {
 		{"200", 20000},
 		{"0.08000", 8},
 		{"-11.57000", -1157},
+		{"-0.99", -99},
 	}
 
 	for _, test := range tests {
