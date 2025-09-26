@@ -63,6 +63,7 @@ func NewRouter(
 
 		categoriesGroup := apiGroup.Group("/categories")
 		{
+			categoriesGroup.POST("/", categoryController.Create)
 			categoriesGroup.GET("/", categoryController.FindAll)
 		}
 

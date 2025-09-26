@@ -5,5 +5,6 @@ import (
 )
 
 type CategoryController interface {
+	Create(*gin.Context)
 	FindAll(*gin.Context)
 }

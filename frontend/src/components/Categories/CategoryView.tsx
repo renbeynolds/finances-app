@@ -17,7 +17,7 @@ export default function CategoryView() {
 
   const startDate = dayjs()
     .startOf('month')
-    .subtract(13, 'month')
+    .subtract(37, 'month')
     .format('YYYY-MM-DD');
   const endDate = dayjs()
     .startOf('month')

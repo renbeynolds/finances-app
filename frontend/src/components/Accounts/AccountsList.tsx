@@ -22,6 +22,7 @@ export default function AccountsList() {
         </Stack>
         <Button
           variant='filled'
+          mih={36}
           leftSection={<IconPlus size={14} />}
           onClick={() => setAccountModalOpened(true)}
         >

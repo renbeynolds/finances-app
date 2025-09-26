@@ -5,5 +5,6 @@ import (
 )
 
 type CategoryRepository interface {
+	Insert(category model.Category) model.Category
 	FindAll() []model.Category
 }
