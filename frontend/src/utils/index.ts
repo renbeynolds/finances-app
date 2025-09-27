@@ -18,3 +18,6 @@ export const FormatMonthString = (input: string): string =>
 
 export const FormatDayString = (input: string): string =>
   dayjs(input).format('MMM, DD YYYY');
+
+export const MonthStringToTimestamp = (input: string): number =>
+  dayjs(input).startOf('month').unix();

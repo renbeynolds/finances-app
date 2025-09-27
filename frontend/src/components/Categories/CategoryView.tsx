@@ -35,6 +35,7 @@ export default function CategoryView() {
       <AmountOverTimeChart
         response={categoryOverTimeResponse}
         title='Amount Over Time'
+        displayTrendline
       />
       <TransactionTable categoryId={categoryId} />
     </Stack>
