@@ -1,3 +1,0 @@
-interface IValidationData {
-  errors: IValidationError[];
-}

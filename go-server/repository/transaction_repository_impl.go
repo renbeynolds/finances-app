@@ -1,0 +1,49 @@
+package repository
+
+import (
+	"github.com/renbeynolds/finances-app/model"
+	"github.com/renbeynolds/finances-app/util/filter"
+	"github.com/renbeynolds/finances-app/util/paginate"
+	"gorm.io/gorm"
+	"gorm.io/gorm/clause"
+)
+
+type TransactionRepositoryImpl struct {
+	Db *gorm.DB
+}
+
+func NewTransactionRepositoryImpl(Db *gorm.DB) TransactionRepository {
+	return &TransactionRepositoryImpl{Db: Db}
+}
+
+func (r *TransactionRepositoryImpl) FindAll(pagination *paginate.Pagination, filters *filter.TransactionFilters) []model.Transaction {
+	var transactions []model.Transaction
+	r.Db.Scopes(
+		paginate.Paginate(transactions, pagination, r.Db, filter.FilterTransactions(transactions, filters, r.Db)),
+	).Select("transactions.*").Order(clause.OrderBy{Columns: []clause.OrderByColumn{
+		{Column: clause.Column{Name: "date"}, Desc: true},
+		{Column: clause.Column{Name: "id"}, Desc: true},
+	}}).Find(&transactions)
+	if transactions == nil {
+		return []model.Transaction{}
+	}
+	return transactions
+}
+
+func (r *TransactionRepositoryImpl) FindByID(id uint) (*model.Transaction, error) {
+	var transaction model.Transaction
+	err := r.Db.First(&transaction, id).Error
+	return &transaction, err
+}
+
+func (r *TransactionRepositoryImpl) Update(transaction *model.Transaction) *model.Transaction {
+	r.Db.Save(transaction)
+	return transaction
+}
+
+func (r *TransactionRepositoryImpl) GetFilteredTransactionsTotal(filters *filter.TransactionFilters) int64 {
+	var total int64
+	r.Db.Model(&model.Transaction{}).Scopes(filter.FilterTransactions(nil, filters, r.Db)).
+		Select("SUM(amount) as total").Scan(&total)
+	return total
+}
