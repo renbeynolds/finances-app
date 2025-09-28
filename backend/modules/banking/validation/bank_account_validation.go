@@ -20,3 +20,7 @@ func NewBankAccountValidation() *BankAccountValidation {
 func (v *BankAccountValidation) ValidateCreateBankAccountRequest(req dto.CreateBankAccountRequest) error {
 	return v.validate.Struct(req)
 }
+
+func (v *BankAccountValidation) ValidateUpdateBankAccountRequest(req dto.UpdateBankAccountRequest) error {
+	return v.validate.Struct(req)
+}

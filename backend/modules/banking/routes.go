@@ -13,5 +13,6 @@ func RegisterRoutes(server *gin.Engine, injector do.Injector) {
 	{
 		bankAccountRoutes.GET("", bankAccountController.GetAllBankAccounts)
 		bankAccountRoutes.GET("/:id", bankAccountController.GetBankAccountByID)
+		bankAccountRoutes.PUT("/:id", bankAccountController.UpdateBankAccount)
 	}
 }

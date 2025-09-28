@@ -18,6 +18,7 @@ type (
 	BankAccountController interface {
 		GetAllBankAccounts(ctx *gin.Context)
 		GetBankAccountByID(ctx *gin.Context)
+		UpdateBankAccount(ctx *gin.Context)
 	}
 
 	bankAccountController struct {
@@ -65,5 +66,37 @@ func (c *bankAccountController) GetBankAccountByID(ctx *gin.Context) {
 	}
 
 	res := utils.BuildResponseSuccess(dto.MESSAGE_SUCCESS_GET_BANK_ACCOUNT, bankAccount)
+	ctx.JSON(http.StatusOK, res)
+}
+
+func (c *bankAccountController) UpdateBankAccount(ctx *gin.Context) {
+	var byID utils.ByID
+	if err := ctx.ShouldBindUri(&byID); err != nil {
+		res := utils.BuildResponseFailed(dto.MESSAGE_FAILED_UPDATE_BANK_ACCOUNT, err.Error(), nil)
+		ctx.JSON(http.StatusBadRequest, res)
+		return
+	}
+
+	var req dto.UpdateBankAccountRequest
+	if err := ctx.ShouldBindJSON(&req); err != nil {
+		res := utils.BuildResponseFailed(dto.MESSAGE_FAILED_UPDATE_BANK_ACCOUNT, err.Error(), nil)
+		ctx.JSON(http.StatusBadRequest, res)
+		return
+	}
+
+	if err := c.bankAccountValidation.ValidateUpdateBankAccountRequest(req); err != nil {
+		res := utils.BuildResponseFailed(dto.MESSAGE_FAILED_UPDATE_BANK_ACCOUNT, err.Error(), nil)
+		ctx.JSON(http.StatusBadRequest, res)
+		return
+	}
+
+	bankAccount, err := c.bankAccountService.UpdateBankAccount(ctx.Request.Context(), req, byID.ID)
+	if err != nil {
+		res := utils.BuildResponseFailed(dto.MESSAGE_FAILED_UPDATE_BANK_ACCOUNT, err.Error(), nil)
+		ctx.JSON(http.StatusBadRequest, res)
+		return
+	}
+
+	res := utils.BuildResponseSuccess(dto.MESSAGE_SUCCESS_UPDATE_BANK_ACCOUNT, bankAccount)
 	ctx.JSON(http.StatusOK, res)
 }

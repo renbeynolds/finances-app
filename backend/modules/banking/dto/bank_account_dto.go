@@ -1,10 +1,12 @@
 package dto
 
 const (
-	MESSAGE_FAILED_LIST_BANK_ACCOUNTS  = "failed list bank accounts"
-	MESSAGE_FAILED_GET_BANK_ACCOUNT    = "failed get bank account"
-	MESSAGE_SUCCESS_LIST_BANK_ACCOUNTS = "success list bank accounts"
-	MESSAGE_SUCCESS_GET_BANK_ACCOUNT   = "success get bank account"
+	MESSAGE_FAILED_LIST_BANK_ACCOUNTS   = "failed list bank accounts"
+	MESSAGE_FAILED_GET_BANK_ACCOUNT     = "failed get bank account"
+	MESSAGE_FAILED_UPDATE_BANK_ACCOUNT  = "failed update bank account"
+	MESSAGE_SUCCESS_LIST_BANK_ACCOUNTS  = "success list bank accounts"
+	MESSAGE_SUCCESS_GET_BANK_ACCOUNT    = "success get bank account"
+	MESSAGE_SUCCESS_UPDATE_BANK_ACCOUNT = "success update bank account"
 )
 
 type (
@@ -14,6 +16,14 @@ type (
 		DescriptionHeader string  `json:"descriptionHeader" validate:"required"`
 		AmountExpression  string  `json:"amountExpression" validate:"required"`
 		StartingAmount    int64   `json:"startingAmount"` // TODO: Validate this is 2 decimal number
+		LoginURL          *string `json:"loginUrl"`
+	}
+
+	UpdateBankAccountRequest struct {
+		Name              *string `json:"name"`
+		DateHeader        *string `json:"dateHeader"`
+		DescriptionHeader *string `json:"descriptionHeader"`
+		AmountExpression  *string `json:"amountExpression"`
 		LoginURL          *string `json:"loginUrl"`
 	}
 

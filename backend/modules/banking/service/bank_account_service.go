@@ -12,6 +12,7 @@ import (
 type BankAccountService interface {
 	GetAllBankAccounts(ctx context.Context) ([]dto.BankAccountResponse, error)
 	GetBankAccountByID(ctx context.Context, id uint) (dto.BankAccountResponse, error)
+	UpdateBankAccount(ctx context.Context, req dto.UpdateBankAccountRequest, id uint) (dto.BankAccountResponse, error)
 }
 
 type bankAccountService struct {
@@ -49,6 +50,36 @@ func (s *bankAccountService) GetBankAccountByID(ctx context.Context, id uint) (d
 	}
 
 	return entityToResponse(bankAccount), nil
+}
+
+func (s *bankAccountService) UpdateBankAccount(ctx context.Context, req dto.UpdateBankAccountRequest, id uint) (dto.BankAccountResponse, error) {
+	bankAccount, err := s.bankAccountRepository.GetBankAccountByID(ctx, s.db, id)
+	if err != nil {
+		return dto.BankAccountResponse{}, err
+	}
+
+	if req.Name != nil {
+		bankAccount.Name = *req.Name
+	}
+	if req.DateHeader != nil {
+		bankAccount.DateHeader = *req.DateHeader
+	}
+	if req.DescriptionHeader != nil {
+		bankAccount.DescriptionHeader = *req.DescriptionHeader
+	}
+	if req.AmountExpression != nil {
+		bankAccount.AmountExpression = *req.AmountExpression
+	}
+	if req.LoginURL != nil {
+		bankAccount.LoginURL = req.LoginURL
+	}
+
+	updatedBankAccount, err := s.bankAccountRepository.UpdateBankAccount(ctx, s.db, bankAccount)
+	if err != nil {
+		return dto.BankAccountResponse{}, err
+	}
+
+	return entityToResponse(updatedBankAccount), nil
 }
 
 func entityToResponse(entity entities.BankAccount) dto.BankAccountResponse {

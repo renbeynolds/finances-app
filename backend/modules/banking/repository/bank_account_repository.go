@@ -11,6 +11,7 @@ type (
 	BankAccountRepository interface {
 		GetAllBankAccounts(ctx context.Context, tx *gorm.DB) ([]entities.BankAccount, error)
 		GetBankAccountByID(ctx context.Context, tx *gorm.DB, id uint) (entities.BankAccount, error)
+		UpdateBankAccount(ctx context.Context, tx *gorm.DB, bankAccount entities.BankAccount) (entities.BankAccount, error)
 	}
 
 	bankAccountRepository struct {
@@ -44,6 +45,18 @@ func (r *bankAccountRepository) GetBankAccountByID(ctx context.Context, tx *gorm
 
 	var bankAccount entities.BankAccount
 	if err := tx.WithContext(ctx).Where("id = ?", id).Take(&bankAccount).Error; err != nil {
+		return entities.BankAccount{}, err
+	}
+
+	return bankAccount, nil
+}
+
+func (r *bankAccountRepository) UpdateBankAccount(ctx context.Context, tx *gorm.DB, bankAccount entities.BankAccount) (entities.BankAccount, error) {
+	if tx == nil {
+		tx = r.db
+	}
+
+	if err := tx.WithContext(ctx).Updates(&bankAccount).Error; err != nil {
 		return entities.BankAccount{}, err
 	}
 

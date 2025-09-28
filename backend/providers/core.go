@@ -18,7 +18,6 @@ func InitDatabase(injector do.Injector) {
 
 func RegisterDependencies(injector do.Injector) {
 	InitDatabase(injector)
-
 	db := do.MustInvokeNamed[*gorm.DB](injector, constants.DB)
 
 	bankAccountRepository := bankAccountRepository.NewBankAccountRepository(db)
