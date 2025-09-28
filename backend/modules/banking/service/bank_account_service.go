@@ -10,6 +10,7 @@ import (
 )
 
 type BankAccountService interface {
+	CreateBankAccount(ctx context.Context, req dto.CreateBankAccountRequest) (dto.BankAccountResponse, error)
 	GetAllBankAccounts(ctx context.Context) ([]dto.BankAccountResponse, error)
 	GetBankAccountByID(ctx context.Context, id uint) (dto.BankAccountResponse, error)
 	UpdateBankAccount(ctx context.Context, req dto.UpdateBankAccountRequest, id uint) (dto.BankAccountResponse, error)
@@ -28,6 +29,24 @@ func NewBankAccountService(
 		bankAccountRepository: bankAccountRepo,
 		db:                    db,
 	}
+}
+
+func (s *bankAccountService) CreateBankAccount(ctx context.Context, req dto.CreateBankAccountRequest) (dto.BankAccountResponse, error) {
+	bankAccount := entities.BankAccount{
+		Name:              req.Name,
+		DateHeader:        req.DateHeader,
+		DescriptionHeader: req.DescriptionHeader,
+		AmountExpression:  req.AmountExpression,
+		StartingAmount:    req.StartingAmount,
+		LoginURL:          req.LoginURL,
+	}
+
+	createdBankAccount, err := s.bankAccountRepository.CreateBankAccount(ctx, s.db, bankAccount)
+	if err != nil {
+		return dto.BankAccountResponse{}, err
+	}
+
+	return entityToResponse(createdBankAccount), nil
 }
 
 func (s *bankAccountService) GetAllBankAccounts(ctx context.Context) ([]dto.BankAccountResponse, error) {

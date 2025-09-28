@@ -16,6 +16,7 @@ import (
 
 type (
 	BankAccountController interface {
+		CreateBankAccount(ctx *gin.Context)
 		GetAllBankAccounts(ctx *gin.Context)
 		GetBankAccountByID(ctx *gin.Context)
 		UpdateBankAccount(ctx *gin.Context)
@@ -38,10 +39,35 @@ func NewBankAccountController(injector do.Injector, s service.BankAccountService
 	}
 }
 
+func (c *bankAccountController) CreateBankAccount(ctx *gin.Context) {
+	var req dto.CreateBankAccountRequest
+	if err := ctx.ShouldBindJSON(&req); err != nil {
+		res := utils.BuildResponseFailed(dto.MESSAGE_FAILED_CREATE_BANK_ACCOUNT, err.Error())
+		ctx.JSON(http.StatusBadRequest, res)
+		return
+	}
+
+	if err := c.bankAccountValidation.ValidateCreateBankAccountRequest(req); err != nil {
+		res := utils.BuildResponseFailed(dto.MESSAGE_FAILED_CREATE_BANK_ACCOUNT, err.Error())
+		ctx.JSON(http.StatusBadRequest, res)
+		return
+	}
+
+	bankAccount, err := c.bankAccountService.CreateBankAccount(ctx.Request.Context(), req)
+	if err != nil {
+		res := utils.BuildResponseFailed(dto.MESSAGE_FAILED_CREATE_BANK_ACCOUNT, err.Error())
+		ctx.JSON(http.StatusBadRequest, res)
+		return
+	}
+
+	res := utils.BuildResponseSuccess(dto.MESSAGE_SUCCESS_CREATE_BANK_ACCOUNT, bankAccount)
+	ctx.JSON(http.StatusOK, res)
+}
+
 func (c *bankAccountController) GetAllBankAccounts(ctx *gin.Context) {
 	bankAccounts, err := c.bankAccountService.GetAllBankAccounts(ctx.Request.Context())
 	if err != nil {
-		res := utils.BuildResponseFailed(dto.MESSAGE_FAILED_LIST_BANK_ACCOUNTS, err.Error(), nil)
+		res := utils.BuildResponseFailed(dto.MESSAGE_FAILED_LIST_BANK_ACCOUNTS, err.Error())
 		ctx.JSON(http.StatusBadRequest, res)
 		return
 	}
@@ -53,14 +79,14 @@ func (c *bankAccountController) GetAllBankAccounts(ctx *gin.Context) {
 func (c *bankAccountController) GetBankAccountByID(ctx *gin.Context) {
 	var byID utils.ByID
 	if err := ctx.ShouldBindUri(&byID); err != nil {
-		res := utils.BuildResponseFailed(dto.MESSAGE_FAILED_GET_BANK_ACCOUNT, err.Error(), nil)
+		res := utils.BuildResponseFailed(dto.MESSAGE_FAILED_GET_BANK_ACCOUNT, err.Error())
 		ctx.JSON(http.StatusBadRequest, res)
 		return
 	}
 
 	bankAccount, err := c.bankAccountService.GetBankAccountByID(ctx.Request.Context(), byID.ID)
 	if err != nil {
-		res := utils.BuildResponseFailed(dto.MESSAGE_FAILED_GET_BANK_ACCOUNT, err.Error(), nil)
+		res := utils.BuildResponseFailed(dto.MESSAGE_FAILED_GET_BANK_ACCOUNT, err.Error())
 		ctx.JSON(http.StatusBadRequest, res)
 		return
 	}
@@ -72,27 +98,27 @@ func (c *bankAccountController) GetBankAccountByID(ctx *gin.Context) {
 func (c *bankAccountController) UpdateBankAccount(ctx *gin.Context) {
 	var byID utils.ByID
 	if err := ctx.ShouldBindUri(&byID); err != nil {
-		res := utils.BuildResponseFailed(dto.MESSAGE_FAILED_UPDATE_BANK_ACCOUNT, err.Error(), nil)
+		res := utils.BuildResponseFailed(dto.MESSAGE_FAILED_UPDATE_BANK_ACCOUNT, err.Error())
 		ctx.JSON(http.StatusBadRequest, res)
 		return
 	}
 
 	var req dto.UpdateBankAccountRequest
 	if err := ctx.ShouldBindJSON(&req); err != nil {
-		res := utils.BuildResponseFailed(dto.MESSAGE_FAILED_UPDATE_BANK_ACCOUNT, err.Error(), nil)
+		res := utils.BuildResponseFailed(dto.MESSAGE_FAILED_UPDATE_BANK_ACCOUNT, err.Error())
 		ctx.JSON(http.StatusBadRequest, res)
 		return
 	}
 
 	if err := c.bankAccountValidation.ValidateUpdateBankAccountRequest(req); err != nil {
-		res := utils.BuildResponseFailed(dto.MESSAGE_FAILED_UPDATE_BANK_ACCOUNT, err.Error(), nil)
+		res := utils.BuildResponseFailed(dto.MESSAGE_FAILED_UPDATE_BANK_ACCOUNT, err.Error())
 		ctx.JSON(http.StatusBadRequest, res)
 		return
 	}
 
 	bankAccount, err := c.bankAccountService.UpdateBankAccount(ctx.Request.Context(), req, byID.ID)
 	if err != nil {
-		res := utils.BuildResponseFailed(dto.MESSAGE_FAILED_UPDATE_BANK_ACCOUNT, err.Error(), nil)
+		res := utils.BuildResponseFailed(dto.MESSAGE_FAILED_UPDATE_BANK_ACCOUNT, err.Error())
 		ctx.JSON(http.StatusBadRequest, res)
 		return
 	}

@@ -1,11 +1,16 @@
 package dto
 
 const (
-	MESSAGE_FAILED_LIST_BANK_ACCOUNTS   = "failed list bank accounts"
-	MESSAGE_FAILED_GET_BANK_ACCOUNT     = "failed get bank account"
+	MESSAGE_FAILED_CREATE_BANK_ACCOUNT  = "failed create bank account"
+	MESSAGE_SUCCESS_CREATE_BANK_ACCOUNT = "success create bank account"
+
+	MESSAGE_FAILED_LIST_BANK_ACCOUNTS  = "failed list bank accounts"
+	MESSAGE_SUCCESS_LIST_BANK_ACCOUNTS = "success list bank accounts"
+
+	MESSAGE_FAILED_GET_BANK_ACCOUNT  = "failed get bank account"
+	MESSAGE_SUCCESS_GET_BANK_ACCOUNT = "success get bank account"
+
 	MESSAGE_FAILED_UPDATE_BANK_ACCOUNT  = "failed update bank account"
-	MESSAGE_SUCCESS_LIST_BANK_ACCOUNTS  = "success list bank accounts"
-	MESSAGE_SUCCESS_GET_BANK_ACCOUNT    = "success get bank account"
 	MESSAGE_SUCCESS_UPDATE_BANK_ACCOUNT = "success update bank account"
 )
 

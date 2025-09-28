@@ -11,6 +11,7 @@ func RegisterRoutes(server *gin.Engine, injector do.Injector) {
 
 	bankAccountRoutes := server.Group("/api/bank_accounts")
 	{
+		bankAccountRoutes.POST("", bankAccountController.CreateBankAccount)
 		bankAccountRoutes.GET("", bankAccountController.GetAllBankAccounts)
 		bankAccountRoutes.GET("/:id", bankAccountController.GetBankAccountByID)
 		bankAccountRoutes.PUT("/:id", bankAccountController.UpdateBankAccount)

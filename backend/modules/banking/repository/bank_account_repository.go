@@ -9,6 +9,7 @@ import (
 
 type (
 	BankAccountRepository interface {
+		CreateBankAccount(ctx context.Context, tx *gorm.DB, bankAccount entities.BankAccount) (entities.BankAccount, error)
 		GetAllBankAccounts(ctx context.Context, tx *gorm.DB) ([]entities.BankAccount, error)
 		GetBankAccountByID(ctx context.Context, tx *gorm.DB, id uint) (entities.BankAccount, error)
 		UpdateBankAccount(ctx context.Context, tx *gorm.DB, bankAccount entities.BankAccount) (entities.BankAccount, error)
@@ -23,6 +24,18 @@ func NewBankAccountRepository(db *gorm.DB) BankAccountRepository {
 	return &bankAccountRepository{
 		db: db,
 	}
+}
+
+func (r *bankAccountRepository) CreateBankAccount(ctx context.Context, tx *gorm.DB, bankAccount entities.BankAccount) (entities.BankAccount, error) {
+	if tx == nil {
+		tx = r.db
+	}
+
+	if err := tx.WithContext(ctx).Create(&bankAccount).Error; err != nil {
+		return entities.BankAccount{}, err
+	}
+
+	return bankAccount, nil
 }
 
 func (r *bankAccountRepository) GetAllBankAccounts(ctx context.Context, tx *gorm.DB) ([]entities.BankAccount, error) {

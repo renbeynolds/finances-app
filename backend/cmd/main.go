@@ -4,28 +4,9 @@ import (
 	"log"
 	"os"
 
-	// "github.com/Caknoooo/go-gin-clean-starter/middlewares"
-	// "github.com/Caknoooo/go-gin-clean-starter/modules/auth"
-	// "github.com/Caknoooo/go-gin-clean-starter/modules/user"
-	// "github.com/Caknoooo/go-gin-clean-starter/providers"
-	// "github.com/Caknoooo/go-gin-clean-starter/script"
-	"github.com/renbeynolds/finances-app/middlewares"
-	"github.com/renbeynolds/finances-app/modules/banking"
-	"github.com/renbeynolds/finances-app/providers"
-	"github.com/samber/do/v2"
-
-	// "github.com/common-nighthawk/go-figure"
 	"github.com/gin-gonic/gin"
+	"github.com/renbeynolds/finances-app/server"
 )
-
-// func args(injector *do.Injector) bool {
-// 	if len(os.Args) > 1 {
-// 		flag := script.Commands(injector)
-// 		return flag
-// 	}
-
-// 	return true
-// }
 
 func run(server *gin.Engine) {
 	server.Static("/assets", "./assets")
@@ -48,21 +29,8 @@ func run(server *gin.Engine) {
 }
 
 func main() {
-	var (
-		injector = do.New()
-	)
-
-	providers.RegisterDependencies(injector)
-
-	// if !args(injector) {
-	// 	return
-	// }
-
-	server := gin.Default()
-	server.Use(middlewares.CORSMiddleware())
-
-	// Register module routes
-	banking.RegisterRoutes(server, injector)
-
+	server := server.MakeServer(server.ServerOpts{
+		DBType: "postgres",
+	})
 	run(server)
 }
