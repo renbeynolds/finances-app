@@ -8,6 +8,9 @@ import (
 	investmentAccountController "github.com/renbeynolds/finances-app/modules/investments/controller"
 	investmentAccountRepository "github.com/renbeynolds/finances-app/modules/investments/repository"
 	investmentAccountService "github.com/renbeynolds/finances-app/modules/investments/service"
+	uploadController "github.com/renbeynolds/finances-app/modules/uploads/controller"
+	uploadRepository "github.com/renbeynolds/finances-app/modules/uploads/repository"
+	uploadService "github.com/renbeynolds/finances-app/modules/uploads/service"
 	"github.com/renbeynolds/finances-app/pkg/constants"
 	"github.com/samber/do/v2"
 	"gorm.io/gorm"
@@ -29,6 +32,9 @@ func RegisterDependencies(injector do.Injector, dbType string) {
 	investmentAccountRepository := investmentAccountRepository.NewInvestmentAccountRepository(db)
 	investmentAccountService := investmentAccountService.NewInvestmentAccountService(investmentAccountRepository, db)
 
+	uploadRepository := uploadRepository.NewUploadRepository(db)
+	uploadService := uploadService.NewUploadService(uploadRepository, db)
+
 	do.Provide(
 		injector, func(i do.Injector) (bankAccountController.BankAccountController, error) {
 			return bankAccountController.NewBankAccountController(i, bankAccountService), nil
@@ -37,6 +43,11 @@ func RegisterDependencies(injector do.Injector, dbType string) {
 	do.Provide(
 		injector, func(i do.Injector) (investmentAccountController.InvestmentAccountController, error) {
 			return investmentAccountController.NewInvestmentAccountController(i, investmentAccountService), nil
+		},
+	)
+	do.Provide(
+		injector, func(i do.Injector) (uploadController.UploadController, error) {
+			return uploadController.NewUploadController(i, uploadService), nil
 		},
 	)
 }

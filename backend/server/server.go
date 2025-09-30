@@ -5,6 +5,7 @@ import (
 	"github.com/renbeynolds/finances-app/middlewares"
 	"github.com/renbeynolds/finances-app/modules/banking"
 	"github.com/renbeynolds/finances-app/modules/investments"
+	"github.com/renbeynolds/finances-app/modules/uploads"
 	"github.com/renbeynolds/finances-app/providers"
 	"github.com/samber/do/v2"
 )
@@ -20,5 +21,6 @@ func MakeServer(opts ServerOpts) *gin.Engine {
 	server.Use(middlewares.CORSMiddleware())
 	banking.RegisterRoutes(server, injector)
 	investments.RegisterRoutes(server, injector)
+	uploads.RegisterRoutes(server, injector)
 	return server
 }
