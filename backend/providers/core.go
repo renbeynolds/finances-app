@@ -5,6 +5,9 @@ import (
 	bankAccountController "github.com/renbeynolds/finances-app/modules/banking/controller"
 	bankAccountRepository "github.com/renbeynolds/finances-app/modules/banking/repository"
 	bankAccountService "github.com/renbeynolds/finances-app/modules/banking/service"
+	investmentAccountController "github.com/renbeynolds/finances-app/modules/investments/controller"
+	investmentAccountRepository "github.com/renbeynolds/finances-app/modules/investments/repository"
+	investmentAccountService "github.com/renbeynolds/finances-app/modules/investments/service"
 	"github.com/renbeynolds/finances-app/pkg/constants"
 	"github.com/samber/do/v2"
 	"gorm.io/gorm"
@@ -23,9 +26,17 @@ func RegisterDependencies(injector do.Injector, dbType string) {
 	bankAccountRepository := bankAccountRepository.NewBankAccountRepository(db)
 	bankAccountService := bankAccountService.NewBankAccountService(bankAccountRepository, db)
 
+	investmentAccountRepository := investmentAccountRepository.NewInvestmentAccountRepository(db)
+	investmentAccountService := investmentAccountService.NewInvestmentAccountService(investmentAccountRepository, db)
+
 	do.Provide(
 		injector, func(i do.Injector) (bankAccountController.BankAccountController, error) {
 			return bankAccountController.NewBankAccountController(i, bankAccountService), nil
+		},
+	)
+	do.Provide(
+		injector, func(i do.Injector) (investmentAccountController.InvestmentAccountController, error) {
+			return investmentAccountController.NewInvestmentAccountController(i, investmentAccountService), nil
 		},
 	)
 }

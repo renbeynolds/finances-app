@@ -14,6 +14,7 @@ func RegisterRoutes(server *gin.Engine, injector do.Injector) {
 		bankAccountRoutes.POST("", bankAccountController.CreateBankAccount)
 		bankAccountRoutes.GET("", bankAccountController.GetAllBankAccounts)
 		bankAccountRoutes.GET("/:id", bankAccountController.GetBankAccountByID)
-		bankAccountRoutes.PUT("/:id", bankAccountController.UpdateBankAccount)
+		bankAccountRoutes.PATCH("/:id", bankAccountController.UpdateBankAccount)
+		// TODO: get balance over time
 	}
 }
