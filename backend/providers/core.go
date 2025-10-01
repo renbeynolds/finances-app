@@ -11,6 +11,9 @@ import (
 	investmentAccountController "github.com/renbeynolds/finances-app/modules/investments/controller"
 	investmentAccountRepository "github.com/renbeynolds/finances-app/modules/investments/repository"
 	investmentAccountService "github.com/renbeynolds/finances-app/modules/investments/service"
+	transactionController "github.com/renbeynolds/finances-app/modules/transactions/controller"
+	transactionRepository "github.com/renbeynolds/finances-app/modules/transactions/repository"
+	transactionService "github.com/renbeynolds/finances-app/modules/transactions/service"
 	uploadController "github.com/renbeynolds/finances-app/modules/uploads/controller"
 	uploadRepository "github.com/renbeynolds/finances-app/modules/uploads/repository"
 	uploadService "github.com/renbeynolds/finances-app/modules/uploads/service"
@@ -41,6 +44,9 @@ func RegisterDependencies(injector do.Injector, dbType string) {
 	categoryRepository := categoryRepository.NewCategoryRepository(db)
 	categoryService := categoryService.NewCategoryService(categoryRepository, db)
 
+	transactionRepository := transactionRepository.NewTransactionRepository(db)
+	transactionService := transactionService.NewTransactionService(transactionRepository, db)
+
 	do.Provide(
 		injector, func(i do.Injector) (bankAccountController.BankAccountController, error) {
 			return bankAccountController.NewBankAccountController(i, bankAccountService), nil
@@ -59,6 +65,11 @@ func RegisterDependencies(injector do.Injector, dbType string) {
 	do.Provide(
 		injector, func(i do.Injector) (categoryController.CategoryController, error) {
 			return categoryController.NewCategoryController(i, categoryService), nil
+		},
+	)
+	do.Provide(
+		injector, func(i do.Injector) (transactionController.TransactionController, error) {
+			return transactionController.NewTransactionController(i, transactionService), nil
 		},
 	)
 }
