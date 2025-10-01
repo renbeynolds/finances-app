@@ -60,7 +60,7 @@ func (c *bankAccountController) CreateBankAccount(ctx *gin.Context) {
 		return
 	}
 
-	res := utils.BuildResponseSuccess(dto.MESSAGE_SUCCESS_CREATE_BANK_ACCOUNT, bankAccount)
+	res := utils.BuildResponseSuccess(dto.MESSAGE_SUCCESS_CREATE_BANK_ACCOUNT, bankAccount, nil)
 	ctx.JSON(http.StatusOK, res)
 }
 
@@ -72,7 +72,7 @@ func (c *bankAccountController) GetAllBankAccounts(ctx *gin.Context) {
 		return
 	}
 
-	res := utils.BuildResponseSuccess(dto.MESSAGE_SUCCESS_LIST_BANK_ACCOUNTS, bankAccounts)
+	res := utils.BuildResponseSuccess(dto.MESSAGE_SUCCESS_LIST_BANK_ACCOUNTS, bankAccounts, nil)
 	ctx.JSON(http.StatusOK, res)
 }
 
@@ -91,7 +91,7 @@ func (c *bankAccountController) GetBankAccountByID(ctx *gin.Context) {
 		return
 	}
 
-	res := utils.BuildResponseSuccess(dto.MESSAGE_SUCCESS_GET_BANK_ACCOUNT, bankAccount)
+	res := utils.BuildResponseSuccess(dto.MESSAGE_SUCCESS_GET_BANK_ACCOUNT, bankAccount, nil)
 	ctx.JSON(http.StatusOK, res)
 }
 
@@ -123,6 +123,6 @@ func (c *bankAccountController) UpdateBankAccount(ctx *gin.Context) {
 		return
 	}
 
-	res := utils.BuildResponseSuccess(dto.MESSAGE_SUCCESS_UPDATE_BANK_ACCOUNT, bankAccount)
+	res := utils.BuildResponseSuccess(dto.MESSAGE_SUCCESS_UPDATE_BANK_ACCOUNT, bankAccount, nil)
 	ctx.JSON(http.StatusOK, res)
 }

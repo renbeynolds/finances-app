@@ -60,7 +60,7 @@ func (c *investmentAccountController) CreateInvestmentAccount(ctx *gin.Context) 
 		return
 	}
 
-	res := utils.BuildResponseSuccess(dto.MESSAGE_SUCCESS_CREATE_INVESTMENT_ACCOUNT, investmentAccount)
+	res := utils.BuildResponseSuccess(dto.MESSAGE_SUCCESS_CREATE_INVESTMENT_ACCOUNT, investmentAccount, nil)
 	ctx.JSON(http.StatusOK, res)
 }
 
@@ -72,7 +72,7 @@ func (c *investmentAccountController) GetAllInvestmentAccounts(ctx *gin.Context)
 		return
 	}
 
-	res := utils.BuildResponseSuccess(dto.MESSAGE_SUCCESS_LIST_INVESTMENT_ACCOUNTS, investmentAccounts)
+	res := utils.BuildResponseSuccess(dto.MESSAGE_SUCCESS_LIST_INVESTMENT_ACCOUNTS, investmentAccounts, nil)
 	ctx.JSON(http.StatusOK, res)
 }
 
@@ -91,7 +91,7 @@ func (c *investmentAccountController) GetInvestmentAccountByID(ctx *gin.Context)
 		return
 	}
 
-	res := utils.BuildResponseSuccess(dto.MESSAGE_SUCCESS_GET_INVESTMENT_ACCOUNT, investmentAccount)
+	res := utils.BuildResponseSuccess(dto.MESSAGE_SUCCESS_GET_INVESTMENT_ACCOUNT, investmentAccount, nil)
 	ctx.JSON(http.StatusOK, res)
 }
 
@@ -123,6 +123,6 @@ func (c *investmentAccountController) UpdateInvestmentAccount(ctx *gin.Context) 
 		return
 	}
 
-	res := utils.BuildResponseSuccess(dto.MESSAGE_SUCCESS_UPDATE_INVESTMENT_ACCOUNT, investmentAccount)
+	res := utils.BuildResponseSuccess(dto.MESSAGE_SUCCESS_UPDATE_INVESTMENT_ACCOUNT, investmentAccount, nil)
 	ctx.JSON(http.StatusOK, res)
 }

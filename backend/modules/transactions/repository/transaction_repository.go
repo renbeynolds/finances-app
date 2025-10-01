@@ -4,11 +4,15 @@ import (
 	"context"
 
 	"github.com/renbeynolds/finances-app/database/entities"
+	queryPkg "github.com/renbeynolds/finances-app/modules/transactions/query"
+	"github.com/renbeynolds/finances-app/pkg/utils"
 	"gorm.io/gorm"
+	"gorm.io/gorm/clause"
 )
 
 type (
 	TransactionRepository interface {
+		GetAllTransactions(ctx context.Context, tx *gorm.DB, pagination *utils.Pagination, query *queryPkg.TransactionQuery) ([]entities.Transaction, error)
 		GetTransactionByID(ctx context.Context, tx *gorm.DB, id uint) (entities.Transaction, error)
 		UpdateTransaction(ctx context.Context, tx *gorm.DB, transaction entities.Transaction) (entities.Transaction, error)
 	}
@@ -22,6 +26,26 @@ func NewTransactionRepository(db *gorm.DB) TransactionRepository {
 	return &transactionRepository{
 		db: db,
 	}
+}
+
+func (r *transactionRepository) GetAllTransactions(ctx context.Context, tx *gorm.DB, pagination *utils.Pagination, query *queryPkg.TransactionQuery) ([]entities.Transaction, error) {
+	if tx == nil {
+		tx = r.db
+	}
+
+	var transactions []entities.Transaction
+	tx.WithContext(ctx).Scopes(
+		utils.Paginate(transactions, pagination, tx, queryPkg.QueryTransactions(transactions, query, tx)),
+	).Select("transactions.*").Order(clause.OrderBy{Columns: []clause.OrderByColumn{
+		{Column: clause.Column{Name: "date"}, Desc: true},
+		{Column: clause.Column{Name: "id"}, Desc: true},
+	}}).Find(&transactions)
+
+	if transactions == nil {
+		return []entities.Transaction{}, nil
+	}
+
+	return transactions, nil
 }
 
 func (r *transactionRepository) GetTransactionByID(ctx context.Context, tx *gorm.DB, id uint) (entities.Transaction, error) {

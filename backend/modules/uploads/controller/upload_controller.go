@@ -58,7 +58,7 @@ func (c *uploadController) CreateUpload(ctx *gin.Context) {
 		return
 	}
 
-	res := utils.BuildResponseSuccess(dto.MESSAGE_SUCCESS_CREATE_UPLOAD, upload)
+	res := utils.BuildResponseSuccess(dto.MESSAGE_SUCCESS_CREATE_UPLOAD, upload, nil)
 	ctx.JSON(http.StatusOK, res)
 }
 
@@ -70,6 +70,6 @@ func (c *uploadController) GetAllUploads(ctx *gin.Context) {
 		return
 	}
 
-	res := utils.BuildResponseSuccess(dto.MESSAGE_SUCCESS_LIST_UPLOADS, uploads)
+	res := utils.BuildResponseSuccess(dto.MESSAGE_SUCCESS_LIST_UPLOADS, uploads, nil)
 	ctx.JSON(http.StatusOK, res)
 }

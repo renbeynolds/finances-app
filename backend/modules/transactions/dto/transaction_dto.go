@@ -3,6 +3,9 @@ package dto
 const (
 	MESSAGE_FAILED_UPDATE_TRANSACTION  = "failed update transaction"
 	MESSAGE_SUCCESS_UPDATE_TRANSACTION = "success update transaction"
+
+	MESSAGE_FAILED_LIST_TRANSACTIONS  = "failed list transactions"
+	MESSAGE_SUCCESS_LIST_TRANSACTIONS = "success list transactions"
 )
 
 type (

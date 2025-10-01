@@ -58,7 +58,7 @@ func (c *categoryController) CreateCategory(ctx *gin.Context) {
 		return
 	}
 
-	res := utils.BuildResponseSuccess(dto.MESSAGE_SUCCESS_CREATE_CATEGORY, category)
+	res := utils.BuildResponseSuccess(dto.MESSAGE_SUCCESS_CREATE_CATEGORY, category, nil)
 	ctx.JSON(http.StatusOK, res)
 }
 
@@ -70,6 +70,6 @@ func (c *categoryController) GetAllCategories(ctx *gin.Context) {
 		return
 	}
 
-	res := utils.BuildResponseSuccess(dto.MESSAGE_SUCCESS_LIST_CATEGORIES, categories)
+	res := utils.BuildResponseSuccess(dto.MESSAGE_SUCCESS_LIST_CATEGORIES, categories, nil)
 	ctx.JSON(http.StatusOK, res)
 }

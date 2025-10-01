@@ -5,11 +5,14 @@ import (
 
 	"github.com/renbeynolds/finances-app/database/entities"
 	"github.com/renbeynolds/finances-app/modules/transactions/dto"
+	"github.com/renbeynolds/finances-app/modules/transactions/query"
 	"github.com/renbeynolds/finances-app/modules/transactions/repository"
+	"github.com/renbeynolds/finances-app/pkg/utils"
 	"gorm.io/gorm"
 )
 
 type TransactionService interface {
+	GetAllTransactions(ctx context.Context, pagination *utils.Pagination, query *query.TransactionQuery) ([]dto.TransactionResponse, error)
 	UpdateTransaction(ctx context.Context, req dto.UpdateTransactionRequest, id uint) (dto.TransactionResponse, error)
 }
 
@@ -28,14 +31,26 @@ func NewTransactionService(
 	}
 }
 
+func (s *transactionService) GetAllTransactions(ctx context.Context, pagination *utils.Pagination, query *query.TransactionQuery) ([]dto.TransactionResponse, error) {
+	transactions, err := s.transactionRepository.GetAllTransactions(ctx, s.db, pagination, query)
+	if err != nil {
+		return nil, err
+	}
+
+	var transactionResponses []dto.TransactionResponse
+	for _, tx := range transactions {
+		transactionResponses = append(transactionResponses, entityToResponse(tx))
+	}
+
+	return transactionResponses, nil
+}
+
 func (s *transactionService) UpdateTransaction(ctx context.Context, req dto.UpdateTransactionRequest, id uint) (dto.TransactionResponse, error) {
-	// Get the existing transaction
 	transaction, err := s.transactionRepository.GetTransactionByID(ctx, s.db, id)
 	if err != nil {
 		return dto.TransactionResponse{}, err
 	}
 
-	// Update only the fields that are provided
 	if req.CategoryID != nil {
 		transaction.CategoryID = req.CategoryID
 	}
@@ -43,7 +58,6 @@ func (s *transactionService) UpdateTransaction(ctx context.Context, req dto.Upda
 		transaction.Comment = req.Comment
 	}
 
-	// Save the updated transaction
 	updatedTransaction, err := s.transactionRepository.UpdateTransaction(ctx, s.db, transaction)
 	if err != nil {
 		return dto.TransactionResponse{}, err
