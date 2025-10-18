@@ -12,6 +12,7 @@ func RegisterRoutes(server *gin.Engine, injector do.Injector) {
 	transactionRoutes := server.Group("/api/transactions")
 	{
 		transactionRoutes.GET("/", transactionController.GetAllTransactions)
+		transactionRoutes.GET("/total", transactionController.GetFilteredTransactionsTotal)
 		transactionRoutes.PATCH("/:id", transactionController.UpdateTransaction)
 	}
 }

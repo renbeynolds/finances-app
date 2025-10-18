@@ -13,6 +13,7 @@ import (
 
 type TransactionService interface {
 	GetAllTransactions(ctx context.Context, pagination *utils.Pagination, query *query.TransactionQuery) ([]dto.TransactionResponse, error)
+	GetFilteredTransactionsTotal(ctx context.Context, query *query.TransactionQuery) (dto.TransactionsTotalResponse, error)
 	UpdateTransaction(ctx context.Context, req dto.UpdateTransactionRequest, id uint) (dto.TransactionResponse, error)
 }
 
@@ -43,6 +44,13 @@ func (s *transactionService) GetAllTransactions(ctx context.Context, pagination 
 	}
 
 	return transactionResponses, nil
+}
+
+func (s *transactionService) GetFilteredTransactionsTotal(ctx context.Context, query *query.TransactionQuery) (dto.TransactionsTotalResponse, error) {
+	total, err := s.transactionRepository.GetFilteredTransactionsTotal(ctx, s.db, query)
+	return dto.TransactionsTotalResponse{
+		Total: total,
+	}, err
 }
 
 func (s *transactionService) UpdateTransaction(ctx context.Context, req dto.UpdateTransactionRequest, id uint) (dto.TransactionResponse, error) {

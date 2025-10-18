@@ -18,6 +18,7 @@ import (
 type (
 	TransactionController interface {
 		GetAllTransactions(ctx *gin.Context)
+		GetFilteredTransactionsTotal(ctx *gin.Context)
 		UpdateTransaction(ctx *gin.Context)
 	}
 
@@ -61,6 +62,25 @@ func (c *transactionController) GetAllTransactions(ctx *gin.Context) {
 	}
 
 	res := utils.BuildResponseSuccess(dto.MESSAGE_SUCCESS_LIST_TRANSACTIONS, transactions, &pagination)
+	ctx.JSON(http.StatusOK, res)
+}
+
+func (c *transactionController) GetFilteredTransactionsTotal(ctx *gin.Context) {
+	var query query.TransactionQuery
+	if err := ctx.ShouldBindQuery(&query); err != nil {
+		res := utils.BuildResponseFailed(dto.MESSAGE_FAILED_LIST_TRANSACTIONS, err.Error())
+		ctx.JSON(http.StatusBadRequest, res)
+		return
+	}
+
+	total, err := c.transactionService.GetFilteredTransactionsTotal(ctx.Request.Context(), &query)
+	if err != nil {
+		res := utils.BuildResponseFailed(dto.MESSAGE_FAILED_GET_TRANSACTIONS_TOTAL, err.Error())
+		ctx.JSON(http.StatusBadRequest, res)
+		return
+	}
+
+	res := utils.BuildResponseSuccess(dto.MESSAGE_SUCCESS_GET_TRANSACTIONS_TOTAL, total, nil)
 	ctx.JSON(http.StatusOK, res)
 }
 

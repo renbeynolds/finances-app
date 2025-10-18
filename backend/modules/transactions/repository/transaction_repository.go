@@ -13,6 +13,7 @@ import (
 type (
 	TransactionRepository interface {
 		GetAllTransactions(ctx context.Context, tx *gorm.DB, pagination *utils.Pagination, query *queryPkg.TransactionQuery) ([]entities.Transaction, error)
+		GetFilteredTransactionsTotal(ctx context.Context, tx *gorm.DB, query *queryPkg.TransactionQuery) (int64, error)
 		GetTransactionByID(ctx context.Context, tx *gorm.DB, id uint) (entities.Transaction, error)
 		UpdateTransaction(ctx context.Context, tx *gorm.DB, transaction entities.Transaction) (entities.Transaction, error)
 	}
@@ -46,6 +47,19 @@ func (r *transactionRepository) GetAllTransactions(ctx context.Context, tx *gorm
 	}
 
 	return transactions, nil
+}
+
+func (r *transactionRepository) GetFilteredTransactionsTotal(ctx context.Context, tx *gorm.DB, query *queryPkg.TransactionQuery) (int64, error) {
+	if tx == nil {
+		tx = r.db
+	}
+
+	var total int64
+	tx.WithContext(ctx).Model(&entities.Transaction{}).Scopes(
+		queryPkg.QueryTransactions(nil, query, tx),
+	).Select("SUM(amount) as total").Scan(&total)
+
+	return total, nil
 }
 
 func (r *transactionRepository) GetTransactionByID(ctx context.Context, tx *gorm.DB, id uint) (entities.Transaction, error) {
