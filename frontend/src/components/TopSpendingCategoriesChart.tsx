@@ -1,5 +1,5 @@
-import { Group, Paper, Text, useMantineTheme } from '@mantine/core';
-import React from 'react';
+import { Group, Paper, Text, useMantineTheme } from "@mantine/core";
+import React from "react";
 import {
   Cell,
   Legend,
@@ -7,18 +7,18 @@ import {
   PieChart,
   ResponsiveContainer,
   Sector,
-} from 'recharts';
-import { Props } from 'recharts/types/component/DefaultLegendContent';
-import { PieSectorDataItem } from 'recharts/types/polar/Pie';
-import useSWR from 'swr';
-import { TransactionFiltersContext } from '../context/TransactionFiltersContext';
-import { TopSpendingCategory } from '../data/TopSpendingCategory';
+} from "recharts";
+import { Props } from "recharts/types/component/DefaultLegendContent";
+import { PieSectorDataItem } from "recharts/types/polar/Pie";
+import useSWR from "swr";
+import { TransactionFiltersContext } from "../context/TransactionFiltersContext";
 import {
   TopSpendingCategoriesEndpoint,
   TopSpendingCategoriesFetcher,
-} from '../Fetchers';
-import { FormatMoney } from '../utils';
-import { getChartColors } from '../utils/chartcolors';
+} from "../data/Categories/fetchers";
+import { TopSpendingCategory } from "../data/Categories/types";
+import { FormatMoney } from "../utils";
+import { getChartColors } from "../utils/chartcolors";
 
 export default function TopSpendingCategoriesChart() {
   const theme = useMantineTheme();
@@ -29,7 +29,7 @@ export default function TopSpendingCategoriesChart() {
 
   const { data, error, isLoading } = useSWR(
     `${TopSpendingCategoriesEndpoint}?from=${transactionFilters.Date[0]}&to=${transactionFilters.Date[1]}`,
-    TopSpendingCategoriesFetcher,
+    TopSpendingCategoriesFetcher
   );
 
   React.useEffect(() => {
@@ -41,30 +41,30 @@ export default function TopSpendingCategoriesChart() {
   if (error) return <div>failed to load</div>;
 
   return (
-    <Paper shadow='sm' p='lg'>
+    <Paper shadow="sm" p="lg">
       <ResponsiveContainer height={300}>
         <PieChart>
           <Pie
             data={chartData}
             innerRadius={60}
             outerRadius={95}
-            fill='#8884d8'
+            fill="#8884d8"
             paddingAngle={1}
-            dataKey='value'
+            dataKey="total"
             onMouseEnter={(_, idx) => setActiveIndex(idx)}
             activeIndex={activeIndex}
             activeShape={ActivePieShape}
-            cx={'40%'}
+            cx={"40%"}
           >
             {chartData.map((_, index: number) => (
-              <Cell key={index} fill={chartColors[index]} stroke='none' />
+              <Cell key={index} fill={chartColors[index]} stroke="none" />
             ))}
           </Pie>
           <Legend
-            layout='vertical'
-            verticalAlign='middle'
+            layout="vertical"
+            verticalAlign="middle"
             width={375}
-            align='right'
+            align="right"
             content={(props) =>
               CustomLegend({ ...props, activeIndex, setActiveIndex })
             }
@@ -87,13 +87,13 @@ const ActivePieShape = ({
   value,
 }: PieSectorDataItem) => {
   return (
-    <g style={{ cursor: 'pointer' }}>
+    <g style={{ cursor: "pointer" }}>
       <text
         x={cx}
         y={cy}
         dy={-5}
-        textAnchor='middle'
-        fill='rgba(255, 255, 255, 0.85)'
+        textAnchor="middle"
+        fill="rgba(255, 255, 255, 0.85)"
       >
         {FormatMoney(value!)}
       </text>
@@ -101,8 +101,8 @@ const ActivePieShape = ({
         x={cx}
         y={cy}
         dy={20}
-        textAnchor='middle'
-        fill='rgba(255, 255, 255, 0.45)'
+        textAnchor="middle"
+        fill="rgba(255, 255, 255, 0.45)"
       >{`(${(percent! * 100).toFixed(2)}%)`}</text>
       <Sector
         cx={cx}
@@ -130,7 +130,7 @@ const CustomLegend = (
   props: Props & {
     setActiveIndex: (arg0: number) => void;
     activeIndex: number;
-  },
+  }
 ) => {
   const { payload, activeIndex, setActiveIndex } = props;
 
@@ -146,15 +146,15 @@ const CustomLegend = (
             <div
               style={{
                 backgroundColor: entry.color,
-                width: '1rem',
-                height: '1rem',
+                width: "1rem",
+                height: "1rem",
               }}
             />
-            <Text flex={1} td={index === activeIndex ? 'underline' : undefined}>
+            <Text flex={1} td={index === activeIndex ? "underline" : undefined}>
               {entry.value}
             </Text>
             <Text>{amount}</Text>
-            <Text c='dimmed' w='70px'>
+            <Text c="dimmed" w="70px">
               {percentage}
             </Text>
           </Group>

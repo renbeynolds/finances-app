@@ -5,6 +5,7 @@ import (
 
 	"github.com/renbeynolds/finances-app/database/entities"
 	"github.com/renbeynolds/finances-app/modules/categories/dto"
+	"github.com/renbeynolds/finances-app/modules/categories/query"
 	"github.com/renbeynolds/finances-app/modules/categories/repository"
 	"gorm.io/gorm"
 )
@@ -12,6 +13,7 @@ import (
 type CategoryService interface {
 	CreateCategory(ctx context.Context, req dto.CreateCategoryRequest) (dto.CategoryResponse, error)
 	GetAllCategories(ctx context.Context) ([]dto.CategoryResponse, error)
+	GetTopSpendingCategories(ctx context.Context, query query.TopSpendingCategoriesQuery) ([]dto.TopSpendingCategoryResponse, error)
 }
 
 type categoryService struct {
@@ -58,6 +60,10 @@ func (s *categoryService) GetAllCategories(ctx context.Context) ([]dto.CategoryR
 	}
 
 	return categoryResponses, nil
+}
+
+func (s *categoryService) GetTopSpendingCategories(ctx context.Context, query query.TopSpendingCategoriesQuery) ([]dto.TopSpendingCategoryResponse, error) {
+	return s.categoryRepository.GetTopSpendingCategories(ctx, s.db, &query)
 }
 
 func entityToResponse(category entities.Category) dto.CategoryResponse {

@@ -4,7 +4,6 @@ import { AmountOverTime } from "./data/AmountOverTime";
 import { AmountVsAverage } from "./data/AmountVsAverage";
 import { IncomeVsExpense } from "./data/IncomeVsExpense";
 import { Response } from "./data/Response";
-import { TopSpendingCategory } from "./data/TopSpendingCategory";
 import { Transaction } from "./data/Transaction";
 import { Upload } from "./data/Upload";
 
@@ -58,13 +57,6 @@ export const TransactionsEndpoint = (
 export const TransactionsFetcher: Fetcher<Response<Transaction[]>, string> = (
   url
 ) => fetch(url).then((res) => res.json());
-
-export const TopSpendingCategoriesEndpoint =
-  "/api/insights/top_spending_categories";
-export const TopSpendingCategoriesFetcher: Fetcher<
-  Response<TopSpendingCategory[]>,
-  string
-> = (url) => fetch(url).then((res) => res.json());
 
 export const IncomeVsAverageEndpoint = "/api/insights/income_vs_average";
 export const ExpenseVsAverageEndpoint = "/api/insights/expense_vs_average";

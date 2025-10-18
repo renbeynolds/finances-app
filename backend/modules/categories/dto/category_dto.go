@@ -6,6 +6,9 @@ const (
 
 	MESSAGE_FAILED_LIST_CATEGORIES  = "failed list categories"
 	MESSAGE_SUCCESS_LIST_CATEGORIES = "success list categories"
+
+	MESSAGE_FAILED_LIST_TOP_SPENDING_CATEGORIES  = "failed list top spending categories"
+	MESSAGE_SUCCESS_LIST_TOP_SPENDING_CATEGORIES = "success list top spending categories"
 )
 
 type (
@@ -24,5 +27,11 @@ type (
 		IconURL          string `json:"iconUrl"`
 		Type             string `json:"type"`
 		ParentCategoryID *uint  `json:"parentCategoryId"`
+	}
+
+	TopSpendingCategoryResponse struct {
+		ID    uint    `json:"id"`
+		Name  string  `json:"name"`
+		Total float64 `json:"total"`
 	}
 )

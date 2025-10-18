@@ -12,3 +12,9 @@ export type CategoriesOverTime = {
   date: string;
   amount: number;
 };
+
+export type TopSpendingCategory = {
+  id: number;
+  name: string;
+  total: number;
+};

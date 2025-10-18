@@ -1,23 +1,23 @@
-import { Text } from '@mantine/core';
-import dayjs from 'dayjs';
-import { DataTable } from 'mantine-datatable';
-import * as React from 'react';
-import useSWR from 'swr';
+import { Text } from "@mantine/core";
+import dayjs from "dayjs";
+import { DataTable } from "mantine-datatable";
+import * as React from "react";
+import useSWR from "swr";
 import {
   TransactionFiltersContext,
   TransactionFiltersDispatchContext,
-} from '../context/TransactionFiltersContext';
-import { Response } from '../data/Response';
-import { Transaction } from '../data/Transaction';
-import { TransactionsEndpoint, TransactionsFetcher } from '../Fetchers';
-import { requestUpdateTransaction } from '../Requests';
-import { FormatMoney } from '../utils';
-import DateRangePicker from './DateRangePicker';
-import TransactionTableAmountFilter from './TransactionTableAmountFilter';
-import TransactionTableCategoryCombobox from './TransactionTableCategoryCombobox';
-import TransactionTableCommentBox from './TransactionTableCommentBox';
-import TransactionTableCommentFilter from './TransactionTableCommentFilter';
-import TransactionTableDescriptionFilter from './TransactionTableDescriptionFilter';
+} from "../context/TransactionFiltersContext";
+import { Response } from "../data/Response";
+import { Transaction } from "../data/Transaction";
+import { TransactionsEndpoint, TransactionsFetcher } from "../Fetchers";
+import { requestUpdateTransaction } from "../Requests";
+import { FormatMoney } from "../utils";
+import DateRangePicker from "./DateRangePicker";
+import TransactionTableAmountFilter from "./TransactionTableAmountFilter";
+import TransactionTableCategoryCombobox from "./TransactionTableCategoryCombobox";
+import TransactionTableCommentBox from "./TransactionTableCommentBox";
+import TransactionTableCommentFilter from "./TransactionTableCommentFilter";
+import TransactionTableDescriptionFilter from "./TransactionTableDescriptionFilter";
 
 const pageSize = 10;
 
@@ -38,7 +38,7 @@ export default function TransactionTable({
 }: TransactionTableProps) {
   const transactionFilters = React.useContext(TransactionFiltersContext);
   const dispatchTransactionFilters = React.useContext(
-    TransactionFiltersDispatchContext,
+    TransactionFiltersDispatchContext
   );
   const [page, setPage] = React.useState(1);
   const [response, setResponse] = React.useState<Response<Transaction[]>>();
@@ -55,9 +55,9 @@ export default function TransactionTable({
       accountId,
       uploadId,
       categoryId,
-      ignoreDateRange,
+      ignoreDateRange
     ),
-    TransactionsFetcher,
+    TransactionsFetcher
   );
 
   const updateTransaction = React.useCallback(
@@ -66,11 +66,11 @@ export default function TransactionTable({
       mutate({
         ...data!,
         data: data!.data.map((t) =>
-          t.id === updatedTransaction.data.id ? updatedTransaction.data : t,
+          t.id === updatedTransaction.data.id ? updatedTransaction.data : t
         ),
       });
     },
-    [mutate, data],
+    [mutate, data]
   );
 
   React.useEffect(() => {
@@ -85,27 +85,27 @@ export default function TransactionTable({
   return (
     <DataTable
       withTableBorder
-      borderRadius='sm'
+      borderRadius="sm"
       withColumnBorders
       page={page}
-      totalRecords={response!.totalRecords}
+      totalRecords={response!.pagination!.totalRecords}
       recordsPerPage={pageSize}
       onPageChange={(p) => setPage(p)}
       records={response!.data}
       columns={[
         {
-          accessor: 'date',
-          width: '125px',
+          accessor: "date",
+          width: "125px",
           filter: hideDateFilter ? undefined : () => <DateRangePicker />,
           filtering: !hideDateFilter,
           render: (record) => (
-            <Text size='sm'>{dayjs(record.date).format('dd MMM DD, YY')}</Text>
+            <Text size="sm">{dayjs(record.date).format("dd MMM DD, YY")}</Text>
           ),
         },
         {
-          accessor: 'description',
+          accessor: "description",
           ellipsis: true,
-          cellsStyle: () => ({ maxWidth: '400px' }),
+          cellsStyle: () => ({ maxWidth: "400px" }),
           filter: ({ close }) => (
             <TransactionTableDescriptionFilter
               descriptionFilter={transactionFilters.Description}
@@ -113,10 +113,10 @@ export default function TransactionTable({
               close={close}
             />
           ),
-          filtering: transactionFilters.Description !== '',
+          filtering: transactionFilters.Description !== "",
         },
         {
-          accessor: 'comment',
+          accessor: "comment",
           render: (record) => (
             <TransactionTableCommentBox
               transaction={record}
@@ -130,12 +130,12 @@ export default function TransactionTable({
               close={close}
             />
           ),
-          filtering: transactionFilters.Comment !== '',
+          filtering: transactionFilters.Comment !== "",
         },
         {
-          accessor: 'amount',
+          accessor: "amount",
           render: (record) => (
-            <Text size='sm' c={record.amount > 0 ? 'green' : 'red'}>
+            <Text size="sm" c={record.amount > 0 ? "green" : "red"}>
               {FormatMoney(record.amount)}
             </Text>
           ),
@@ -151,17 +151,17 @@ export default function TransactionTable({
             transactionFilters.Amount[1] !== undefined,
         },
         {
-          accessor: 'balance',
+          accessor: "balance",
           render: (record) => (
-            <Text size='sm' c={record.balance > 0 ? 'green' : 'red'}>
+            <Text size="sm" c={record.balance > 0 ? "green" : "red"}>
               {FormatMoney(record.balance)}
             </Text>
           ),
         },
         {
-          accessor: 'categoryId',
-          title: 'Category',
-          width: '350px',
+          accessor: "categoryId",
+          title: "Category",
+          width: "350px",
           render: (record) => (
             <TransactionTableCategoryCombobox
               transaction={record}

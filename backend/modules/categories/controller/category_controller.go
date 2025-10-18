@@ -5,6 +5,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/renbeynolds/finances-app/modules/categories/dto"
+	"github.com/renbeynolds/finances-app/modules/categories/query"
 	"github.com/renbeynolds/finances-app/modules/categories/service"
 	"github.com/renbeynolds/finances-app/modules/categories/validation"
 	"github.com/renbeynolds/finances-app/pkg/constants"
@@ -18,6 +19,7 @@ type (
 	CategoryController interface {
 		CreateCategory(ctx *gin.Context)
 		GetAllCategories(ctx *gin.Context)
+		GetTopSpendingCategories(ctx *gin.Context)
 	}
 
 	categoryController struct {
@@ -71,5 +73,24 @@ func (c *categoryController) GetAllCategories(ctx *gin.Context) {
 	}
 
 	res := utils.BuildResponseSuccess(dto.MESSAGE_SUCCESS_LIST_CATEGORIES, categories, nil)
+	ctx.JSON(http.StatusOK, res)
+}
+
+func (c *categoryController) GetTopSpendingCategories(ctx *gin.Context) {
+	var query query.TopSpendingCategoriesQuery
+	if err := ctx.ShouldBindQuery(&query); err != nil {
+		res := utils.BuildResponseFailed(dto.MESSAGE_FAILED_LIST_TOP_SPENDING_CATEGORIES, err.Error())
+		ctx.JSON(http.StatusBadRequest, res)
+		return
+	}
+
+	topSpendingCategories, err := c.categoryService.GetTopSpendingCategories(ctx.Request.Context(), query)
+	if err != nil {
+		res := utils.BuildResponseFailed(dto.MESSAGE_FAILED_LIST_TOP_SPENDING_CATEGORIES, err.Error())
+		ctx.JSON(http.StatusBadRequest, res)
+		return
+	}
+
+	res := utils.BuildResponseSuccess(dto.MESSAGE_SUCCESS_LIST_TOP_SPENDING_CATEGORIES, topSpendingCategories, nil)
 	ctx.JSON(http.StatusOK, res)
 }
