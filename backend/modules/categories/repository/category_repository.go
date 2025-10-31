@@ -14,6 +14,7 @@ type (
 		CreateCategory(ctx context.Context, tx *gorm.DB, category entities.Category) (entities.Category, error)
 		GetAllCategories(ctx context.Context, tx *gorm.DB) ([]entities.Category, error)
 		GetTopSpendingCategories(ctx context.Context, tx *gorm.DB, query *queryPkg.TopSpendingCategoriesQuery) ([]dto.TopSpendingCategoryResponse, error)
+		GetCategoryAmountOverTime(ctx context.Context, tx *gorm.DB, categoryId, from, to string) ([]dto.CategoryAmountOverTimeResponse, error)
 	}
 
 	categoryRepository struct {
@@ -105,6 +106,33 @@ func (r *categoryRepository) GetTopSpendingCategories(ctx context.Context, tx *g
 
 	if result == nil {
 		result = []dto.TopSpendingCategoryResponse{}
+	}
+
+	return result, nil
+}
+
+func (r *categoryRepository) GetCategoryAmountOverTime(ctx context.Context, tx *gorm.DB, categoryId, from, to string) ([]dto.CategoryAmountOverTimeResponse, error) {
+	if tx == nil {
+		tx = r.db
+	}
+
+	var result []dto.CategoryAmountOverTimeResponse
+
+	tx.Raw(`
+		WITH calendar AS (
+			SELECT DATE_TRUNC('month', bucket::date) AS month FROM generate_series(?, ?, '1 month'::interval) bucket
+		)
+    SELECT
+      COALESCE(ABS(SUM(t.amount)), 0) AS amount,
+      TO_CHAR(c.month, 'YYYY-MM') as date
+    FROM calendar c
+		LEFT JOIN transactions t ON DATE_TRUNC('month', t.date) = c.month AND t.category_id = ?
+		GROUP BY c.month
+		ORDER BY c.month ASC
+  `, from, to, categoryId).Scan(&result)
+
+	if result == nil {
+		result = []dto.CategoryAmountOverTimeResponse{}
 	}
 
 	return result, nil

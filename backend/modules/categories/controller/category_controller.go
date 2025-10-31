@@ -20,6 +20,7 @@ type (
 		CreateCategory(ctx *gin.Context)
 		GetAllCategories(ctx *gin.Context)
 		GetTopSpendingCategories(ctx *gin.Context)
+		GetCategoryAmountOverTime(ctx *gin.Context)
 	}
 
 	categoryController struct {
@@ -92,5 +93,25 @@ func (c *categoryController) GetTopSpendingCategories(ctx *gin.Context) {
 	}
 
 	res := utils.BuildResponseSuccess(dto.MESSAGE_SUCCESS_LIST_TOP_SPENDING_CATEGORIES, topSpendingCategories, nil)
+	ctx.JSON(http.StatusOK, res)
+}
+
+func (c *categoryController) GetCategoryAmountOverTime(ctx *gin.Context) {
+	categoryID := ctx.Param("id")
+	var query query.CategoryAmountOverTimeQuery
+	if err := ctx.ShouldBindQuery(&query); err != nil {
+		res := utils.BuildResponseFailed(dto.MESSAGE_FAILED_GET_CATEGORY_AMOUNT_OVER_TIME, err.Error())
+		ctx.JSON(http.StatusBadRequest, res)
+		return
+	}
+
+	amountOverTime, err := c.categoryService.GetCategoryAmountOverTime(ctx.Request.Context(), categoryID, query)
+	if err != nil {
+		res := utils.BuildResponseFailed(dto.MESSAGE_FAILED_GET_CATEGORY_AMOUNT_OVER_TIME, err.Error())
+		ctx.JSON(http.StatusBadRequest, res)
+		return
+	}
+
+	res := utils.BuildResponseSuccess(dto.MESSAGE_SUCCESS_GET_CATEGORY_AMOUNT_OVER_TIME, amountOverTime, nil)
 	ctx.JSON(http.StatusOK, res)
 }

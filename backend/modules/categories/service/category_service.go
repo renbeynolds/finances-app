@@ -14,6 +14,7 @@ type CategoryService interface {
 	CreateCategory(ctx context.Context, req dto.CreateCategoryRequest) (dto.CategoryResponse, error)
 	GetAllCategories(ctx context.Context) ([]dto.CategoryResponse, error)
 	GetTopSpendingCategories(ctx context.Context, query query.TopSpendingCategoriesQuery) ([]dto.TopSpendingCategoryResponse, error)
+	GetCategoryAmountOverTime(ctx context.Context, categoryID string, query query.CategoryAmountOverTimeQuery) ([]dto.CategoryAmountOverTimeResponse, error)
 }
 
 type categoryService struct {
@@ -64,6 +65,10 @@ func (s *categoryService) GetAllCategories(ctx context.Context) ([]dto.CategoryR
 
 func (s *categoryService) GetTopSpendingCategories(ctx context.Context, query query.TopSpendingCategoriesQuery) ([]dto.TopSpendingCategoryResponse, error) {
 	return s.categoryRepository.GetTopSpendingCategories(ctx, s.db, &query)
+}
+
+func (s *categoryService) GetCategoryAmountOverTime(ctx context.Context, categoryID string, query query.CategoryAmountOverTimeQuery) ([]dto.CategoryAmountOverTimeResponse, error) {
+	return s.categoryRepository.GetCategoryAmountOverTime(ctx, s.db, categoryID, *query.From, *query.To)
 }
 
 func entityToResponse(category entities.Category) dto.CategoryResponse {

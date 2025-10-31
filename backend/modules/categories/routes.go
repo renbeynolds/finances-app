@@ -14,5 +14,6 @@ func RegisterRoutes(server *gin.Engine, injector do.Injector) {
 		categoryRoutes.POST("", categoryController.CreateCategory)
 		categoryRoutes.GET("", categoryController.GetAllCategories)
 		categoryRoutes.GET("/top_spending", categoryController.GetTopSpendingCategories)
+		categoryRoutes.GET("/:id/amount_over_time", categoryController.GetCategoryAmountOverTime)
 	}
 }
