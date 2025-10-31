@@ -18,7 +18,7 @@ export const AccountBalanceOverTimeEndpoint = (
   accountId: string,
   from: string,
   to: string
-) => `/api/accounts/${accountId}/balance_over_time?from=${from}&to=${to}`;
+) => `/api/bank_accounts/${accountId}/balance_over_time?from=${from}&to=${to}`;
 export const AmountOverTimeFetcher: Fetcher<
   Response<AmountOverTime[]>,
   string

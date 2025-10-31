@@ -12,6 +12,9 @@ const (
 
 	MESSAGE_FAILED_UPDATE_BANK_ACCOUNT  = "failed update bank account"
 	MESSAGE_SUCCESS_UPDATE_BANK_ACCOUNT = "success update bank account"
+
+	MESSAGE_FAILED_GET_BALANCE_OVER_TIME  = "failed get balance over time"
+	MESSAGE_SUCCESS_GET_BALANCE_OVER_TIME = "success get balance over time"
 )
 
 type (
@@ -42,5 +45,10 @@ type (
 		Balance           int64  `json:"balance"`
 		Color             string `json:"color"`
 		LoginURL          string `json:"loginUrl"`
+	}
+
+	BalanceOverTimeResponse struct {
+		Date   string `json:"date"`
+		Amount int64  `json:"amount"`
 	}
 )

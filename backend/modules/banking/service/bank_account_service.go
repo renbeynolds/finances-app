@@ -5,6 +5,7 @@ import (
 
 	"github.com/renbeynolds/finances-app/database/entities"
 	"github.com/renbeynolds/finances-app/modules/banking/dto"
+	"github.com/renbeynolds/finances-app/modules/banking/query"
 	"github.com/renbeynolds/finances-app/modules/banking/repository"
 	"gorm.io/gorm"
 )
@@ -14,6 +15,7 @@ type BankAccountService interface {
 	GetAllBankAccounts(ctx context.Context) ([]dto.BankAccountResponse, error)
 	GetBankAccountByID(ctx context.Context, id uint) (dto.BankAccountResponse, error)
 	UpdateBankAccount(ctx context.Context, req dto.UpdateBankAccountRequest, id uint) (dto.BankAccountResponse, error)
+	GetBalanceOverTime(ctx context.Context, id uint, query query.BalanceOverTimeQuery) ([]dto.BalanceOverTimeResponse, error)
 }
 
 type bankAccountService struct {
@@ -99,6 +101,10 @@ func (s *bankAccountService) UpdateBankAccount(ctx context.Context, req dto.Upda
 	}
 
 	return entityToResponse(updatedBankAccount), nil
+}
+
+func (s *bankAccountService) GetBalanceOverTime(ctx context.Context, id uint, query query.BalanceOverTimeQuery) ([]dto.BalanceOverTimeResponse, error) {
+	return s.bankAccountRepository.GetBalanceOverTime(ctx, s.db, id, *query.From, *query.To)
 }
 
 func entityToResponse(entity entities.BankAccount) dto.BankAccountResponse {
