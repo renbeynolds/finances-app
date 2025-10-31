@@ -17,6 +17,9 @@ import (
 	transactionController "github.com/renbeynolds/finances-app/modules/transactions/controller"
 	transactionRepository "github.com/renbeynolds/finances-app/modules/transactions/repository"
 	transactionService "github.com/renbeynolds/finances-app/modules/transactions/service"
+	trendsController "github.com/renbeynolds/finances-app/modules/trends/controller"
+	trendsRepository "github.com/renbeynolds/finances-app/modules/trends/repository"
+	trendsService "github.com/renbeynolds/finances-app/modules/trends/service"
 	uploadController "github.com/renbeynolds/finances-app/modules/uploads/controller"
 	uploadRepository "github.com/renbeynolds/finances-app/modules/uploads/repository"
 	uploadService "github.com/renbeynolds/finances-app/modules/uploads/service"
@@ -53,6 +56,9 @@ func RegisterDependencies(injector do.Injector, dbType string) {
 	snapshotRepository := snapshotRepository.NewSnapshotRepository(db)
 	snapshotService := snapshotService.NewSnapshotService(snapshotRepository, db)
 
+	trendsRepository := trendsRepository.NewTrendsRepository(db)
+	trendsService := trendsService.NewTrendsService(trendsRepository, db)
+
 	do.Provide(
 		injector, func(i do.Injector) (bankAccountController.BankAccountController, error) {
 			return bankAccountController.NewBankAccountController(i, bankAccountService), nil
@@ -81,6 +87,11 @@ func RegisterDependencies(injector do.Injector, dbType string) {
 	do.Provide(
 		injector, func(i do.Injector) (snapshotController.SnapshotController, error) {
 			return snapshotController.NewSnapshotController(i, snapshotService), nil
+		},
+	)
+	do.Provide(
+		injector, func(i do.Injector) (trendsController.TrendsController, error) {
+			return trendsController.NewTrendsController(i, trendsService), nil
 		},
 	)
 }

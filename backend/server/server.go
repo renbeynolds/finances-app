@@ -8,6 +8,7 @@ import (
 	"github.com/renbeynolds/finances-app/modules/investments"
 	"github.com/renbeynolds/finances-app/modules/snapshot"
 	"github.com/renbeynolds/finances-app/modules/transactions"
+	"github.com/renbeynolds/finances-app/modules/trends"
 	"github.com/renbeynolds/finances-app/modules/uploads"
 	"github.com/renbeynolds/finances-app/providers"
 	"github.com/samber/do/v2"
@@ -28,5 +29,6 @@ func MakeServer(opts ServerOpts) *gin.Engine {
 	categories.RegisterRoutes(server, injector)
 	transactions.RegisterRoutes(server, injector)
 	snapshot.RegisterRoutes(server, injector)
+	trends.RegisterRoutes(server, injector)
 	return server
 }
