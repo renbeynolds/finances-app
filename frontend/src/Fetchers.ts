@@ -65,7 +65,7 @@ export const AmountVsAverageFetcher: Fetcher<
   string
 > = (url) => fetch(url).then((res) => res.json());
 
-export const IncomeVsExpenseEndpoint = "/api/insights/income_vs_expense";
+export const IncomeVsExpenseEndpoint = "/api/trends/income_vs_expense";
 export const IncomeVsExpenseFetcher: Fetcher<
   Response<IncomeVsExpense[]>,
   string

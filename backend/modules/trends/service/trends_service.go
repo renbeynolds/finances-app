@@ -1,12 +1,15 @@
 package service
 
 import (
+	"context"
+
+	"github.com/renbeynolds/finances-app/modules/trends/dto"
 	"github.com/renbeynolds/finances-app/modules/trends/repository"
 	"gorm.io/gorm"
 )
 
 type TrendsService interface {
-	// Service methods will be added here
+	GetIncomeVsExpense(ctx context.Context, query dto.IncomeVsExpenseQuery) ([]dto.IncomeVsExpenseResponse, error)
 }
 
 type trendsService struct {
@@ -22,4 +25,8 @@ func NewTrendsService(
 		trendsRepository: trendsRepo,
 		db:               db,
 	}
+}
+
+func (s *trendsService) GetIncomeVsExpense(ctx context.Context, query dto.IncomeVsExpenseQuery) ([]dto.IncomeVsExpenseResponse, error) {
+	return s.trendsRepository.GetIncomeVsExpense(ctx, s.db, *query.From, *query.To)
 }

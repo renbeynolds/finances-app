@@ -9,7 +9,8 @@ import (
 func RegisterRoutes(server *gin.Engine, injector do.Injector) {
 	trendsController := do.MustInvoke[controller.TrendsController](injector)
 
-	_ = server.Group("/api/trends")
-	// Endpoints will be added here
-	_ = trendsController // Prevent unused variable error for now
+	trendsRoutes := server.Group("/api/trends")
+	{
+		trendsRoutes.GET("/income_vs_expense", trendsController.GetIncomeVsExpense)
+	}
 }
