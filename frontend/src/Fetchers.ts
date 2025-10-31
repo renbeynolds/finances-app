@@ -14,7 +14,7 @@ export const CategoryOverTimeEndpoint = (
 ) =>
   `/api/insights/category_over_time?from=${from}&to=${to}&category_id=${categoryId}`;
 export const NetWorthOverTimeEndpoint = (from: string, to: string) =>
-  `/api/insights/net_worth?from=${from}&to=${to}`;
+  `/api/trends/net_worth?from=${from}&to=${to}`;
 export const AccountBalanceOverTimeEndpoint = (
   accountId: string,
   from: string,

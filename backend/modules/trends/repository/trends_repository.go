@@ -10,6 +10,7 @@ import (
 type (
 	TrendsRepository interface {
 		GetIncomeVsExpense(ctx context.Context, tx *gorm.DB, from string, to string) ([]dto.IncomeVsExpenseResponse, error)
+		GetNetWorth(ctx context.Context, tx *gorm.DB, from string, to string) ([]dto.NetWorthResponse, error)
 	}
 
 	trendsRepository struct {
@@ -45,6 +46,74 @@ func (r *trendsRepository) GetIncomeVsExpense(ctx context.Context, tx *gorm.DB, 
     WHERE cat.type IN ('income', 'expense')
 		GROUP BY c.month
 		ORDER BY c.month ASC
+	`, from, to).Scan(&result)
+
+	return result, nil
+}
+
+func (r *trendsRepository) GetNetWorth(ctx context.Context, tx *gorm.DB, from string, to string) ([]dto.NetWorthResponse, error) {
+	if tx == nil {
+		tx = r.db
+	}
+
+	var result []dto.NetWorthResponse
+
+	tx.Raw(`
+		WITH calendar AS (
+			SELECT DATE_TRUNC('day', bucket::date) AS day FROM generate_series(?, ?, '1 week'::interval) bucket
+		),
+		latest_account_balances AS (
+			SELECT
+				c.day,
+				a.id AS account_id,
+				COALESCE((
+					SELECT t.balance
+					FROM transactions t
+          LEFT JOIN uploads u ON t.upload_id = u.id
+					WHERE u.account_id = a.id AND t.date <= c.day
+					ORDER BY t.date DESC, t.id DESC
+					LIMIT 1
+				), a.balance) AS balance
+			FROM calendar c
+			CROSS JOIN accounts a
+		),
+		latest_investment_balances AS (
+			SELECT
+				c.day,
+				ia.id AS investment_account_id,
+				(
+					SELECT iab.balance
+					FROM investment_account_balances iab
+					WHERE iab.investment_account_id = ia.id AND iab.date <= c.day
+					ORDER BY iab.date DESC, iab.id DESC
+					LIMIT 1
+				) AS balance
+			FROM calendar c
+			CROSS JOIN investment_accounts ia
+		),
+		daily_totals AS (
+			SELECT
+				c.day,
+				COALESCE(SUM(lab.balance), 0) AS account_balance,
+				COALESCE(SUM(lib.balance), 0) AS investment_balance
+			FROM calendar c
+			LEFT JOIN (
+				SELECT day, SUM(balance) as balance
+				FROM latest_account_balances
+				GROUP BY day
+			) lab ON c.day = lab.day
+			LEFT JOIN (
+				SELECT day, SUM(balance) as balance
+				FROM latest_investment_balances
+				GROUP BY day
+			) lib ON c.day = lib.day
+			GROUP BY c.day
+		)
+		SELECT
+			(account_balance + investment_balance) AS amount,
+			TO_CHAR(day, 'YYYY-MM-DD') AS date
+		FROM daily_totals
+		ORDER BY day ASC
 	`, from, to).Scan(&result)
 
 	return result, nil

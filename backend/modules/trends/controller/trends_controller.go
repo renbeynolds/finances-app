@@ -5,6 +5,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/renbeynolds/finances-app/modules/trends/dto"
+	"github.com/renbeynolds/finances-app/modules/trends/query"
 	"github.com/renbeynolds/finances-app/modules/trends/service"
 	"github.com/renbeynolds/finances-app/pkg/constants"
 	"github.com/renbeynolds/finances-app/pkg/utils"
@@ -15,6 +16,7 @@ import (
 type (
 	TrendsController interface {
 		GetIncomeVsExpense(ctx *gin.Context)
+		GetNetWorth(ctx *gin.Context)
 	}
 
 	trendsController struct {
@@ -32,20 +34,39 @@ func NewTrendsController(injector do.Injector, s service.TrendsService) TrendsCo
 }
 
 func (c *trendsController) GetIncomeVsExpense(ctx *gin.Context) {
-	var query dto.IncomeVsExpenseQuery
-	if err := ctx.ShouldBindQuery(&query); err != nil {
-		res := utils.BuildResponseFailed("Failed to get income vs expense data", err.Error())
+	var q query.IncomeVsExpenseQuery
+	if err := ctx.ShouldBindQuery(&q); err != nil {
+		res := utils.BuildResponseFailed(dto.MESSAGE_FAILED_GET_INCOME_VS_EXPENSE, err.Error())
 		ctx.JSON(http.StatusBadRequest, res)
 		return
 	}
 
-	result, err := c.trendsService.GetIncomeVsExpense(ctx.Request.Context(), query)
+	result, err := c.trendsService.GetIncomeVsExpense(ctx.Request.Context(), q)
 	if err != nil {
-		res := utils.BuildResponseFailed("Failed to get income vs expense data", err.Error())
+		res := utils.BuildResponseFailed(dto.MESSAGE_FAILED_GET_INCOME_VS_EXPENSE, err.Error())
 		ctx.JSON(http.StatusInternalServerError, res)
 		return
 	}
 
-	res := utils.BuildResponseSuccess("Income vs expense data retrieved successfully", result, nil)
+	res := utils.BuildResponseSuccess(dto.MESSAGE_SUCCESS_GET_INCOME_VS_EXPENSE, result, nil)
+	ctx.JSON(http.StatusOK, res)
+}
+
+func (c *trendsController) GetNetWorth(ctx *gin.Context) {
+	var q query.NetWorthQuery
+	if err := ctx.ShouldBindQuery(&q); err != nil {
+		res := utils.BuildResponseFailed(dto.MESSAGE_FAILED_GET_NET_WORTH, err.Error())
+		ctx.JSON(http.StatusBadRequest, res)
+		return
+	}
+
+	result, err := c.trendsService.GetNetWorth(ctx.Request.Context(), q)
+	if err != nil {
+		res := utils.BuildResponseFailed(dto.MESSAGE_FAILED_GET_NET_WORTH, err.Error())
+		ctx.JSON(http.StatusInternalServerError, res)
+		return
+	}
+
+	res := utils.BuildResponseSuccess(dto.MESSAGE_SUCCESS_GET_NET_WORTH, result, nil)
 	ctx.JSON(http.StatusOK, res)
 }
