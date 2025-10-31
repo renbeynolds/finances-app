@@ -58,8 +58,8 @@ export const TransactionsFetcher: Fetcher<Response<Transaction[]>, string> = (
   url
 ) => fetch(url).then((res) => res.json());
 
-export const IncomeVsAverageEndpoint = "/api/insights/income_vs_average";
-export const ExpenseVsAverageEndpoint = "/api/insights/expense_vs_average";
+export const IncomeVsAverageEndpoint = "/api/snapshot/income_vs_average";
+export const ExpenseVsAverageEndpoint = "/api/snapshot/expense_vs_average";
 export const AmountVsAverageFetcher: Fetcher<
   Response<AmountVsAverage>,
   string

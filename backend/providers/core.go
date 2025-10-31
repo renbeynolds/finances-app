@@ -11,6 +11,9 @@ import (
 	investmentAccountController "github.com/renbeynolds/finances-app/modules/investments/controller"
 	investmentAccountRepository "github.com/renbeynolds/finances-app/modules/investments/repository"
 	investmentAccountService "github.com/renbeynolds/finances-app/modules/investments/service"
+	snapshotController "github.com/renbeynolds/finances-app/modules/snapshot/controller"
+	snapshotRepository "github.com/renbeynolds/finances-app/modules/snapshot/repository"
+	snapshotService "github.com/renbeynolds/finances-app/modules/snapshot/service"
 	transactionController "github.com/renbeynolds/finances-app/modules/transactions/controller"
 	transactionRepository "github.com/renbeynolds/finances-app/modules/transactions/repository"
 	transactionService "github.com/renbeynolds/finances-app/modules/transactions/service"
@@ -47,6 +50,9 @@ func RegisterDependencies(injector do.Injector, dbType string) {
 	transactionRepository := transactionRepository.NewTransactionRepository(db)
 	transactionService := transactionService.NewTransactionService(transactionRepository, db)
 
+	snapshotRepository := snapshotRepository.NewSnapshotRepository(db)
+	snapshotService := snapshotService.NewSnapshotService(snapshotRepository, db)
+
 	do.Provide(
 		injector, func(i do.Injector) (bankAccountController.BankAccountController, error) {
 			return bankAccountController.NewBankAccountController(i, bankAccountService), nil
@@ -70,6 +76,11 @@ func RegisterDependencies(injector do.Injector, dbType string) {
 	do.Provide(
 		injector, func(i do.Injector) (transactionController.TransactionController, error) {
 			return transactionController.NewTransactionController(i, transactionService), nil
+		},
+	)
+	do.Provide(
+		injector, func(i do.Injector) (snapshotController.SnapshotController, error) {
+			return snapshotController.NewSnapshotController(i, snapshotService), nil
 		},
 	)
 }
