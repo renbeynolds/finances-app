@@ -30,6 +30,7 @@ func (r *snapshotRepository) GetAmountVsAverage(ctx context.Context, tx *gorm.DB
 
 	var amount int64
 	var average int64
+	var median float64
 
 	tx.Raw(`
 		SELECT COALESCE(ABS(SUM(t.amount)), 0) as amount
@@ -57,8 +58,26 @@ func (r *snapshotRepository) GetAmountVsAverage(ctx context.Context, tx *gorm.DB
     ) sums
 	`, avgFrom, avgTo, amountType).Scan(&average)
 
+	tx.Raw(`
+	  WITH calendar AS (
+      SELECT DATE_TRUNC('month', bucket::date) AS month FROM generate_series(?, ?, '1 month'::interval) bucket
+    )
+    SELECT
+      COALESCE(TRUNC(ABS(PERCENTILE_CONT(0.5) WITHIN GROUP (ORDER BY sums.total))), 0) as median
+    FROM (
+      SELECT
+        SUM(amount) AS "total"
+      FROM calendar c
+      LEFT JOIN transactions t ON DATE_TRUNC('month', t.date) = c.month
+      LEFT JOIN categories cat ON t.category_id = cat.id
+      WHERE cat.type = ?
+      GROUP BY c.month
+    ) sums
+	`, avgFrom, avgTo, amountType).Scan(&median)
+
 	return dto.AmountVsAverageResponse{
 		Amount:  amount,
 		Average: average,
+		Median:  int64(median),
 	}
 }

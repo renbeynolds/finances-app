@@ -12,5 +12,6 @@ type (
 	AmountVsAverageResponse struct {
 		Amount  int64 `json:"amount"`
 		Average int64 `json:"average"`
+		Median  int64 `json:"median"`
 	}
 )
