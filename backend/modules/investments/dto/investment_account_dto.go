@@ -12,6 +12,9 @@ const (
 
 	MESSAGE_FAILED_UPDATE_INVESTMENT_ACCOUNT  = "failed update investment account"
 	MESSAGE_SUCCESS_UPDATE_INVESTMENT_ACCOUNT = "success update investment account"
+
+	MESSAGE_FAILED_GET_BALANCE_OVER_TIME  = "failed get balance over time"
+	MESSAGE_SUCCESS_GET_BALANCE_OVER_TIME = "success get balance over time"
 )
 
 type (
@@ -28,5 +31,10 @@ type (
 		Name      string `json:"name"`
 		Balance   int64  `json:"balance"`
 		UpdatedAt string `json:"updatedAt"`
+	}
+
+	BalanceOverTimeResponse struct {
+		Date   string `json:"date"`
+		Amount int64  `json:"amount"`
 	}
 )

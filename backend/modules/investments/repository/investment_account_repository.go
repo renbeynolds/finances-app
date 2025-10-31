@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"github.com/renbeynolds/finances-app/database/entities"
+	"github.com/renbeynolds/finances-app/modules/investments/dto"
 	"gorm.io/gorm"
 )
 
@@ -13,6 +14,7 @@ type (
 		GetAllInvestmentAccounts(ctx context.Context, tx *gorm.DB) ([]entities.InvestmentAccount, error)
 		GetInvestmentAccountByID(ctx context.Context, tx *gorm.DB, id uint) (entities.InvestmentAccount, error)
 		UpdateInvestmentAccount(ctx context.Context, tx *gorm.DB, investmentAccount entities.InvestmentAccount) (entities.InvestmentAccount, error)
+		GetBalanceOverTime(ctx context.Context, tx *gorm.DB, id uint, from, to string) ([]dto.BalanceOverTimeResponse, error)
 	}
 
 	investmentAccountRepository struct {
@@ -74,4 +76,31 @@ func (r *investmentAccountRepository) UpdateInvestmentAccount(ctx context.Contex
 	}
 
 	return investmentAccount, nil
+}
+
+func (r *investmentAccountRepository) GetBalanceOverTime(ctx context.Context, tx *gorm.DB, id uint, from, to string) ([]dto.BalanceOverTimeResponse, error) {
+	if tx == nil {
+		tx = r.db
+	}
+
+	var results []dto.BalanceOverTimeResponse
+
+	tx.Raw(`
+    WITH calendar AS (
+      SELECT bucket::date AS day FROM generate_series(?, ?, '10 day'::interval) bucket
+    )
+    SELECT
+      c.day AS date,
+      (
+        SELECT balance
+        FROM investment_account_balances iab
+        WHERE iab.date <= c.day AND iab.investment_account_id = ? AND iab.deleted_at IS NULL
+        ORDER BY iab.date DESC
+        LIMIT 1
+      ) AS "amount"
+    FROM
+    calendar c
+	`, from, to, id).Scan(&results)
+
+	return results, nil
 }

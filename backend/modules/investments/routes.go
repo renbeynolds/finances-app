@@ -15,5 +15,6 @@ func RegisterRoutes(server *gin.Engine, injector do.Injector) {
 		investmentAccountRoutes.GET("", investmentAccountController.GetAllInvestmentAccounts)
 		investmentAccountRoutes.GET("/:id", investmentAccountController.GetInvestmentAccountByID)
 		investmentAccountRoutes.PATCH("/:id", investmentAccountController.UpdateInvestmentAccount)
+		investmentAccountRoutes.GET("/:id/balance_over_time", investmentAccountController.GetBalanceOverTime)
 	}
 }

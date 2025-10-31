@@ -5,6 +5,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/renbeynolds/finances-app/modules/investments/dto"
+	"github.com/renbeynolds/finances-app/modules/investments/query"
 	"github.com/renbeynolds/finances-app/modules/investments/service"
 	"github.com/renbeynolds/finances-app/modules/investments/validation"
 	"github.com/renbeynolds/finances-app/pkg/constants"
@@ -20,6 +21,7 @@ type (
 		GetAllInvestmentAccounts(ctx *gin.Context)
 		GetInvestmentAccountByID(ctx *gin.Context)
 		UpdateInvestmentAccount(ctx *gin.Context)
+		GetBalanceOverTime(ctx *gin.Context)
 	}
 
 	investmentAccountController struct {
@@ -124,5 +126,31 @@ func (c *investmentAccountController) UpdateInvestmentAccount(ctx *gin.Context) 
 	}
 
 	res := utils.BuildResponseSuccess(dto.MESSAGE_SUCCESS_UPDATE_INVESTMENT_ACCOUNT, investmentAccount, nil)
+	ctx.JSON(http.StatusOK, res)
+}
+
+func (c *investmentAccountController) GetBalanceOverTime(ctx *gin.Context) {
+	var byID utils.ByID
+	if err := ctx.ShouldBindUri(&byID); err != nil {
+		res := utils.BuildResponseFailed(dto.MESSAGE_FAILED_GET_BALANCE_OVER_TIME, err.Error())
+		ctx.JSON(http.StatusBadRequest, res)
+		return
+	}
+
+	var query query.BalanceOverTimeQuery
+	if err := ctx.ShouldBindQuery(&query); err != nil {
+		res := utils.BuildResponseFailed(dto.MESSAGE_FAILED_GET_BALANCE_OVER_TIME, err.Error())
+		ctx.JSON(http.StatusBadRequest, res)
+		return
+	}
+
+	balanceOverTime, err := c.investmentAccountService.GetBalanceOverTime(ctx.Request.Context(), byID.ID, query)
+	if err != nil {
+		res := utils.BuildResponseFailed(dto.MESSAGE_FAILED_GET_BALANCE_OVER_TIME, err.Error())
+		ctx.JSON(http.StatusBadRequest, res)
+		return
+	}
+
+	res := utils.BuildResponseSuccess(dto.MESSAGE_SUCCESS_GET_BALANCE_OVER_TIME, balanceOverTime, nil)
 	ctx.JSON(http.StatusOK, res)
 }

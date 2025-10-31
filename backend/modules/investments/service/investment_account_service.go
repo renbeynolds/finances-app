@@ -6,6 +6,7 @@ import (
 
 	"github.com/renbeynolds/finances-app/database/entities"
 	"github.com/renbeynolds/finances-app/modules/investments/dto"
+	"github.com/renbeynolds/finances-app/modules/investments/query"
 	"github.com/renbeynolds/finances-app/modules/investments/repository"
 	"gorm.io/gorm"
 )
@@ -15,6 +16,7 @@ type InvestmentAccountService interface {
 	GetAllInvestmentAccounts(ctx context.Context) ([]dto.InvestmentAccountResponse, error)
 	GetInvestmentAccountByID(ctx context.Context, id uint) (dto.InvestmentAccountResponse, error)
 	UpdateInvestmentAccount(ctx context.Context, req dto.UpdateInvestmentAccountRequest, id uint) (dto.InvestmentAccountResponse, error)
+	GetBalanceOverTime(ctx context.Context, id uint, query query.BalanceOverTimeQuery) ([]dto.BalanceOverTimeResponse, error)
 }
 
 type investmentAccountService struct {
@@ -83,6 +85,10 @@ func (s *investmentAccountService) UpdateInvestmentAccount(ctx context.Context, 
 	}
 
 	return entityToResponse(updatedInvestmentAccount), nil
+}
+
+func (s *investmentAccountService) GetBalanceOverTime(ctx context.Context, id uint, query query.BalanceOverTimeQuery) ([]dto.BalanceOverTimeResponse, error) {
+	return s.investmentAccountRepository.GetBalanceOverTime(ctx, s.db, id, *query.From, *query.To)
 }
 
 func entityToResponse(entity entities.InvestmentAccount) dto.InvestmentAccountResponse {
