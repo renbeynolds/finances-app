@@ -4,8 +4,8 @@ const (
 	MESSAGE_FAILED_GET_INCOME_VS_EXPENSE  = "Failed to get income vs expense data"
 	MESSAGE_SUCCESS_GET_INCOME_VS_EXPENSE = "Income vs expense data retrieved successfully"
 
-	MESSAGE_FAILED_GET_NET_WORTH  = "Failed to get net worth data"
-	MESSAGE_SUCCESS_GET_NET_WORTH = "Net worth data retrieved successfully"
+	MESSAGE_FAILED_GET_NET_WORTH_OVER_TIME  = "Failed to get net worth over time data"
+	MESSAGE_SUCCESS_GET_NET_WORTH_OVER_TIME = "Net worth over time data retrieved successfully"
 )
 
 type IncomeVsExpenseResponse struct {
@@ -15,7 +15,7 @@ type IncomeVsExpenseResponse struct {
 	Net     float64 `json:"net"`
 }
 
-type NetWorthResponse struct {
+type NetWorthOverTimeResponse struct {
 	Date   string  `json:"date"`
 	Amount float64 `json:"amount"`
 }

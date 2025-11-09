@@ -5,7 +5,7 @@ type IncomeVsExpenseQuery struct {
 	To   *string `form:"to" binding:"required"`
 }
 
-type NetWorthQuery struct {
+type NetWorthOverTimeQuery struct {
 	From *string `form:"from" binding:"required"`
 	To   *string `form:"to" binding:"required"`
 }

@@ -11,7 +11,7 @@ import (
 
 type TrendsService interface {
 	GetIncomeVsExpense(ctx context.Context, q query.IncomeVsExpenseQuery) ([]dto.IncomeVsExpenseResponse, error)
-	GetNetWorth(ctx context.Context, q query.NetWorthQuery) ([]dto.NetWorthResponse, error)
+	GetNetWorthOverTime(ctx context.Context, q query.NetWorthOverTimeQuery) ([]dto.NetWorthOverTimeResponse, error)
 }
 
 type trendsService struct {
@@ -33,6 +33,6 @@ func (s *trendsService) GetIncomeVsExpense(ctx context.Context, q query.IncomeVs
 	return s.trendsRepository.GetIncomeVsExpense(ctx, s.db, *q.From, *q.To)
 }
 
-func (s *trendsService) GetNetWorth(ctx context.Context, q query.NetWorthQuery) ([]dto.NetWorthResponse, error) {
-	return s.trendsRepository.GetNetWorth(ctx, s.db, *q.From, *q.To)
+func (s *trendsService) GetNetWorthOverTime(ctx context.Context, q query.NetWorthOverTimeQuery) ([]dto.NetWorthOverTimeResponse, error) {
+	return s.trendsRepository.GetNetWorthOverTime(ctx, s.db, *q.From, *q.To)
 }

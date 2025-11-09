@@ -16,7 +16,7 @@ import (
 type (
 	TrendsController interface {
 		GetIncomeVsExpense(ctx *gin.Context)
-		GetNetWorth(ctx *gin.Context)
+		GetNetWorthOverTime(ctx *gin.Context)
 	}
 
 	trendsController struct {
@@ -52,21 +52,21 @@ func (c *trendsController) GetIncomeVsExpense(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, res)
 }
 
-func (c *trendsController) GetNetWorth(ctx *gin.Context) {
-	var q query.NetWorthQuery
+func (c *trendsController) GetNetWorthOverTime(ctx *gin.Context) {
+	var q query.NetWorthOverTimeQuery
 	if err := ctx.ShouldBindQuery(&q); err != nil {
-		res := utils.BuildResponseFailed(dto.MESSAGE_FAILED_GET_NET_WORTH, err.Error())
+		res := utils.BuildResponseFailed(dto.MESSAGE_FAILED_GET_NET_WORTH_OVER_TIME, err.Error())
 		ctx.JSON(http.StatusBadRequest, res)
 		return
 	}
 
-	result, err := c.trendsService.GetNetWorth(ctx.Request.Context(), q)
+	result, err := c.trendsService.GetNetWorthOverTime(ctx.Request.Context(), q)
 	if err != nil {
-		res := utils.BuildResponseFailed(dto.MESSAGE_FAILED_GET_NET_WORTH, err.Error())
+		res := utils.BuildResponseFailed(dto.MESSAGE_FAILED_GET_NET_WORTH_OVER_TIME, err.Error())
 		ctx.JSON(http.StatusInternalServerError, res)
 		return
 	}
 
-	res := utils.BuildResponseSuccess(dto.MESSAGE_SUCCESS_GET_NET_WORTH, result, nil)
+	res := utils.BuildResponseSuccess(dto.MESSAGE_SUCCESS_GET_NET_WORTH_OVER_TIME, result, nil)
 	ctx.JSON(http.StatusOK, res)
 }

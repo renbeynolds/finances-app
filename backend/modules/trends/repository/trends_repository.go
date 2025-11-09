@@ -10,7 +10,7 @@ import (
 type (
 	TrendsRepository interface {
 		GetIncomeVsExpense(ctx context.Context, tx *gorm.DB, from string, to string) ([]dto.IncomeVsExpenseResponse, error)
-		GetNetWorth(ctx context.Context, tx *gorm.DB, from string, to string) ([]dto.NetWorthResponse, error)
+		GetNetWorthOverTime(ctx context.Context, tx *gorm.DB, from string, to string) ([]dto.NetWorthOverTimeResponse, error)
 	}
 
 	trendsRepository struct {
@@ -51,12 +51,12 @@ func (r *trendsRepository) GetIncomeVsExpense(ctx context.Context, tx *gorm.DB, 
 	return result, nil
 }
 
-func (r *trendsRepository) GetNetWorth(ctx context.Context, tx *gorm.DB, from string, to string) ([]dto.NetWorthResponse, error) {
+func (r *trendsRepository) GetNetWorthOverTime(ctx context.Context, tx *gorm.DB, from string, to string) ([]dto.NetWorthOverTimeResponse, error) {
 	if tx == nil {
 		tx = r.db
 	}
 
-	var result []dto.NetWorthResponse
+	var result []dto.NetWorthOverTimeResponse
 
 	tx.Raw(`
 		WITH calendar AS (
