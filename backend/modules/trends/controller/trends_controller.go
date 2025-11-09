@@ -17,6 +17,7 @@ type (
 	TrendsController interface {
 		GetIncomeVsExpense(ctx *gin.Context)
 		GetNetWorthOverTime(ctx *gin.Context)
+		GetCurrentNetWorth(ctx *gin.Context)
 	}
 
 	trendsController struct {
@@ -68,5 +69,17 @@ func (c *trendsController) GetNetWorthOverTime(ctx *gin.Context) {
 	}
 
 	res := utils.BuildResponseSuccess(dto.MESSAGE_SUCCESS_GET_NET_WORTH_OVER_TIME, result, nil)
+	ctx.JSON(http.StatusOK, res)
+}
+
+func (c *trendsController) GetCurrentNetWorth(ctx *gin.Context) {
+	result, err := c.trendsService.GetCurrentNetWorth(ctx.Request.Context())
+	if err != nil {
+		res := utils.BuildResponseFailed(dto.MESSAGE_FAILED_GET_CURRENT_NET_WORTH, err.Error())
+		ctx.JSON(http.StatusInternalServerError, res)
+		return
+	}
+
+	res := utils.BuildResponseSuccess(dto.MESSAGE_SUCCESS_GET_CURRENT_NET_WORTH, result, nil)
 	ctx.JSON(http.StatusOK, res)
 }

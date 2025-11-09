@@ -11,6 +11,7 @@ type (
 	TrendsRepository interface {
 		GetIncomeVsExpense(ctx context.Context, tx *gorm.DB, from string, to string) ([]dto.IncomeVsExpenseResponse, error)
 		GetNetWorthOverTime(ctx context.Context, tx *gorm.DB, from string, to string) ([]dto.NetWorthOverTimeResponse, error)
+		GetCurrentNetWorth(ctx context.Context, tx *gorm.DB) (*dto.CurrentNetWorthResponse, error)
 	}
 
 	trendsRepository struct {
@@ -117,4 +118,23 @@ func (r *trendsRepository) GetNetWorthOverTime(ctx context.Context, tx *gorm.DB,
 	`, from, to).Scan(&result)
 
 	return result, nil
+}
+
+func (r *trendsRepository) GetCurrentNetWorth(ctx context.Context, tx *gorm.DB) (*dto.CurrentNetWorthResponse, error) {
+	if tx == nil {
+		tx = r.db
+	}
+
+	var result dto.CurrentNetWorthResponse
+
+	tx.Raw(`
+		SELECT
+			(
+				(SELECT COALESCE(SUM(balance), 0) FROM accounts) +
+				(SELECT COALESCE(SUM(balance), 0) FROM investment_accounts)
+			) AS amount,
+			TO_CHAR(NOW(), 'YYYY-MM-DD') AS date
+	`).Scan(&result)
+
+	return &result, nil
 }

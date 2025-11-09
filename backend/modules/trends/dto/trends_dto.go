@@ -6,6 +6,9 @@ const (
 
 	MESSAGE_FAILED_GET_NET_WORTH_OVER_TIME  = "Failed to get net worth over time data"
 	MESSAGE_SUCCESS_GET_NET_WORTH_OVER_TIME = "Net worth over time data retrieved successfully"
+
+	MESSAGE_FAILED_GET_CURRENT_NET_WORTH  = "Failed to get current net worth"
+	MESSAGE_SUCCESS_GET_CURRENT_NET_WORTH = "Current net worth retrieved successfully"
 )
 
 type IncomeVsExpenseResponse struct {
@@ -18,4 +21,9 @@ type IncomeVsExpenseResponse struct {
 type NetWorthOverTimeResponse struct {
 	Date   string  `json:"date"`
 	Amount float64 `json:"amount"`
+}
+
+type CurrentNetWorthResponse struct {
+	Amount float64 `json:"amount"`
+	Date   string  `json:"date"`
 }
