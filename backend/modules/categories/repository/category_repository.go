@@ -48,7 +48,7 @@ func (r *categoryRepository) GetAllCategories(ctx context.Context, tx *gorm.DB) 
 	}
 
 	var categories []entities.Category
-	if err := tx.WithContext(ctx).Find(&categories).Error; err != nil {
+	if err := tx.WithContext(ctx).Preload("PrefixRules").Find(&categories).Error; err != nil {
 		return nil, err
 	}
 

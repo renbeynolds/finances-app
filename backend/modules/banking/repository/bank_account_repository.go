@@ -95,7 +95,7 @@ func (r *bankAccountRepository) GetBalanceOverTime(ctx context.Context, tx *gorm
         SELECT balance
         FROM transactions t
         LEFT JOIN uploads u ON t.upload_id = u.id
-        WHERE date < c.day AND u.account_id = ?
+        WHERE date < c.day AND u.bank_account_id = ?
         ORDER BY "date" DESC
         LIMIT 1
       ) AS "amount"

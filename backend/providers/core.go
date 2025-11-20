@@ -41,17 +41,17 @@ func RegisterDependencies(injector do.Injector, dbType string) {
 	bankAccountRepository := bankAccountRepository.NewBankAccountRepository(db)
 	bankAccountService := bankAccountService.NewBankAccountService(bankAccountRepository, db)
 
-	investmentAccountRepository := investmentAccountRepository.NewInvestmentAccountRepository(db)
-	investmentAccountService := investmentAccountService.NewInvestmentAccountService(investmentAccountRepository, db)
-
-	uploadRepository := uploadRepository.NewUploadRepository(db)
-	uploadService := uploadService.NewUploadService(uploadRepository, db)
-
 	categoryRepository := categoryRepository.NewCategoryRepository(db)
 	categoryService := categoryService.NewCategoryService(categoryRepository, db)
 
 	transactionRepository := transactionRepository.NewTransactionRepository(db)
 	transactionService := transactionService.NewTransactionService(transactionRepository, db)
+
+	investmentAccountRepository := investmentAccountRepository.NewInvestmentAccountRepository(db)
+	investmentAccountService := investmentAccountService.NewInvestmentAccountService(investmentAccountRepository, db)
+
+	uploadRepository := uploadRepository.NewUploadRepository(db)
+	uploadService := uploadService.NewUploadService(uploadRepository, bankAccountRepository, categoryRepository, transactionRepository, db)
 
 	snapshotRepository := snapshotRepository.NewSnapshotRepository(db)
 	snapshotService := snapshotService.NewSnapshotService(snapshotRepository, db)

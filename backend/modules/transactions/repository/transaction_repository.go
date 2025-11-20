@@ -16,6 +16,7 @@ type (
 		GetFilteredTransactionsTotal(ctx context.Context, tx *gorm.DB, query *queryPkg.TransactionQuery) (int64, error)
 		GetTransactionByID(ctx context.Context, tx *gorm.DB, id uint) (entities.Transaction, error)
 		UpdateTransaction(ctx context.Context, tx *gorm.DB, transaction entities.Transaction) (entities.Transaction, error)
+		BulkCreateTransactions(ctx context.Context, tx *gorm.DB, transactions []entities.Transaction) error
 	}
 
 	transactionRepository struct {
@@ -85,4 +86,21 @@ func (r *transactionRepository) UpdateTransaction(ctx context.Context, tx *gorm.
 	}
 
 	return transaction, nil
+}
+
+func (r *transactionRepository) BulkCreateTransactions(ctx context.Context, tx *gorm.DB, transactions []entities.Transaction) error {
+	if tx == nil {
+		tx = r.db
+	}
+
+	if len(transactions) == 0 {
+		return nil
+	}
+
+	// Use CreateInBatches for better performance with large datasets
+	if err := tx.WithContext(ctx).CreateInBatches(&transactions, 100).Error; err != nil {
+		return err
+	}
+
+	return nil
 }

@@ -39,7 +39,7 @@ func NewUploadController(injector do.Injector, s service.UploadService) UploadCo
 
 func (c *uploadController) CreateUpload(ctx *gin.Context) {
 	var req dto.CreateUploadRequest
-	if err := ctx.ShouldBindJSON(&req); err != nil {
+	if err := ctx.ShouldBind(&req); err != nil {
 		res := utils.BuildResponseFailed(dto.MESSAGE_FAILED_CREATE_UPLOAD, err.Error())
 		ctx.JSON(http.StatusBadRequest, res)
 		return

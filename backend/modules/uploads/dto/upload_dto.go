@@ -12,8 +12,8 @@ const (
 
 type (
 	CreateUploadRequest struct {
-		BankAccountID uint                 `form:"bankAccountId" validate:"required"`
-		CSV           multipart.FileHeader `form:"csv" validate:"required"`
+		BankAccountID uint                  `form:"bankAccountId" validate:"required"`
+		CSV           *multipart.FileHeader `form:"csv" validate:"required"`
 	}
 
 	UploadResponse struct {

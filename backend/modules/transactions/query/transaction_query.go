@@ -49,7 +49,7 @@ func QueryTransactions(value interface{}, query *TransactionQuery, db *gorm.DB) 
 		}
 		if query.AccountID != nil && *query.AccountID != "" {
 			filtered = filtered.Joins("LEFT JOIN uploads u ON transactions.upload_id = u.id")
-			filtered = filtered.Where("u.account_id = ?", *query.AccountID)
+			filtered = filtered.Where("u.bank_account_id = ?", *query.AccountID)
 		}
 		if query.CategoryID != nil && *query.CategoryID != "" {
 			filtered = filtered.Where("category_id = ?", *query.CategoryID)

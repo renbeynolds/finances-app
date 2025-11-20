@@ -71,7 +71,7 @@ func (r *trendsRepository) GetNetWorthOverTime(ctx context.Context, tx *gorm.DB,
 					SELECT t.balance
 					FROM transactions t
           LEFT JOIN uploads u ON t.upload_id = u.id
-					WHERE u.account_id = a.id AND t.date <= c.day
+					WHERE u.bank_account_id = a.id AND t.date <= c.day
 					ORDER BY t.date DESC, t.id DESC
 					LIMIT 1
 				), a.balance) AS balance
