@@ -1,8 +1,8 @@
-import { Fetcher } from 'swr';
-import { Response } from '../Response';
-import { CategoriesOverTime, Category } from './types';
+import { Fetcher } from "swr";
+import { Response } from "../Response";
+import { CategoriesOverTime, Category, TopSpendingCategory } from "./types";
 
-export const CategoriesEndpoint = '/api/categories';
+export const CategoriesEndpoint = "/api/categories";
 export const CategoryEndpoint = (categoryId: string) =>
   `/api/categories/${categoryId}`;
 export const CategoriesOverTimeEndpoint = (from: string, to: string) =>
@@ -16,5 +16,11 @@ export const CategoryFetcher: Fetcher<Response<Category>, string> = (url) =>
 
 export const CategoriesOverTimeFetcher: Fetcher<
   Response<CategoriesOverTime[]>,
+  string
+> = (url) => fetch(url).then((res) => res.json());
+
+export const TopSpendingCategoriesEndpoint = "/api/categories/top_spending";
+export const TopSpendingCategoriesFetcher: Fetcher<
+  Response<TopSpendingCategory[]>,
   string
 > = (url) => fetch(url).then((res) => res.json());

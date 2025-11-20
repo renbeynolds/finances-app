@@ -1,6 +1,10 @@
 export type Response<DataType> = {
   code: number;
-  status: string;
-  totalRecords: number | undefined;
+  success: boolean;
+  pagination: Pagination | undefined;
   data: DataType;
+};
+
+export type Pagination = {
+  totalRecords: number;
 };

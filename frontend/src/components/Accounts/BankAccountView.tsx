@@ -7,25 +7,25 @@ import {
   SimpleGrid,
   Stack,
   Title,
-} from '@mantine/core';
-import { IconEdit, IconUpload } from '@tabler/icons-react';
-import dayjs from 'dayjs';
-import React from 'react';
-import { useParams } from 'react-router';
-import useSWR from 'swr';
+} from "@mantine/core";
+import { IconEdit, IconUpload } from "@tabler/icons-react";
+import dayjs from "dayjs";
+import React from "react";
+import { useParams } from "react-router";
+import useSWR from "swr";
 import {
   BankAccountFetcher,
   BankAccountsEndpoint,
-} from '../../data/BankAccounts/fetchers';
+} from "../../data/BankAccounts/fetchers";
 import {
   AccountBalanceOverTimeEndpoint,
   AmountOverTimeFetcher,
-} from '../../Fetchers';
-import AmountOverTimeChart from '../AmountOverTimeChart';
-import ConditionalWrap from '../ConditionalWrap';
-import TransactionTable from '../TransactionTable';
-import UploadForm from '../Uploads/UploadForm';
-import BankAccountForm from './BankAccountForm';
+} from "../../Fetchers";
+import AmountOverTimeChart from "../AmountOverTimeChart";
+import ConditionalWrap from "../ConditionalWrap";
+import TransactionTable from "../TransactionTable";
+import UploadForm from "../Uploads/UploadForm";
+import BankAccountForm from "./BankAccountForm";
 
 export default function BankAccountView() {
   const { accountId } = useParams();
@@ -41,10 +41,10 @@ export default function BankAccountView() {
   const balanceOverTimeResponse = useSWR(
     AccountBalanceOverTimeEndpoint(
       accountId!,
-      dayjs().subtract(365, 'day').format('YYYY-MM-DD'),
-      dayjs().format('YYYY-MM-DD'),
+      dayjs().subtract(365, "day").format("YYYY-MM-DD"),
+      dayjs().format("YYYY-MM-DD")
     ),
-    AmountOverTimeFetcher,
+    AmountOverTimeFetcher
   );
 
   if (accountError) return <div>failed to load</div>;
@@ -53,12 +53,12 @@ export default function BankAccountView() {
   return (
     <>
       <Stack>
-        <Group justify='space-between'>
+        <Group justify="space-between">
           <Group>
             <ConditionalWrap
-              condition={accountData?.data.loginUrl !== ''}
+              condition={accountData?.data.loginUrl !== ""}
               wrap={(wrappedChildren) => (
-                <Anchor href={accountData?.data.loginUrl} target='_blank'>
+                <Anchor href={accountData?.data.loginUrl} target="_blank">
                   {wrappedChildren}
                 </Anchor>
               )}
@@ -66,11 +66,11 @@ export default function BankAccountView() {
               <Title order={2}>{accountData?.data.name}</Title>
             </ConditionalWrap>
             <ActionIcon
-              size='m'
-              variant='outline'
+              size="m"
+              variant="outline"
               onClick={() => setEditModalOpened(true)}
             >
-              <IconEdit style={{ width: '70%' }} />
+              <IconEdit style={{ width: "70%" }} />
             </ActionIcon>
           </Group>
           <Button
@@ -83,7 +83,7 @@ export default function BankAccountView() {
         <SimpleGrid cols={2}>
           <AmountOverTimeChart
             response={balanceOverTimeResponse}
-            title='Balance'
+            title="Balance"
           />
         </SimpleGrid>
         <TransactionTable accountId={accountId} />
@@ -91,17 +91,17 @@ export default function BankAccountView() {
       <Modal
         opened={uploadModalOpened}
         onClose={() => setUploadModalOpened(false)}
-        title='New Upload'
+        title="New Upload"
       >
         <UploadForm
-          accountId={String(accountId)}
+          bankAccountId={String(accountId)}
           close={() => setUploadModalOpened(false)}
         />
       </Modal>
       <Modal
         opened={editModalOpened}
         onClose={() => setEditModalOpened(false)}
-        title='Edit Account'
+        title="Edit Account"
       >
         <BankAccountForm
           bankAccount={accountData!.data}
