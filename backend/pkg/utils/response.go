@@ -1,7 +1,7 @@
 package utils
 
 type Response[T any] struct {
-	Status     bool                `json:"status"`
+	Success    bool                `json:"success"`
 	Message    string              `json:"message"`
 	Error      any                 `json:"error,omitempty"`
 	Data       T                   `json:"data,omitempty"`
@@ -16,7 +16,7 @@ type EmptyObj struct{}
 
 func BuildResponseSuccess[T any](message string, data T, pagination *Pagination) Response[T] {
 	res := Response[T]{
-		Status:  true,
+		Success: true,
 		Message: message,
 		Data:    data,
 	}
@@ -30,7 +30,7 @@ func BuildResponseSuccess[T any](message string, data T, pagination *Pagination)
 
 func BuildResponseFailed(message string, err string) Response[EmptyObj] {
 	res := Response[EmptyObj]{
-		Status:  false,
+		Success: false,
 		Message: message,
 		Error:   err,
 	}

@@ -1,14 +1,14 @@
-import { Button, Select, Stack, TextInput } from '@mantine/core';
-import { useForm } from '@mantine/form';
-import { UseLazyCategories } from '../../context/CategoriesContext';
-import { requestCreateCategory } from '../../data/Categories/requests';
+import { Button, Select, Stack, TextInput } from "@mantine/core";
+import { useForm } from "@mantine/form";
+import { UseLazyCategories } from "../../context/CategoriesContext";
+import { requestCreateCategory } from "../../data/Categories/requests";
 
 export interface CategoryFormValues {
   name: string;
   color: string | null;
   parentId: number | null;
-  iconURL: string | null;
-  type: 'expense' | 'income';
+  emoji: string | null;
+  type: "expense" | "income";
 }
 
 type CategoryFormProps = {
@@ -27,7 +27,8 @@ export default function CategoryForm({ category, close }: CategoryFormProps) {
   const handleSubmit = async (values: CategoryFormValues) => {
     // if (!category) {
     const response = await requestCreateCategory(values);
-    if (response.code === 200) {
+    console.log("response", response);
+    if (response.success) {
       close();
     }
     // } else {
@@ -42,39 +43,39 @@ export default function CategoryForm({ category, close }: CategoryFormProps) {
     <form onSubmit={form.onSubmit((values) => handleSubmit(values))}>
       <Stack>
         <TextInput
-          {...form.getInputProps('name')}
-          placeholder='Name'
-          label='Name'
+          {...form.getInputProps("name")}
+          placeholder="Name"
+          label="Name"
         />
         <TextInput
-          {...form.getInputProps('color')}
-          placeholder='Color'
-          label='Color'
+          {...form.getInputProps("color")}
+          placeholder="Color"
+          label="Color"
         />
         <TextInput
-          {...form.getInputProps('iconURL')}
-          placeholder='Icon URL'
-          label='Icon URL'
+          {...form.getInputProps("emoji")}
+          placeholder="Emoji"
+          label="Emoji"
         />
         <Select
-          {...form.getInputProps('type')}
-          placeholder='Type'
-          label='Type'
+          {...form.getInputProps("type")}
+          placeholder="Type"
+          label="Type"
           data={[
-            { value: 'expense', label: 'Expense' },
-            { value: 'income', label: 'Income' },
+            { value: "expense", label: "Expense" },
+            { value: "income", label: "Income" },
           ]}
         />
         <Select
-          {...form.getInputProps('parentId')}
-          placeholder='Parent Category'
-          label='Parent Category'
+          {...form.getInputProps("parentId")}
+          placeholder="Parent Category"
+          label="Parent Category"
           data={categories.map((category) => ({
             value: category.id.toString(),
             label: category.name,
           }))}
         />
-        <Button type='submit' loading={form.submitting}>
+        <Button type="submit" loading={form.submitting}>
           Submit
         </Button>
       </Stack>

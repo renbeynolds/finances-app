@@ -36,7 +36,7 @@ func (s *categoryService) CreateCategory(ctx context.Context, req dto.CreateCate
 	category := entities.Category{
 		Name:             req.Name,
 		Color:            req.Color,
-		IconURL:          req.IconURL,
+		Emoji:            req.Emoji,
 		Type:             req.Type,
 		ParentCategoryID: req.ParentCategoryID,
 	}
@@ -82,16 +82,16 @@ func entityToResponse(category entities.Category) dto.CategoryResponse {
 		color = *category.Color
 	}
 
-	iconURL := ""
-	if category.IconURL != nil {
-		iconURL = *category.IconURL
+	emoji := ""
+	if category.Emoji != nil {
+		emoji = *category.Emoji
 	}
 
 	return dto.CategoryResponse{
 		ID:               category.ID,
 		Name:             category.Name,
 		Color:            color,
-		IconURL:          iconURL,
+		Emoji:            emoji,
 		Type:             category.Type,
 		ParentCategoryID: category.ParentCategoryID,
 	}

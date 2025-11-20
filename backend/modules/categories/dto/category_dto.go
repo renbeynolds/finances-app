@@ -18,7 +18,7 @@ type (
 	CreateCategoryRequest struct {
 		Name             string  `json:"name" validate:"required"`
 		Color            *string `json:"color"`
-		IconURL          *string `json:"iconUrl"`
+		Emoji            *string `json:"emoji"`
 		Type             string  `json:"type" validate:"required,oneof=income expense"`
 		ParentCategoryID *uint   `json:"parentCategoryId"`
 	}
@@ -27,7 +27,7 @@ type (
 		ID               uint   `json:"id"`
 		Name             string `json:"name"`
 		Color            string `json:"color"`
-		IconURL          string `json:"iconUrl"`
+		Emoji            string `json:"emoji"`
 		Type             string `json:"type"`
 		ParentCategoryID *uint  `json:"parentCategoryId"`
 	}
