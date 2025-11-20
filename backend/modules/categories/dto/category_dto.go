@@ -7,6 +7,9 @@ const (
 	MESSAGE_FAILED_LIST_CATEGORIES  = "failed list categories"
 	MESSAGE_SUCCESS_LIST_CATEGORIES = "success list categories"
 
+	MESSAGE_FAILED_UPDATE_CATEGORY  = "failed update category"
+	MESSAGE_SUCCESS_UPDATE_CATEGORY = "success update category"
+
 	MESSAGE_FAILED_LIST_TOP_SPENDING_CATEGORIES  = "failed list top spending categories"
 	MESSAGE_SUCCESS_LIST_TOP_SPENDING_CATEGORIES = "success list top spending categories"
 
@@ -20,6 +23,14 @@ type (
 		Color            *string `json:"color"`
 		Emoji            *string `json:"emoji"`
 		Type             string  `json:"type" validate:"required,oneof=income expense"`
+		ParentCategoryID *uint   `json:"parentCategoryId"`
+	}
+
+	UpdateCategoryRequest struct {
+		Name             *string `json:"name"`
+		Color            *string `json:"color"`
+		Emoji            *string `json:"emoji"`
+		Type             *string `json:"type" validate:"omitempty,oneof=income expense"`
 		ParentCategoryID *uint   `json:"parentCategoryId"`
 	}
 

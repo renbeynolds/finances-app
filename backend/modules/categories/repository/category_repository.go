@@ -13,6 +13,8 @@ type (
 	CategoryRepository interface {
 		CreateCategory(ctx context.Context, tx *gorm.DB, category entities.Category) (entities.Category, error)
 		GetAllCategories(ctx context.Context, tx *gorm.DB) ([]entities.Category, error)
+		GetCategoryByID(ctx context.Context, tx *gorm.DB, id uint) (entities.Category, error)
+		UpdateCategory(ctx context.Context, tx *gorm.DB, category entities.Category) (entities.Category, error)
 		GetTopSpendingCategories(ctx context.Context, tx *gorm.DB, query *queryPkg.TopSpendingCategoriesQuery) ([]dto.TopSpendingCategoryResponse, error)
 		GetCategoryAmountOverTime(ctx context.Context, tx *gorm.DB, categoryId, from, to string) ([]dto.CategoryAmountOverTimeResponse, error)
 	}
@@ -51,6 +53,31 @@ func (r *categoryRepository) GetAllCategories(ctx context.Context, tx *gorm.DB) 
 	}
 
 	return categories, nil
+}
+
+func (r *categoryRepository) GetCategoryByID(ctx context.Context, tx *gorm.DB, id uint) (entities.Category, error) {
+	if tx == nil {
+		tx = r.db
+	}
+
+	var category entities.Category
+	if err := tx.WithContext(ctx).First(&category, id).Error; err != nil {
+		return entities.Category{}, err
+	}
+
+	return category, nil
+}
+
+func (r *categoryRepository) UpdateCategory(ctx context.Context, tx *gorm.DB, category entities.Category) (entities.Category, error) {
+	if tx == nil {
+		tx = r.db
+	}
+
+	if err := tx.WithContext(ctx).Save(&category).Error; err != nil {
+		return entities.Category{}, err
+	}
+
+	return category, nil
 }
 
 func (r *categoryRepository) GetTopSpendingCategories(ctx context.Context, tx *gorm.DB, query *queryPkg.TopSpendingCategoriesQuery) ([]dto.TopSpendingCategoryResponse, error) {

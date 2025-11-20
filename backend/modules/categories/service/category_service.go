@@ -13,6 +13,7 @@ import (
 type CategoryService interface {
 	CreateCategory(ctx context.Context, req dto.CreateCategoryRequest) (dto.CategoryResponse, error)
 	GetAllCategories(ctx context.Context) ([]dto.CategoryResponse, error)
+	UpdateCategory(ctx context.Context, req dto.UpdateCategoryRequest, id uint) (dto.CategoryResponse, error)
 	GetTopSpendingCategories(ctx context.Context, query query.TopSpendingCategoriesQuery) ([]dto.TopSpendingCategoryResponse, error)
 	GetCategoryAmountOverTime(ctx context.Context, categoryID string, query query.CategoryAmountOverTimeQuery) ([]dto.CategoryAmountOverTimeResponse, error)
 }
@@ -61,6 +62,38 @@ func (s *categoryService) GetAllCategories(ctx context.Context) ([]dto.CategoryR
 	}
 
 	return categoryResponses, nil
+}
+
+func (s *categoryService) UpdateCategory(ctx context.Context, req dto.UpdateCategoryRequest, id uint) (dto.CategoryResponse, error) {
+	// First get the existing category
+	category, err := s.categoryRepository.GetCategoryByID(ctx, s.db, id)
+	if err != nil {
+		return dto.CategoryResponse{}, err
+	}
+
+	// Update only the fields that are provided
+	if req.Name != nil {
+		category.Name = *req.Name
+	}
+	if req.Color != nil {
+		category.Color = req.Color
+	}
+	if req.Emoji != nil {
+		category.Emoji = req.Emoji
+	}
+	if req.Type != nil {
+		category.Type = *req.Type
+	}
+	if req.ParentCategoryID != nil {
+		category.ParentCategoryID = req.ParentCategoryID
+	}
+
+	updatedCategory, err := s.categoryRepository.UpdateCategory(ctx, s.db, category)
+	if err != nil {
+		return dto.CategoryResponse{}, err
+	}
+
+	return entityToResponse(updatedCategory), nil
 }
 
 func (s *categoryService) GetTopSpendingCategories(ctx context.Context, query query.TopSpendingCategoriesQuery) ([]dto.TopSpendingCategoryResponse, error) {

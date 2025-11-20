@@ -1,7 +1,10 @@
 import { Button, Select, Stack, TextInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { UseLazyCategories } from "../../context/CategoriesContext";
-import { requestCreateCategory } from "../../data/Categories/requests";
+import {
+  requestCreateCategory,
+  requestUpdateCategory,
+} from "../../data/Categories/requests";
 
 export interface CategoryFormValues {
   name: string;
@@ -25,18 +28,17 @@ export default function CategoryForm({ category, close }: CategoryFormProps) {
   });
 
   const handleSubmit = async (values: CategoryFormValues) => {
-    // if (!category) {
-    const response = await requestCreateCategory(values);
-    console.log("response", response);
-    if (response.success) {
-      close();
+    if (!category) {
+      const response = await requestCreateCategory(values);
+      if (response.success) {
+        close();
+      }
+    } else {
+      const response = await requestUpdateCategory(category.id, values);
+      if (response.success) {
+        close();
+      }
     }
-    // } else {
-    //   const response = await requestUpdateCategory(category.id, values);
-    //   if (response.code === 200) {
-    //     close();
-    //   }
-    // }
   };
 
   return (
@@ -76,7 +78,7 @@ export default function CategoryForm({ category, close }: CategoryFormProps) {
           }))}
         />
         <Button type="submit" loading={form.submitting}>
-          Submit
+          {category ? "Update" : "Create"}
         </Button>
       </Stack>
     </form>

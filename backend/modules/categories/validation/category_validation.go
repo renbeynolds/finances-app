@@ -18,3 +18,7 @@ func NewCategoryValidation() *CategoryValidation {
 func (v *CategoryValidation) ValidateCreateCategory(req dto.CreateCategoryRequest) error {
 	return v.validator.Struct(req)
 }
+
+func (v *CategoryValidation) ValidateUpdateCategory(req dto.UpdateCategoryRequest) error {
+	return v.validator.Struct(req)
+}

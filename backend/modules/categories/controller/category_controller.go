@@ -19,6 +19,7 @@ type (
 	CategoryController interface {
 		CreateCategory(ctx *gin.Context)
 		GetAllCategories(ctx *gin.Context)
+		UpdateCategory(ctx *gin.Context)
 		GetTopSpendingCategories(ctx *gin.Context)
 		GetCategoryAmountOverTime(ctx *gin.Context)
 	}
@@ -74,6 +75,38 @@ func (c *categoryController) GetAllCategories(ctx *gin.Context) {
 	}
 
 	res := utils.BuildResponseSuccess(dto.MESSAGE_SUCCESS_LIST_CATEGORIES, categories, nil)
+	ctx.JSON(http.StatusOK, res)
+}
+
+func (c *categoryController) UpdateCategory(ctx *gin.Context) {
+	var byID utils.ByID
+	if err := ctx.ShouldBindUri(&byID); err != nil {
+		res := utils.BuildResponseFailed(dto.MESSAGE_FAILED_UPDATE_CATEGORY, err.Error())
+		ctx.JSON(http.StatusBadRequest, res)
+		return
+	}
+
+	var req dto.UpdateCategoryRequest
+	if err := ctx.ShouldBindJSON(&req); err != nil {
+		res := utils.BuildResponseFailed(dto.MESSAGE_FAILED_UPDATE_CATEGORY, err.Error())
+		ctx.JSON(http.StatusBadRequest, res)
+		return
+	}
+
+	if err := c.categoryValidation.ValidateUpdateCategory(req); err != nil {
+		res := utils.BuildResponseFailed(dto.MESSAGE_FAILED_UPDATE_CATEGORY, err.Error())
+		ctx.JSON(http.StatusBadRequest, res)
+		return
+	}
+
+	category, err := c.categoryService.UpdateCategory(ctx.Request.Context(), req, byID.ID)
+	if err != nil {
+		res := utils.BuildResponseFailed(dto.MESSAGE_FAILED_UPDATE_CATEGORY, err.Error())
+		ctx.JSON(http.StatusBadRequest, res)
+		return
+	}
+
+	res := utils.BuildResponseSuccess(dto.MESSAGE_SUCCESS_UPDATE_CATEGORY, category, nil)
 	ctx.JSON(http.StatusOK, res)
 }
 
