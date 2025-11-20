@@ -1,25 +1,15 @@
-import { Loader, Paper, Title, useMantineTheme } from '@mantine/core';
+import { AreaChart } from "@mantine/charts";
+import { Loader, Paper, Title, useMantineTheme } from "@mantine/core";
+import { linearRegression, linearRegressionLine } from "simple-statistics";
+import { SWRResponse } from "swr";
+import { AmountOverTime } from "../data/AmountOverTime";
+import { Response } from "../data/Response";
 import {
-  Area,
-  CartesianGrid,
-  ComposedChart,
-  Line,
-  ResponsiveContainer,
-  Tooltip,
-  XAxis,
-  YAxis,
-} from 'recharts';
-import { linearRegression, linearRegressionLine } from 'simple-statistics';
-import { SWRResponse } from 'swr';
-import { AmountOverTime } from '../data/AmountOverTime';
-import { Response } from '../data/Response';
-import {
-  FormatDayString,
   FormatMoney,
   FormatMoneyThousands,
   FormatMonthString,
   MonthStringToTimestamp,
-} from '../utils';
+} from "../utils";
 
 type AmountOverTimeChartProps = {
   title: string;
@@ -57,48 +47,44 @@ export default function AmountOverTimeChart({
   };
 
   return (
-    <Paper shadow='sm' p='lg'>
+    <Paper shadow="sm" p="lg">
       <Title order={3}>{title}</Title>
       {response.isLoading ? (
-        <Loader color='blue' />
+        <Loader color="blue" />
       ) : (
-        <ResponsiveContainer height={300}>
-          <ComposedChart data={getChartDataWithTrendline(response.data!.data)}>
-            <CartesianGrid strokeDasharray='3 3' />
-            <XAxis dataKey='date' tickFormatter={FormatMonthString} />
-            <YAxis
-              tickFormatter={(value: number) => FormatMoneyThousands(value)}
-            />
-            <Tooltip
-              formatter={(value: number, name: string) => [
-                FormatMoney(value),
-                name === 'amount' ? 'Actual' : 'Trend',
-              ]}
-              labelFormatter={FormatDayString}
-              contentStyle={{
-                backgroundColor: theme.colors.dark[8],
-                border: 'none',
-              }}
-            />
-            <Area
-              type='monotone'
-              dataKey='amount'
-              stroke={theme.colors.blue[6]}
-              fill={theme.colors.blue[6]}
-            />
-            {displayTrendline && (
-              <Line
-                type='monotone'
-                dataKey='trendline'
-                stroke={theme.colors.red[6]}
-                strokeWidth={2}
-                strokeDasharray='5 5'
-                dot={false}
-                activeDot={false}
-              />
-            )}
-          </ComposedChart>
-        </ResponsiveContainer>
+        <AreaChart
+          h={300}
+          data={getChartDataWithTrendline(response.data!.data)}
+          dataKey="date"
+          series={[
+            {
+              name: "amount",
+              color: theme.colors.blue[6],
+            },
+            ...(displayTrendline
+              ? [
+                  {
+                    name: "trendline",
+                    color: theme.colors.red[6],
+                  },
+                ]
+              : []),
+          ]}
+          curveType="monotone"
+          tickLine="xy"
+          gridAxis="x"
+          withXAxis
+          withYAxis
+          withTooltip
+          withDots={false}
+          xAxisProps={{
+            tickFormatter: FormatMonthString,
+          }}
+          yAxisProps={{
+            tickFormatter: (value: number) => FormatMoneyThousands(value),
+          }}
+          valueFormatter={(value: number) => FormatMoney(value)}
+        />
       )}
     </Paper>
   );
