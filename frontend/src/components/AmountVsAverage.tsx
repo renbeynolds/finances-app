@@ -33,7 +33,7 @@ export default function AmountVsAverage({
   if (isLoading) return <div>loading...</div>;
 
   return (
-    <Card>
+    <Card shadow="sm" bg="var(--mantine-color-body)">
       <Card.Section withBorder inheritPadding py="xs">
         <Title order={4}>{title}</Title>
       </Card.Section>
