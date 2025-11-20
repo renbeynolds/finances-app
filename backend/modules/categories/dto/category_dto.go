@@ -22,7 +22,7 @@ type (
 		Name             string  `json:"name" validate:"required"`
 		Color            *string `json:"color"`
 		Emoji            *string `json:"emoji"`
-		Type             string  `json:"type" validate:"required,oneof=income expense"`
+		Type             string  `json:"type" validate:"required,oneof=income expense transfer"`
 		ParentCategoryID *uint   `json:"parentCategoryId"`
 	}
 
@@ -30,7 +30,7 @@ type (
 		Name             *string `json:"name"`
 		Color            *string `json:"color"`
 		Emoji            *string `json:"emoji"`
-		Type             *string `json:"type" validate:"omitempty,oneof=income expense"`
+		Type             *string `json:"type" validate:"omitempty,oneof=income expense transfer"`
 		ParentCategoryID *uint   `json:"parentCategoryId"`
 	}
 

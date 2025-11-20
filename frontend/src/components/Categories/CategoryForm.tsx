@@ -1,6 +1,9 @@
 import { Button, Select, Stack, TextInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
-import { UseLazyCategories } from "../../context/CategoriesContext";
+import {
+  UseCategoriesDispatch,
+  UseLazyCategories,
+} from "../../context/CategoriesContext";
 import {
   requestCreateCategory,
   requestUpdateCategory,
@@ -11,7 +14,7 @@ export interface CategoryFormValues {
   color: string | null;
   parentId: number | null;
   emoji: string | null;
-  type: "expense" | "income";
+  type: "expense" | "income" | "transfer";
 }
 
 type CategoryFormProps = {
@@ -21,6 +24,7 @@ type CategoryFormProps = {
 
 export default function CategoryForm({ category, close }: CategoryFormProps) {
   const categories = UseLazyCategories();
+  const dispatch = UseCategoriesDispatch();
 
   const form = useForm<CategoryFormValues>({
     initialValues: category,
@@ -31,11 +35,13 @@ export default function CategoryForm({ category, close }: CategoryFormProps) {
     if (!category) {
       const response = await requestCreateCategory(values);
       if (response.success) {
+        dispatch({ type: "ADD", payload: response.data });
         close();
       }
     } else {
       const response = await requestUpdateCategory(category.id, values);
       if (response.success) {
+        dispatch({ type: "UPDATE", payload: response.data });
         close();
       }
     }
@@ -66,6 +72,7 @@ export default function CategoryForm({ category, close }: CategoryFormProps) {
           data={[
             { value: "expense", label: "Expense" },
             { value: "income", label: "Income" },
+            { value: "transfer", label: "Transfer" },
           ]}
         />
         <Select

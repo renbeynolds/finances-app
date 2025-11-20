@@ -1,12 +1,5 @@
-import {
-  ActionIcon,
-  Button,
-  Group,
-  Modal,
-  NavLink,
-  Stack,
-} from "@mantine/core";
-import { IconEdit, IconPlus } from "@tabler/icons-react";
+import { Button, Modal, NavLink, Stack } from "@mantine/core";
+import { IconPlus } from "@tabler/icons-react";
 import React from "react";
 import { useLocation, useNavigate } from "react-router";
 import { UseLazyCategories } from "../../context/CategoriesContext";
@@ -17,21 +10,13 @@ export default function CategoriesList() {
   const location = useLocation();
   const navigate = useNavigate();
   const [categoryModalOpened, setCategoryModalOpened] = React.useState(false);
-  const [selectedCategory, setSelectedCategory] = React.useState<any>(null);
 
   const handleNewCategory = () => {
-    setSelectedCategory(null);
-    setCategoryModalOpened(true);
-  };
-
-  const handleEditCategory = (category: any) => {
-    setSelectedCategory(category);
     setCategoryModalOpened(true);
   };
 
   const handleCloseModal = () => {
     setCategoryModalOpened(false);
-    setSelectedCategory(null);
   };
 
   React.useEffect(() => {
@@ -52,24 +37,12 @@ export default function CategoriesList() {
           {categories
             .sort((a, b) => (a.name < b.name ? -1 : 1))
             .map((category, index) => (
-              <Group key={index} justify="space-between" wrap="nowrap">
-                <NavLink
-                  active={location.pathname === `/categories/${category.id}`}
-                  onClick={() => navigate(`/categories/${category.id}`)}
-                  label={category.name}
-                  style={{ flex: 1 }}
-                />
-                <ActionIcon
-                  variant="subtle"
-                  size="sm"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleEditCategory(category);
-                  }}
-                >
-                  <IconEdit size={14} />
-                </ActionIcon>
-              </Group>
+              <NavLink
+                key={index}
+                active={location.pathname === `/categories/${category.id}`}
+                onClick={() => navigate(`/categories/${category.id}`)}
+                label={`${category.emoji + " " || ""}${category.name}`}
+              />
             ))}
         </Stack>
         <Button
@@ -84,9 +57,9 @@ export default function CategoriesList() {
       <Modal
         opened={categoryModalOpened}
         onClose={handleCloseModal}
-        title={selectedCategory ? "Edit Category" : "New Category"}
+        title="New Category"
       >
-        <CategoryForm category={selectedCategory} close={handleCloseModal} />
+        <CategoryForm close={handleCloseModal} />
       </Modal>
     </>
   );

@@ -3,7 +3,7 @@ export type Category = {
   name: string;
   type: string;
   color: string | undefined;
-  iconUrl: string | undefined;
+  emoji: string | undefined;
   parentCategoryId: number | undefined;
 };
 
