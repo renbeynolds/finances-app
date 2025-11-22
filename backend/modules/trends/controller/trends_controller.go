@@ -18,6 +18,7 @@ type (
 		GetIncomeVsExpense(ctx *gin.Context)
 		GetNetWorthOverTime(ctx *gin.Context)
 		GetCurrentNetWorth(ctx *gin.Context)
+		GetExpensesOverTime(ctx *gin.Context)
 	}
 
 	trendsController struct {
@@ -81,5 +82,24 @@ func (c *trendsController) GetCurrentNetWorth(ctx *gin.Context) {
 	}
 
 	res := utils.BuildResponseSuccess(dto.MESSAGE_SUCCESS_GET_CURRENT_NET_WORTH, result, nil)
+	ctx.JSON(http.StatusOK, res)
+}
+
+func (c *trendsController) GetExpensesOverTime(ctx *gin.Context) {
+	var q query.ExpensesOverTimeQuery
+	if err := ctx.ShouldBindQuery(&q); err != nil {
+		res := utils.BuildResponseFailed(dto.MESSAGE_FAILED_GET_EXPENSES_OVER_TIME, err.Error())
+		ctx.JSON(http.StatusBadRequest, res)
+		return
+	}
+
+	result, err := c.trendsService.GetExpensesOverTime(ctx.Request.Context(), q)
+	if err != nil {
+		res := utils.BuildResponseFailed(dto.MESSAGE_FAILED_GET_EXPENSES_OVER_TIME, err.Error())
+		ctx.JSON(http.StatusInternalServerError, res)
+		return
+	}
+
+	res := utils.BuildResponseSuccess(dto.MESSAGE_SUCCESS_GET_EXPENSES_OVER_TIME, result, nil)
 	ctx.JSON(http.StatusOK, res)
 }

@@ -14,5 +14,6 @@ func RegisterRoutes(server *gin.Engine, injector do.Injector) {
 		trendsRoutes.GET("/income_vs_expense", trendsController.GetIncomeVsExpense)
 		trendsRoutes.GET("/net_worth_over_time", trendsController.GetNetWorthOverTime)
 		trendsRoutes.GET("/net_worth", trendsController.GetCurrentNetWorth)
+		trendsRoutes.GET("/expenses_over_time", trendsController.GetExpensesOverTime)
 	}
 }

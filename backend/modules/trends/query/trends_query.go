@@ -9,3 +9,8 @@ type NetWorthOverTimeQuery struct {
 	From *string `form:"from" binding:"required"`
 	To   *string `form:"to" binding:"required"`
 }
+
+type ExpensesOverTimeQuery struct {
+	From *string `form:"from" binding:"required"`
+	To   *string `form:"to" binding:"required"`
+}
