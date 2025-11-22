@@ -9,7 +9,6 @@ import {
 } from "../Fetchers";
 import { FormatMoney } from "../utils";
 import AmountOverTimeChart from "./AmountOverTimeChart";
-import CategoriesOverTimeChart from "./CategoriesOverTimeChart";
 import IncomeVsExpenseChart from "./IncomeVsExpenseChart";
 
 export default function Trends() {
@@ -37,7 +36,6 @@ export default function Trends() {
         response={netWorthOverTimeResponse}
         title={netWorthTitle}
       />
-      <CategoriesOverTimeChart />
     </SimpleGrid>
   );
 }
