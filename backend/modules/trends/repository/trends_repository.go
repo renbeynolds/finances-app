@@ -12,6 +12,7 @@ type (
 		GetIncomeVsExpense(ctx context.Context, tx *gorm.DB, from string, to string) ([]dto.IncomeVsExpenseResponse, error)
 		GetNetWorthOverTime(ctx context.Context, tx *gorm.DB, from string, to string) ([]dto.NetWorthOverTimeResponse, error)
 		GetCurrentNetWorth(ctx context.Context, tx *gorm.DB) (*dto.CurrentNetWorthResponse, error)
+		GetExpensesOverTime(ctx context.Context, tx *gorm.DB, from string, to string) ([]dto.ExpensesOverTimeResponse, error)
 	}
 
 	trendsRepository struct {
@@ -137,4 +138,43 @@ func (r *trendsRepository) GetCurrentNetWorth(ctx context.Context, tx *gorm.DB) 
 	`).Scan(&result)
 
 	return &result, nil
+}
+
+func (r *trendsRepository) GetExpensesOverTime(ctx context.Context, tx *gorm.DB, from string, to string) ([]dto.ExpensesOverTimeResponse, error) {
+	if tx == nil {
+		tx = r.db
+	}
+
+	var result []dto.ExpensesOverTimeResponse
+
+	tx.Raw(`
+		WITH daily_calendar AS (
+			SELECT 
+				DATE_TRUNC('day', bucket::date) AS day,
+				EXTRACT(EPOCH FROM (bucket::date - ?::date)) / 86400 AS day_number
+			FROM generate_series(?::date, ?::date, '1 day'::interval) bucket
+		),
+		daily_expenses AS (
+			SELECT
+				DATE_TRUNC('day', t.date) AS day,
+				COALESCE(SUM(t.amount), 0) AS daily_expense_amount
+			FROM transactions t
+			LEFT JOIN categories cat ON t.category_id = cat.id
+			WHERE cat.type = 'expense' 
+				AND t.date >= ?::date 
+				AND t.date <= ?::date
+			GROUP BY DATE_TRUNC('day', t.date)
+		),
+		running_totals AS (
+			SELECT
+				dc.day_number::int AS day,
+				SUM(COALESCE(de.daily_expense_amount, 0)) OVER (ORDER BY dc.day) AS amount
+			FROM daily_calendar dc
+			LEFT JOIN daily_expenses de ON dc.day = de.day
+			ORDER BY dc.day
+		)
+		SELECT day, amount FROM running_totals
+	`, from, from, to, from, to).Scan(&result)
+
+	return result, nil
 }
