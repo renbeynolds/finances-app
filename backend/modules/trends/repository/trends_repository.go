@@ -147,17 +147,11 @@ func (r *trendsRepository) GetExpensesOverTime(ctx context.Context, tx *gorm.DB,
 
 	var result []dto.ExpensesOverTimeResponse
 
-	tx.Raw(`
-		WITH daily_calendar AS (
-			SELECT 
-				DATE_TRUNC('day', bucket::date) AS day,
-				EXTRACT(EPOCH FROM (bucket::date - ?::date)) / 86400 AS day_number
-			FROM generate_series(?::date, ?::date, '1 day'::interval) bucket
-		),
-		daily_expenses AS (
+	err := tx.Raw(`
+		WITH daily_expenses AS (
 			SELECT
 				DATE_TRUNC('day', t.date) AS day,
-				COALESCE(SUM(t.amount), 0) AS daily_expense_amount
+				SUM(ABS(t.amount)) AS daily_amount
 			FROM transactions t
 			LEFT JOIN categories cat ON t.category_id = cat.id
 			WHERE cat.type = 'expense' 
@@ -165,16 +159,26 @@ func (r *trendsRepository) GetExpensesOverTime(ctx context.Context, tx *gorm.DB,
 				AND t.date <= ?::date
 			GROUP BY DATE_TRUNC('day', t.date)
 		),
+		calendar AS (
+			SELECT 
+				DATE_TRUNC('day', bucket) AS day,
+				EXTRACT(EPOCH FROM (DATE_TRUNC('day', bucket) - ?::date)) / 86400 AS day_number
+			FROM generate_series(?::date, ?::date, '1 day'::interval) bucket
+		),
 		running_totals AS (
 			SELECT
-				dc.day_number::int AS day,
-				SUM(COALESCE(de.daily_expense_amount, 0)) OVER (ORDER BY dc.day) AS amount
-			FROM daily_calendar dc
-			LEFT JOIN daily_expenses de ON dc.day = de.day
-			ORDER BY dc.day
+				c.day_number::int AS day,
+				SUM(COALESCE(de.daily_amount, 0)) OVER (ORDER BY c.day_number) AS amount
+			FROM calendar c
+			LEFT JOIN daily_expenses de ON c.day = de.day
+			ORDER BY c.day_number
 		)
 		SELECT day, amount FROM running_totals
-	`, from, from, to, from, to).Scan(&result)
+	`, from, to, from, from, to).Scan(&result).Error
+
+	if err != nil {
+		return nil, err
+	}
 
 	return result, nil
 }

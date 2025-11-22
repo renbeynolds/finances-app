@@ -3,6 +3,7 @@ import { TransactionFilters } from "./context/TransactionFiltersContext";
 import { AmountOverTime } from "./data/AmountOverTime";
 import { AmountVsAverage } from "./data/AmountVsAverage";
 import { CurrentNetWorth } from "./data/CurrentNetWorth";
+import { ExpensesOverTime } from "./data/ExpensesOverTime";
 import { IncomeVsExpense } from "./data/IncomeVsExpense";
 import { Response } from "./data/Response";
 import { Transaction } from "./data/Transaction";
@@ -16,6 +17,8 @@ export const CategoryOverTimeEndpoint = (
 export const NetWorthOverTimeEndpoint = (from: string, to: string) =>
   `/api/trends/net_worth_over_time?from=${from}&to=${to}`;
 export const CurrentNetWorthEndpoint = () => `/api/trends/net_worth`;
+export const ExpensesOverTimeEndpoint = (from: string, to: string) =>
+  `/api/trends/expenses_over_time?from=${from}&to=${to}`;
 export const AccountBalanceOverTimeEndpoint = (
   accountId: string,
   from: string,
@@ -34,6 +37,11 @@ export const AmountOverTimeFetcher: Fetcher<
 
 export const CurrentNetWorthFetcher: Fetcher<
   Response<CurrentNetWorth>,
+  string
+> = (url) => fetch(url).then((res) => res.json());
+
+export const ExpensesOverTimeFetcher: Fetcher<
+  Response<ExpensesOverTime[]>,
   string
 > = (url) => fetch(url).then((res) => res.json());
 
