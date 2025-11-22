@@ -151,7 +151,7 @@ func (r *trendsRepository) GetExpensesOverTime(ctx context.Context, tx *gorm.DB,
 		WITH daily_expenses AS (
 			SELECT
 				DATE_TRUNC('day', t.date) AS day,
-				SUM(ABS(t.amount)) AS daily_amount
+				ABS(SUM(t.amount)) AS daily_amount
 			FROM transactions t
 			LEFT JOIN categories cat ON t.category_id = cat.id
 			WHERE cat.type = 'expense' 
