@@ -1,3 +1,4 @@
+import { BarChart } from "@mantine/charts";
 import {
   ActionIcon,
   Grid,
@@ -6,6 +7,7 @@ import {
   Paper,
   Stack,
   Title,
+  useMantineTheme,
 } from "@mantine/core";
 import { IconEdit } from "@tabler/icons-react";
 import dayjs from "dayjs";
@@ -21,7 +23,7 @@ import {
   AmountOverTimeFetcher,
   CategoryOverTimeEndpoint,
 } from "../../Fetchers";
-import { MoneyInputToCents } from "../../utils";
+import { FormatMoney, FormatMonthString, MoneyInputToCents } from "../../utils";
 import AmountOverTimeChart from "../AmountOverTimeChart";
 import MoneyInput from "../MoneyInput";
 import TransactionTable from "../TransactionTable";
@@ -36,6 +38,7 @@ export default function CategoryView() {
   const [budget, setBudget] = React.useState<string>(
     category?.budget ? (category.budget / 100).toString() : "0"
   );
+  const theme = useMantineTheme();
 
   const startDate = dayjs()
     .startOf("month")
@@ -65,6 +68,30 @@ export default function CategoryView() {
     }
   };
 
+  // Prepare data for the last 3 months stacked bar chart
+  const getBarChartData = () => {
+    if (!categoryOverTimeResponse.data?.data) return [];
+
+    const budgetAmount = category?.budget ? category.budget : 0;
+
+    return categoryOverTimeResponse.data.data
+      .slice(-4)
+      .reverse() // Reverse to show most recent month on top
+      .map((item) => {
+        const spentAmount = Math.abs(item.amount);
+        const withinBudget = Math.min(spentAmount, budgetAmount);
+        const savings = Math.max(0, budgetAmount - spentAmount);
+        const overspend = Math.max(0, spentAmount - budgetAmount);
+
+        return {
+          month: FormatMonthString(item.date),
+          withinBudget,
+          savings,
+          overspend,
+        };
+      });
+  };
+
   return (
     <>
       <Stack>
@@ -89,7 +116,7 @@ export default function CategoryView() {
             />
           </Grid.Col>
           <Grid.Col span={4}>
-            <Paper p={"md"} h={"100%"}>
+            <Paper p={"sm"} h={"100%"}>
               <Stack>
                 <Title order={3}>Budget</Title>
                 <MoneyInput
@@ -97,6 +124,73 @@ export default function CategoryView() {
                   onBlur={handleBudgetChange}
                   value={budget}
                 />
+                {budget && parseFloat(budget) > 0 && (
+                  <>
+                    <Title order={4} size="sm" mt="sm">
+                      Last 4 Months Spending
+                    </Title>
+                    <BarChart
+                      h={200}
+                      data={getBarChartData()}
+                      dataKey="month"
+                      series={[
+                        {
+                          name: "withinBudget",
+                          color: theme.colors.blue[6],
+                          label: "Within Budget",
+                        },
+                        {
+                          name: "savings",
+                          color: theme.colors.green[6],
+                          label: "Savings",
+                        },
+                        {
+                          name: "overspend",
+                          color: theme.colors.red[6],
+                          label: "Overspend",
+                        },
+                      ]}
+                      barProps={{ barSize: 20 }}
+                      withTooltip
+                      orientation="vertical"
+                      type="stacked"
+                      xAxisProps={{
+                        tickFormatter: (value: number) => FormatMoney(value),
+                      }}
+                      tooltipProps={{
+                        content: ({ payload }) => {
+                          if (payload && payload.length > 0) {
+                            const data = payload[0].payload;
+                            const total = data.withinBudget + data.overspend;
+                            return (
+                              <Paper p="xs" shadow="sm">
+                                <div style={{ fontSize: "14px" }}>
+                                  <div>
+                                    <strong>{data.month}</strong>
+                                  </div>
+                                  <div>Spent: {FormatMoney(total)}</div>
+                                  {data.savings > 0 && (
+                                    <div
+                                      style={{ color: theme.colors.green[6] }}
+                                    >
+                                      Savings: {FormatMoney(data.savings)}
+                                    </div>
+                                  )}
+                                  {data.overspend > 0 && (
+                                    <div style={{ color: theme.colors.red[6] }}>
+                                      Overspend: {FormatMoney(data.overspend)}
+                                    </div>
+                                  )}
+                                </div>
+                              </Paper>
+                            );
+                          }
+                          return null;
+                        },
+                      }}
+                    />
+                  </>
+                )}
               </Stack>
             </Paper>
           </Grid.Col>
