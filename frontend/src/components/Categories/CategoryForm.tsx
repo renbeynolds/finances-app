@@ -10,11 +10,12 @@ import {
 } from "../../data/Categories/requests";
 
 export interface CategoryFormValues {
-  name: string;
-  color: string | null;
-  parentId: number | null;
-  emoji: string | null;
-  type: "expense" | "income" | "transfer";
+  name?: string;
+  color?: string | null;
+  parentId?: number | null;
+  emoji?: string | null;
+  budget?: number | null;
+  type?: "expense" | "income" | "transfer";
 }
 
 type CategoryFormProps = {

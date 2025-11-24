@@ -1,7 +1,8 @@
-import { Button, NumberInput, Stack } from '@mantine/core';
-import { IconX } from '@tabler/icons-react';
-import * as React from 'react';
-import { TransactionFiltersAction } from '../context/TransactionFiltersContext';
+import { Button, Stack } from "@mantine/core";
+import { IconX } from "@tabler/icons-react";
+import * as React from "react";
+import { TransactionFiltersAction } from "../context/TransactionFiltersContext";
+import MoneyInput from "./MoneyInput";
 
 type TransactionTableAmountFilterProps = {
   amountFilter: [number | undefined, number | undefined];
@@ -19,66 +20,62 @@ export default function TransactionTableAmountFilter({
 
   const enterFunction = React.useCallback(
     (event: KeyboardEvent) => {
-      if (event.key === 'Enter' && dispatchTransactionFilters) {
+      if (event.key === "Enter" && dispatchTransactionFilters) {
         dispatchTransactionFilters({
-          type: 'SET_AMOUNT_FILTER',
+          type: "SET_AMOUNT_FILTER",
           payload: amountValues,
         });
         close();
       }
     },
-    [close, dispatchTransactionFilters, amountValues],
+    [close, dispatchTransactionFilters, amountValues]
   );
 
   React.useEffect(() => {
-    document.addEventListener('keypress', enterFunction);
+    document.addEventListener("keypress", enterFunction);
     return () => {
-      document.removeEventListener('keypress', enterFunction);
+      document.removeEventListener("keypress", enterFunction);
     };
   }, [enterFunction]);
 
   return (
     <Stack>
-      <NumberInput
-        label='Min'
-        prefix='$'
-        allowDecimal={false}
-        placeholder='$0'
+      <MoneyInput
+        label="Min"
         value={amountValues[0]}
+        allowDecimal={false}
         onChange={(value) => {
-          const newFilterValue = value === '' ? undefined : Number(value);
+          const newFilterValue = value === "" ? undefined : Number(value);
           setAmountValues([newFilterValue, amountValues[1]]);
         }}
         onBlur={() => {
           dispatchTransactionFilters!({
-            type: 'SET_AMOUNT_FILTER',
+            type: "SET_AMOUNT_FILTER",
             payload: amountValues,
           });
         }}
       />
-      <NumberInput
-        label='Max'
-        prefix='$'
-        allowDecimal={false}
-        placeholder='$0'
+      <MoneyInput
+        label="Max"
         value={amountValues[1]}
+        allowDecimal={false}
         onChange={(value) => {
-          const newFilterValue = value === '' ? undefined : Number(value);
+          const newFilterValue = value === "" ? undefined : Number(value);
           setAmountValues([amountValues[0], newFilterValue]);
         }}
         onBlur={() => {
           dispatchTransactionFilters!({
-            type: 'SET_AMOUNT_FILTER',
+            type: "SET_AMOUNT_FILTER",
             payload: amountValues,
           });
         }}
       />
       <Button
-        variant='light'
+        variant="light"
         leftSection={<IconX size={14} />}
         onClick={() => {
           dispatchTransactionFilters!({
-            type: 'SET_AMOUNT_FILTER',
+            type: "SET_AMOUNT_FILTER",
             payload: [undefined, undefined],
           });
           close();

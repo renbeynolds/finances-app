@@ -5,6 +5,7 @@ export type Category = {
   color: string | undefined;
   emoji: string | undefined;
   parentCategoryId: number | undefined;
+  budget: number | undefined;
 };
 
 export type CategoriesOverTime = {
