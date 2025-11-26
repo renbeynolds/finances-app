@@ -4,6 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/renbeynolds/finances-app/middlewares"
 	"github.com/renbeynolds/finances-app/modules/banking"
+	"github.com/renbeynolds/finances-app/modules/budgets"
 	"github.com/renbeynolds/finances-app/modules/categories"
 	"github.com/renbeynolds/finances-app/modules/investments"
 	"github.com/renbeynolds/finances-app/modules/snapshot"
@@ -24,6 +25,7 @@ func MakeServer(opts ServerOpts) *gin.Engine {
 	server := gin.Default()
 	server.Use(middlewares.CORSMiddleware())
 	banking.RegisterRoutes(server, injector)
+	budgets.RegisterRoutes(server, injector)
 	investments.RegisterRoutes(server, injector)
 	uploads.RegisterRoutes(server, injector)
 	categories.RegisterRoutes(server, injector)
