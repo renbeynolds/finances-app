@@ -58,6 +58,7 @@ func setupInMemoryDatabaseConnection() *gorm.DB {
 
 	if err := db.AutoMigrate(
 		&entities.BankAccount{},
+		&entities.Budget{},
 		&entities.Category{},
 		&entities.InvestmentAccountBalance{},
 		&entities.InvestmentAccount{},

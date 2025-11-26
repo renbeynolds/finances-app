@@ -87,9 +87,6 @@ func (s *categoryService) UpdateCategory(ctx context.Context, req dto.UpdateCate
 	if req.ParentCategoryID != nil {
 		category.ParentCategoryID = req.ParentCategoryID
 	}
-	if req.Budget != nil {
-		category.Budget = req.Budget
-	}
 
 	updatedCategory, err := s.categoryRepository.UpdateCategory(ctx, s.db, category)
 	if err != nil {
@@ -130,6 +127,5 @@ func entityToResponse(category entities.Category) dto.CategoryResponse {
 		Emoji:            emoji,
 		Type:             category.Type,
 		ParentCategoryID: category.ParentCategoryID,
-		Budget:           category.Budget,
 	}
 }

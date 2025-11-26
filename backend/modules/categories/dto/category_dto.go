@@ -32,7 +32,6 @@ type (
 		Emoji            *string `json:"emoji"`
 		Type             *string `json:"type" validate:"omitempty,oneof=income expense transfer"`
 		ParentCategoryID *uint   `json:"parentCategoryId"`
-		Budget           *int64  `json:"budget"`
 	}
 
 	CategoryResponse struct {
@@ -42,7 +41,6 @@ type (
 		Emoji            string `json:"emoji"`
 		Type             string `json:"type"`
 		ParentCategoryID *uint  `json:"parentCategoryId"`
-		Budget           *int64 `json:"budget"`
 	}
 
 	TopSpendingCategoryResponse struct {
