@@ -19,7 +19,7 @@ import {
   UseLazyCategories,
 } from "../../context/CategoriesContext";
 import { useBudget } from "../../data/Budgets/hooks";
-import { requestUpdateCategory } from "../../data/Categories/requests";
+import { requestUpdateBudget } from "../../data/Budgets/requests";
 import {
   AmountOverTimeFetcher,
   CategoryOverTimeEndpoint,
@@ -36,13 +36,10 @@ export default function CategoryView() {
   const category = categories.find((c) => c.id === parseInt(categoryId || ""));
   const [editModalOpened, setEditModalOpened] = React.useState(false);
   const dispatch = UseCategoriesDispatch();
-  const [budget, setBudget] = React.useState<string>(
-    category?.budget ? (category.budget / 100).toString() : "0"
-  );
+  const [budgetAmount, setBudgetAmount] = React.useState<string>("0");
   const theme = useMantineTheme();
 
-  const { budget: foo } = useBudget(5);
-  console.log("Budget", foo);
+  const { budget } = useBudget(category?.budgetId);
 
   const startDate = dayjs()
     .startOf("month")
@@ -59,15 +56,17 @@ export default function CategoryView() {
   );
 
   React.useEffect(() => {
-    setBudget(category?.budget ? (category.budget / 100).toString() : "0");
-  }, [category, setBudget]);
+    setBudgetAmount(
+      budget && budget.amount ? (budget.amount / 100).toString() : "0"
+    );
+  }, [budget]);
 
   const handleBudgetChange = async () => {
-    const response = await requestUpdateCategory(Number(categoryId!), {
-      budget: MoneyInputToCents(budget),
-    });
+    const response = await requestUpdateBudget(
+      budget?.id || 0,
+      MoneyInputToCents(budgetAmount)
+    );
     if (response.success) {
-      dispatch({ type: "UPDATE", payload: response.data });
       close();
     }
   };
@@ -76,16 +75,18 @@ export default function CategoryView() {
   const getBarChartData = () => {
     if (!categoryOverTimeResponse.data?.data) return [];
 
-    const budgetAmount = category?.budget ? category.budget : 0;
+    const budgetAmountCents = MoneyInputToCents(
+      budget && budget.amount ? (budget.amount / 100).toString() : "0"
+    );
 
     return categoryOverTimeResponse.data.data
       .slice(-4)
       .reverse() // Reverse to show most recent month on top
       .map((item) => {
         const spentAmount = Math.abs(item.amount);
-        const withinBudget = Math.min(spentAmount, budgetAmount);
-        const savings = Math.max(0, budgetAmount - spentAmount);
-        const overspend = Math.max(0, spentAmount - budgetAmount);
+        const withinBudget = Math.min(spentAmount, budgetAmountCents);
+        const savings = Math.max(0, budgetAmountCents - spentAmount);
+        const overspend = Math.max(0, spentAmount - budgetAmountCents);
 
         return {
           month: FormatMonthString(item.date),
@@ -124,11 +125,11 @@ export default function CategoryView() {
               <Stack>
                 <Title order={3}>Budget</Title>
                 <MoneyInput
-                  onChange={(value) => setBudget(value.toString())}
+                  onChange={(value) => setBudgetAmount(value.toString())}
                   onBlur={handleBudgetChange}
-                  value={budget}
+                  value={budgetAmount}
                 />
-                {budget && parseFloat(budget) > 0 && (
+                {budget && parseFloat(budgetAmount) > 0 && (
                   <>
                     <Title order={4} size="sm" mt="sm">
                       Last 4 Months Spending

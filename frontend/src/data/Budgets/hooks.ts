@@ -1,7 +1,7 @@
 import useSWR from "swr";
 import { BudgetFetcher } from "./fetchers";
 
-export const useBudget = (budgetId: number) => {
+export const useBudget = (budgetId?: number) => {
   const { data, error, isLoading } = useSWR(
     budgetId ? `/api/budgets/${budgetId}` : null,
     BudgetFetcher
