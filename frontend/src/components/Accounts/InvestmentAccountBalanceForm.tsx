@@ -1,9 +1,10 @@
-import { Button, NumberInput, Stack } from '@mantine/core';
-import { DatePickerInput } from '@mantine/dates';
-import { useForm } from '@mantine/form';
-import { requestRecordInvestmentAccountBalance } from '../../data/InvestmentAccounts/requests';
+import { Button, NumberInput, Stack } from "@mantine/core";
+import { DatePickerInput } from "@mantine/dates";
+import { useForm } from "@mantine/form";
+import { requestRecordInvestmentAccountBalance } from "../../data/InvestmentAccounts/requests";
 
 export interface InvestmentAccountBalanceFormValues {
+  investmentAccountId: number;
   balance: number;
   date: Date | null;
 }
@@ -19,6 +20,7 @@ export default function InvestmentAccountBalanceForm({
 }: InvestmentAccountBalanceFormProps) {
   const form = useForm<InvestmentAccountBalanceFormValues>({
     initialValues: {
+      investmentAccountId,
       balance: 0.0,
       date: new Date(),
     },
@@ -26,7 +28,7 @@ export default function InvestmentAccountBalanceForm({
   });
 
   const handleSubmit = async (values: InvestmentAccountBalanceFormValues) => {
-    requestRecordInvestmentAccountBalance(investmentAccountId, values);
+    requestRecordInvestmentAccountBalance(values);
     close();
   };
 
@@ -34,19 +36,19 @@ export default function InvestmentAccountBalanceForm({
     <form onSubmit={form.onSubmit((values) => handleSubmit(values))}>
       <Stack>
         <DatePickerInput
-          {...form.getInputProps('date')}
-          placeholder='Select Date'
+          {...form.getInputProps("date")}
+          placeholder="Select Date"
           maxDate={new Date()}
         />
         <NumberInput
-          {...form.getInputProps('balance')}
-          placeholder='Balance'
-          label='Balance'
+          {...form.getInputProps("balance")}
+          placeholder="Balance"
+          label="Balance"
           decimalScale={2}
           fixedDecimalScale
-          prefix='$'
+          prefix="$"
         />
-        <Button type='submit' loading={form.submitting}>
+        <Button type="submit" loading={form.submitting}>
           Submit
         </Button>
       </Stack>

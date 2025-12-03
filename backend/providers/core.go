@@ -11,6 +11,9 @@ import (
 	categoryController "github.com/renbeynolds/finances-app/modules/categories/controller"
 	categoryRepository "github.com/renbeynolds/finances-app/modules/categories/repository"
 	categoryService "github.com/renbeynolds/finances-app/modules/categories/service"
+	investmentBalanceController "github.com/renbeynolds/finances-app/modules/investmentbalance/controller"
+	investmentBalanceRepository "github.com/renbeynolds/finances-app/modules/investmentbalance/repository"
+	investmentBalanceService "github.com/renbeynolds/finances-app/modules/investmentbalance/service"
 	investmentAccountController "github.com/renbeynolds/finances-app/modules/investments/controller"
 	investmentAccountRepository "github.com/renbeynolds/finances-app/modules/investments/repository"
 	investmentAccountService "github.com/renbeynolds/finances-app/modules/investments/service"
@@ -56,6 +59,9 @@ func RegisterDependencies(injector do.Injector, dbType string) {
 	investmentAccountRepository := investmentAccountRepository.NewInvestmentAccountRepository(db)
 	investmentAccountService := investmentAccountService.NewInvestmentAccountService(investmentAccountRepository, db)
 
+	investmentBalanceRepository := investmentBalanceRepository.NewInvestmentBalanceRepository(db)
+	investmentBalanceService := investmentBalanceService.NewInvestmentBalanceService(investmentBalanceRepository, db)
+
 	uploadRepository := uploadRepository.NewUploadRepository(db)
 	uploadService := uploadService.NewUploadService(uploadRepository, bankAccountRepository, categoryRepository, transactionRepository, db)
 
@@ -78,6 +84,11 @@ func RegisterDependencies(injector do.Injector, dbType string) {
 	do.Provide(
 		injector, func(i do.Injector) (investmentAccountController.InvestmentAccountController, error) {
 			return investmentAccountController.NewInvestmentAccountController(i, investmentAccountService), nil
+		},
+	)
+	do.Provide(
+		injector, func(i do.Injector) (investmentBalanceController.InvestmentBalanceController, error) {
+			return investmentBalanceController.NewInvestmentBalanceController(i, investmentBalanceService), nil
 		},
 	)
 	do.Provide(

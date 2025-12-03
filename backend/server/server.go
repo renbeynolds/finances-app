@@ -6,6 +6,7 @@ import (
 	"github.com/renbeynolds/finances-app/modules/banking"
 	"github.com/renbeynolds/finances-app/modules/budgets"
 	"github.com/renbeynolds/finances-app/modules/categories"
+	"github.com/renbeynolds/finances-app/modules/investmentbalance"
 	"github.com/renbeynolds/finances-app/modules/investments"
 	"github.com/renbeynolds/finances-app/modules/snapshot"
 	"github.com/renbeynolds/finances-app/modules/transactions"
@@ -27,6 +28,7 @@ func MakeServer(opts ServerOpts) *gin.Engine {
 	banking.RegisterRoutes(server, injector)
 	budgets.RegisterRoutes(server, injector)
 	investments.RegisterRoutes(server, injector)
+	investmentbalance.RegisterRoutes(server, injector)
 	uploads.RegisterRoutes(server, injector)
 	categories.RegisterRoutes(server, injector)
 	transactions.RegisterRoutes(server, injector)
