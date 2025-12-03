@@ -18,6 +18,7 @@ import {
   UseCategoriesDispatch,
   UseLazyCategories,
 } from "../../context/CategoriesContext";
+import { useBudget } from "../../data/Budgets/hooks";
 import { requestUpdateCategory } from "../../data/Categories/requests";
 import {
   AmountOverTimeFetcher,
@@ -39,6 +40,9 @@ export default function CategoryView() {
     category?.budget ? (category.budget / 100).toString() : "0"
   );
   const theme = useMantineTheme();
+
+  const { budget: foo } = useBudget(5);
+  console.log("Budget", foo);
 
   const startDate = dayjs()
     .startOf("month")

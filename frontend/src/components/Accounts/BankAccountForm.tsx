@@ -1,9 +1,9 @@
-import { Button, Stack, TextInput } from '@mantine/core';
-import { useForm } from '@mantine/form';
+import { Button, Stack, TextInput } from "@mantine/core";
+import { useForm } from "@mantine/form";
 import {
   requestCreateBankAccount,
   requestUpdateBankAccount,
-} from '../../data/BankAccounts/requests';
+} from "../../data/BankAccounts/requests";
 
 export interface BankAccountFormValues {
   name: string;
@@ -30,12 +30,12 @@ export default function BankAccountForm({
   const handleSubmit = async (values: BankAccountFormValues) => {
     if (!bankAccount) {
       const response = await requestCreateBankAccount(values);
-      if (response.code === 200) {
+      if (response.success) {
         close();
       }
     } else {
       const response = await requestUpdateBankAccount(bankAccount.id, values);
-      if (response.code === 200) {
+      if (response.success) {
         close();
       }
     }
@@ -45,31 +45,31 @@ export default function BankAccountForm({
     <form onSubmit={form.onSubmit((values) => handleSubmit(values))}>
       <Stack>
         <TextInput
-          {...form.getInputProps('name')}
-          placeholder='Name'
-          label='Name'
+          {...form.getInputProps("name")}
+          placeholder="Name"
+          label="Name"
         />
         <TextInput
-          {...form.getInputProps('dateHeader')}
-          placeholder='Date Header'
-          label='Date Header'
+          {...form.getInputProps("dateHeader")}
+          placeholder="Date Header"
+          label="Date Header"
         />
         <TextInput
-          {...form.getInputProps('descriptionHeader')}
-          placeholder='Description Header'
-          label='Description Header'
+          {...form.getInputProps("descriptionHeader")}
+          placeholder="Description Header"
+          label="Description Header"
         />
         <TextInput
-          {...form.getInputProps('amountExpression')}
-          placeholder='Amount Expression'
-          label='Amount Expression'
+          {...form.getInputProps("amountExpression")}
+          placeholder="Amount Expression"
+          label="Amount Expression"
         />
         <TextInput
-          {...form.getInputProps('loginUrl')}
-          placeholder='Login URL'
-          label='Login URL'
+          {...form.getInputProps("loginUrl")}
+          placeholder="Login URL"
+          label="Login URL"
         />
-        <Button type='submit' loading={form.submitting}>
+        <Button type="submit" loading={form.submitting}>
           Submit
         </Button>
       </Stack>
