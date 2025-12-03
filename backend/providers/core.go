@@ -60,7 +60,7 @@ func RegisterDependencies(injector do.Injector, dbType string) {
 	investmentAccountService := investmentAccountService.NewInvestmentAccountService(investmentAccountRepository, db)
 
 	investmentBalanceRepository := investmentBalanceRepository.NewInvestmentBalanceRepository(db)
-	investmentBalanceService := investmentBalanceService.NewInvestmentBalanceService(investmentBalanceRepository, db)
+	investmentBalanceService := investmentBalanceService.NewInvestmentBalanceService(investmentBalanceRepository, investmentAccountRepository, db)
 
 	uploadRepository := uploadRepository.NewUploadRepository(db)
 	uploadService := uploadService.NewUploadService(uploadRepository, bankAccountRepository, categoryRepository, transactionRepository, db)
