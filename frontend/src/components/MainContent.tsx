@@ -1,7 +1,7 @@
 import { Route, Routes } from "react-router";
 import BankAccountView from "./Accounts/BankAccountView";
 import InvestmentAccountView from "./Accounts/InvestmentAccountView";
-import Budgeting from "./Budgeting";
+import BudgetsView from "./Budgets/BudgetsView";
 import CategoryView from "./Categories/CategoryView";
 import Explore from "./Explore";
 import Snapshot from "./Snapshot";
@@ -22,7 +22,7 @@ export default function MainContent() {
       />
       <Route path="/uploads/:uploadId" element={<UploadView />} />
       <Route path="/categories/:categoryId" element={<CategoryView />} />
-      <Route path="/budgeting" element={<Budgeting />} />
+      <Route path="/budgeting" element={<BudgetsView />} />
     </Routes>
   );
 }
