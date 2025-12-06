@@ -1,13 +1,13 @@
 import { Accordion, Group, Paper, Stack, Table, Text, Title } from "@mantine/core";
 import { IconCurrencyDollarOff, IconMoneybag } from "@tabler/icons-react";
-import { useBudgetsWithCategories } from "../../data/Budgets/hooks";
-import { BudgetWithCategory } from "../../data/Budgets/types";
+import { useBudgetsViewData } from "../../data/Budgets/hooks";
+import { BudgetWithCategoryAndActual } from "../../data/Budgets/types";
 import { FormatMoney } from "../../utils";
 import MonthPicker from "../MonthPicker";
 
 export default function BudgetsView() {
 
-  const { budgets, budgetsLoading, budgetsError } = useBudgetsWithCategories();
+  const { budgets, budgetsLoading, budgetsError } = useBudgetsViewData();
 
   if (budgetsLoading) {
     return <div>Loading budgets...</div>;
@@ -17,8 +17,8 @@ export default function BudgetsView() {
     return <div>Error loading budgets</div>;
   }
 
-  const expenseBudgets = budgets!.filter((budget) => budget.category.type === "expense");
-  const incomeBudgets = budgets!.filter((budget) => budget.category.type === "income");
+  const expenseBudgets = budgets!.filter((budget) => budget.category.type === "expense").sort((a, b) => a.category.name.localeCompare(b.category.name));
+  const incomeBudgets = budgets!.filter((budget) => budget.category.type === "income").sort((a, b) => a.category.name.localeCompare(b.category.name));
   
   return (
     <Stack>
@@ -59,7 +59,7 @@ export default function BudgetsView() {
   );
 }
 
-function IncomeAccordionPanel({ budgets }: { budgets: BudgetWithCategory[] }) {
+function IncomeAccordionPanel({ budgets }: { budgets: BudgetWithCategoryAndActual[] }) {
   return (
     <Accordion.Panel>
       {
@@ -71,7 +71,7 @@ function IncomeAccordionPanel({ budgets }: { budgets: BudgetWithCategory[] }) {
   )
 }
 
-function ExpensesAccordionPanel({ budgets }: { budgets: BudgetWithCategory[] }) {
+function ExpensesAccordionPanel({ budgets }: { budgets: BudgetWithCategoryAndActual[] }) {
   return (
     <Accordion.Panel>
     <Table ml="28px">
@@ -79,6 +79,7 @@ function ExpensesAccordionPanel({ budgets }: { budgets: BudgetWithCategory[] }) 
         <Table.Tr>
           <Table.Th>Category</Table.Th>
           <Table.Th>Budget</Table.Th>
+          <Table.Th>Actual</Table.Th>
         </Table.Tr>
       </Table.Thead>
       <Table.Tbody>
@@ -86,7 +87,8 @@ function ExpensesAccordionPanel({ budgets }: { budgets: BudgetWithCategory[] }) 
           budgets.map((budget) => (
             <Table.Tr key={budget.id}>
               <Table.Td w="20.3%">{budget.category.name}</Table.Td>
-              <Table.Td>{FormatMoney(budget.amount)}</Table.Td>
+              <Table.Td w="20%">{FormatMoney(budget.amount)}</Table.Td>
+              <Table.Td>{FormatMoney(budget.actual)}</Table.Td>
             </Table.Tr>
           ))
         }

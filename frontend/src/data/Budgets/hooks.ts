@@ -1,7 +1,10 @@
+import dayjs from "dayjs";
+import { useContext } from "react";
 import useSWR from "swr";
+import { TransactionFiltersContext } from "../../context/TransactionFiltersContext";
 import { useCategories } from "../Categories/hooks";
-import { BudgetFetcher, BudgetsFetcher } from "./fetchers";
-import { BudgetWithCategory } from "./types";
+import { BudgetActualsFetcher, BudgetFetcher, BudgetsFetcher } from "./fetchers";
+import { BudgetWithCategoryAndActual } from "./types";
 
 export const useBudget = (budgetId?: number) => {
   const { data, error, isLoading, mutate } = useSWR(
@@ -29,11 +32,28 @@ export const useBudgets = () => {
   };
 };
 
-export const useBudgetsWithCategories = (): { budgets: BudgetWithCategory[] | null; budgetsLoading: boolean; budgetsError: any } => {
+export const useBudgetActuals = (month: string) => {
+  const { data, error, isLoading, mutate } = useSWR(
+    `/api/budgets/actuals?month=${month}`,
+    BudgetActualsFetcher
+  );
+  return {
+    budgetActuals: data ? data.data : null,
+    budgetActualsLoading: isLoading,
+    budgetActualsError: error,
+    budgetActualsMutate: mutate,
+  };
+};
+
+export const useBudgetsViewData = (): { budgets: BudgetWithCategoryAndActual[] | null; budgetsLoading: boolean; budgetsError: any } => {
+
+  const transactionFilters = useContext(TransactionFiltersContext);
+
   const { budgets, budgetsLoading, budgetsError } = useBudgets();
+  const { budgetActuals, budgetActualsLoading, budgetActualsError } = useBudgetActuals(dayjs(transactionFilters.Date[0]).format("YYYY-MM"));
   const { categories, categoriesLoading, categoriesError } = useCategories();
 
-  if (budgetsLoading || categoriesLoading) {
+  if (budgetsLoading || categoriesLoading || budgetActualsLoading) {
     return {
       budgets: null,
       budgetsLoading: true,
@@ -41,24 +61,28 @@ export const useBudgetsWithCategories = (): { budgets: BudgetWithCategory[] | nu
     };
   }
 
-  if (budgetsError || categoriesError) {
+  if (budgetsError || categoriesError || budgetActualsError) {
     return {
       budgets: null,
       budgetsLoading: false,
-      budgetsError: budgetsError || categoriesError,
+      budgetsError: budgetsError || categoriesError || budgetActualsError,
     };
   }
 
-  const budgetsWithCategories = budgets!.map((budget) => {
+  console.log(budgetActuals)
+
+  const budgetsData = budgets!.map((budget) => {
     const category = categories!.find((category) => category.id === budget.categoryId);
+    const budgetActual = budgetActuals!.find((budgetActual) => budgetActual.budgetId === budget.id);
     return {
       ...budget,
       category: category!,
+      actual: budgetActual!.amount,
     };
   });
 
   return {
-    budgets: budgetsWithCategories,
+    budgets: budgetsData,
     budgetsLoading: false,
     budgetsError: null,
   };

@@ -7,6 +7,13 @@ export type Budget = {
   categoryName: string;
 };
 
-export type BudgetWithCategory = Budget & {
+export type BudgetWithCategoryAndActual = Budget & {
   category: Category;
+  actual: number;
+};
+
+export type BudgetActual = {
+  budgetId: number;
+  categoryId: number;
+  amount: number;
 };

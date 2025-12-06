@@ -90,7 +90,7 @@ func (r *budgetRepository) GetBudgetActuals(ctx context.Context, tx *gorm.DB, st
 		SELECT 
 			budgets.id as budget_id, 
 			budgets.category_id, 
-			COALESCE(SUM(transactions.amount), 0) as amount
+			ABS(COALESCE(SUM(transactions.amount), 0)) as amount
 		FROM budgets
 		LEFT JOIN transactions ON 
 			budgets.category_id = transactions.category_id AND 
