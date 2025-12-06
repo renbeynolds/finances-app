@@ -1,4 +1,4 @@
-import { Accordion, Group, Paper, Stack, Table, Text, Title } from "@mantine/core";
+import { Accordion, Box, Group, Paper, Stack, Table, Text } from "@mantine/core";
 import { IconCurrencyDollarOff, IconMoneybag } from "@tabler/icons-react";
 import { useBudgetsViewData } from "../../data/Budgets/hooks";
 import { BudgetWithCategoryAndActual } from "../../data/Budgets/types";
@@ -27,13 +27,18 @@ export default function BudgetsView() {
         <Accordion defaultValue="Expenses">
           <Accordion.Item key={"Income"} value={"Income"}>
             <Accordion.Control icon={<IconMoneybag />}>
-              <Group w="100%">
-                <Text w="20%">Income</Text>
-                <Group>
-                    <Title order={4}>Total</Title>
-                    <Text c="green">{FormatMoney(incomeBudgets.reduce((total, budget) => total + budget.amount, 0))}</Text>
+              <Stack>
+                <Group ml="2rem">
+                  <Text style={{ fontWeight: "bold" }} w="20%">Income</Text>
+                  <Text style={{ fontWeight: "bold" }} w="20%">Budget</Text>
+                  <Text style={{ fontWeight: "bold" }} w="20%">Actual</Text>
                 </Group>
-              </Group>
+                <Group ml="2rem">
+                  <Box w="20%"></Box>
+                  <Text w="20%">{FormatMoney(incomeBudgets.reduce((total, budget) => total + budget.amount, 0))}</Text>
+                  <Text w="20%" c="green">{FormatMoney(incomeBudgets.reduce((total, budget) => total + budget.actual, 0))}</Text>
+                </Group>
+              </Stack>
             </Accordion.Control>
             <IncomeAccordionPanel
               budgets={incomeBudgets}
@@ -41,13 +46,18 @@ export default function BudgetsView() {
           </Accordion.Item>
           <Accordion.Item key={"Expenses"} value={"Expenses"}>
             <Accordion.Control icon={<IconCurrencyDollarOff />}>
-              <Group w="100%">
-                <Text w="20%">Expenses</Text>
-                <Group>
-                    <Title order={4}>Total</Title>
-                    <Text c="red">{FormatMoney(expenseBudgets.reduce((total, budget) => total + budget.amount, 0))}</Text>
+              <Stack>
+                <Group ml="2rem">
+                  <Text style={{ fontWeight: "bold" }} w="20%">Expenses</Text>
+                  <Text style={{ fontWeight: "bold" }} w="20%">Budget</Text>
+                  <Text style={{ fontWeight: "bold" }} w="20%">Actual</Text>
                 </Group>
-              </Group>
+                <Group ml="2rem">
+                  <Box w="20%"></Box>
+                  <Text w="20%">{FormatMoney(expenseBudgets.reduce((total, budget) => total + budget.amount, 0))}</Text>
+                  <Text w="20%" c="red">{FormatMoney(expenseBudgets.reduce((total, budget) => total + budget.actual, 0))}</Text>
+                </Group>
+              </Stack>
             </Accordion.Control>
             <ExpensesAccordionPanel
               budgets={expenseBudgets}
@@ -62,11 +72,19 @@ export default function BudgetsView() {
 function IncomeAccordionPanel({ budgets }: { budgets: BudgetWithCategoryAndActual[] }) {
   return (
     <Accordion.Panel>
-      {
-        budgets.map((budget) => (
-          <div key={budget.id}>{budget.category.name}: {budget.amount}</div>
-        ))
-      }
+      <Table ml="58px">
+        <Table.Tbody>
+          {
+            budgets.map((budget) => (
+              <Table.Tr key={budget.id}>
+                <Table.Td w="20%" style={{ fontWeight: "bold" }}>{budget.category.name}</Table.Td>
+                <Table.Td w="20%">{FormatMoney(budget.amount)}</Table.Td>
+                <Table.Td>{FormatMoney(budget.actual)}</Table.Td>
+              </Table.Tr>
+            ))
+          }
+        </Table.Tbody>
+      </Table>
     </Accordion.Panel>
   )
 }
@@ -74,26 +92,19 @@ function IncomeAccordionPanel({ budgets }: { budgets: BudgetWithCategoryAndActua
 function ExpensesAccordionPanel({ budgets }: { budgets: BudgetWithCategoryAndActual[] }) {
   return (
     <Accordion.Panel>
-    <Table ml="28px">
-      <Table.Thead>
-        <Table.Tr>
-          <Table.Th>Category</Table.Th>
-          <Table.Th>Budget</Table.Th>
-          <Table.Th>Actual</Table.Th>
-        </Table.Tr>
-      </Table.Thead>
-      <Table.Tbody>
-        {
-          budgets.map((budget) => (
-            <Table.Tr key={budget.id}>
-              <Table.Td w="20.3%">{budget.category.name}</Table.Td>
-              <Table.Td w="20%">{FormatMoney(budget.amount)}</Table.Td>
-              <Table.Td>{FormatMoney(budget.actual)}</Table.Td>
-            </Table.Tr>
-          ))
-        }
-      </Table.Tbody>
-    </Table>
+      <Table ml="58px">
+        <Table.Tbody>
+          {
+            budgets.map((budget) => (
+              <Table.Tr key={budget.id}>
+                <Table.Td w="20%" style={{ fontWeight: "bold" }}>{budget.category.name}</Table.Td>
+                <Table.Td w="20%">{FormatMoney(budget.amount)}</Table.Td>
+                <Table.Td>{FormatMoney(budget.actual)}</Table.Td>
+              </Table.Tr>
+            ))
+          }
+        </Table.Tbody>
+      </Table>
     </Accordion.Panel>
   )
 }
