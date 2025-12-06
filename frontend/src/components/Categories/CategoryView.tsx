@@ -62,7 +62,7 @@ export default function CategoryView() {
           <Grid.Col span={4}>
             <BudgetCard
               budgetId={category?.budgetId}
-              categoryId={category?.id}
+              category={category}
               categoryOverTimeResponse={categoryOverTimeResponse}
             />
           </Grid.Col>

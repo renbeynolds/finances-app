@@ -16,6 +16,7 @@ import {
   requestUpdateBudget,
 } from "../../data/Budgets/requests";
 import { Budget } from "../../data/Budgets/types";
+import { Category } from "../../data/Categories/types";
 import { Response } from "../../data/Response";
 import { FormatMoney, FormatMonthString, MoneyInputToCents } from "../../utils";
 import MoneyInput from "../MoneyInput";
@@ -24,13 +25,13 @@ const NUM_MONTHS_TO_DISPLAY = 4;
 
 type BudgetCardProps = {
   budgetId?: number;
-  categoryId?: number;
+  category?: Category;
   categoryOverTimeResponse: SWRResponse<Response<AmountOverTime[]>, any, any>;
 };
 
 export default function BudgetCard({
   budgetId,
-  categoryId,
+  category,
   categoryOverTimeResponse,
 }: BudgetCardProps) {
   const { budget, budgetLoading, budgetError, budgetMutate } =
@@ -48,12 +49,11 @@ export default function BudgetCard({
       ) : budgetError || categoryError ? (
         <ErrorContent />
       ) : !budget ? (
-        <NoBudgetContent
-          categoryId={categoryId}
-        />
+        <NoBudgetContent category={category} />
       ) : (
         <BudgetContent
           budget={budget}
+          category={category}
           categoryOverTimeData={categoryData!.data}
           budgetMutate={budgetMutate}
         />
@@ -61,13 +61,15 @@ export default function BudgetCard({
     </Wrapper>
   );
 }
-``;
+
 function BudgetContent({
   budget,
+  category,
   categoryOverTimeData,
   budgetMutate,
 }: {
   budget: Budget;
+  category?: Category;
   categoryOverTimeData: AmountOverTime[];
   budgetMutate: KeyedMutator<Response<Budget>>;
 }) {
@@ -95,6 +97,8 @@ function BudgetContent({
     }
   }, [budget.id, budgetAmount, budgetMutate]);
 
+  const isIncome = category?.type === "income";
+
   const getBarChartData = () => {
     if (!categoryOverTimeData) return [];
 
@@ -106,19 +110,23 @@ function BudgetContent({
       .slice(-1 * NUM_MONTHS_TO_DISPLAY)
       .reverse() // Reverse to show most recent month on top
       .map((item) => {
-        const spentAmount = Math.abs(item.amount);
-        const withinBudget = Math.min(spentAmount, budgetAmountCents);
-        const savings = Math.max(0, budgetAmountCents - spentAmount);
-        const overspend = Math.max(0, spentAmount - budgetAmountCents);
+        const actual = Math.abs(item.amount);
+        const withinBudget = Math.min(actual, budgetAmountCents);
+
+        let  aboveBudget = Math.max(0, actual - budgetAmountCents);
+        let  belowBudget = Math.max(0, budgetAmountCents - actual);
 
         return {
           month: FormatMonthString(item.date),
           withinBudget,
-          savings,
-          overspend,
+          aboveBudget,
+          belowBudget,
         };
       });
   };
+
+  const goodLabel = isIncome ? "Extra Income" : "Savings";
+  const badLabel = isIncome ? "Under Budget" : "Overspend";
 
   return (
     <Stack>
@@ -131,7 +139,7 @@ function BudgetContent({
       />
 
       <Title order={4} size="sm" mt="sm">
-        Last {NUM_MONTHS_TO_DISPLAY} Months Spending
+        Last {NUM_MONTHS_TO_DISPLAY} Months {isIncome ? "Income" : "Spending"}
       </Title>
       <BarChart
         h={200}
@@ -144,14 +152,14 @@ function BudgetContent({
             label: "Within Budget",
           },
           {
-            name: "savings",
-            color: theme.colors.green[6],
-            label: "Savings",
+            name: "aboveBudget",
+            color: isIncome ? theme.colors.green[6] : theme.colors.red[6],
+            label: isIncome ? goodLabel : badLabel,
           },
           {
-            name: "overspend",
-            color: theme.colors.red[6],
-            label: "Overspend",
+            name: "belowBudget",
+            color: isIncome ? theme.colors.red[6] : theme.colors.green[6],
+            label: isIncome ? badLabel : goodLabel,
           },
         ]}
         barProps={{ barSize: 20 }}
@@ -165,22 +173,27 @@ function BudgetContent({
           content: ({ payload }) => {
             if (payload && payload.length > 0) {
               const data = payload[0].payload;
-              const total = data.withinBudget + data.overspend;
+
+              let actualAmount = data.withinBudget + data.aboveBudget;
+
               return (
                 <Paper p="xs" shadow="sm">
                   <div style={{ fontSize: "14px" }}>
                     <div>
                       <strong>{data.month}</strong>
                     </div>
-                    <div>Spent: {FormatMoney(total)}</div>
-                    {data.savings > 0 && (
-                      <div style={{ color: theme.colors.green[6] }}>
-                        Savings: {FormatMoney(data.savings)}
+                    <div>
+                      {isIncome ? "Earned" : "Spent"}:{" "}
+                      {FormatMoney(actualAmount)}
+                    </div>
+                    {data.aboveBudget > 0 && (
+                      <div style={{ color: isIncome ? theme.colors.green[6] : theme.colors.red[6] }}>
+                        {isIncome ? goodLabel : badLabel}: {FormatMoney(data.aboveBudget)}
                       </div>
                     )}
-                    {data.overspend > 0 && (
-                      <div style={{ color: theme.colors.red[6] }}>
-                        Overspend: {FormatMoney(data.overspend)}
+                    {data.belowBudget > 0 && (
+                      <div style={{ color: isIncome ? theme.colors.red[6] : theme.colors.green[6] }}>
+                        {isIncome ? badLabel : goodLabel}: {FormatMoney(data.belowBudget)}
                       </div>
                     )}
                   </div>
@@ -195,18 +208,14 @@ function BudgetContent({
   );
 }
 
-function NoBudgetContent({
-  categoryId,
-}: {
-  categoryId?: number;
-}) {
+function NoBudgetContent({ category }: { category?: Category }) {
   const [creating, setCreating] = useState(false);
 
   const handleCreateBudget = async () => {
-    if (!categoryId) return;
+    if (!category) return;
 
     setCreating(true);
-    const response = await requestCreateBudget(categoryId);
+    const response = await requestCreateBudget(category.id);
     setCreating(false);
 
     if (response.success) {
@@ -219,7 +228,7 @@ function NoBudgetContent({
       <Button
         loading={creating}
         onClick={handleCreateBudget}
-        disabled={!categoryId}
+        disabled={!category}
       >
         Create Budget
       </Button>
