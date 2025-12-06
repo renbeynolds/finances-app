@@ -11,7 +11,10 @@ import { useCallback, useEffect, useState } from "react";
 import { KeyedMutator, SWRResponse } from "swr";
 import { AmountOverTime } from "../../data/AmountOverTime";
 import { useBudget } from "../../data/Budgets/hooks";
-import { requestUpdateBudget } from "../../data/Budgets/requests";
+import {
+  requestCreateBudget,
+  requestUpdateBudget,
+} from "../../data/Budgets/requests";
 import { Budget } from "../../data/Budgets/types";
 import { Response } from "../../data/Response";
 import { FormatMoney, FormatMonthString, MoneyInputToCents } from "../../utils";
@@ -21,11 +24,13 @@ const NUM_MONTHS_TO_DISPLAY = 4;
 
 type BudgetCardProps = {
   budgetId?: number;
+  categoryId?: number;
   categoryOverTimeResponse: SWRResponse<Response<AmountOverTime[]>, any, any>;
 };
 
 export default function BudgetCard({
   budgetId,
+  categoryId,
   categoryOverTimeResponse,
 }: BudgetCardProps) {
   const { budget, budgetLoading, budgetError, budgetMutate } =
@@ -43,7 +48,9 @@ export default function BudgetCard({
       ) : budgetError || categoryError ? (
         <ErrorContent />
       ) : !budget ? (
-        <NoBudgetContent />
+        <NoBudgetContent
+          categoryId={categoryId}
+        />
       ) : (
         <BudgetContent
           budget={budget}
@@ -188,10 +195,34 @@ function BudgetContent({
   );
 }
 
-function NoBudgetContent() {
+function NoBudgetContent({
+  categoryId,
+}: {
+  categoryId?: number;
+}) {
+  const [creating, setCreating] = useState(false);
+
+  const handleCreateBudget = async () => {
+    if (!categoryId) return;
+
+    setCreating(true);
+    const response = await requestCreateBudget(categoryId);
+    setCreating(false);
+
+    if (response.success) {
+      // todo
+    }
+  };
+
   return (
     <Center h="calc(100% - 60px)">
-      <Button>Create Budget</Button>
+      <Button
+        loading={creating}
+        onClick={handleCreateBudget}
+        disabled={!categoryId}
+      >
+        Create Budget
+      </Button>
     </Center>
   );
 }

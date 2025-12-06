@@ -4,7 +4,9 @@ import dayjs from "dayjs";
 import React from "react";
 import { useParams } from "react-router";
 import useSWR from "swr";
-import { UseLazyCategories } from "../../context/CategoriesContext";
+import {
+  UseLazyCategories
+} from "../../context/CategoriesContext";
 import {
   AmountOverTimeFetcher,
   CategoryOverTimeEndpoint,
@@ -60,6 +62,7 @@ export default function CategoryView() {
           <Grid.Col span={4}>
             <BudgetCard
               budgetId={category?.budgetId}
+              categoryId={category?.id}
               categoryOverTimeResponse={categoryOverTimeResponse}
             />
           </Grid.Col>

@@ -13,3 +13,15 @@ export const requestUpdateBudget = async (
     }),
   }).then((response) => response.json());
 };
+
+export const requestCreateBudget = async (
+  categoryId: number
+): Promise<Response<Budget>> => {
+  return fetch(`/api/budgets`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      categoryId,
+    }),
+  }).then((response) => response.json());
+};
