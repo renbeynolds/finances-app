@@ -12,6 +12,9 @@ const (
 
 	MESSAGE_FAILED_GET_ALL_BUDGETS  = "failed get all budgets"
 	MESSAGE_SUCCESS_GET_ALL_BUDGETS = "success get all budgets"
+
+	MESSAGE_FAILED_GET_BUDGET_ACTUALS  = "failed get budget actuals"
+	MESSAGE_SUCCESS_GET_BUDGET_ACTUALS = "success get budget actuals"
 )
 
 type (
@@ -27,5 +30,11 @@ type (
 		ID         uint  `json:"id"`
 		Amount     int64 `json:"amount"`
 		CategoryID uint  `json:"categoryId"`
+	}
+
+	BudgetActualResponse struct {
+		BudgetID   uint  `json:"budgetId"`
+		CategoryID uint  `json:"categoryId"`
+		Amount     int64 `json:"amount"`
 	}
 )

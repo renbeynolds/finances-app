@@ -5,6 +5,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/renbeynolds/finances-app/modules/budgets/dto"
+	"github.com/renbeynolds/finances-app/modules/budgets/query"
 	"github.com/renbeynolds/finances-app/modules/budgets/service"
 	"github.com/renbeynolds/finances-app/modules/budgets/validation"
 	"github.com/renbeynolds/finances-app/pkg/constants"
@@ -20,6 +21,7 @@ type (
 		GetBudgetByID(ctx *gin.Context)
 		GetAllBudgets(ctx *gin.Context)
 		UpdateBudget(ctx *gin.Context)
+		GetBudgetActuals(ctx *gin.Context)
 	}
 
 	budgetController struct {
@@ -124,5 +126,24 @@ func (c *budgetController) UpdateBudget(ctx *gin.Context) {
 	}
 
 	res := utils.BuildResponseSuccess(dto.MESSAGE_SUCCESS_UPDATE_BUDGET, budget, nil)
+	ctx.JSON(http.StatusOK, res)
+}
+
+func (c *budgetController) GetBudgetActuals(ctx *gin.Context) {
+	var req query.BudgetActualsQuery
+	if err := ctx.ShouldBindQuery(&req); err != nil {
+		res := utils.BuildResponseFailed(dto.MESSAGE_FAILED_GET_BUDGET_ACTUALS, err.Error())
+		ctx.JSON(http.StatusBadRequest, res)
+		return
+	}
+
+	actuals, err := c.budgetService.GetBudgetActuals(ctx.Request.Context(), req.Month)
+	if err != nil {
+		res := utils.BuildResponseFailed(dto.MESSAGE_FAILED_GET_BUDGET_ACTUALS, err.Error())
+		ctx.JSON(http.StatusBadRequest, res)
+		return
+	}
+
+	res := utils.BuildResponseSuccess(dto.MESSAGE_SUCCESS_GET_BUDGET_ACTUALS, actuals, nil)
 	ctx.JSON(http.StatusOK, res)
 }

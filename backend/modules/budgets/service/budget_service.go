@@ -2,6 +2,7 @@ package service
 
 import (
 	"context"
+	"time"
 
 	"github.com/renbeynolds/finances-app/database/entities"
 	"github.com/renbeynolds/finances-app/modules/budgets/dto"
@@ -14,6 +15,7 @@ type BudgetService interface {
 	GetBudgetByID(ctx context.Context, id uint) (dto.BudgetResponse, error)
 	GetAllBudgets(ctx context.Context) ([]dto.BudgetResponse, error)
 	UpdateBudget(ctx context.Context, req dto.UpdateBudgetRequest, id uint) (dto.BudgetResponse, error)
+	GetBudgetActuals(ctx context.Context, month string) ([]dto.BudgetActualResponse, error)
 }
 
 type budgetService struct {
@@ -86,6 +88,19 @@ func (s *budgetService) UpdateBudget(ctx context.Context, req dto.UpdateBudgetRe
 	}
 
 	return entityToResponse(updatedBudget), nil
+}
+
+func (s *budgetService) GetBudgetActuals(ctx context.Context, month string) ([]dto.BudgetActualResponse, error) {
+	parsedDate, err := time.Parse("2006-01", month)
+	if err != nil {
+		return nil, err
+	}
+
+	// Calculate start and end of the month
+	startOfMonth := parsedDate // Day 1, 00:00:00
+	endOfMonth := startOfMonth.AddDate(0, 1, 0).Add(-time.Nanosecond)
+
+	return s.budgetRepository.GetBudgetActuals(ctx, s.db, startOfMonth, endOfMonth)
 }
 
 func entityToResponse(budget entities.Budget) dto.BudgetResponse {

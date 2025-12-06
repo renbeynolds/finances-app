@@ -1,8 +1,9 @@
-import { Accordion, Group, Paper, Table, Text, Title } from "@mantine/core";
+import { Accordion, Group, Paper, Stack, Table, Text, Title } from "@mantine/core";
 import { IconCurrencyDollarOff, IconMoneybag } from "@tabler/icons-react";
 import { useBudgetsWithCategories } from "../../data/Budgets/hooks";
 import { BudgetWithCategory } from "../../data/Budgets/types";
 import { FormatMoney } from "../../utils";
+import MonthPicker from "../MonthPicker";
 
 export default function BudgetsView() {
 
@@ -20,38 +21,41 @@ export default function BudgetsView() {
   const incomeBudgets = budgets!.filter((budget) => budget.category.type === "income");
   
   return (
-    <Paper>
-      <Accordion defaultValue="Expenses">
-        <Accordion.Item key={"Income"} value={"Income"}>
-          <Accordion.Control icon={<IconMoneybag />}>
-            <Group w="100%">
-              <Text w="20%">Income</Text>
-              <Group>
-                  <Title order={4}>Total</Title>
-                  <Text c="green">{FormatMoney(incomeBudgets.reduce((total, budget) => total + budget.amount, 0))}</Text>
+    <Stack>
+      <MonthPicker />
+      <Paper>
+        <Accordion defaultValue="Expenses">
+          <Accordion.Item key={"Income"} value={"Income"}>
+            <Accordion.Control icon={<IconMoneybag />}>
+              <Group w="100%">
+                <Text w="20%">Income</Text>
+                <Group>
+                    <Title order={4}>Total</Title>
+                    <Text c="green">{FormatMoney(incomeBudgets.reduce((total, budget) => total + budget.amount, 0))}</Text>
+                </Group>
               </Group>
-            </Group>
-          </Accordion.Control>
-          <IncomeAccordionPanel
-            budgets={incomeBudgets}
-          />
-        </Accordion.Item>
-        <Accordion.Item key={"Expenses"} value={"Expenses"}>
-          <Accordion.Control icon={<IconCurrencyDollarOff />}>
-            <Group w="100%">
-              <Text w="20%">Expenses</Text>
-              <Group>
-                  <Title order={4}>Total</Title>
-                  <Text c="red">{FormatMoney(expenseBudgets.reduce((total, budget) => total + budget.amount, 0))}</Text>
+            </Accordion.Control>
+            <IncomeAccordionPanel
+              budgets={incomeBudgets}
+            />
+          </Accordion.Item>
+          <Accordion.Item key={"Expenses"} value={"Expenses"}>
+            <Accordion.Control icon={<IconCurrencyDollarOff />}>
+              <Group w="100%">
+                <Text w="20%">Expenses</Text>
+                <Group>
+                    <Title order={4}>Total</Title>
+                    <Text c="red">{FormatMoney(expenseBudgets.reduce((total, budget) => total + budget.amount, 0))}</Text>
+                </Group>
               </Group>
-            </Group>
-          </Accordion.Control>
-          <ExpensesAccordionPanel
-            budgets={expenseBudgets}
-          />
-        </Accordion.Item>
-      </Accordion>
-    </Paper>
+            </Accordion.Control>
+            <ExpensesAccordionPanel
+              budgets={expenseBudgets}
+            />
+          </Accordion.Item>
+        </Accordion>
+      </Paper>
+    </Stack>
   );
 }
 
@@ -74,7 +78,7 @@ function ExpensesAccordionPanel({ budgets }: { budgets: BudgetWithCategory[] }) 
       <Table.Thead>
         <Table.Tr>
           <Table.Th>Category</Table.Th>
-          <Table.Th>Amount</Table.Th>
+          <Table.Th>Budget</Table.Th>
         </Table.Tr>
       </Table.Thead>
       <Table.Tbody>

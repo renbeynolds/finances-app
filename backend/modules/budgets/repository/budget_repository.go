@@ -2,8 +2,10 @@ package repository
 
 import (
 	"context"
+	"time"
 
 	"github.com/renbeynolds/finances-app/database/entities"
+	"github.com/renbeynolds/finances-app/modules/budgets/dto"
 	"gorm.io/gorm"
 )
 
@@ -13,6 +15,7 @@ type (
 		GetBudgetByID(ctx context.Context, tx *gorm.DB, id uint) (entities.Budget, error)
 		GetAllBudgets(ctx context.Context, tx *gorm.DB) ([]entities.Budget, error)
 		UpdateBudget(ctx context.Context, tx *gorm.DB, budget entities.Budget) (entities.Budget, error)
+		GetBudgetActuals(ctx context.Context, tx *gorm.DB, startTime, endTime time.Time) ([]dto.BudgetActualResponse, error)
 	}
 
 	budgetRepository struct {
@@ -74,4 +77,31 @@ func (r *budgetRepository) GetAllBudgets(ctx context.Context, tx *gorm.DB) ([]en
 	}
 
 	return budgets, nil
+}
+
+func (r *budgetRepository) GetBudgetActuals(ctx context.Context, tx *gorm.DB, startTime, endTime time.Time) ([]dto.BudgetActualResponse, error) {
+	if tx == nil {
+		tx = r.db
+	}
+
+	var results []dto.BudgetActualResponse
+
+	query := `
+		SELECT 
+			budgets.id as budget_id, 
+			budgets.category_id, 
+			COALESCE(SUM(transactions.amount), 0) as amount
+		FROM budgets
+		LEFT JOIN transactions ON 
+			budgets.category_id = transactions.category_id AND 
+			transactions.date >= ? AND 
+			transactions.date <= ?
+		GROUP BY budgets.id, budgets.category_id
+	`
+
+	if err := tx.WithContext(ctx).Raw(query, startTime, endTime).Scan(&results).Error; err != nil {
+		return nil, err
+	}
+
+	return results, nil
 }

@@ -13,6 +13,7 @@ func RegisterRoutes(server *gin.Engine, injector do.Injector) {
 	{
 		budgetRoutes.POST("", budgetController.CreateBudget)
 		budgetRoutes.GET("", budgetController.GetAllBudgets)
+		budgetRoutes.GET("/actuals", budgetController.GetBudgetActuals)
 		budgetRoutes.GET("/:id", budgetController.GetBudgetByID)
 		budgetRoutes.PATCH("/:id", budgetController.UpdateBudget)
 	}
