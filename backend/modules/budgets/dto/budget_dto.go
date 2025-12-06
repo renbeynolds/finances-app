@@ -9,6 +9,9 @@ const (
 
 	MESSAGE_FAILED_UPDATE_BUDGET  = "failed update budget"
 	MESSAGE_SUCCESS_UPDATE_BUDGET = "success update budget"
+
+	MESSAGE_FAILED_GET_ALL_BUDGETS  = "failed get all budgets"
+	MESSAGE_SUCCESS_GET_ALL_BUDGETS = "success get all budgets"
 )
 
 type (

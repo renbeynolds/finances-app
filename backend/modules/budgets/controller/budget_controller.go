@@ -18,6 +18,7 @@ type (
 	BudgetController interface {
 		CreateBudget(ctx *gin.Context)
 		GetBudgetByID(ctx *gin.Context)
+		GetAllBudgets(ctx *gin.Context)
 		UpdateBudget(ctx *gin.Context)
 	}
 
@@ -79,6 +80,18 @@ func (c *budgetController) GetBudgetByID(ctx *gin.Context) {
 	}
 
 	res := utils.BuildResponseSuccess(dto.MESSAGE_SUCCESS_GET_BUDGET, budget, nil)
+	ctx.JSON(http.StatusOK, res)
+}
+
+func (c *budgetController) GetAllBudgets(ctx *gin.Context) {
+	budgets, err := c.budgetService.GetAllBudgets(ctx.Request.Context())
+	if err != nil {
+		res := utils.BuildResponseFailed(dto.MESSAGE_FAILED_GET_ALL_BUDGETS, err.Error())
+		ctx.JSON(http.StatusInternalServerError, res)
+		return
+	}
+
+	res := utils.BuildResponseSuccess(dto.MESSAGE_SUCCESS_GET_ALL_BUDGETS, budgets, nil)
 	ctx.JSON(http.StatusOK, res)
 }
 

@@ -11,6 +11,7 @@ type (
 	BudgetRepository interface {
 		CreateBudget(ctx context.Context, tx *gorm.DB, budget entities.Budget) (entities.Budget, error)
 		GetBudgetByID(ctx context.Context, tx *gorm.DB, id uint) (entities.Budget, error)
+		GetAllBudgets(ctx context.Context, tx *gorm.DB) ([]entities.Budget, error)
 		UpdateBudget(ctx context.Context, tx *gorm.DB, budget entities.Budget) (entities.Budget, error)
 	}
 
@@ -60,4 +61,17 @@ func (r *budgetRepository) UpdateBudget(ctx context.Context, tx *gorm.DB, budget
 	}
 
 	return budget, nil
+}
+
+func (r *budgetRepository) GetAllBudgets(ctx context.Context, tx *gorm.DB) ([]entities.Budget, error) {
+	if tx == nil {
+		tx = r.db
+	}
+
+	var budgets []entities.Budget
+	if err := tx.WithContext(ctx).Find(&budgets).Error; err != nil {
+		return nil, err
+	}
+
+	return budgets, nil
 }

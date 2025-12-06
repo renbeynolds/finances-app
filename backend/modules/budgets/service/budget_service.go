@@ -12,6 +12,7 @@ import (
 type BudgetService interface {
 	CreateBudget(ctx context.Context, req dto.CreateBudgetRequest) (dto.BudgetResponse, error)
 	GetBudgetByID(ctx context.Context, id uint) (dto.BudgetResponse, error)
+	GetAllBudgets(ctx context.Context) ([]dto.BudgetResponse, error)
 	UpdateBudget(ctx context.Context, req dto.UpdateBudgetRequest, id uint) (dto.BudgetResponse, error)
 }
 
@@ -51,6 +52,20 @@ func (s *budgetService) GetBudgetByID(ctx context.Context, id uint) (dto.BudgetR
 	}
 
 	return entityToResponse(budget), nil
+}
+
+func (s *budgetService) GetAllBudgets(ctx context.Context) ([]dto.BudgetResponse, error) {
+	budgets, err := s.budgetRepository.GetAllBudgets(ctx, s.db)
+	if err != nil {
+		return nil, err
+	}
+
+	var budgetResponses []dto.BudgetResponse
+	for _, budget := range budgets {
+		budgetResponses = append(budgetResponses, entityToResponse(budget))
+	}
+
+	return budgetResponses, nil
 }
 
 func (s *budgetService) UpdateBudget(ctx context.Context, req dto.UpdateBudgetRequest, id uint) (dto.BudgetResponse, error) {
