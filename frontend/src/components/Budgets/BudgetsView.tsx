@@ -215,7 +215,7 @@ function IncomeAccordionPanel({
 }) {
   return (
     <Accordion.Panel>
-      <Table ml="58px" w="calc(100% - 58px)">
+      <Table ml="58px" w="calc(100% - 80px)" layout="fixed">
         <Table.Tbody>
           {categories.map((category) => {
             const percentage = category.budget
@@ -223,12 +223,12 @@ function IncomeAccordionPanel({
               : "0.00";
             return (
               <Table.Tr key={category.id}>
-                <Table.Td w="21%" style={{ fontWeight: "bold" }}>
+                <Table.Td style={{ fontWeight: "bold" }}>
                   {category.name}
                 </Table.Td>
-                <Table.Td w="21%">{FormatMoney(category.budget!)}</Table.Td>
-                <Table.Td w="21%">{FormatMoney(category.actual)}</Table.Td>
-                <Table.Td w="21%">{percentage}%</Table.Td>
+                <Table.Td>{FormatMoney(category.budget!)}</Table.Td>
+                <Table.Td>{FormatMoney(category.actual)}</Table.Td>
+                <Table.Td>{percentage}%</Table.Td>
               </Table.Tr>
             );
           })}
@@ -245,7 +245,7 @@ function ExpensesAccordionPanel({
 }) {
   return (
     <Accordion.Panel>
-      <Table ml="58px" w="calc(100% - 58px)">
+      <Table ml="58px" w="calc(100% - 80px)" layout="fixed">
         <Table.Tbody>
           {categories.map((category) => {
             const percentage = category.budget
@@ -253,12 +253,12 @@ function ExpensesAccordionPanel({
               : "0.00";
             return (
               <Table.Tr key={category.id}>
-                <Table.Td w="21%" style={{ fontWeight: "bold" }}>
+                <Table.Td style={{ fontWeight: "bold" }}>
                   {category.name}
                 </Table.Td>
-                <Table.Td w="21%">{FormatMoney(category.budget!)}</Table.Td>
-                <Table.Td w="21%">{FormatMoney(category.actual)}</Table.Td>
-                <Table.Td w="21%">{percentage}%</Table.Td>
+                <Table.Td>{FormatMoney(category.budget!)}</Table.Td>
+                <Table.Td>{FormatMoney(category.actual)}</Table.Td>
+                <Table.Td>{percentage}%</Table.Td>
               </Table.Tr>
             );
           })}
