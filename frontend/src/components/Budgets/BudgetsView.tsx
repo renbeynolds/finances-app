@@ -42,9 +42,9 @@ export default function BudgetsView() {
     <Stack>
       <MonthPicker />
       <Grid>
-        <Grid.Col span={8}>
+        <Grid.Col span={7}>
           <Paper>
-            <Accordion defaultValue={["Income", "Expenses"]} multiple>
+            <Accordion defaultValue={["Expenses"]} multiple>
               <Accordion.Item key={"Income"} value={"Income"}>
                 <Accordion.Control icon={<IconMoneybag />}>
                   <Stack>
@@ -57,6 +57,9 @@ export default function BudgetsView() {
                       </Text>
                       <Text style={{ fontWeight: "bold" }} w="20%">
                         Actual
+                      </Text>
+                      <Text style={{ fontWeight: "bold" }} w="20%">
+                        %
                       </Text>
                     </Group>
                     <Group ml="2rem">
@@ -77,6 +80,22 @@ export default function BudgetsView() {
                           )
                         )}
                       </Text>
+                      <Text w="20%">
+                        {(() => {
+                          const totalBudget = incomeCategories.reduce(
+                            (total, category) => total + category.budget!,
+                            0
+                          );
+                          const totalActual = incomeCategories.reduce(
+                            (total, category) => total + category.actual,
+                            0
+                          );
+                          const percentage = totalBudget
+                            ? ((totalActual / totalBudget) * 100).toFixed(2)
+                            : "0.00";
+                          return `${percentage}%`;
+                        })()}
+                      </Text>
                     </Group>
                   </Stack>
                 </Accordion.Control>
@@ -94,6 +113,9 @@ export default function BudgetsView() {
                       </Text>
                       <Text style={{ fontWeight: "bold" }} w="20%">
                         Actual
+                      </Text>
+                      <Text style={{ fontWeight: "bold" }} w="20%">
+                        %
                       </Text>
                     </Group>
                     <Group ml="2rem">
@@ -114,6 +136,22 @@ export default function BudgetsView() {
                           )
                         )}
                       </Text>
+                      <Text w="20%">
+                        {(() => {
+                          const totalBudget = expenseCategories.reduce(
+                            (total, category) => total + category.budget!,
+                            0
+                          );
+                          const totalActual = expenseCategories.reduce(
+                            (total, category) => total + category.actual,
+                            0
+                          );
+                          const percentage = totalBudget
+                            ? ((totalActual / totalBudget) * 100).toFixed(2)
+                            : "0.00";
+                          return `${percentage}%`;
+                        })()}
+                      </Text>
                     </Group>
                   </Stack>
                 </Accordion.Control>
@@ -122,7 +160,7 @@ export default function BudgetsView() {
             </Accordion>
           </Paper>
         </Grid.Col>
-        <Grid.Col span={4}>
+        <Grid.Col span={5}>
           <Paper p="md">
             <Stack gap="md">
               <Group justify="space-between">
@@ -179,15 +217,21 @@ function IncomeAccordionPanel({
     <Accordion.Panel>
       <Table ml="58px" w="calc(100% - 58px)">
         <Table.Tbody>
-          {categories.map((category) => (
-            <Table.Tr key={category.id}>
-              <Table.Td w="21%" style={{ fontWeight: "bold" }}>
-                {category.name}
-              </Table.Td>
-              <Table.Td w="21%">{FormatMoney(category.budget!)}</Table.Td>
-              <Table.Td>{FormatMoney(category.actual)}</Table.Td>
-            </Table.Tr>
-          ))}
+          {categories.map((category) => {
+            const percentage = category.budget
+              ? ((category.actual / category.budget) * 100).toFixed(2)
+              : "0.00";
+            return (
+              <Table.Tr key={category.id}>
+                <Table.Td w="21%" style={{ fontWeight: "bold" }}>
+                  {category.name}
+                </Table.Td>
+                <Table.Td w="21%">{FormatMoney(category.budget!)}</Table.Td>
+                <Table.Td w="21%">{FormatMoney(category.actual)}</Table.Td>
+                <Table.Td w="21%">{percentage}%</Table.Td>
+              </Table.Tr>
+            );
+          })}
         </Table.Tbody>
       </Table>
     </Accordion.Panel>
@@ -203,15 +247,21 @@ function ExpensesAccordionPanel({
     <Accordion.Panel>
       <Table ml="58px" w="calc(100% - 58px)">
         <Table.Tbody>
-          {categories.map((category) => (
-            <Table.Tr key={category.id}>
-              <Table.Td w="21%" style={{ fontWeight: "bold" }}>
-                {category.name}
-              </Table.Td>
-              <Table.Td w="21%">{FormatMoney(category.budget!)}</Table.Td>
-              <Table.Td>{FormatMoney(category.actual)}</Table.Td>
-            </Table.Tr>
-          ))}
+          {categories.map((category) => {
+            const percentage = category.budget
+              ? ((category.actual / category.budget) * 100).toFixed(2)
+              : "0.00";
+            return (
+              <Table.Tr key={category.id}>
+                <Table.Td w="21%" style={{ fontWeight: "bold" }}>
+                  {category.name}
+                </Table.Td>
+                <Table.Td w="21%">{FormatMoney(category.budget!)}</Table.Td>
+                <Table.Td w="21%">{FormatMoney(category.actual)}</Table.Td>
+                <Table.Td w="21%">{percentage}%</Table.Td>
+              </Table.Tr>
+            );
+          })}
         </Table.Tbody>
       </Table>
     </Accordion.Panel>
