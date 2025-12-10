@@ -4,7 +4,7 @@ import useSWR from "swr";
 import { TransactionFiltersContext } from "../../context/TransactionFiltersContext";
 import { useCategories } from "../Categories/hooks";
 import { BudgetActualsFetcher, BudgetFetcher, BudgetsFetcher } from "./fetchers";
-import { BudgetWithCategoryAndActual } from "./types";
+import { BudgetsViewData } from "./types";
 
 export const useBudget = (budgetId?: number) => {
   const { data, error, isLoading, mutate } = useSWR(
@@ -45,7 +45,7 @@ export const useBudgetActuals = (month: string) => {
   };
 };
 
-export const useBudgetsViewData = (): { budgets: BudgetWithCategoryAndActual[] | null; budgetsLoading: boolean; budgetsError: any } => {
+export const useBudgetsViewData = (): { data: BudgetsViewData[] | null; isLoading: boolean; error: any } => {
 
   const transactionFilters = useContext(TransactionFiltersContext);
 
@@ -55,35 +55,34 @@ export const useBudgetsViewData = (): { budgets: BudgetWithCategoryAndActual[] |
 
   if (budgetsLoading || categoriesLoading || budgetActualsLoading) {
     return {
-      budgets: null,
-      budgetsLoading: true,
-      budgetsError: null,
+      data: null,
+      isLoading: true,
+      error: null,
     };
   }
 
   if (budgetsError || categoriesError || budgetActualsError) {
     return {
-      budgets: null,
-      budgetsLoading: false,
-      budgetsError: budgetsError || categoriesError || budgetActualsError,
+      data: null,
+      isLoading: false,
+      error: budgetsError || categoriesError || budgetActualsError,
     };
   }
 
-  console.log(budgetActuals)
-
-  const budgetsData = budgets!.map((budget) => {
-    const category = categories!.find((category) => category.id === budget.categoryId);
-    const budgetActual = budgetActuals!.find((budgetActual) => budgetActual.budgetId === budget.id);
+  const budgetsData = categories!.map((category) => {
+    const budget = budgets!.find((budget) => budget.categoryId === category.id);
+    const budgetActual = budgetActuals!.find((budgetActual) => budgetActual.categoryId === category.id);
     return {
-      ...budget,
-      category: category!,
+      ...category,
+      budget: budget?.amount,
       actual: budgetActual!.amount,
     };
-  });
+    
+  })
 
   return {
-    budgets: budgetsData,
-    budgetsLoading: false,
-    budgetsError: null,
+    data: budgetsData,
+    isLoading: false,
+    error: null,
   };
 };

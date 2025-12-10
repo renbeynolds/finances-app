@@ -33,7 +33,7 @@ type (
 	}
 
 	BudgetActualResponse struct {
-		BudgetID   uint  `json:"budgetId"`
+		BudgetID   *uint `json:"budgetId"`
 		CategoryID uint  `json:"categoryId"`
 		Amount     int64 `json:"amount"`
 	}

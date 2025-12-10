@@ -7,9 +7,9 @@ export type Budget = {
   categoryName: string;
 };
 
-export type BudgetWithCategoryAndActual = Budget & {
-  category: Category;
+export type BudgetsViewData = Category & {
   actual: number;
+  budget?: number;
 };
 
 export type BudgetActual = {

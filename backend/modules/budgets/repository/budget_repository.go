@@ -89,14 +89,16 @@ func (r *budgetRepository) GetBudgetActuals(ctx context.Context, tx *gorm.DB, st
 	query := `
 		SELECT 
 			budgets.id as budget_id, 
-			budgets.category_id, 
+			categories.id as category_id, 
 			ABS(COALESCE(SUM(transactions.amount), 0)) as amount
-		FROM budgets
+		FROM categories
+		LEFT JOIN budgets ON categories.id = budgets.category_id
 		LEFT JOIN transactions ON 
-			budgets.category_id = transactions.category_id AND 
+			categories.id = transactions.category_id AND 
 			transactions.date >= ? AND 
 			transactions.date <= ?
-		GROUP BY budgets.id, budgets.category_id
+		GROUP BY categories.id, budgets.id
+		ORDER BY categories.id
 	`
 
 	if err := tx.WithContext(ctx).Raw(query, startTime, endTime).Scan(&results).Error; err != nil {
