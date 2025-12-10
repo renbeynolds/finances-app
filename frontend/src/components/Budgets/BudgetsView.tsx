@@ -37,6 +37,22 @@ export default function BudgetsView() {
         !category.budget && category.actual > 0 && category.type === "expense"
     )
     .sort((a, b) => b.actual - a.actual);
+  const incomeBudgetTotal = incomeCategories.reduce(
+    (total, category) => total + category.budget!,
+    0
+  );
+  const expenseBudgetTotal = expenseCategories.reduce(
+    (total, category) => total + category.budget!,
+    0
+  );
+  const incomeActualTotal = incomeCategories.reduce(
+    (total, category) => total + category.actual,
+    0
+  );
+  const expenseActualTotal = expenseCategories.reduce(
+    (total, category) => total + category.actual,
+    0
+  );
 
   return (
     <Stack>
@@ -67,34 +83,29 @@ export default function BudgetsView() {
                     <Table.Tbody>
                       <Table.Tr>
                         <Table.Td></Table.Td>
-                        <Table.Td>
-                          {FormatMoney(
-                            incomeCategories.reduce(
-                              (total, category) => total + category.budget!,
-                              0
-                            )
-                          )}
+                        <Table.Td>{FormatMoney(incomeBudgetTotal)}</Table.Td>
+                        <Table.Td
+                          c={
+                            incomeActualTotal > incomeBudgetTotal
+                              ? "green"
+                              : "red"
+                          }
+                        >
+                          {FormatMoney(incomeActualTotal)}
                         </Table.Td>
-                        <Table.Td c="green">
-                          {FormatMoney(
-                            incomeCategories.reduce(
-                              (total, category) => total + category.actual,
-                              0
-                            )
-                          )}
-                        </Table.Td>
-                        <Table.Td>
+                        <Table.Td
+                          c={
+                            incomeActualTotal > incomeBudgetTotal
+                              ? "green"
+                              : "red"
+                          }
+                        >
                           {(() => {
-                            const totalBudget = incomeCategories.reduce(
-                              (total, category) => total + category.budget!,
-                              0
-                            );
-                            const totalActual = incomeCategories.reduce(
-                              (total, category) => total + category.actual,
-                              0
-                            );
-                            const percentage = totalBudget
-                              ? ((totalActual / totalBudget) * 100).toFixed(2)
+                            const percentage = incomeBudgetTotal
+                              ? (
+                                  (incomeActualTotal / incomeBudgetTotal) *
+                                  100
+                                ).toFixed(2)
                               : "0.00";
                             return `${percentage}%`;
                           })()}
@@ -127,34 +138,29 @@ export default function BudgetsView() {
                     <Table.Tbody>
                       <Table.Tr>
                         <Table.Td></Table.Td>
-                        <Table.Td>
-                          {FormatMoney(
-                            expenseCategories.reduce(
-                              (total, category) => total + category.budget!,
-                              0
-                            )
-                          )}
+                        <Table.Td>{FormatMoney(expenseBudgetTotal)}</Table.Td>
+                        <Table.Td
+                          c={
+                            expenseActualTotal > expenseBudgetTotal
+                              ? "red"
+                              : "green"
+                          }
+                        >
+                          {FormatMoney(expenseActualTotal)}
                         </Table.Td>
-                        <Table.Td c="red">
-                          {FormatMoney(
-                            expenseCategories.reduce(
-                              (total, category) => total + category.actual,
-                              0
-                            )
-                          )}
-                        </Table.Td>
-                        <Table.Td>
+                        <Table.Td
+                          c={
+                            expenseActualTotal > expenseBudgetTotal
+                              ? "red"
+                              : "green"
+                          }
+                        >
                           {(() => {
-                            const totalBudget = expenseCategories.reduce(
-                              (total, category) => total + category.budget!,
-                              0
-                            );
-                            const totalActual = expenseCategories.reduce(
-                              (total, category) => total + category.actual,
-                              0
-                            );
-                            const percentage = totalBudget
-                              ? ((totalActual / totalBudget) * 100).toFixed(2)
+                            const percentage = expenseBudgetTotal
+                              ? (
+                                  (expenseActualTotal / expenseBudgetTotal) *
+                                  100
+                                ).toFixed(2)
                               : "0.00";
                             return `${percentage}%`;
                           })()}
@@ -231,12 +237,16 @@ function IncomeAccordionPanel({
               : "0.00";
             return (
               <Table.Tr key={category.id}>
-                <Table.Td style={{ fontWeight: "bold" }}>
+                <Table.Td style={{ fontWeight: "bold" }} c="dimmed">
                   {category.name}
                 </Table.Td>
                 <Table.Td>{FormatMoney(category.budget!)}</Table.Td>
                 <Table.Td>{FormatMoney(category.actual)}</Table.Td>
-                <Table.Td>{percentage}%</Table.Td>
+                <Table.Td
+                  c={category.actual > category.budget! ? "green" : "red"}
+                >
+                  {percentage}%
+                </Table.Td>
               </Table.Tr>
             );
           })}
@@ -261,12 +271,16 @@ function ExpensesAccordionPanel({
               : "0.00";
             return (
               <Table.Tr key={category.id}>
-                <Table.Td style={{ fontWeight: "bold" }}>
+                <Table.Td style={{ fontWeight: "bold" }} c="dimmed">
                   {category.name}
                 </Table.Td>
                 <Table.Td>{FormatMoney(category.budget!)}</Table.Td>
                 <Table.Td>{FormatMoney(category.actual)}</Table.Td>
-                <Table.Td>{percentage}%</Table.Td>
+                <Table.Td
+                  c={category.actual > category.budget! ? "red" : "green"}
+                >
+                  {percentage}%
+                </Table.Td>
               </Table.Tr>
             );
           })}
