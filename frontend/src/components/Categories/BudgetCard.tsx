@@ -49,7 +49,7 @@ export default function BudgetCard({
       ) : budgetError || categoryError ? (
         <ErrorContent />
       ) : !budget ? (
-        <NoBudgetContent category={category} />
+        <NoBudgetContent category={category} budgetMutate={budgetMutate} />
       ) : (
         <BudgetContent
           budget={budget}
@@ -208,7 +208,7 @@ function BudgetContent({
   );
 }
 
-function NoBudgetContent({ category }: { category?: Category }) {
+function NoBudgetContent({ category, budgetMutate }: { category?: Category; budgetMutate: KeyedMutator<Response<Budget>> }) {
   const [creating, setCreating] = useState(false);
 
   const handleCreateBudget = async () => {
@@ -219,7 +219,7 @@ function NoBudgetContent({ category }: { category?: Category }) {
     setCreating(false);
 
     if (response.success) {
-      // todo
+      budgetMutate(response);
     }
   };
 

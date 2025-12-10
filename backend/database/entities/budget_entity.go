@@ -7,6 +7,6 @@ import (
 type Budget struct {
 	gorm.Model
 	Amount     int64    `gorm:"not null"`
-	CategoryID uint     `gorm:"not null"`
+	CategoryID uint     `gorm:"not null;unique"`
 	Category   Category `gorm:"foreignKey:CategoryID;constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
 }
