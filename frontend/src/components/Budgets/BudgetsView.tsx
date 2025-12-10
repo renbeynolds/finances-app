@@ -1,12 +1,12 @@
 import {
   Accordion,
-  Box,
   Grid,
   Group,
   Paper,
   Stack,
   Table,
   Text,
+  Title,
 } from "@mantine/core";
 import { IconCurrencyDollarOff, IconMoneybag } from "@tabler/icons-react";
 import { useBudgetsViewData } from "../../data/Budgets/hooks";
@@ -47,113 +47,121 @@ export default function BudgetsView() {
             <Accordion defaultValue={["Expenses"]} multiple>
               <Accordion.Item key={"Income"} value={"Income"}>
                 <Accordion.Control icon={<IconMoneybag />}>
-                  <Stack>
-                    <Group ml="2rem">
-                      <Text style={{ fontWeight: "bold" }} w="20%">
-                        Income
-                      </Text>
-                      <Text style={{ fontWeight: "bold" }} w="20%">
-                        Budget
-                      </Text>
-                      <Text style={{ fontWeight: "bold" }} w="20%">
-                        Actual
-                      </Text>
-                      <Text style={{ fontWeight: "bold" }} w="20%">
-                        %
-                      </Text>
-                    </Group>
-                    <Group ml="2rem">
-                      <Box w="20%"></Box>
-                      <Text w="20%">
-                        {FormatMoney(
-                          incomeCategories.reduce(
-                            (total, category) => total + category.budget!,
-                            0
-                          )
-                        )}
-                      </Text>
-                      <Text w="20%" c="green">
-                        {FormatMoney(
-                          incomeCategories.reduce(
-                            (total, category) => total + category.actual,
-                            0
-                          )
-                        )}
-                      </Text>
-                      <Text w="20%">
-                        {(() => {
-                          const totalBudget = incomeCategories.reduce(
-                            (total, category) => total + category.budget!,
-                            0
-                          );
-                          const totalActual = incomeCategories.reduce(
-                            (total, category) => total + category.actual,
-                            0
-                          );
-                          const percentage = totalBudget
-                            ? ((totalActual / totalBudget) * 100).toFixed(2)
-                            : "0.00";
-                          return `${percentage}%`;
-                        })()}
-                      </Text>
-                    </Group>
-                  </Stack>
+                  <Table ml="2rem" w="calc(100% - 58px)" layout="fixed">
+                    <Table.Thead>
+                      <Table.Tr>
+                        <Table.Th>
+                          <Title order={4}>Income</Title>
+                        </Table.Th>
+                        <Table.Th>
+                          <Title order={4}>Budget</Title>
+                        </Table.Th>
+                        <Table.Th>
+                          <Title order={4}>Actual</Title>
+                        </Table.Th>
+                        <Table.Th>
+                          <Title order={4}>%</Title>
+                        </Table.Th>
+                      </Table.Tr>
+                    </Table.Thead>
+                    <Table.Tbody>
+                      <Table.Tr>
+                        <Table.Td></Table.Td>
+                        <Table.Td>
+                          {FormatMoney(
+                            incomeCategories.reduce(
+                              (total, category) => total + category.budget!,
+                              0
+                            )
+                          )}
+                        </Table.Td>
+                        <Table.Td c="green">
+                          {FormatMoney(
+                            incomeCategories.reduce(
+                              (total, category) => total + category.actual,
+                              0
+                            )
+                          )}
+                        </Table.Td>
+                        <Table.Td>
+                          {(() => {
+                            const totalBudget = incomeCategories.reduce(
+                              (total, category) => total + category.budget!,
+                              0
+                            );
+                            const totalActual = incomeCategories.reduce(
+                              (total, category) => total + category.actual,
+                              0
+                            );
+                            const percentage = totalBudget
+                              ? ((totalActual / totalBudget) * 100).toFixed(2)
+                              : "0.00";
+                            return `${percentage}%`;
+                          })()}
+                        </Table.Td>
+                      </Table.Tr>
+                    </Table.Tbody>
+                  </Table>
                 </Accordion.Control>
                 <IncomeAccordionPanel categories={incomeCategories} />
               </Accordion.Item>
               <Accordion.Item key={"Expenses"} value={"Expenses"}>
                 <Accordion.Control icon={<IconCurrencyDollarOff />}>
-                  <Stack>
-                    <Group ml="2rem">
-                      <Text style={{ fontWeight: "bold" }} w="20%">
-                        Expenses
-                      </Text>
-                      <Text style={{ fontWeight: "bold" }} w="20%">
-                        Budget
-                      </Text>
-                      <Text style={{ fontWeight: "bold" }} w="20%">
-                        Actual
-                      </Text>
-                      <Text style={{ fontWeight: "bold" }} w="20%">
-                        %
-                      </Text>
-                    </Group>
-                    <Group ml="2rem">
-                      <Box w="20%"></Box>
-                      <Text w="20%">
-                        {FormatMoney(
-                          expenseCategories.reduce(
-                            (total, category) => total + category.budget!,
-                            0
-                          )
-                        )}
-                      </Text>
-                      <Text w="20%" c="red">
-                        {FormatMoney(
-                          expenseCategories.reduce(
-                            (total, category) => total + category.actual,
-                            0
-                          )
-                        )}
-                      </Text>
-                      <Text w="20%">
-                        {(() => {
-                          const totalBudget = expenseCategories.reduce(
-                            (total, category) => total + category.budget!,
-                            0
-                          );
-                          const totalActual = expenseCategories.reduce(
-                            (total, category) => total + category.actual,
-                            0
-                          );
-                          const percentage = totalBudget
-                            ? ((totalActual / totalBudget) * 100).toFixed(2)
-                            : "0.00";
-                          return `${percentage}%`;
-                        })()}
-                      </Text>
-                    </Group>
-                  </Stack>
+                  <Table ml="2rem" w="calc(100% - 58px)" layout="fixed">
+                    <Table.Thead>
+                      <Table.Tr>
+                        <Table.Th>
+                          <Title order={4}>Expenses</Title>
+                        </Table.Th>
+                        <Table.Th>
+                          <Title order={4}>Budget</Title>
+                        </Table.Th>
+                        <Table.Th>
+                          <Title order={4}>Actual</Title>
+                        </Table.Th>
+                        <Table.Th>
+                          <Title order={4}>%</Title>
+                        </Table.Th>
+                      </Table.Tr>
+                    </Table.Thead>
+                    <Table.Tbody>
+                      <Table.Tr>
+                        <Table.Td></Table.Td>
+                        <Table.Td>
+                          {FormatMoney(
+                            expenseCategories.reduce(
+                              (total, category) => total + category.budget!,
+                              0
+                            )
+                          )}
+                        </Table.Td>
+                        <Table.Td c="red">
+                          {FormatMoney(
+                            expenseCategories.reduce(
+                              (total, category) => total + category.actual,
+                              0
+                            )
+                          )}
+                        </Table.Td>
+                        <Table.Td>
+                          {(() => {
+                            const totalBudget = expenseCategories.reduce(
+                              (total, category) => total + category.budget!,
+                              0
+                            );
+                            const totalActual = expenseCategories.reduce(
+                              (total, category) => total + category.actual,
+                              0
+                            );
+                            const percentage = totalBudget
+                              ? ((totalActual / totalBudget) * 100).toFixed(2)
+                              : "0.00";
+                            return `${percentage}%`;
+                          })()}
+                        </Table.Td>
+                      </Table.Tr>
+                    </Table.Tbody>
+                  </Table>
                 </Accordion.Control>
                 <ExpensesAccordionPanel categories={expenseCategories} />
               </Accordion.Item>
@@ -215,7 +223,7 @@ function IncomeAccordionPanel({
 }) {
   return (
     <Accordion.Panel>
-      <Table ml="58px" w="calc(100% - 80px)" layout="fixed">
+      <Table ml="68px" w="calc(100% - 112px)" layout="fixed">
         <Table.Tbody>
           {categories.map((category) => {
             const percentage = category.budget
@@ -245,7 +253,7 @@ function ExpensesAccordionPanel({
 }) {
   return (
     <Accordion.Panel>
-      <Table ml="58px" w="calc(100% - 80px)" layout="fixed">
+      <Table ml="68px" w="calc(100% - 112px)" layout="fixed">
         <Table.Tbody>
           {categories.map((category) => {
             const percentage = category.budget
