@@ -31,6 +31,12 @@ export default function BudgetsView() {
   const incomeCategories = data!
     .filter((category) => category.budget && category.type === "income")
     .sort((a, b) => a.name.localeCompare(b.name));
+  const categoriesWithoutBudgets = data!
+    .filter(
+      (category) =>
+        !category.budget && category.actual > 0 && category.type === "expense"
+    )
+    .sort((a, b) => b.actual - a.actual);
 
   return (
     <Stack>
@@ -38,7 +44,7 @@ export default function BudgetsView() {
       <Grid>
         <Grid.Col span={8}>
           <Paper>
-            <Accordion defaultValue="Expenses">
+            <Accordion defaultValue={["Income", "Expenses"]} multiple>
               <Accordion.Item key={"Income"} value={"Income"}>
                 <Accordion.Control icon={<IconMoneybag />}>
                   <Stack>
@@ -117,9 +123,45 @@ export default function BudgetsView() {
           </Paper>
         </Grid.Col>
         <Grid.Col span={4}>
-          <Paper>
-            <Stack>
-              <Text style={{ fontWeight: "bold" }}>Summary</Text>
+          <Paper p="md">
+            <Stack gap="md">
+              <Group justify="space-between">
+                <Text style={{ fontWeight: "bold" }}>Unbudgeted Expenses</Text>
+                <Text c="red">
+                  {FormatMoney(
+                    categoriesWithoutBudgets.reduce(
+                      (total, category) => total + category.actual,
+                      0
+                    )
+                  )}
+                </Text>
+              </Group>
+              {categoriesWithoutBudgets.length > 0 ? (
+                <Table>
+                  <Table.Thead>
+                    <Table.Tr>
+                      <Table.Th>Category</Table.Th>
+                      <Table.Th style={{ textAlign: "right" }}>
+                        Spending
+                      </Table.Th>
+                    </Table.Tr>
+                  </Table.Thead>
+                  <Table.Tbody>
+                    {categoriesWithoutBudgets.map((category) => (
+                      <Table.Tr key={category.id}>
+                        <Table.Td>{category.name}</Table.Td>
+                        <Table.Td style={{ textAlign: "right" }}>
+                          {FormatMoney(category.actual)}
+                        </Table.Td>
+                      </Table.Tr>
+                    ))}
+                  </Table.Tbody>
+                </Table>
+              ) : (
+                <Text size="sm" c="dimmed">
+                  No categories without budgets with spending
+                </Text>
+              )}
             </Stack>
           </Paper>
         </Grid.Col>
