@@ -1,29 +1,33 @@
-import { SimpleGrid, Stack } from '@mantine/core';
-import { ExpenseVsAverageEndpoint, IncomeVsAverageEndpoint } from '../Fetchers';
-import AmountVsAverage from './AmountVsAverage';
-import MonthPicker from './MonthPicker';
-import TopSpendingCategoriesChart from './TopSpendingCategoriesChart';
-import TransactionTable from './TransactionTable';
+import { Grid, Stack } from "@mantine/core";
+import { ExpenseVsAverageEndpoint, IncomeVsAverageEndpoint } from "../Fetchers";
+import AmountVsAverage from "./AmountVsAverage";
+import MonthPicker from "./MonthPicker";
+import TopSpendingCategoriesChart from "./TopSpendingCategoriesChart";
+import TransactionTable from "./TransactionTable";
 
 export default function Snapshot() {
   return (
     <Stack>
       <MonthPicker />
-      <SimpleGrid cols={2}>
-        <TopSpendingCategoriesChart />
-        <SimpleGrid cols={2}>
+      <Grid>
+        <Grid.Col span={6}>
+          <TopSpendingCategoriesChart />
+        </Grid.Col>
+        <Grid.Col span={3}>
           <AmountVsAverage
-            title='Income'
+            title="Income"
             endpoint={IncomeVsAverageEndpoint}
-            color='green'
+            color="green"
           />
+        </Grid.Col>
+        <Grid.Col span={3}>
           <AmountVsAverage
-            title='Expense'
+            title="Expense"
             endpoint={ExpenseVsAverageEndpoint}
-            color='red'
+            color="red"
           />
-        </SimpleGrid>
-      </SimpleGrid>
+        </Grid.Col>
+      </Grid>
       <TransactionTable hideDateFilter />
     </Stack>
   );
