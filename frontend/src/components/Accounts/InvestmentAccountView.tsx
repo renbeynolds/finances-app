@@ -1,5 +1,13 @@
-import { Button, Group, Modal, SimpleGrid, Stack, Title } from "@mantine/core";
-import { IconNote } from "@tabler/icons-react";
+import {
+  ActionIcon,
+  Button,
+  Group,
+  Modal,
+  SimpleGrid,
+  Stack,
+  Title,
+} from "@mantine/core";
+import { IconEdit, IconNote } from "@tabler/icons-react";
 import dayjs from "dayjs";
 import React from "react";
 import { useParams } from "react-router";
@@ -14,11 +22,13 @@ import {
 } from "../../Fetchers";
 import AmountOverTimeChart from "../AmountOverTimeChart";
 import InvestmentAccountBalanceForm from "./InvestmentAccountBalanceForm";
+import InvestmentAccountForm from "./InvestmentAccountForm";
 
 export default function InvestmentAccountView() {
   const { accountId } = useParams();
   const [recordBalanceModalOpened, setRecordBalanceModalOpened] =
     React.useState(false);
+  const [editModalOpened, setEditModalOpened] = React.useState(false);
 
   const {
     data: accountData,
@@ -30,9 +40,9 @@ export default function InvestmentAccountView() {
     InvestmentAccountBalanceOverTimeEndpoint(
       accountId!,
       dayjs().subtract(365, "day").format("YYYY-MM-DD"),
-      dayjs().format("YYYY-MM-DD")
+      dayjs().format("YYYY-MM-DD"),
     ),
-    AmountOverTimeFetcher
+    AmountOverTimeFetcher,
   );
 
   if (accountError) return <div>failed to load</div>;
@@ -42,7 +52,16 @@ export default function InvestmentAccountView() {
     <>
       <Stack>
         <Group justify="space-between">
-          <Title order={2}>{accountData?.data.name}</Title>
+          <Group>
+            <Title order={2}>{accountData?.data.name}</Title>
+            <ActionIcon
+              size="m"
+              variant="outline"
+              onClick={() => setEditModalOpened(true)}
+            >
+              <IconEdit style={{ width: "70%" }} />
+            </ActionIcon>
+          </Group>
           <Button
             rightSection={<IconNote />}
             onClick={() => setRecordBalanceModalOpened(true)}
@@ -65,6 +84,16 @@ export default function InvestmentAccountView() {
         <InvestmentAccountBalanceForm
           investmentAccountId={Number(accountId)}
           close={() => setRecordBalanceModalOpened(false)}
+        />
+      </Modal>
+      <Modal
+        opened={editModalOpened}
+        onClose={() => setEditModalOpened(false)}
+        title="Edit Account"
+      >
+        <InvestmentAccountForm
+          investmentAccount={accountData!.data}
+          close={() => setEditModalOpened(false)}
         />
       </Modal>
     </>

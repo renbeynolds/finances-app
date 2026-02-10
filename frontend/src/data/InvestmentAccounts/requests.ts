@@ -6,7 +6,7 @@ import { Response } from "../Response";
 import { InvestmentAccount } from "./types";
 
 export const requestCreateInvestmentAccount = async (
-  values: InvestmentAccountFormValues
+  values: InvestmentAccountFormValues,
 ): Promise<Response<InvestmentAccount>> => {
   return fetch("/api/investment_accounts", {
     method: "POST",
@@ -15,8 +15,19 @@ export const requestCreateInvestmentAccount = async (
   }).then((response) => response.json());
 };
 
+export const requestUpdateInvestmentAccount = async (
+  id: number,
+  values: InvestmentAccountFormValues,
+): Promise<Response<InvestmentAccount>> => {
+  return fetch(`/api/investment_accounts/${id}`, {
+    method: "PATCH",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(values),
+  }).then((response) => response.json());
+};
+
 export const requestRecordInvestmentAccountBalance = async (
-  values: InvestmentAccountBalanceFormValues
+  values: InvestmentAccountBalanceFormValues,
 ): Promise<Response<InvestmentAccount>> => {
   return fetch(`/api/investment_balances`, {
     method: "POST",
