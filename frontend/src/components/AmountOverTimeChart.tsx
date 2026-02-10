@@ -6,6 +6,7 @@ import { AmountOverTime } from "../data/AmountOverTime";
 import { Response } from "../data/Response";
 import {
   FormatMoney,
+  FormatMoneyDollars,
   FormatMoneyThousands,
   FormatMonthString,
   MonthStringToTimestamp,
@@ -46,6 +47,10 @@ export default function AmountOverTimeChart({
     }));
   };
 
+  const maxValue = Math.max(
+    ...(response.data?.data.map((point) => point.amount) || [0]),
+  );
+
   return (
     <Paper shadow="sm" p="lg">
       <Title order={3}>{title}</Title>
@@ -81,7 +86,10 @@ export default function AmountOverTimeChart({
             tickFormatter: FormatMonthString,
           }}
           yAxisProps={{
-            tickFormatter: (value: number) => FormatMoneyThousands(value),
+            tickFormatter: (value: number) =>
+              maxValue > 1000000
+                ? FormatMoneyThousands(value)
+                : FormatMoneyDollars(value),
           }}
           valueFormatter={(value: number) => FormatMoney(value)}
         />

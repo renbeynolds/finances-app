@@ -15,6 +15,7 @@ type BankAccountService interface {
 	GetAllBankAccounts(ctx context.Context) ([]dto.BankAccountResponse, error)
 	GetBankAccountByID(ctx context.Context, id uint) (dto.BankAccountResponse, error)
 	UpdateBankAccount(ctx context.Context, req dto.UpdateBankAccountRequest, id uint) (dto.BankAccountResponse, error)
+	ArchiveBankAccount(ctx context.Context, id uint) error
 	GetBalanceOverTime(ctx context.Context, id uint, query query.BalanceOverTimeQuery) ([]dto.BalanceOverTimeResponse, error)
 }
 
@@ -101,6 +102,10 @@ func (s *bankAccountService) UpdateBankAccount(ctx context.Context, req dto.Upda
 	}
 
 	return entityToResponse(updatedBankAccount), nil
+}
+
+func (s *bankAccountService) ArchiveBankAccount(ctx context.Context, id uint) error {
+	return s.bankAccountRepository.ArchiveBankAccount(ctx, s.db, id)
 }
 
 func (s *bankAccountService) GetBalanceOverTime(ctx context.Context, id uint, query query.BalanceOverTimeQuery) ([]dto.BalanceOverTimeResponse, error) {

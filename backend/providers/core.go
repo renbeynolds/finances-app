@@ -5,9 +5,15 @@ import (
 	bankAccountController "github.com/renbeynolds/finances-app/modules/banking/controller"
 	bankAccountRepository "github.com/renbeynolds/finances-app/modules/banking/repository"
 	bankAccountService "github.com/renbeynolds/finances-app/modules/banking/service"
+	budgetController "github.com/renbeynolds/finances-app/modules/budgets/controller"
+	budgetRepository "github.com/renbeynolds/finances-app/modules/budgets/repository"
+	budgetService "github.com/renbeynolds/finances-app/modules/budgets/service"
 	categoryController "github.com/renbeynolds/finances-app/modules/categories/controller"
 	categoryRepository "github.com/renbeynolds/finances-app/modules/categories/repository"
 	categoryService "github.com/renbeynolds/finances-app/modules/categories/service"
+	investmentBalanceController "github.com/renbeynolds/finances-app/modules/investmentbalance/controller"
+	investmentBalanceRepository "github.com/renbeynolds/finances-app/modules/investmentbalance/repository"
+	investmentBalanceService "github.com/renbeynolds/finances-app/modules/investmentbalance/service"
 	investmentAccountController "github.com/renbeynolds/finances-app/modules/investments/controller"
 	investmentAccountRepository "github.com/renbeynolds/finances-app/modules/investments/repository"
 	investmentAccountService "github.com/renbeynolds/finances-app/modules/investments/service"
@@ -41,6 +47,9 @@ func RegisterDependencies(injector do.Injector, dbType string) {
 	bankAccountRepository := bankAccountRepository.NewBankAccountRepository(db)
 	bankAccountService := bankAccountService.NewBankAccountService(bankAccountRepository, db)
 
+	budgetRepository := budgetRepository.NewBudgetRepository(db)
+	budgetService := budgetService.NewBudgetService(budgetRepository, db)
+
 	categoryRepository := categoryRepository.NewCategoryRepository(db)
 	categoryService := categoryService.NewCategoryService(categoryRepository, db)
 
@@ -49,6 +58,9 @@ func RegisterDependencies(injector do.Injector, dbType string) {
 
 	investmentAccountRepository := investmentAccountRepository.NewInvestmentAccountRepository(db)
 	investmentAccountService := investmentAccountService.NewInvestmentAccountService(investmentAccountRepository, db)
+
+	investmentBalanceRepository := investmentBalanceRepository.NewInvestmentBalanceRepository(db)
+	investmentBalanceService := investmentBalanceService.NewInvestmentBalanceService(investmentBalanceRepository, investmentAccountRepository, db)
 
 	uploadRepository := uploadRepository.NewUploadRepository(db)
 	uploadService := uploadService.NewUploadService(uploadRepository, bankAccountRepository, categoryRepository, transactionRepository, db)
@@ -65,8 +77,18 @@ func RegisterDependencies(injector do.Injector, dbType string) {
 		},
 	)
 	do.Provide(
+		injector, func(i do.Injector) (budgetController.BudgetController, error) {
+			return budgetController.NewBudgetController(i, budgetService), nil
+		},
+	)
+	do.Provide(
 		injector, func(i do.Injector) (investmentAccountController.InvestmentAccountController, error) {
 			return investmentAccountController.NewInvestmentAccountController(i, investmentAccountService), nil
+		},
+	)
+	do.Provide(
+		injector, func(i do.Injector) (investmentBalanceController.InvestmentBalanceController, error) {
+			return investmentBalanceController.NewInvestmentBalanceController(i, investmentBalanceService), nil
 		},
 	)
 	do.Provide(

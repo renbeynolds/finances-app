@@ -120,6 +120,11 @@ func entityToResponse(category entities.Category) dto.CategoryResponse {
 		emoji = *category.Emoji
 	}
 
+	var budgetID *uint
+	if category.Budget != nil {
+		budgetID = &category.Budget.ID
+	}
+
 	return dto.CategoryResponse{
 		ID:               category.ID,
 		Name:             category.Name,
@@ -127,5 +132,6 @@ func entityToResponse(category entities.Category) dto.CategoryResponse {
 		Emoji:            emoji,
 		Type:             category.Type,
 		ParentCategoryID: category.ParentCategoryID,
+		BudgetID:         budgetID,
 	}
 }

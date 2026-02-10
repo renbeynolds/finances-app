@@ -21,6 +21,7 @@ type (
 		GetAllBankAccounts(ctx *gin.Context)
 		GetBankAccountByID(ctx *gin.Context)
 		UpdateBankAccount(ctx *gin.Context)
+		ArchiveBankAccount(ctx *gin.Context)
 		GetBalanceOverTime(ctx *gin.Context)
 	}
 
@@ -126,6 +127,25 @@ func (c *bankAccountController) UpdateBankAccount(ctx *gin.Context) {
 	}
 
 	res := utils.BuildResponseSuccess(dto.MESSAGE_SUCCESS_UPDATE_BANK_ACCOUNT, bankAccount, nil)
+	ctx.JSON(http.StatusOK, res)
+}
+
+func (c *bankAccountController) ArchiveBankAccount(ctx *gin.Context) {
+	var byID utils.ByID
+	if err := ctx.ShouldBindUri(&byID); err != nil {
+		res := utils.BuildResponseFailed(dto.MESSAGE_FAILED_ARCHIVE_BANK_ACCOUNT, err.Error())
+		ctx.JSON(http.StatusBadRequest, res)
+		return
+	}
+
+	err := c.bankAccountService.ArchiveBankAccount(ctx.Request.Context(), byID.ID)
+	if err != nil {
+		res := utils.BuildResponseFailed(dto.MESSAGE_FAILED_ARCHIVE_BANK_ACCOUNT, err.Error())
+		ctx.JSON(http.StatusBadRequest, res)
+		return
+	}
+
+	res := utils.BuildResponseSuccess(dto.MESSAGE_SUCCESS_ARCHIVE_BANK_ACCOUNT, map[string]interface{}{}, nil)
 	ctx.JSON(http.StatusOK, res)
 }
 

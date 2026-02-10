@@ -13,6 +13,9 @@ const (
 	MESSAGE_FAILED_UPDATE_BANK_ACCOUNT  = "failed update bank account"
 	MESSAGE_SUCCESS_UPDATE_BANK_ACCOUNT = "success update bank account"
 
+	MESSAGE_FAILED_ARCHIVE_BANK_ACCOUNT  = "failed archive bank account"
+	MESSAGE_SUCCESS_ARCHIVE_BANK_ACCOUNT = "success archive bank account"
+
 	MESSAGE_FAILED_GET_BALANCE_OVER_TIME  = "failed get balance over time"
 	MESSAGE_SUCCESS_GET_BALANCE_OVER_TIME = "success get balance over time"
 )

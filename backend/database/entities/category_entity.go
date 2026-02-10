@@ -14,4 +14,5 @@ type Category struct {
 	ParentCategoryID *uint
 	SubCategories    []Category `gorm:"foreignkey:ParentCategoryID"`
 	PrefixRules      []PrefixRule
+	Budget           *Budget `gorm:"foreignKey:CategoryID"`
 }

@@ -1,8 +1,15 @@
 import currency from "currency.js";
 import dayjs from "dayjs";
 
+export const MoneyInputToCents = (value: string): number => {
+  return Math.trunc(Number(value) * 100);
+};
+
 export const FormatMoney = (amount: number) =>
   currency(amount, { fromCents: true }).format();
+
+export const FormatMoneyDollars = (amount: number) =>
+  currency(amount, { fromCents: true }).format().split(".")[0];
 
 export const FormatMoneyThousands = (amount: number) => `$${amount / 100000}k`;
 

@@ -8,15 +8,16 @@ import {
   Stack,
   Title,
 } from "@mantine/core";
-import { IconEdit, IconUpload } from "@tabler/icons-react";
+import { IconArchive, IconEdit, IconUpload } from "@tabler/icons-react";
 import dayjs from "dayjs";
 import React from "react";
-import { useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import useSWR from "swr";
 import {
   BankAccountFetcher,
   BankAccountsEndpoint,
 } from "../../data/BankAccounts/fetchers";
+import { requestArchiveBankAccount } from "../../data/BankAccounts/requests";
 import {
   AccountBalanceOverTimeEndpoint,
   AmountOverTimeFetcher,
@@ -31,6 +32,7 @@ export default function BankAccountView() {
   const { accountId } = useParams();
   const [uploadModalOpened, setUploadModalOpened] = React.useState(false);
   const [editModalOpened, setEditModalOpened] = React.useState(false);
+  const navigate = useNavigate();
 
   const {
     data: accountData,
@@ -42,9 +44,9 @@ export default function BankAccountView() {
     AccountBalanceOverTimeEndpoint(
       accountId!,
       dayjs().subtract(365, "day").format("YYYY-MM-DD"),
-      dayjs().format("YYYY-MM-DD")
+      dayjs().format("YYYY-MM-DD"),
     ),
-    AmountOverTimeFetcher
+    AmountOverTimeFetcher,
   );
 
   if (accountError) return <div>failed to load</div>;
@@ -71,6 +73,19 @@ export default function BankAccountView() {
               onClick={() => setEditModalOpened(true)}
             >
               <IconEdit style={{ width: "70%" }} />
+            </ActionIcon>
+            <ActionIcon
+              size="m"
+              variant="outline"
+              color="red"
+              onClick={async () => {
+                if (confirm("Are you sure you want to archive this account?")) {
+                  await requestArchiveBankAccount(Number(accountId));
+                  navigate("/accounts");
+                }
+              }}
+            >
+              <IconArchive style={{ width: "70%" }} />
             </ActionIcon>
           </Group>
           <Button

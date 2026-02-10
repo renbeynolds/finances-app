@@ -1,6 +1,9 @@
-import { Button, Stack, TextInput } from '@mantine/core';
-import { useForm } from '@mantine/form';
-import { requestCreateInvestmentAccount } from '../../data/InvestmentAccounts/requests';
+import { Button, Stack, TextInput } from "@mantine/core";
+import { useForm } from "@mantine/form";
+import {
+  requestCreateInvestmentAccount,
+  requestUpdateInvestmentAccount,
+} from "../../data/InvestmentAccounts/requests";
 
 export interface InvestmentAccountFormValues {
   name: string;
@@ -23,27 +26,30 @@ export default function InvestmentAccountForm({
   const handleSubmit = async (values: InvestmentAccountFormValues) => {
     if (!investmentAccount) {
       const response = await requestCreateInvestmentAccount(values);
-      if (response.code === 200) {
+      if (response.success) {
         close();
       }
     } else {
-      // const response = await requestUpdateAccount(account.id, values);
-      // if (response.code === 200) {
-      //   close();
-      // }
+      const response = await requestUpdateInvestmentAccount(
+        investmentAccount.id,
+        values,
+      );
+      console.log(response);
+      if (response.success) {
+        close();
+      }
     }
-    close();
   };
 
   return (
     <form onSubmit={form.onSubmit((values) => handleSubmit(values))}>
       <Stack>
         <TextInput
-          {...form.getInputProps('name')}
-          placeholder='Name'
-          label='Name'
+          {...form.getInputProps("name")}
+          placeholder="Name"
+          label="Name"
         />
-        <Button type='submit' loading={form.submitting}>
+        <Button type="submit" loading={form.submitting}>
           Submit
         </Button>
       </Stack>

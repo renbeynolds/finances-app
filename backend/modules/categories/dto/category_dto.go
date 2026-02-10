@@ -41,6 +41,7 @@ type (
 		Emoji            string `json:"emoji"`
 		Type             string `json:"type"`
 		ParentCategoryID *uint  `json:"parentCategoryId"`
+		BudgetID         *uint  `json:"budgetId"`
 	}
 
 	TopSpendingCategoryResponse struct {

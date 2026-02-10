@@ -1,16 +1,19 @@
-import { ActionIcon, Group, Modal, Stack, Title } from "@mantine/core";
+import { ActionIcon, Grid, Group, Modal, Stack, Title } from "@mantine/core";
 import { IconEdit } from "@tabler/icons-react";
 import dayjs from "dayjs";
 import React from "react";
 import { useParams } from "react-router";
 import useSWR from "swr";
-import { UseLazyCategories } from "../../context/CategoriesContext";
+import {
+  UseLazyCategories
+} from "../../context/CategoriesContext";
 import {
   AmountOverTimeFetcher,
   CategoryOverTimeEndpoint,
 } from "../../Fetchers";
 import AmountOverTimeChart from "../AmountOverTimeChart";
 import TransactionTable from "../TransactionTable";
+import BudgetCard from "./BudgetCard";
 import CategoryForm from "./CategoryForm";
 
 export default function CategoryView() {
@@ -48,11 +51,22 @@ export default function CategoryView() {
             </ActionIcon>
           </Group>
         </Group>
-        <AmountOverTimeChart
-          response={categoryOverTimeResponse}
-          title="Amount Over Time"
-          displayTrendline
-        />
+        <Grid>
+          <Grid.Col span={8}>
+            <AmountOverTimeChart
+              response={categoryOverTimeResponse}
+              title="Amount Over Time"
+              displayTrendline
+            />
+          </Grid.Col>
+          <Grid.Col span={4}>
+            <BudgetCard
+              budgetId={category?.budgetId}
+              category={category}
+              categoryOverTimeResponse={categoryOverTimeResponse}
+            />
+          </Grid.Col>
+        </Grid>
         <TransactionTable categoryId={categoryId} />
       </Stack>
       <Modal

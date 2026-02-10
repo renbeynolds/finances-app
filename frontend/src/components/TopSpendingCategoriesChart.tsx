@@ -39,6 +39,7 @@ export default function TopSpendingCategoriesChart() {
   }, [data, error, isLoading, setChartData]);
 
   if (error) return <div>failed to load</div>;
+  if (!chartData) return <div>no data</div>;
 
   return (
     <Paper shadow="sm" p="lg">

@@ -14,6 +14,7 @@ type (
 		GetAllBankAccounts(ctx context.Context, tx *gorm.DB) ([]entities.BankAccount, error)
 		GetBankAccountByID(ctx context.Context, tx *gorm.DB, id uint) (entities.BankAccount, error)
 		UpdateBankAccount(ctx context.Context, tx *gorm.DB, bankAccount entities.BankAccount) (entities.BankAccount, error)
+		ArchiveBankAccount(ctx context.Context, tx *gorm.DB, id uint) error
 		GetBalanceOverTime(ctx context.Context, tx *gorm.DB, id uint, from, to string) ([]dto.BalanceOverTimeResponse, error)
 	}
 
@@ -76,6 +77,18 @@ func (r *bankAccountRepository) UpdateBankAccount(ctx context.Context, tx *gorm.
 	}
 
 	return bankAccount, nil
+}
+
+func (r *bankAccountRepository) ArchiveBankAccount(ctx context.Context, tx *gorm.DB, id uint) error {
+	if tx == nil {
+		tx = r.db
+	}
+
+	if err := tx.WithContext(ctx).Delete(&entities.BankAccount{}, id).Error; err != nil {
+		return err
+	}
+
+	return nil
 }
 
 func (r *bankAccountRepository) GetBalanceOverTime(ctx context.Context, tx *gorm.DB, id uint, from, to string) ([]dto.BalanceOverTimeResponse, error) {
