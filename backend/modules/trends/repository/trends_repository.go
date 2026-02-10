@@ -62,7 +62,7 @@ func (r *trendsRepository) GetNetWorthOverTime(ctx context.Context, tx *gorm.DB,
 
 	tx.Raw(`
 		WITH calendar AS (
-			SELECT DATE_TRUNC('day', bucket::date) AS day FROM generate_series(?, ?, '1 week'::interval) bucket
+			SELECT bucket::date AS day FROM generate_series(?::date, ?::date, '-1 week'::interval) bucket
 		),
 		latest_account_balances AS (
 			SELECT
@@ -116,7 +116,7 @@ func (r *trendsRepository) GetNetWorthOverTime(ctx context.Context, tx *gorm.DB,
 			TO_CHAR(day, 'YYYY-MM-DD') AS date
 		FROM daily_totals
 		ORDER BY day ASC
-	`, from, to).Scan(&result)
+	`, to, from).Scan(&result)
 
 	return result, nil
 }

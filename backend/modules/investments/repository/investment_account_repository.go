@@ -87,7 +87,7 @@ func (r *investmentAccountRepository) GetBalanceOverTime(ctx context.Context, tx
 
 	tx.Raw(`
     WITH calendar AS (
-      SELECT bucket::date AS day FROM generate_series(?, ?, '10 day'::interval) bucket
+      SELECT bucket::date AS day FROM generate_series(?::date, ?::date, '-10 day'::interval) bucket
     )
     SELECT
       c.day AS date,
@@ -100,7 +100,8 @@ func (r *investmentAccountRepository) GetBalanceOverTime(ctx context.Context, tx
       ) AS "amount"
     FROM
     calendar c
-	`, from, to, id).Scan(&results)
+    ORDER BY date ASC
+	`, to, from, id).Scan(&results)
 
 	return results, nil
 }

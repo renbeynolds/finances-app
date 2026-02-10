@@ -48,7 +48,7 @@ export default function AmountOverTimeChart({
   };
 
   const maxValue = Math.max(
-    ...(response.data?.data.map((point) => point.amount) || [0])
+    ...(response.data?.data.map((point) => point.amount) || [0]),
   );
 
   return (
