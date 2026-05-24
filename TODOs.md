@@ -29,15 +29,7 @@ In reality, users contribute to and withdraw from their portfolios on a monthly 
 7. Code Bug: Negative Compounding
    Critique: In Retirement.tsx, if the portfolio runs out of money (yearTotal is less than annualWithdrawalCents), the model subtracts the full withdrawal anyway, sending account balances into the negative. In subsequent years, the script applies the expectedAnnualReturn to these negative balances (a.balance = a.balance \* (1 + a.expectedAnnualReturn)), simulating mounting margin debt. Improvement: Add a floor constraint. If yearTotal cannot support the withdrawal, the balances should bottom out at exactly 0 and stop compounding negatively.
 
-# ===================================================
-
-===================================================
-
-Taxes are arguably the biggest variable in retirement planning after market returns! To accurately model how taxes affect retirement projections, you'll need to expand your data model to differentiate between account types, as they each behave uniquely during both the accumulation (saving) and decumulation (withdrawing) phases.
-
-Here is a breakdown of what you should consider implementing:
-
-1. Add "Tax Treatment" to Account Models
+8. Add "Tax Treatment" to Account Models
    You should add a property to the InvestmentAccount model to designate its tax status. There are three primary buckets:
 
 Pre-Tax / Tax-Deferred (e.g., Traditional 401k, Traditional IRA)
@@ -59,7 +51,7 @@ Drain Pre-Tax Accounts Second: Tap into the 401k/IRA funds and pay the ordinary 
 Drain Roth Accounts Last: Because these grow completely tax-free, you want to leave them alone for as long as possible. They also make the best inheritance for heirs.
 (Note: Advanced planners sometimes use a proportional strategy or fill up low tax brackets with pre-tax money and supplement with Roth money, but sequential depletion is the standard baseline model).
 
-5. Required Minimum Distributions (RMDs)
+9. Required Minimum Distributions (RMDs)
    For highly accurate modeling, you must eventually account for RMDs. The IRS forces retirees to start taking withdrawals from Pre-Tax accounts at a certain age (currently 73-75, depending on birth year).
 
 Even if the user's "Monthly Withdrawal" is covered by their Taxable or Roth accounts, the model must force a withdrawal from the Pre-Tax accounts based on IRS life expectancy tables.
