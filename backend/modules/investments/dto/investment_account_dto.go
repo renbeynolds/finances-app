@@ -23,14 +23,20 @@ type (
 	}
 
 	UpdateInvestmentAccountRequest struct {
-		Name *string `json:"name"`
+		Name                 *string  `json:"name"`
+		IncludeInRetirement  *bool    `json:"includeInRetirement"`
+		AnnualContribution   *int64   `json:"annualContribution"`
+		ExpectedAnnualReturn *float64 `json:"expectedAnnualReturn"`
 	}
 
 	InvestmentAccountResponse struct {
-		ID        uint   `json:"id"`
-		Name      string `json:"name"`
-		Balance   int64  `json:"balance"`
-		UpdatedAt string `json:"updatedAt"`
+		ID                   uint    `json:"id"`
+		Name                 string  `json:"name"`
+		Balance              int64   `json:"balance"`
+		UpdatedAt            string  `json:"updatedAt"`
+		IncludeInRetirement  bool    `json:"includeInRetirement"`
+		AnnualContribution   int64   `json:"annualContribution"`
+		ExpectedAnnualReturn float64 `json:"expectedAnnualReturn"`
 	}
 
 	BalanceOverTimeResponse struct {

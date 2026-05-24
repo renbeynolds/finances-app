@@ -71,7 +71,7 @@ func (r *investmentAccountRepository) UpdateInvestmentAccount(ctx context.Contex
 		tx = r.db
 	}
 
-	if err := tx.WithContext(ctx).Updates(&investmentAccount).Error; err != nil {
+	if err := tx.WithContext(ctx).Save(&investmentAccount).Error; err != nil {
 		return entities.InvestmentAccount{}, err
 	}
 

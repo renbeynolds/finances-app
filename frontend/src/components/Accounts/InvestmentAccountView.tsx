@@ -1,10 +1,12 @@
 import {
   ActionIcon,
+  Badge,
   Button,
   Group,
   Modal,
   SimpleGrid,
   Stack,
+  Text,
   Title,
 } from "@mantine/core";
 import { IconEdit, IconNote } from "@tabler/icons-react";
@@ -20,6 +22,7 @@ import {
   AmountOverTimeFetcher,
   InvestmentAccountBalanceOverTimeEndpoint,
 } from "../../Fetchers";
+import { FormatMoney } from "../../utils";
 import AmountOverTimeChart from "../AmountOverTimeChart";
 import InvestmentAccountBalanceForm from "./InvestmentAccountBalanceForm";
 import InvestmentAccountForm from "./InvestmentAccountForm";
@@ -48,20 +51,46 @@ export default function InvestmentAccountView() {
   if (accountError) return <div>failed to load</div>;
   if (accountIsLoading) return <div>loading...</div>;
 
+  const account = accountData!.data;
+
   return (
     <>
       <Stack>
         <Group justify="space-between">
-          <Group>
-            <Title order={2}>{accountData?.data.name}</Title>
-            <ActionIcon
-              size="m"
-              variant="outline"
-              onClick={() => setEditModalOpened(true)}
-            >
-              <IconEdit style={{ width: "70%" }} />
-            </ActionIcon>
-          </Group>
+          <Stack gap={4}>
+            <Group>
+              <Title order={2}>{account.name}</Title>
+              <ActionIcon
+                size="m"
+                variant="outline"
+                onClick={() => setEditModalOpened(true)}
+              >
+                <IconEdit style={{ width: "70%" }} />
+              </ActionIcon>
+            </Group>
+            <Group gap="xs">
+              <Badge
+                color={account.includeInRetirement ? "teal" : "gray"}
+                variant="light"
+              >
+                {account.includeInRetirement
+                  ? "Included in Retirement"
+                  : "Excluded from Retirement"}
+              </Badge>
+              <Text size="sm" c="dimmed">
+                Contribution:{" "}
+                <Text span fw={500} c="inherit">
+                  {FormatMoney(account.annualContribution)}/yr
+                </Text>
+              </Text>
+              <Text size="sm" c="dimmed">
+                Expected Return:{" "}
+                <Text span fw={500} c="inherit">
+                  {(account.expectedAnnualReturn * 100).toFixed(2)}%
+                </Text>
+              </Text>
+            </Group>
+          </Stack>
           <Button
             rightSection={<IconNote />}
             onClick={() => setRecordBalanceModalOpened(true)}
@@ -92,7 +121,7 @@ export default function InvestmentAccountView() {
         title="Edit Account"
       >
         <InvestmentAccountForm
-          investmentAccount={accountData!.data}
+          investmentAccount={account}
           close={() => setEditModalOpened(false)}
         />
       </Modal>

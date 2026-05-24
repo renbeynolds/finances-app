@@ -11,7 +11,12 @@ export const requestCreateInvestmentAccount = async (
   return fetch("/api/investment_accounts", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(values),
+    body: JSON.stringify({
+      name: values.name,
+      includeInRetirement: values.includeInRetirement,
+      annualContribution: Math.round(values.annualContribution * 100),
+      expectedAnnualReturn: values.expectedAnnualReturn / 100,
+    }),
   }).then((response) => response.json());
 };
 
@@ -22,9 +27,15 @@ export const requestUpdateInvestmentAccount = async (
   return fetch(`/api/investment_accounts/${id}`, {
     method: "PATCH",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(values),
+    body: JSON.stringify({
+      name: values.name,
+      includeInRetirement: values.includeInRetirement,
+      annualContribution: Math.round(values.annualContribution * 100),
+      expectedAnnualReturn: values.expectedAnnualReturn / 100,
+    }),
   }).then((response) => response.json());
 };
+
 
 export const requestRecordInvestmentAccountBalance = async (
   values: InvestmentAccountBalanceFormValues,

@@ -78,6 +78,15 @@ func (s *investmentAccountService) UpdateInvestmentAccount(ctx context.Context, 
 	if req.Name != nil {
 		investmentAccount.Name = *req.Name
 	}
+	if req.IncludeInRetirement != nil {
+		investmentAccount.IncludeInRetirement = *req.IncludeInRetirement
+	}
+	if req.AnnualContribution != nil {
+		investmentAccount.AnnualContribution = *req.AnnualContribution
+	}
+	if req.ExpectedAnnualReturn != nil {
+		investmentAccount.ExpectedAnnualReturn = *req.ExpectedAnnualReturn
+	}
 
 	updatedInvestmentAccount, err := s.investmentAccountRepository.UpdateInvestmentAccount(ctx, s.db, investmentAccount)
 	if err != nil {
@@ -93,9 +102,12 @@ func (s *investmentAccountService) GetBalanceOverTime(ctx context.Context, id ui
 
 func entityToResponse(entity entities.InvestmentAccount) dto.InvestmentAccountResponse {
 	return dto.InvestmentAccountResponse{
-		ID:        entity.ID,
-		Name:      entity.Name,
-		Balance:   entity.Balance,
-		UpdatedAt: entity.UpdatedAt.Format(time.RFC3339),
+		ID:                   entity.ID,
+		Name:                 entity.Name,
+		Balance:              entity.Balance,
+		UpdatedAt:            entity.UpdatedAt.Format(time.RFC3339),
+		IncludeInRetirement:  entity.IncludeInRetirement,
+		AnnualContribution:   entity.AnnualContribution,
+		ExpectedAnnualReturn: entity.ExpectedAnnualReturn,
 	}
 }

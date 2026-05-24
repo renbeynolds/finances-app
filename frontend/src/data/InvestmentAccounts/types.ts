@@ -3,4 +3,7 @@ export type InvestmentAccount = {
   name: string;
   balance: number;
   updatedAt: string;
+  includeInRetirement: boolean;
+  annualContribution: number;
+  expectedAnnualReturn: number;
 };

@@ -1,4 +1,4 @@
-import { Button, Stack, TextInput } from "@mantine/core";
+import { Button, NumberInput, Stack, Switch, TextInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import {
   requestCreateInvestmentAccount,
@@ -7,10 +7,19 @@ import {
 
 export interface InvestmentAccountFormValues {
   name: string;
+  includeInRetirement: boolean;
+  annualContribution: number; // in dollars (UI), converted to cents on submit
+  expectedAnnualReturn: number; // as percentage (UI), e.g. 7 means 7%
 }
 
 type InvestmentAccountFormProps = {
-  investmentAccount?: InvestmentAccountFormValues & { id: number };
+  investmentAccount?: {
+    id: number;
+    name: string;
+    includeInRetirement: boolean;
+    annualContribution: number; // cents from API
+    expectedAnnualReturn: number; // fraction from API (e.g. 0.07)
+  };
   close: () => void;
 };
 
@@ -19,7 +28,19 @@ export default function InvestmentAccountForm({
   close,
 }: InvestmentAccountFormProps) {
   const form = useForm<InvestmentAccountFormValues>({
-    initialValues: investmentAccount,
+    initialValues: investmentAccount
+      ? {
+          name: investmentAccount.name,
+          includeInRetirement: investmentAccount.includeInRetirement,
+          annualContribution: investmentAccount.annualContribution / 100,
+          expectedAnnualReturn: investmentAccount.expectedAnnualReturn * 100,
+        }
+      : {
+          name: "",
+          includeInRetirement: false,
+          annualContribution: 0,
+          expectedAnnualReturn: 0,
+        },
     validate: {},
   });
 
@@ -34,7 +55,6 @@ export default function InvestmentAccountForm({
         investmentAccount.id,
         values,
       );
-      console.log(response);
       if (response.success) {
         close();
       }
@@ -48,6 +68,30 @@ export default function InvestmentAccountForm({
           {...form.getInputProps("name")}
           placeholder="Name"
           label="Name"
+        />
+        <Switch
+          {...form.getInputProps("includeInRetirement", { type: "checkbox" })}
+          label="Include in retirement projections"
+        />
+        <NumberInput
+          {...form.getInputProps("annualContribution")}
+          label="Annual Contribution"
+          placeholder="0"
+          decimalScale={2}
+          fixedDecimalScale
+          prefix="$"
+          hideControls
+        />
+        <NumberInput
+          {...form.getInputProps("expectedAnnualReturn")}
+          label="Expected Annual Return"
+          placeholder="0"
+          decimalScale={2}
+          fixedDecimalScale
+          suffix="%"
+          hideControls
+          min={0}
+          max={100}
         />
         <Button type="submit" loading={form.submitting}>
           Submit
