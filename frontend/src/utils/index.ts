@@ -17,8 +17,8 @@ export const FormatMoneyMillions = (amount: number) =>
   `$${amount / 100000000}m`;
 
 export const FormatMoneyDynamic = (amount: number) => {
-  if (amount > 100000000) return FormatMoneyMillions(amount);
-  if (amount > 100000) return FormatMoneyThousands(amount);
+  if (amount >= 100000000) return FormatMoneyMillions(amount);
+  if (amount >= 100000) return FormatMoneyThousands(amount);
   return FormatMoneyDollars(amount);
 };
 
