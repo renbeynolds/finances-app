@@ -36,8 +36,9 @@ func NewInvestmentAccountService(
 
 func (s *investmentAccountService) CreateInvestmentAccount(ctx context.Context, req dto.CreateInvestmentAccountRequest) (dto.InvestmentAccountResponse, error) {
 	investmentAccount := entities.InvestmentAccount{
-		Name:        req.Name,
-		AccountType: req.AccountType,
+		Name:             req.Name,
+		AccountType:      req.AccountType,
+		AnnualVolatility: req.AnnualVolatility,
 	}
 
 	createdInvestmentAccount, err := s.investmentAccountRepository.CreateInvestmentAccount(ctx, s.db, investmentAccount)
@@ -88,6 +89,9 @@ func (s *investmentAccountService) UpdateInvestmentAccount(ctx context.Context, 
 	if req.ExpectedAnnualReturn != nil {
 		investmentAccount.ExpectedAnnualReturn = *req.ExpectedAnnualReturn
 	}
+	if req.AnnualVolatility != nil {
+		investmentAccount.AnnualVolatility = *req.AnnualVolatility
+	}
 	if req.AccountType != nil {
 		investmentAccount.AccountType = *req.AccountType
 	}
@@ -113,6 +117,7 @@ func entityToResponse(entity entities.InvestmentAccount) dto.InvestmentAccountRe
 		IncludeInRetirement:  entity.IncludeInRetirement,
 		AnnualContribution:   entity.AnnualContribution,
 		ExpectedAnnualReturn: entity.ExpectedAnnualReturn,
+		AnnualVolatility:     entity.AnnualVolatility,
 		AccountType:          entity.AccountType,
 	}
 }

@@ -11,6 +11,7 @@ type InvestmentAccount struct {
 	IncludeInRetirement  bool    `gorm:"not null;default:false"`
 	AnnualContribution   int64   `gorm:"not null;default:0"`
 	ExpectedAnnualReturn float64 `gorm:"not null;default:0"`
+	AnnualVolatility     float64 `gorm:"not null;default:0.15"`
 	AccountType          string  `gorm:"not null;default:'TAXABLE'"`
 	Balances             []InvestmentAccountBalance
 }

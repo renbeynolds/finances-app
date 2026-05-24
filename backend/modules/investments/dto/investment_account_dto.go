@@ -19,8 +19,9 @@ const (
 
 type (
 	CreateInvestmentAccountRequest struct {
-		Name        string `json:"name" validate:"required"`
-		AccountType string `json:"accountType" validate:"required"`
+		Name             string  `json:"name" validate:"required"`
+		AccountType      string  `json:"accountType" validate:"required"`
+		AnnualVolatility float64 `json:"annualVolatility" validate:"required"`
 	}
 
 	UpdateInvestmentAccountRequest struct {
@@ -28,6 +29,7 @@ type (
 		IncludeInRetirement  *bool    `json:"includeInRetirement"`
 		AnnualContribution   *int64   `json:"annualContribution"`
 		ExpectedAnnualReturn *float64 `json:"expectedAnnualReturn"`
+		AnnualVolatility     *float64 `json:"annualVolatility"`
 		AccountType          *string  `json:"accountType"`
 	}
 
@@ -39,6 +41,7 @@ type (
 		IncludeInRetirement  bool    `json:"includeInRetirement"`
 		AnnualContribution   int64   `json:"annualContribution"`
 		ExpectedAnnualReturn float64 `json:"expectedAnnualReturn"`
+		AnnualVolatility     float64 `json:"annualVolatility"`
 		AccountType          string  `json:"accountType"`
 	}
 

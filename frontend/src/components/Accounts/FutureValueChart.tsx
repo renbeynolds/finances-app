@@ -1,61 +1,96 @@
+import { LineChart } from "@mantine/charts";
+import { Paper, Title, useMantineTheme } from "@mantine/core";
 import dayjs from "dayjs";
-import { AmountOverTime } from "../../data/AmountOverTime";
-import { Response } from "../../data/Response";
-import AmountOverTimeChart from "../AmountOverTimeChart";
+import { useMemo } from "react";
+import { FormatMoney, FormatMoneyDynamic } from "../../utils";
+import { runMonteCarloSimulation } from "../../utils/monteCarlo";
 
 type FutureValueChartProps = {
   currentBalance: number; // in cents
   annualContribution: number; // in cents
   expectedAnnualReturn: number; // as a decimal fraction, e.g. 0.07
+  annualVolatility?: number;
   years?: number;
 };
-
-function buildProjection(
-  currentBalanceCents: number,
-  annualContributionCents: number,
-  annualReturnRate: number,
-  years: number,
-): AmountOverTime[] {
-  const startYear = dayjs().year();
-  const points: AmountOverTime[] = [];
-  let balance = currentBalanceCents;
-
-  for (let i = 0; i <= years; i++) {
-    points.push({ date: String(startYear + i), amount: Math.round(balance) });
-    balance = balance * (1 + annualReturnRate) + annualContributionCents;
-  }
-
-  return points;
-}
 
 export default function FutureValueChart({
   currentBalance,
   annualContribution,
   expectedAnnualReturn,
+  annualVolatility = 0.15,
   years = 60,
 }: FutureValueChartProps) {
-  const data = buildProjection(
+  const theme = useMantineTheme();
+
+  const chartData = useMemo(() => {
+    // Current age 0 means it runs for 100 years. We will slice it.
+    const results = runMonteCarloSimulation(
+      [
+        {
+          balance: currentBalance,
+          annualContribution,
+          expectedAnnualReturn,
+          annualVolatility,
+        },
+      ],
+      0, // currentAge
+      999, // retirementAge (never withdraw)
+      0, // withdrawal amount
+      1000 // iterations
+    );
+
+    const startYear = dayjs().year();
+
+    // Take only the requested number of years
+    const slicedResults = results.slice(0, years + 1);
+
+    return slicedResults.map((result, index) => {
+      // Sort ascending to find percentiles
+      const sortedBalances = [...result.balances].sort((a, b) => a - b);
+
+      const p10 = sortedBalances[Math.floor(sortedBalances.length * 0.1)];
+      const p50 = sortedBalances[Math.floor(sortedBalances.length * 0.5)];
+      const p90 = sortedBalances[Math.floor(sortedBalances.length * 0.9)];
+
+      return {
+        date: String(startYear + index),
+        p10,
+        p50,
+        p90,
+      };
+    });
+  }, [
     currentBalance,
     annualContribution,
     expectedAnnualReturn,
+    annualVolatility,
     years,
-  );
-
-  const staticResponse: {
-    data: Response<AmountOverTime[]>;
-    error: undefined;
-    isLoading: false;
-  } = {
-    data: { success: true, code: 200, pagination: { totalRecords: 0 }, data },
-    error: undefined,
-    isLoading: false,
-  };
+  ]);
 
   return (
-    <AmountOverTimeChart
-      title="Future Value"
-      response={staticResponse as any}
-      xAxisTickFormatter={(year) => year}
-    />
+    <Paper shadow="sm" p="lg" style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+      <Title order={3}>Future Value Projection</Title>
+      <LineChart
+        h={300}
+        data={chartData}
+        dataKey="date"
+        series={[
+          { name: "p90", label: "Optimistic (90th)", color: theme.colors.green[6] },
+          { name: "p50", label: "Median (50th)", color: theme.colors.blue[6] },
+          { name: "p10", label: "Pessimistic (10th)", color: theme.colors.red[6] },
+        ]}
+        curveType="monotone"
+        tickLine="xy"
+        gridAxis="x"
+        withXAxis
+        withYAxis
+        withTooltip
+        withDots={false}
+        yAxisProps={{
+          tickFormatter: (value: number) => FormatMoneyDynamic(value),
+        }}
+        valueFormatter={(value: number) => FormatMoney(value)}
+      />
+    </Paper>
   );
 }

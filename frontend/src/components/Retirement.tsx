@@ -47,6 +47,7 @@ function ContributionCell({
         includeInRetirement: account.includeInRetirement,
         annualContribution: parsedContrib,
         expectedAnnualReturn: account.expectedAnnualReturn,
+        annualVolatility: account.annualVolatility,
         accountType: account.accountType,
       });
       mutate();
@@ -94,6 +95,7 @@ function ReturnRateCell({
         includeInRetirement: account.includeInRetirement,
         annualContribution: account.annualContribution / 100,
         expectedAnnualReturn: parsedRate,
+        annualVolatility: account.annualVolatility,
         accountType: account.accountType,
       });
       mutate();
@@ -104,6 +106,54 @@ function ReturnRateCell({
     <NumberInput
       value={returnRate}
       onChange={setReturnRate}
+      onBlur={handleUpdate}
+      suffix="%"
+      decimalScale={2}
+      fixedDecimalScale
+      hideControls
+      size="sm"
+    />
+  );
+}
+
+function VolatilityCell({
+  account,
+  mutate,
+}: {
+  account: InvestmentAccount;
+  mutate: () => void;
+}) {
+  const [volatility, setVolatility] = useState<number | string>(
+    account.annualVolatility * 100,
+  );
+
+  useEffect(() => {
+    setVolatility(account.annualVolatility * 100);
+  }, [account.annualVolatility]);
+
+  const handleUpdate = async () => {
+    const parsedVol =
+      typeof volatility === "number"
+        ? volatility
+        : parseFloat(volatility || "0");
+
+    if (parsedVol / 100 !== account.annualVolatility) {
+      await requestUpdateInvestmentAccount(account.id, {
+        name: account.name,
+        includeInRetirement: account.includeInRetirement,
+        annualContribution: account.annualContribution / 100,
+        expectedAnnualReturn: account.expectedAnnualReturn,
+        annualVolatility: parsedVol,
+        accountType: account.accountType,
+      });
+      mutate();
+    }
+  };
+
+  return (
+    <NumberInput
+      value={volatility}
+      onChange={setVolatility}
       onBlur={handleUpdate}
       suffix="%"
       decimalScale={2}
@@ -144,6 +194,7 @@ export default function Retirement() {
       balance: a.balance,
       annualContribution: a.annualContribution,
       expectedAnnualReturn: a.expectedAnnualReturn,
+      annualVolatility: a.annualVolatility,
     }));
 
     const withdrawalCents =
@@ -265,6 +316,13 @@ export default function Retirement() {
               title: "Expected Return",
               render: (account) => (
                 <ReturnRateCell account={account} mutate={mutate} />
+              ),
+            },
+            {
+              accessor: "annualVolatility",
+              title: "Volatility",
+              render: (account) => (
+                <VolatilityCell account={account} mutate={mutate} />
               ),
             },
             {

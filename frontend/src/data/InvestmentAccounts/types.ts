@@ -6,5 +6,6 @@ export type InvestmentAccount = {
   includeInRetirement: boolean;
   annualContribution: number;
   expectedAnnualReturn: number;
+  annualVolatility: number;
   accountType: string;
 };

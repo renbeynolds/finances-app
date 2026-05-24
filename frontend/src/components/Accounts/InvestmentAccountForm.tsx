@@ -10,6 +10,7 @@ export interface InvestmentAccountFormValues {
   includeInRetirement: boolean;
   annualContribution: number; // in dollars (UI), converted to cents on submit
   expectedAnnualReturn: number; // as percentage (UI), e.g. 7 means 7%
+  annualVolatility: number; // as percentage (UI), e.g. 15 means 15%
   accountType: string;
 }
 
@@ -20,6 +21,7 @@ type InvestmentAccountFormProps = {
     includeInRetirement: boolean;
     annualContribution: number; // cents from API
     expectedAnnualReturn: number; // fraction from API (e.g. 0.07)
+    annualVolatility: number; // fraction from API (e.g. 0.15)
     accountType: string;
   };
   close: () => void;
@@ -36,6 +38,7 @@ export default function InvestmentAccountForm({
           includeInRetirement: investmentAccount.includeInRetirement,
           annualContribution: investmentAccount.annualContribution / 100,
           expectedAnnualReturn: investmentAccount.expectedAnnualReturn * 100,
+          annualVolatility: (investmentAccount.annualVolatility ?? 0.15) * 100,
           accountType: investmentAccount.accountType || "TAXABLE",
         }
       : {
@@ -43,6 +46,7 @@ export default function InvestmentAccountForm({
           includeInRetirement: false,
           annualContribution: 0,
           expectedAnnualReturn: 0,
+          annualVolatility: 15,
           accountType: "TAXABLE",
         },
     validate: {},
@@ -99,6 +103,17 @@ export default function InvestmentAccountForm({
           {...form.getInputProps("expectedAnnualReturn")}
           label="Expected Annual Return"
           placeholder="0"
+          decimalScale={2}
+          fixedDecimalScale
+          suffix="%"
+          hideControls
+          min={0}
+          max={100}
+        />
+        <NumberInput
+          {...form.getInputProps("annualVolatility")}
+          label="Expected Annual Volatility"
+          placeholder="15"
           decimalScale={2}
           fixedDecimalScale
           suffix="%"

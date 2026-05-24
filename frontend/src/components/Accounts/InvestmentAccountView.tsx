@@ -96,6 +96,12 @@ export default function InvestmentAccountView() {
                   {(account.expectedAnnualReturn * 100).toFixed(2)}%
                 </Text>
               </Text>
+              <Text size="sm" c="dimmed">
+                Volatility:{" "}
+                <Text span fw={500} c="inherit">
+                  {(account.annualVolatility * 100).toFixed(2)}%
+                </Text>
+              </Text>
             </Group>
           </Stack>
           <Button
@@ -114,6 +120,7 @@ export default function InvestmentAccountView() {
             currentBalance={account.balance}
             annualContribution={account.annualContribution}
             expectedAnnualReturn={account.expectedAnnualReturn}
+            annualVolatility={account.annualVolatility}
           />
         </SimpleGrid>
       </Stack>
