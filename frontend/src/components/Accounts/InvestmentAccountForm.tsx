@@ -1,4 +1,4 @@
-import { Button, NumberInput, Stack, Switch, TextInput } from "@mantine/core";
+import { Button, NumberInput, Select, Stack, Switch, TextInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import {
   requestCreateInvestmentAccount,
@@ -10,6 +10,7 @@ export interface InvestmentAccountFormValues {
   includeInRetirement: boolean;
   annualContribution: number; // in dollars (UI), converted to cents on submit
   expectedAnnualReturn: number; // as percentage (UI), e.g. 7 means 7%
+  accountType: string;
 }
 
 type InvestmentAccountFormProps = {
@@ -19,6 +20,7 @@ type InvestmentAccountFormProps = {
     includeInRetirement: boolean;
     annualContribution: number; // cents from API
     expectedAnnualReturn: number; // fraction from API (e.g. 0.07)
+    accountType: string;
   };
   close: () => void;
 };
@@ -34,12 +36,14 @@ export default function InvestmentAccountForm({
           includeInRetirement: investmentAccount.includeInRetirement,
           annualContribution: investmentAccount.annualContribution / 100,
           expectedAnnualReturn: investmentAccount.expectedAnnualReturn * 100,
+          accountType: investmentAccount.accountType || "TAXABLE",
         }
       : {
           name: "",
           includeInRetirement: false,
           annualContribution: 0,
           expectedAnnualReturn: 0,
+          accountType: "TAXABLE",
         },
     validate: {},
   });
@@ -68,6 +72,15 @@ export default function InvestmentAccountForm({
           {...form.getInputProps("name")}
           placeholder="Name"
           label="Name"
+        />
+        <Select
+          {...form.getInputProps("accountType")}
+          label="Account Type"
+          data={[
+            { value: "TAXABLE", label: "Taxable" },
+            { value: "PRE_TAX", label: "Pre-Tax" },
+            { value: "ROTH", label: "Roth" },
+          ]}
         />
         <Switch
           {...form.getInputProps("includeInRetirement", { type: "checkbox" })}

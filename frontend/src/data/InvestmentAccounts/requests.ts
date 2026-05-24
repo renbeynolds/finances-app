@@ -16,6 +16,7 @@ export const requestCreateInvestmentAccount = async (
       includeInRetirement: values.includeInRetirement,
       annualContribution: Math.round(values.annualContribution * 100),
       expectedAnnualReturn: values.expectedAnnualReturn / 100,
+      accountType: values.accountType,
     }),
   }).then((response) => response.json());
 };
@@ -32,6 +33,7 @@ export const requestUpdateInvestmentAccount = async (
       includeInRetirement: values.includeInRetirement,
       annualContribution: Math.round(values.annualContribution * 100),
       expectedAnnualReturn: values.expectedAnnualReturn / 100,
+      accountType: values.accountType,
     }),
   }).then((response) => response.json());
 };

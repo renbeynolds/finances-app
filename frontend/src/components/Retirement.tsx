@@ -47,6 +47,7 @@ function ContributionCell({
         includeInRetirement: account.includeInRetirement,
         annualContribution: parsedContrib,
         expectedAnnualReturn: account.expectedAnnualReturn,
+        accountType: account.accountType,
       });
       mutate();
     }
@@ -93,6 +94,7 @@ function ReturnRateCell({
         includeInRetirement: account.includeInRetirement,
         annualContribution: account.annualContribution / 100,
         expectedAnnualReturn: parsedRate,
+        accountType: account.accountType,
       });
       mutate();
     }
@@ -243,6 +245,13 @@ export default function Retirement() {
             {
               accessor: "name",
               title: "Account",
+            },
+            {
+              accessor: "accountType",
+              title: "Type",
+              render: (account) => (
+                account.accountType === "PRE_TAX" ? "Pre-Tax" : account.accountType === "ROTH" ? "Roth" : "Taxable"
+              ),
             },
             {
               accessor: "annualContribution",

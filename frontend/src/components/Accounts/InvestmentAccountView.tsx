@@ -78,6 +78,12 @@ export default function InvestmentAccountView() {
                   ? "Included in Retirement"
                   : "Excluded from Retirement"}
               </Badge>
+              <Badge
+                color="blue"
+                variant="light"
+              >
+                {account.accountType === "PRE_TAX" ? "Pre-Tax" : account.accountType === "ROTH" ? "Roth" : "Taxable"}
+              </Badge>
               <Text size="sm" c="dimmed">
                 Contribution:{" "}
                 <Text span fw={500} c="inherit">
