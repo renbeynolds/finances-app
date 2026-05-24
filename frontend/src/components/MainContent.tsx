@@ -4,6 +4,7 @@ import InvestmentAccountView from "./Accounts/InvestmentAccountView";
 import BudgetsView from "./Budgets/BudgetsView";
 import CategoryView from "./Categories/CategoryView";
 import Explore from "./Explore";
+import Retirement from "./Retirement";
 import Snapshot from "./Snapshot";
 import Trends from "./Trends";
 import UploadView from "./Uploads/UploadView";
@@ -23,6 +24,7 @@ export default function MainContent() {
       <Route path="/uploads/:uploadId" element={<UploadView />} />
       <Route path="/categories/:categoryId" element={<CategoryView />} />
       <Route path="/budgeting" element={<BudgetsView />} />
+      <Route path="/retirement" element={<Retirement />} />
     </Routes>
   );
 }

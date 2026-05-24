@@ -6,6 +6,7 @@ import {
   IconCategory,
   IconChartHistogram,
   IconDatabaseSearch,
+  IconSunset,
   IconUpload,
 } from "@tabler/icons-react";
 import { useLocation, useNavigate } from "react-router";
@@ -78,6 +79,12 @@ export default function Layout() {
               leftSection={<IconBellDollar size={12} />}
             >
               Budgeting
+            </Tabs.Tab>
+            <Tabs.Tab
+              value="retirement"
+              leftSection={<IconSunset size={12} />}
+            >
+              Retirement
             </Tabs.Tab>
           </Tabs.List>
         </Tabs>
