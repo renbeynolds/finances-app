@@ -6,8 +6,7 @@ import { AmountOverTime } from "../data/AmountOverTime";
 import { Response } from "../data/Response";
 import {
   FormatMoney,
-  FormatMoneyDollars,
-  FormatMoneyThousands,
+  FormatMoneyDynamic,
   FormatMonthString,
   MonthStringToTimestamp,
 } from "../utils";
@@ -16,12 +15,14 @@ type AmountOverTimeChartProps = {
   title: string;
   response: SWRResponse<Response<AmountOverTime[]>, any, any>;
   displayTrendline?: boolean;
+  xAxisTickFormatter?: (value: string) => string;
 };
 
 export default function AmountOverTimeChart({
   title,
   response,
   displayTrendline = false,
+  xAxisTickFormatter = FormatMonthString,
 }: AmountOverTimeChartProps) {
   const theme = useMantineTheme();
   if (response.error) return <div>failed to load</div>;
@@ -83,13 +84,10 @@ export default function AmountOverTimeChart({
           withTooltip
           withDots={false}
           xAxisProps={{
-            tickFormatter: FormatMonthString,
+            tickFormatter: xAxisTickFormatter,
           }}
           yAxisProps={{
-            tickFormatter: (value: number) =>
-              maxValue > 1000000
-                ? FormatMoneyThousands(value)
-                : FormatMoneyDollars(value),
+            tickFormatter: (value: number) => FormatMoneyDynamic(value),
           }}
           valueFormatter={(value: number) => FormatMoney(value)}
         />

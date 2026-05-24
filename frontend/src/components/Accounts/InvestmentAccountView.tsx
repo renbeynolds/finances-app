@@ -24,6 +24,7 @@ import {
 } from "../../Fetchers";
 import { FormatMoney } from "../../utils";
 import AmountOverTimeChart from "../AmountOverTimeChart";
+import FutureValueChart from "./FutureValueChart";
 import InvestmentAccountBalanceForm from "./InvestmentAccountBalanceForm";
 import InvestmentAccountForm from "./InvestmentAccountForm";
 
@@ -102,6 +103,11 @@ export default function InvestmentAccountView() {
           <AmountOverTimeChart
             response={balanceOverTimeResponse}
             title="Balance"
+          />
+          <FutureValueChart
+            currentBalance={account.balance}
+            annualContribution={account.annualContribution}
+            expectedAnnualReturn={account.expectedAnnualReturn}
           />
         </SimpleGrid>
       </Stack>

@@ -13,6 +13,15 @@ export const FormatMoneyDollars = (amount: number) =>
 
 export const FormatMoneyThousands = (amount: number) => `$${amount / 100000}k`;
 
+export const FormatMoneyMillions = (amount: number) =>
+  `$${amount / 100000000}m`;
+
+export const FormatMoneyDynamic = (amount: number) => {
+  if (amount > 100000000) return FormatMoneyMillions(amount);
+  if (amount > 100000) return FormatMoneyThousands(amount);
+  return FormatMoneyDollars(amount);
+};
+
 export const PreviousNMonths = (dateRange: [string, string], n: number) => {
   return [
     dayjs(dateRange[0]).subtract(n, "month").format("YYYY-MM-DD"),
