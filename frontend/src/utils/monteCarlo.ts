@@ -6,11 +6,9 @@
  * @returns A randomly generated number from the normal distribution
  */
 export function generateNormalRandom(mean: number, stdDev: number): number {
-  let u = 0,
-    v = 0;
-  while (u === 0) u = Math.random(); // Converting [0,1) to (0,1)
+  let u = 0, v = 0;
+  while (u === 0) u = Math.random();
   while (v === 0) v = Math.random();
-
   const z = Math.sqrt(-2.0 * Math.log(u)) * Math.cos(2.0 * Math.PI * v);
   return z * stdDev + mean;
 }
@@ -24,11 +22,15 @@ export type AccountState = {
 
 export type SimulationResult = {
   year: number;
-  balances: number[]; // the total balance for each iteration in this year
+  // Outer array: one entry per account. Inner array: one balance per iteration.
+  accountBalances: number[][];
 };
 
 /**
- * Runs a Monte Carlo simulation for portfolio growth and decumulation.
+ * Runs a Monte Carlo simulation for portfolio growth and decumulation,
+ * tracking each account's balance independently. During retirement, accounts
+ * are drawn down sequentially in the order they are provided — the first
+ * account is fully drained before withdrawals begin from the next.
  *
  * @param accounts The initial state of the investment accounts
  * @param currentAge The user's current age
@@ -46,61 +48,51 @@ export function runMonteCarloSimulation(
   const years = Math.max(0, 100 - currentAge);
   const results: SimulationResult[] = [];
 
-  // Initialize results array for each year
   for (let y = 0; y <= years; y++) {
     results.push({
       year: currentAge + y,
-      balances: new Array(iterations).fill(0),
+      // One inner array per account, each pre-filled with `iterations` zeros
+      accountBalances: accounts.map(() => new Array(iterations).fill(0)),
     });
   }
 
   for (let i = 0; i < iterations; i++) {
-    // Clone initial account states for this iteration
     let currentAccounts = accounts.map((a) => ({ ...a }));
 
     for (let y = 0; y <= years; y++) {
-      let yearTotal = 0;
       const age = currentAge + y;
 
+      // --- Growth & contribution phase ---
       for (const a of currentAccounts) {
-        // Generate a random return based on account's expected return and volatility
-        // Default volatility to 15% (0.15) if not provided
         const volatility = a.annualVolatility ?? 0.15;
-        const randomReturn = generateNormalRandom(
-          a.expectedAnnualReturn,
-          volatility,
-        );
-
+        const randomReturn = generateNormalRandom(a.expectedAnnualReturn, volatility);
         a.balance = a.balance * (1 + randomReturn);
-
         if (age < retirementAge) {
           a.balance += a.annualContribution;
         }
-
-        yearTotal += a.balance;
       }
 
-      // Apply withdrawal logic with floor constraint (preventing negative compounding bug)
+      // --- Withdrawal phase (sequential across accounts) ---
       if (age >= retirementAge) {
-        if (yearTotal > 0) {
-          if (yearTotal >= annualWithdrawalCents) {
-            for (const a of currentAccounts) {
-              a.balance -= annualWithdrawalCents * (a.balance / yearTotal);
-            }
-            yearTotal -= annualWithdrawalCents;
+        let remainingWithdrawal = annualWithdrawalCents;
+
+        for (const a of currentAccounts) {
+          if (remainingWithdrawal <= 0) break;
+
+          if (a.balance >= remainingWithdrawal) {
+            a.balance -= remainingWithdrawal;
+            remainingWithdrawal = 0;
           } else {
-            // If we can't support full withdrawal, drain all accounts to zero
-            for (const a of currentAccounts) {
-              a.balance = 0;
-            }
-            yearTotal = 0;
+            remainingWithdrawal -= a.balance;
+            a.balance = 0;
           }
-        } else {
-          yearTotal = 0;
         }
       }
 
-      results[y].balances[i] = Math.max(0, Math.round(yearTotal));
+      // --- Record each account's balance for this iteration ---
+      for (let a = 0; a < currentAccounts.length; a++) {
+        results[y].accountBalances[a][i] = Math.max(0, Math.round(currentAccounts[a].balance));
+      }
     }
   }
 

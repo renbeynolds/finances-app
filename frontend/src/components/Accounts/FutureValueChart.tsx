@@ -46,7 +46,7 @@ export default function FutureValueChart({
 
     return slicedResults.map((result, index) => {
       // Sort ascending to find percentiles
-      const sortedBalances = [...result.balances].sort((a, b) => a - b);
+      const sortedBalances = [...result.accountBalances[0]].sort((a, b) => a - b);
 
       const p10 = sortedBalances[Math.floor(sortedBalances.length * 0.1)];
       const p50 = sortedBalances[Math.floor(sortedBalances.length * 0.5)];
