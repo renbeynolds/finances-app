@@ -23,21 +23,12 @@ export default function AssetProjectionChart({
 
   const points: any[] = [];
 
-  const accountsState = accounts.map((a) => ({
-    id: String(a.id),
-    name: a.name,
-    balance: a.balance,
-    annualContribution: a.annualContribution,
-    expectedAnnualReturn: a.expectedAnnualReturn,
-    annualVolatility: a.annualVolatility,
-  }));
-
   const annualWithdrawalCents = monthlyWithdrawlCents * 12;
 
   for (let age = currentAge; age <= 100; age++) {
     let yearTotal = 0;
 
-    for (const a of accountsState) {
+    for (const a of accounts) {
       a.balance = a.balance * (1 + a.expectedAnnualReturn);
       if (age < retirementAge) {
         a.balance += a.annualContribution;
@@ -47,7 +38,7 @@ export default function AssetProjectionChart({
 
     if (age >= retirementAge) {
       if (yearTotal > 0) {
-        for (const a of accountsState) {
+        for (const a of accounts) {
           a.balance -= annualWithdrawalCents * (a.balance / yearTotal);
         }
       }
@@ -57,7 +48,7 @@ export default function AssetProjectionChart({
     const point: any = {
       date: String(age),
     };
-    for (const a of accountsState) {
+    for (const a of accounts) {
       point[a.id] = Math.max(0, Math.round(a.balance));
     }
     points.push(point);
