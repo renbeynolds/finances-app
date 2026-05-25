@@ -17,6 +17,7 @@ export default function AssetProjectionChart({
   monthlyWithdrawlCents,
   accounts,
 }: AssetProjectionChartProps) {
+
   const theme = useMantineTheme();
   const chartColors = getChartColors(theme);
 
@@ -92,6 +93,9 @@ export default function AssetProjectionChart({
           tickFormatter: (value: number) => FormatMoneyDynamic(value),
         }}
         valueFormatter={(value: number) => FormatMoney(value)}
+        referenceLines={[
+          { x: String(retirementAge), color: 'red.6', },
+        ]}
       />
     </Paper>
   );
