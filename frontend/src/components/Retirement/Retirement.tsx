@@ -20,6 +20,7 @@ export default function Retirement() {
   const [currentAge, setCurrentAge] = useState<number>(30);
   const [retirementAge, setRetirementAge] = useState<number>(60);
   const [monthlyWithdrawal, setMonthlyWithdrawal] = useState<number>(2500000);
+  const [performancePercentile, setPerformancePercentile] = useState<number>(50);
 
   const { data, mutate } = useSWR(
     InvestmentAccountsEndpoint,
@@ -54,6 +55,14 @@ export default function Retirement() {
             allowNegative={false}
           />
           <NumberInput
+            label="Performance Percentile"
+            value={performancePercentile}
+            onChange={(value) => setPerformancePercentile(Number(value))}
+            min={0}
+            max={100}
+            allowNegative={false}
+          />
+          <NumberInput
             label="Monthly Withdrawal"
             value={monthlyWithdrawal / 100}
             onChange={(value) => setMonthlyWithdrawal(Number(value) * 100)}
@@ -72,6 +81,7 @@ export default function Retirement() {
           currentAge={currentAge}
           retirementAge={retirementAge}
           monthlyWithdrawlCents={monthlyWithdrawal}
+          performancePercentile={performancePercentile}
         />
       </SimpleGrid>
       <AccountsTable accounts={includedAccounts} mutate={mutate} />

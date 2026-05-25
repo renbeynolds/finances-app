@@ -10,6 +10,7 @@ type AssetProjectionChartProps = {
   currentAge: number;
   retirementAge: number;
   monthlyWithdrawlCents: number;
+  performancePercentile: number;
   accounts: InvestmentAccount[];
 };
 
@@ -17,6 +18,7 @@ export default function AssetProjectionChart({
   currentAge,
   retirementAge,
   monthlyWithdrawlCents,
+  performancePercentile,
   accounts,
 }: AssetProjectionChartProps) {
   const theme = useMantineTheme();
@@ -39,12 +41,13 @@ export default function AssetProjectionChart({
         const sortedBalances = [...simulationYear.accountBalances[i]].sort(
           (a, b) => a - b,
         );
-        const p50 = sortedBalances[Math.floor(sortedBalances.length * 0.5)];
-        point[accounts[i].id] = p50;
+
+        const balance = sortedBalances[Math.floor(sortedBalances.length * (performancePercentile / 100))];
+        point[accounts[i].id] = balance;
       }
       return point;
     });
-  }, [accounts, currentAge, retirementAge, monthlyWithdrawlCents]);
+  }, [accounts, currentAge, retirementAge, monthlyWithdrawlCents, performancePercentile]);
 
   const chartSeries = accounts.map((account, index) => ({
     name: String(account.id),

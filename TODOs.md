@@ -7,12 +7,16 @@ Based on an inspection of frontend/src/components/Retirement.tsx and frontend/sr
    Critique: The models currently calculate strictly in nominal dollars. The user inputs a fixed "Monthly Withdrawal" (e.g., $25,000), and the script subtracts that exact amount every year until age 100. However, due to inflation, $25,000 thirty years from now will have significantly less purchasing power than it does today. Improvement: Allow users to factor in an inflation rate (e.g., 2.5% to 3%).
 
 Method A: Automatically increase the withdrawal amount every year by the inflation rate to maintain purchasing power.
-Method B: Ask the user for a "Real Return Rate" (Nominal Return - Inflation) so that the chart's output is presented in today's purchasing power. 3. Tax Efficiency and Withdrawal Sequencing
+Method B: Ask the user for a "Real Return Rate" (Nominal Return - Inflation) so that the chart's output is presented in today's purchasing power.
+
+3. Tax Efficiency and Withdrawal Sequencing
 Critique: In Retirement.tsx, when the user reaches retirement age, the model fulfills the withdrawal requirement by taking money proportionally across all investment accounts (a.balance -= annualWithdrawalCents \* (a.balance / yearTotal);). This is financially inefficient. Furthermore, it assumes $1 withdrawn equals $1 in the user's pocket. If an account is tax-deferred (like a Traditional 401k), the user must withdraw a larger gross amount to yield the desired net spendable cash after taxes. Improvement: Add an "Account Tax Type" flag (Taxable Brokerage, Pre-Tax/Traditional, Tax-Free/Roth). Implement withdrawal sequencing logic:
 
 Deplete taxable accounts first (to allow tax-advantaged accounts to grow longer).
 Deplete tax-deferred accounts next.
-Deplete tax-free (Roth) accounts last. Include an estimated effective tax rate to calculate the required gross withdrawal for pre-tax accounts. 4. Cash Flow Timing (Intra-Year Compounding)
+Deplete tax-free (Roth) accounts last. Include an estimated effective tax rate to calculate the required gross withdrawal for pre-tax accounts.
+
+4. Cash Flow Timing (Intra-Year Compounding)
 Critique: In both scripts, the math calculates the annual return on the starting balance, and then adds the contribution or subtracts the withdrawal at the end of the year.
 
 typescript
