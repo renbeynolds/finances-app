@@ -28,7 +28,7 @@ export default function TransactionTableAmountFilter({
         close();
       }
     },
-    [close, dispatchTransactionFilters, amountValues]
+    [close, dispatchTransactionFilters, amountValues],
   );
 
   React.useEffect(() => {

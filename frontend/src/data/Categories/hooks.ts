@@ -4,7 +4,7 @@ import { CategoriesFetcher } from "./fetchers";
 export const useCategories = () => {
   const { data, error, isLoading, mutate } = useSWR(
     `/api/categories`,
-    CategoriesFetcher
+    CategoriesFetcher,
   );
   return {
     categories: data ? data.data : null,

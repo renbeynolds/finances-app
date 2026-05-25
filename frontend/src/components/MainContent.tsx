@@ -4,7 +4,7 @@ import InvestmentAccountView from "./Accounts/InvestmentAccountView";
 import BudgetsView from "./Budgets/BudgetsView";
 import CategoryView from "./Categories/CategoryView";
 import Explore from "./Explore";
-import Retirement from "./Retirement";
+import Retirement from "./Retirement/Retirement";
 import Snapshot from "./Snapshot";
 import Trends from "./Trends";
 import UploadView from "./Uploads/UploadView";

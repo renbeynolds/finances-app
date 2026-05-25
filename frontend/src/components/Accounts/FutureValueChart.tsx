@@ -36,7 +36,7 @@ export default function FutureValueChart({
       0, // currentAge
       999, // retirementAge (never withdraw)
       0, // withdrawal amount
-      1000 // iterations
+      1000, // iterations
     );
 
     const startYear = dayjs().year();
@@ -68,16 +68,28 @@ export default function FutureValueChart({
   ]);
 
   return (
-    <Paper shadow="sm" p="lg" style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+    <Paper
+      shadow="sm"
+      p="lg"
+      style={{ display: "flex", flexDirection: "column", gap: "1rem" }}
+    >
       <Title order={3}>Future Value Projection</Title>
       <LineChart
         h={300}
         data={chartData}
         dataKey="date"
         series={[
-          { name: "p90", label: "Optimistic (90th)", color: theme.colors.green[6] },
+          {
+            name: "p90",
+            label: "Optimistic (90th)",
+            color: theme.colors.green[6],
+          },
           { name: "p50", label: "Median (50th)", color: theme.colors.blue[6] },
-          { name: "p10", label: "Pessimistic (10th)", color: theme.colors.red[6] },
+          {
+            name: "p10",
+            label: "Pessimistic (10th)",
+            color: theme.colors.red[6],
+          },
         ]}
         curveType="monotone"
         tickLine="xy"

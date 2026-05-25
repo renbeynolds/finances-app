@@ -5,7 +5,7 @@ import { Response } from "../Response";
 import { TransactionsTotal } from "./types";
 
 export const FilteredTransactionsTotalEndpoint = (
-  transactionFilters: TransactionFilters
+  transactionFilters: TransactionFilters,
 ) =>
   `/api/transactions/total?` +
   TransactionFiltersToQueryParams(transactionFilters, false);

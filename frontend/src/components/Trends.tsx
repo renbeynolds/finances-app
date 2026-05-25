@@ -16,14 +16,14 @@ export default function Trends() {
   const netWorthOverTimeResponse = useSWR(
     NetWorthOverTimeEndpoint(
       dayjs().subtract(365, "day").format("YYYY-MM-DD"),
-      dayjs().format("YYYY-MM-DD")
+      dayjs().format("YYYY-MM-DD"),
     ),
-    AmountOverTimeFetcher
+    AmountOverTimeFetcher,
   );
 
   const currentNetWorthResponse = useSWR(
     CurrentNetWorthEndpoint(),
-    CurrentNetWorthFetcher
+    CurrentNetWorthFetcher,
   );
 
   const netWorthTitle = currentNetWorthResponse.data?.data

@@ -29,33 +29,33 @@ export default function ExpensesOverTimeChart() {
   const currentMonthResponse = useSWR(
     ExpensesOverTimeEndpoint(
       currentMonthStart.format("YYYY-MM-DD"),
-      currentMonthEnd.format("YYYY-MM-DD")
+      currentMonthEnd.format("YYYY-MM-DD"),
     ),
-    ExpensesOverTimeFetcher
+    ExpensesOverTimeFetcher,
   );
 
   const prevMonth1Response = useSWR(
     ExpensesOverTimeEndpoint(
       prevMonth1Start.format("YYYY-MM-DD"),
-      prevMonth1End.format("YYYY-MM-DD")
+      prevMonth1End.format("YYYY-MM-DD"),
     ),
-    ExpensesOverTimeFetcher
+    ExpensesOverTimeFetcher,
   );
 
   const prevMonth2Response = useSWR(
     ExpensesOverTimeEndpoint(
       prevMonth2Start.format("YYYY-MM-DD"),
-      prevMonth2End.format("YYYY-MM-DD")
+      prevMonth2End.format("YYYY-MM-DD"),
     ),
-    ExpensesOverTimeFetcher
+    ExpensesOverTimeFetcher,
   );
 
   const prevMonth3Response = useSWR(
     ExpensesOverTimeEndpoint(
       prevMonth3Start.format("YYYY-MM-DD"),
-      prevMonth3End.format("YYYY-MM-DD")
+      prevMonth3End.format("YYYY-MM-DD"),
     ),
-    ExpensesOverTimeFetcher
+    ExpensesOverTimeFetcher,
   );
 
   // Check loading states and errors
@@ -90,7 +90,7 @@ export default function ExpensesOverTimeChart() {
     currentMonthResponse.data.data.length,
     prevMonth1Response.data.data.length,
     prevMonth2Response.data.data.length,
-    prevMonth3Response.data.data.length
+    prevMonth3Response.data.data.length,
   );
 
   console.log("Max Days:", maxDays);

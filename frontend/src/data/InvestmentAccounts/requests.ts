@@ -40,7 +40,6 @@ export const requestUpdateInvestmentAccount = async (
   }).then((response) => response.json());
 };
 
-
 export const requestRecordInvestmentAccountBalance = async (
   values: InvestmentAccountBalanceFormValues,
 ): Promise<Response<InvestmentAccount>> => {

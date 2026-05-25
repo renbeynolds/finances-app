@@ -21,7 +21,7 @@ export const CategoriesDispatchContext =
 
 export const CategoriesReducer = (
   state: Category[],
-  action: CategoriesAction
+  action: CategoriesAction,
 ) => {
   switch (action.type) {
     case "SET":
@@ -30,7 +30,7 @@ export const CategoriesReducer = (
       return [...state, action.payload];
     case "UPDATE":
       return state.map((category) =>
-        category.id === action.payload.id ? action.payload : category
+        category.id === action.payload.id ? action.payload : category,
       );
     case "DELETE":
       return state.filter((category) => category.id !== action.payload);
@@ -45,7 +45,7 @@ export const UseLazyCategories = () => {
 
   const { data, error, isLoading } = useSWR(
     categories.length === 0 ? CategoriesEndpoint : null,
-    CategoriesFetcher
+    CategoriesFetcher,
   );
 
   React.useEffect(() => {
@@ -61,7 +61,7 @@ export const UseCategoriesDispatch = () => {
   const dispatch = React.useContext(CategoriesDispatchContext);
   if (!dispatch) {
     throw new Error(
-      "UseCategoriesDispatch must be used within a CategoriesProvider"
+      "UseCategoriesDispatch must be used within a CategoriesProvider",
     );
   }
   return dispatch;

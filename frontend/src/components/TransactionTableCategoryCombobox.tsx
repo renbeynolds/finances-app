@@ -5,11 +5,11 @@ import {
   Pill,
   PillsInput,
   useCombobox,
-} from '@mantine/core';
-import { IconX } from '@tabler/icons-react';
-import { useState } from 'react';
-import { UseLazyCategories } from '../context/CategoriesContext';
-import { Transaction } from '../data/Transaction';
+} from "@mantine/core";
+import { IconX } from "@tabler/icons-react";
+import { useState } from "react";
+import { UseLazyCategories } from "../context/CategoriesContext";
+import { Transaction } from "../data/Transaction";
 
 interface TransactionTableCategoryComboboxProps {
   transaction: Transaction;
@@ -22,10 +22,10 @@ export default function TransactionTableCategoryCombobox({
 }: TransactionTableCategoryComboboxProps) {
   const combobox = useCombobox({
     onDropdownClose: () => combobox.resetSelectedOption(),
-    onDropdownOpen: () => combobox.updateSelectedOptionIndex('active'),
+    onDropdownOpen: () => combobox.updateSelectedOptionIndex("active"),
   });
   const categories = UseLazyCategories();
-  const [search, setSearch] = useState('');
+  const [search, setSearch] = useState("");
   const [value, setValue] = useState<string[]>(
     transaction.categoryId ? [`${transaction.categoryId}`] : [],
   );
@@ -36,7 +36,7 @@ export default function TransactionTableCategoryCombobox({
       ...transaction,
       categoryId: parseInt(val),
     });
-    setSearch('');
+    setSearch("");
     setValue([val]);
   };
 
@@ -51,12 +51,12 @@ export default function TransactionTableCategoryCombobox({
   const values = value.map((item) => (
     <Badge
       key={item}
-      bg={categories.find((c) => c.id === parseInt(item))?.color || 'gray'}
+      bg={categories.find((c) => c.id === parseInt(item))?.color || "gray"}
       rightSection={
         <ActionIcon
-          size='xs'
+          size="xs"
           onClick={() => handleValueRemove(item)}
-          bg='transparent'
+          bg="transparent"
         >
           <IconX />
         </ActionIcon>
@@ -88,7 +88,7 @@ export default function TransactionTableCategoryCombobox({
                   setSearch(event.currentTarget.value);
                 }}
                 onKeyDown={(event) => {
-                  if (event.key === 'Backspace' && search.length === 0) {
+                  if (event.key === "Backspace" && search.length === 0) {
                     event.preventDefault();
                     handleValueRemove(value[value.length - 1]);
                   }
@@ -100,7 +100,7 @@ export default function TransactionTableCategoryCombobox({
       </Combobox.DropdownTarget>
 
       <Combobox.Dropdown>
-        <Combobox.Options mah={200} style={{ overflowY: 'auto' }}>
+        <Combobox.Options mah={200} style={{ overflowY: "auto" }}>
           {options.length > 0 ? (
             options
           ) : (

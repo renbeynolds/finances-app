@@ -8,6 +8,6 @@ export const BudgetFetcher: Fetcher<Response<Budget>, string> = (url) =>
 export const BudgetsFetcher: Fetcher<Response<Budget[]>, string> = (url) =>
   fetch(url).then((res) => res.json());
 
-export const BudgetActualsFetcher: Fetcher<Response<BudgetActual[]>, string> = (url) =>
-  fetch(url).then((res) => res.json());
-  
+export const BudgetActualsFetcher: Fetcher<Response<BudgetActual[]>, string> = (
+  url,
+) => fetch(url).then((res) => res.json());

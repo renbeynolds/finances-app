@@ -1,6 +1,6 @@
-import { TextInput } from '@mantine/core';
-import React from 'react';
-import { Transaction } from '../data/Transaction';
+import { TextInput } from "@mantine/core";
+import React from "react";
+import { Transaction } from "../data/Transaction";
 
 interface TransactionTableCommentBoxProps {
   transaction: Transaction;

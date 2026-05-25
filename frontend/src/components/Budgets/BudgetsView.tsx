@@ -34,24 +34,24 @@ export default function BudgetsView() {
   const categoriesWithoutBudgets = data!
     .filter(
       (category) =>
-        !category.budget && category.actual > 0 && category.type === "expense"
+        !category.budget && category.actual > 0 && category.type === "expense",
     )
     .sort((a, b) => b.actual - a.actual);
   const incomeBudgetTotal = incomeCategories.reduce(
     (total, category) => total + category.budget!,
-    0
+    0,
   );
   const expenseBudgetTotal = expenseCategories.reduce(
     (total, category) => total + category.budget!,
-    0
+    0,
   );
   const incomeActualTotal = incomeCategories.reduce(
     (total, category) => total + category.actual,
-    0
+    0,
   );
   const expenseActualTotal = expenseCategories.reduce(
     (total, category) => total + category.actual,
-    0
+    0,
   );
 
   return (
@@ -183,8 +183,8 @@ export default function BudgetsView() {
                   {FormatMoney(
                     categoriesWithoutBudgets.reduce(
                       (total, category) => total + category.actual,
-                      0
-                    )
+                      0,
+                    ),
                   )}
                 </Text>
               </Group>

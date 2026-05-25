@@ -3,7 +3,7 @@ import { Response } from "../Response";
 import { Category } from "./types";
 
 export const requestCreateCategory = async (
-  values: CategoryFormValues
+  values: CategoryFormValues,
 ): Promise<Response<Category>> => {
   return fetch("/api/categories", {
     method: "POST",
@@ -17,7 +17,7 @@ export const requestCreateCategory = async (
 
 export const requestUpdateCategory = async (
   id: number,
-  values: CategoryFormValues
+  values: CategoryFormValues,
 ): Promise<Response<Category>> => {
   return fetch(`/api/categories/${id}`, {
     method: "PATCH",

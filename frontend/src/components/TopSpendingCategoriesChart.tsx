@@ -29,7 +29,7 @@ export default function TopSpendingCategoriesChart() {
 
   const { data, error, isLoading } = useSWR(
     `${TopSpendingCategoriesEndpoint}?from=${transactionFilters.Date[0]}&to=${transactionFilters.Date[1]}`,
-    TopSpendingCategoriesFetcher
+    TopSpendingCategoriesFetcher,
   );
 
   React.useEffect(() => {
@@ -131,7 +131,7 @@ const CustomLegend = (
   props: Props & {
     setActiveIndex: (arg0: number) => void;
     activeIndex: number;
-  }
+  },
 ) => {
   const { payload, activeIndex, setActiveIndex } = props;
 

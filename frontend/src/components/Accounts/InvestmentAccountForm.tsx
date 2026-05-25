@@ -1,4 +1,11 @@
-import { Button, NumberInput, Select, Stack, Switch, TextInput } from "@mantine/core";
+import {
+  Button,
+  NumberInput,
+  Select,
+  Stack,
+  Switch,
+  TextInput,
+} from "@mantine/core";
 import { useForm } from "@mantine/form";
 import {
   requestCreateInvestmentAccount,

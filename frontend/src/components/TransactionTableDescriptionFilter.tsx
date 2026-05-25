@@ -1,7 +1,7 @@
-import { ActionIcon, TextInput } from '@mantine/core';
-import { IconSearch, IconX } from '@tabler/icons-react';
-import * as React from 'react';
-import { TransactionFiltersAction } from '../context/TransactionFiltersContext';
+import { ActionIcon, TextInput } from "@mantine/core";
+import { IconSearch, IconX } from "@tabler/icons-react";
+import * as React from "react";
+import { TransactionFiltersAction } from "../context/TransactionFiltersContext";
 
 type TransactionTableDescriptionFilterProps = {
   descriptionFilter: string;
@@ -19,9 +19,9 @@ export default function TransactionTableDescriptionFilter({
 
   const enterFunction = React.useCallback(
     (event: KeyboardEvent) => {
-      if (event.key === 'Enter' && dispatchTransactionFilters) {
+      if (event.key === "Enter" && dispatchTransactionFilters) {
         dispatchTransactionFilters({
-          type: 'SET_DESCRIPTION_FILTER',
+          type: "SET_DESCRIPTION_FILTER",
           payload: descriptionSearch,
         });
         close();
@@ -31,28 +31,28 @@ export default function TransactionTableDescriptionFilter({
   );
 
   React.useEffect(() => {
-    document.addEventListener('keypress', enterFunction);
+    document.addEventListener("keypress", enterFunction);
     return () => {
-      document.removeEventListener('keypress', enterFunction);
+      document.removeEventListener("keypress", enterFunction);
     };
   }, [enterFunction]);
 
   return (
     <TextInput
-      label='Description'
-      description='Fuzzy search'
-      placeholder='Enter search string...'
+      label="Description"
+      description="Fuzzy search"
+      placeholder="Enter search string..."
       leftSection={<IconSearch size={16} />}
       rightSection={
         <ActionIcon
-          size='sm'
-          variant='transparent'
-          c='dimmed'
+          size="sm"
+          variant="transparent"
+          c="dimmed"
           onClick={() => {
-            setDescriptionSearch('');
+            setDescriptionSearch("");
             dispatchTransactionFilters!({
-              type: 'SET_DESCRIPTION_FILTER',
-              payload: '',
+              type: "SET_DESCRIPTION_FILTER",
+              payload: "",
             });
             close();
           }}
@@ -63,7 +63,7 @@ export default function TransactionTableDescriptionFilter({
       value={descriptionSearch}
       onBlur={() => {
         dispatchTransactionFilters!({
-          type: 'SET_DESCRIPTION_FILTER',
+          type: "SET_DESCRIPTION_FILTER",
           payload: descriptionSearch,
         });
       }}

@@ -26,12 +26,12 @@ import { theme } from "./Theme";
 export default function App() {
   const [transactionFilters, transactionFiltersDispatch] = React.useReducer(
     TransactionFiltersReducer,
-    DefaultTransactionFilters
+    DefaultTransactionFilters,
   );
 
   const [categories, categoriesDispatchContext] = React.useReducer(
     CategoriesReducer,
-    DefaultCategories
+    DefaultCategories,
   );
 
   return (

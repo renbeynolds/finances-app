@@ -1,8 +1,8 @@
-import { NavLink, Stack } from '@mantine/core';
-import React from 'react';
-import { useLocation, useNavigate } from 'react-router';
-import useSWR from 'swr';
-import { UploadsEndpoint, UploadsFetcher } from '../../Fetchers';
+import { NavLink, Stack } from "@mantine/core";
+import React from "react";
+import { useLocation, useNavigate } from "react-router";
+import useSWR from "swr";
+import { UploadsEndpoint, UploadsFetcher } from "../../Fetchers";
 
 export default function UploadsList() {
   const { data, error, isLoading } = useSWR(UploadsEndpoint, UploadsFetcher);
@@ -10,7 +10,7 @@ export default function UploadsList() {
   const location = useLocation();
 
   React.useEffect(() => {
-    if (location.pathname === '/uploads' && data?.data.length) {
+    if (location.pathname === "/uploads" && data?.data.length) {
       navigate(`/uploads/${data.data[0].id}`);
     }
   }, [data, navigate, location.pathname]);
@@ -21,11 +21,11 @@ export default function UploadsList() {
   return (
     <div
       style={{
-        height: '100%',
-        overflowY: 'auto',
+        height: "100%",
+        overflowY: "auto",
       }}
     >
-      <Stack align='stretch' justify='flex-start' gap='md'>
+      <Stack align="stretch" justify="flex-start" gap="md">
         {data!.data
           .sort((a, b) => b.id - a.id)
           .map((upload, index) => (

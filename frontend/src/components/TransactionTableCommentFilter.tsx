@@ -1,7 +1,7 @@
-import { ActionIcon, TextInput } from '@mantine/core';
-import { IconSearch, IconX } from '@tabler/icons-react';
-import * as React from 'react';
-import { TransactionFiltersAction } from '../context/TransactionFiltersContext';
+import { ActionIcon, TextInput } from "@mantine/core";
+import { IconSearch, IconX } from "@tabler/icons-react";
+import * as React from "react";
+import { TransactionFiltersAction } from "../context/TransactionFiltersContext";
 
 type TransactionTableCommentFilterProps = {
   commentFilter: string;
@@ -18,9 +18,9 @@ export default function TransactionTableCommentFilter({
 
   const enterFunction = React.useCallback(
     (event: KeyboardEvent) => {
-      if (event.key === 'Enter' && dispatchTransactionFilters) {
+      if (event.key === "Enter" && dispatchTransactionFilters) {
         dispatchTransactionFilters({
-          type: 'SET_COMMENT_FILTER',
+          type: "SET_COMMENT_FILTER",
           payload: commentSearch,
         });
         close();
@@ -30,27 +30,27 @@ export default function TransactionTableCommentFilter({
   );
 
   React.useEffect(() => {
-    document.addEventListener('keypress', enterFunction);
+    document.addEventListener("keypress", enterFunction);
     return () => {
-      document.removeEventListener('keypress', enterFunction);
+      document.removeEventListener("keypress", enterFunction);
     };
   }, [enterFunction]);
 
   return (
     <TextInput
-      label='Comment'
-      description='Fuzzy search'
-      placeholder='Enter search string...'
+      label="Comment"
+      description="Fuzzy search"
+      placeholder="Enter search string..."
       leftSection={<IconSearch size={16} />}
       rightSection={
         <ActionIcon
-          size='sm'
-          variant='transparent'
-          c='dimmed'
+          size="sm"
+          variant="transparent"
+          c="dimmed"
           onClick={() => {
             dispatchTransactionFilters!({
-              type: 'SET_COMMENT_FILTER',
-              payload: '',
+              type: "SET_COMMENT_FILTER",
+              payload: "",
             });
             close();
           }}
@@ -61,7 +61,7 @@ export default function TransactionTableCommentFilter({
       value={commentSearch}
       onBlur={() => {
         dispatchTransactionFilters!({
-          type: 'SET_COMMENT_FILTER',
+          type: "SET_COMMENT_FILTER",
           payload: commentSearch,
         });
       }}

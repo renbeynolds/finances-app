@@ -1,5 +1,5 @@
-import dayjs from 'dayjs';
-import { createContext, Dispatch } from 'react';
+import dayjs from "dayjs";
+import { createContext, Dispatch } from "react";
 
 type DateFilter = [string, string];
 type AmountFilter = [number | undefined, number | undefined];
@@ -12,20 +12,20 @@ export type TransactionFilters = {
 };
 
 export type TransactionFiltersAction =
-  | { type: 'SET_DATE_FILTER'; payload: DateFilter }
-  | { type: 'SET_DESCRIPTION_FILTER'; payload: string }
-  | { type: 'SET_COMMENT_FILTER'; payload: string }
-  | { type: 'SET_AMOUNT_FILTER'; payload: AmountFilter };
+  | { type: "SET_DATE_FILTER"; payload: DateFilter }
+  | { type: "SET_DESCRIPTION_FILTER"; payload: string }
+  | { type: "SET_COMMENT_FILTER"; payload: string }
+  | { type: "SET_AMOUNT_FILTER"; payload: AmountFilter };
 
 const DefaultDateFilter: DateFilter = [
-  dayjs().startOf('month').format('YYYY-MM-DD'),
-  dayjs().endOf('month').format('YYYY-MM-DD'),
+  dayjs().startOf("month").format("YYYY-MM-DD"),
+  dayjs().endOf("month").format("YYYY-MM-DD"),
 ];
 
 export const DefaultTransactionFilters: TransactionFilters = {
   Date: DefaultDateFilter,
-  Description: '',
-  Comment: '',
+  Description: "",
+  Comment: "",
   Amount: [undefined, undefined],
 };
 
@@ -41,13 +41,13 @@ export const TransactionFiltersReducer = (
   action: TransactionFiltersAction,
 ) => {
   switch (action.type) {
-    case 'SET_DATE_FILTER':
+    case "SET_DATE_FILTER":
       return { ...state, Date: action.payload };
-    case 'SET_DESCRIPTION_FILTER':
+    case "SET_DESCRIPTION_FILTER":
       return { ...state, Description: action.payload };
-    case 'SET_COMMENT_FILTER':
+    case "SET_COMMENT_FILTER":
       return { ...state, Comment: action.payload };
-    case 'SET_AMOUNT_FILTER':
+    case "SET_AMOUNT_FILTER":
       return { ...state, Amount: action.payload };
     default:
       return state;

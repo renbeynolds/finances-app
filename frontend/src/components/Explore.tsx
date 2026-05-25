@@ -14,7 +14,7 @@ export default function Explore() {
 
   const { data, error, isLoading } = useSWR(
     FilteredTransactionsTotalEndpoint(transactionFilters),
-    TransactionsTotalFetcher
+    TransactionsTotalFetcher,
   );
 
   return (

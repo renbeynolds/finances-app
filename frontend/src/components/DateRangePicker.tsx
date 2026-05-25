@@ -1,38 +1,38 @@
-import { ActionIcon, Group, Menu } from '@mantine/core';
-import { DatePickerInput, DatesRangeValue } from '@mantine/dates';
-import { IconCalendarBolt } from '@tabler/icons-react';
-import dayjs from 'dayjs';
-import React from 'react';
+import { ActionIcon, Group, Menu } from "@mantine/core";
+import { DatePickerInput, DatesRangeValue } from "@mantine/dates";
+import { IconCalendarBolt } from "@tabler/icons-react";
+import dayjs from "dayjs";
+import React from "react";
 import {
   TransactionFiltersContext,
   TransactionFiltersDispatchContext,
-} from '../context/TransactionFiltersContext';
+} from "../context/TransactionFiltersContext";
 
 const dateRanges: { label: React.ReactNode; value: [Date, Date] }[] = [
   {
-    label: 'This Month',
-    value: [dayjs().startOf('month').toDate(), dayjs().endOf('month').toDate()],
+    label: "This Month",
+    value: [dayjs().startOf("month").toDate(), dayjs().endOf("month").toDate()],
   },
   {
-    label: 'Last Month',
+    label: "Last Month",
     value: [
-      dayjs().subtract(1, 'month').startOf('month').toDate(),
-      dayjs().subtract(1, 'month').endOf('month').toDate(),
+      dayjs().subtract(1, "month").startOf("month").toDate(),
+      dayjs().subtract(1, "month").endOf("month").toDate(),
     ],
   },
   {
-    label: 'Year to Date',
-    value: [dayjs().startOf('year').toDate(), new Date()],
+    label: "Year to Date",
+    value: [dayjs().startOf("year").toDate(), new Date()],
   },
   {
-    label: 'Last Year',
+    label: "Last Year",
     value: [
-      dayjs().subtract(1, 'year').startOf('year').toDate(),
-      dayjs().subtract(1, 'year').endOf('year').toDate(),
+      dayjs().subtract(1, "year").startOf("year").toDate(),
+      dayjs().subtract(1, "year").endOf("year").toDate(),
     ],
   },
   {
-    label: 'All Time',
+    label: "All Time",
     value: [new Date(0), new Date()],
   },
 ];
@@ -53,10 +53,10 @@ export default function DateRangePicker() {
       setValue(value);
       if (dispatchTransactionFilters && value[0] && value[1]) {
         dispatchTransactionFilters!({
-          type: 'SET_DATE_FILTER',
+          type: "SET_DATE_FILTER",
           payload: [
-            value[0].toISOString().split('T')[0],
-            value[1].toISOString().split('T')[0],
+            value[0].toISOString().split("T")[0],
+            value[1].toISOString().split("T")[0],
           ],
         });
       }
@@ -67,8 +67,8 @@ export default function DateRangePicker() {
   return (
     <Group>
       <DatePickerInput
-        type='range'
-        placeholder='Select Date Range'
+        type="range"
+        placeholder="Select Date Range"
         value={value}
         maxDate={new Date()}
         onChange={handleChange}
@@ -78,11 +78,11 @@ export default function DateRangePicker() {
       />
       <Menu>
         <Menu.Target>
-          <ActionIcon variant='default'>
+          <ActionIcon variant="default">
             <IconCalendarBolt />
           </ActionIcon>
         </Menu.Target>
-        <Menu.Dropdown w='200'>
+        <Menu.Dropdown w="200">
           {dateRanges.map((range, index) => (
             <Menu.Item
               key={index}

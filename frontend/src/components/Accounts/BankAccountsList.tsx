@@ -1,13 +1,13 @@
-import { NavLink, useMantineTheme } from '@mantine/core';
-import { IconTransactionDollar } from '@tabler/icons-react';
-import React from 'react';
-import { useLocation, useNavigate } from 'react-router';
-import useSWR from 'swr';
+import { NavLink, useMantineTheme } from "@mantine/core";
+import { IconTransactionDollar } from "@tabler/icons-react";
+import React from "react";
+import { useLocation, useNavigate } from "react-router";
+import useSWR from "swr";
 import {
   BankAccountsEndpoint,
   BankAccountsFetcher,
-} from '../../data/BankAccounts/fetchers';
-import { FormatMoney } from '../../utils';
+} from "../../data/BankAccounts/fetchers";
+import { FormatMoney } from "../../utils";
 
 export default function BankAccountsList() {
   const { data, error, isLoading } = useSWR(
@@ -22,7 +22,7 @@ export default function BankAccountsList() {
   const navigate = useNavigate();
 
   React.useEffect(() => {
-    if (location.pathname === '/accounts' && data?.data.length) {
+    if (location.pathname === "/accounts" && data?.data.length) {
       navigate(`/accounts/bank/${data.data[0].id}`);
     }
   }, [data, navigate, location.pathname]);
@@ -34,7 +34,7 @@ export default function BankAccountsList() {
     <NavLink
       opened={expanded}
       onClick={() => setExpanded((e) => !e)}
-      label='Bank Accounts'
+      label="Bank Accounts"
       leftSection={<IconTransactionDollar size={16} stroke={1.5} />}
     >
       {data!.data

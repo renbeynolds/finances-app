@@ -21,12 +21,12 @@ export default function AmountVsAverage({
   const transactionFilters = React.useContext(TransactionFiltersContext);
   const averageOver = PreviousNMonths(
     transactionFilters.Date,
-    AVERAGE_OVER_N_MONTHS
+    AVERAGE_OVER_N_MONTHS,
   );
 
   const { data, error, isLoading } = useSWR(
     `${endpoint}?from=${transactionFilters.Date[0]}&to=${transactionFilters.Date[1]}&avg_from=${averageOver[0]}&avg_to=${averageOver[1]}`,
-    AmountVsAverageFetcher
+    AmountVsAverageFetcher,
   );
 
   if (error) return <div>failed to load</div>;

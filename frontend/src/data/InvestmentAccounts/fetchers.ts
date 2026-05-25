@@ -1,8 +1,8 @@
-import { Fetcher } from 'swr';
-import { Response } from '../Response';
-import { InvestmentAccount } from './types';
+import { Fetcher } from "swr";
+import { Response } from "../Response";
+import { InvestmentAccount } from "./types";
 
-export const InvestmentAccountsEndpoint = '/api/investment_accounts';
+export const InvestmentAccountsEndpoint = "/api/investment_accounts";
 export const InvestmentAccountsFetcher: Fetcher<
   Response<InvestmentAccount[]>,
   string

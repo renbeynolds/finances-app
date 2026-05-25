@@ -80,10 +80,7 @@ export default function Layout() {
             >
               Budgeting
             </Tabs.Tab>
-            <Tabs.Tab
-              value="retirement"
-              leftSection={<IconSunset size={12} />}
-            >
+            <Tabs.Tab value="retirement" leftSection={<IconSunset size={12} />}>
               Retirement
             </Tabs.Tab>
           </Tabs.List>

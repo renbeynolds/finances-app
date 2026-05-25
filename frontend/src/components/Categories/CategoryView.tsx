@@ -4,9 +4,7 @@ import dayjs from "dayjs";
 import React from "react";
 import { useParams } from "react-router";
 import useSWR from "swr";
-import {
-  UseLazyCategories
-} from "../../context/CategoriesContext";
+import { UseLazyCategories } from "../../context/CategoriesContext";
 import {
   AmountOverTimeFetcher,
   CategoryOverTimeEndpoint,
@@ -33,7 +31,7 @@ export default function CategoryView() {
 
   const categoryOverTimeResponse = useSWR(
     CategoryOverTimeEndpoint(startDate, endDate, categoryId || ""),
-    AmountOverTimeFetcher
+    AmountOverTimeFetcher,
   );
 
   return (

@@ -12,7 +12,7 @@ import { Upload } from "./data/Upload";
 export const CategoryOverTimeEndpoint = (
   from: string,
   to: string,
-  categoryId: string
+  categoryId: string,
 ) => `/api/categories/${categoryId}/amount_over_time?from=${from}&to=${to}`;
 export const NetWorthOverTimeEndpoint = (from: string, to: string) =>
   `/api/trends/net_worth_over_time?from=${from}&to=${to}`;
@@ -22,12 +22,12 @@ export const ExpensesOverTimeEndpoint = (from: string, to: string) =>
 export const AccountBalanceOverTimeEndpoint = (
   accountId: string,
   from: string,
-  to: string
+  to: string,
 ) => `/api/bank_accounts/${accountId}/balance_over_time?from=${from}&to=${to}`;
 export const InvestmentAccountBalanceOverTimeEndpoint = (
   accountId: string,
   from: string,
-  to: string
+  to: string,
 ) =>
   `/api/investment_accounts/${accountId}/balance_over_time?from=${from}&to=${to}`;
 export const AmountOverTimeFetcher: Fetcher<
@@ -51,7 +51,7 @@ export const UploadsFetcher: Fetcher<Response<Upload[]>, string> = (url) =>
 
 export const TransactionFiltersToQueryParams = (
   transactionFilters: TransactionFilters,
-  ignoreDateRange: boolean
+  ignoreDateRange: boolean,
 ) =>
   ignoreDateRange
     ? ""
@@ -67,7 +67,7 @@ export const TransactionsEndpoint = (
   accountId?: string,
   uploadId?: string,
   categoryId?: string,
-  ignoreDateRange: boolean = false
+  ignoreDateRange: boolean = false,
 ) =>
   `/api/transactions?page=${page}&limit=${pageSize}&` +
   TransactionFiltersToQueryParams(transactionFilters, ignoreDateRange) +
@@ -75,7 +75,7 @@ export const TransactionsEndpoint = (
   `&upload_id=${uploadId !== undefined ? uploadId : ""}` +
   `&category_id=${categoryId !== undefined ? categoryId : ""}`;
 export const TransactionsFetcher: Fetcher<Response<Transaction[]>, string> = (
-  url
+  url,
 ) => fetch(url).then((res) => res.json());
 
 export const IncomeVsAverageEndpoint = "/api/snapshot/income_vs_average";

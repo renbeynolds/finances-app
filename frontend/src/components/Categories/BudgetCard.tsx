@@ -76,7 +76,7 @@ function BudgetContent({
   const theme = useMantineTheme();
 
   const [budgetAmount, setBudgetAmount] = useState<string>(
-    (budget.amount / 100).toString()
+    (budget.amount / 100).toString(),
   );
 
   useEffect(() => {
@@ -92,7 +92,7 @@ function BudgetContent({
           ...curData!,
           data: { ...curData!.data, amount: newAmount },
         }),
-        false
+        false,
       );
     }
   }, [budget.id, budgetAmount, budgetMutate]);
@@ -103,7 +103,7 @@ function BudgetContent({
     if (!categoryOverTimeData) return [];
 
     const budgetAmountCents = MoneyInputToCents(
-      (budget.amount / 100).toString()
+      (budget.amount / 100).toString(),
     );
 
     return categoryOverTimeData
@@ -113,8 +113,8 @@ function BudgetContent({
         const actual = Math.abs(item.amount);
         const withinBudget = Math.min(actual, budgetAmountCents);
 
-        let  aboveBudget = Math.max(0, actual - budgetAmountCents);
-        let  belowBudget = Math.max(0, budgetAmountCents - actual);
+        let aboveBudget = Math.max(0, actual - budgetAmountCents);
+        let belowBudget = Math.max(0, budgetAmountCents - actual);
 
         return {
           month: FormatMonthString(item.date),
@@ -187,13 +187,27 @@ function BudgetContent({
                       {FormatMoney(actualAmount)}
                     </div>
                     {data.aboveBudget > 0 && (
-                      <div style={{ color: isIncome ? theme.colors.green[6] : theme.colors.red[6] }}>
-                        {isIncome ? goodLabel : badLabel}: {FormatMoney(data.aboveBudget)}
+                      <div
+                        style={{
+                          color: isIncome
+                            ? theme.colors.green[6]
+                            : theme.colors.red[6],
+                        }}
+                      >
+                        {isIncome ? goodLabel : badLabel}:{" "}
+                        {FormatMoney(data.aboveBudget)}
                       </div>
                     )}
                     {data.belowBudget > 0 && (
-                      <div style={{ color: isIncome ? theme.colors.red[6] : theme.colors.green[6] }}>
-                        {isIncome ? badLabel : goodLabel}: {FormatMoney(data.belowBudget)}
+                      <div
+                        style={{
+                          color: isIncome
+                            ? theme.colors.red[6]
+                            : theme.colors.green[6],
+                        }}
+                      >
+                        {isIncome ? badLabel : goodLabel}:{" "}
+                        {FormatMoney(data.belowBudget)}
                       </div>
                     )}
                   </div>
@@ -208,7 +222,13 @@ function BudgetContent({
   );
 }
 
-function NoBudgetContent({ category, budgetMutate }: { category?: Category; budgetMutate: KeyedMutator<Response<Budget>> }) {
+function NoBudgetContent({
+  category,
+  budgetMutate,
+}: {
+  category?: Category;
+  budgetMutate: KeyedMutator<Response<Budget>>;
+}) {
   const [creating, setCreating] = useState(false);
 
   const handleCreateBudget = async () => {

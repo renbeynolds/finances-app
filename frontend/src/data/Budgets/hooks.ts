@@ -3,13 +3,17 @@ import { useContext } from "react";
 import useSWR from "swr";
 import { TransactionFiltersContext } from "../../context/TransactionFiltersContext";
 import { useCategories } from "../Categories/hooks";
-import { BudgetActualsFetcher, BudgetFetcher, BudgetsFetcher } from "./fetchers";
+import {
+  BudgetActualsFetcher,
+  BudgetFetcher,
+  BudgetsFetcher,
+} from "./fetchers";
 import { BudgetsViewData } from "./types";
 
 export const useBudget = (budgetId?: number) => {
   const { data, error, isLoading, mutate } = useSWR(
     budgetId ? `/api/budgets/${budgetId}` : null,
-    BudgetFetcher
+    BudgetFetcher,
   );
   return {
     budget: data ? data.data : null,
@@ -22,7 +26,7 @@ export const useBudget = (budgetId?: number) => {
 export const useBudgets = () => {
   const { data, error, isLoading, mutate } = useSWR(
     `/api/budgets`,
-    BudgetsFetcher
+    BudgetsFetcher,
   );
   return {
     budgets: data ? data.data : null,
@@ -35,7 +39,7 @@ export const useBudgets = () => {
 export const useBudgetActuals = (month: string) => {
   const { data, error, isLoading, mutate } = useSWR(
     `/api/budgets/actuals?month=${month}`,
-    BudgetActualsFetcher
+    BudgetActualsFetcher,
   );
   return {
     budgetActuals: data ? data.data : null,
@@ -45,12 +49,16 @@ export const useBudgetActuals = (month: string) => {
   };
 };
 
-export const useBudgetsViewData = (): { data: BudgetsViewData[] | null; isLoading: boolean; error: any } => {
-
+export const useBudgetsViewData = (): {
+  data: BudgetsViewData[] | null;
+  isLoading: boolean;
+  error: any;
+} => {
   const transactionFilters = useContext(TransactionFiltersContext);
 
   const { budgets, budgetsLoading, budgetsError } = useBudgets();
-  const { budgetActuals, budgetActualsLoading, budgetActualsError } = useBudgetActuals(dayjs(transactionFilters.Date[0]).format("YYYY-MM"));
+  const { budgetActuals, budgetActualsLoading, budgetActualsError } =
+    useBudgetActuals(dayjs(transactionFilters.Date[0]).format("YYYY-MM"));
   const { categories, categoriesLoading, categoriesError } = useCategories();
 
   if (budgetsLoading || categoriesLoading || budgetActualsLoading) {
@@ -71,14 +79,15 @@ export const useBudgetsViewData = (): { data: BudgetsViewData[] | null; isLoadin
 
   const budgetsData = categories!.map((category) => {
     const budget = budgets!.find((budget) => budget.categoryId === category.id);
-    const budgetActual = budgetActuals!.find((budgetActual) => budgetActual.categoryId === category.id);
+    const budgetActual = budgetActuals!.find(
+      (budgetActual) => budgetActual.categoryId === category.id,
+    );
     return {
       ...category,
       budget: budget?.amount,
       actual: budgetActual!.amount,
     };
-    
-  })
+  });
 
   return {
     data: budgetsData,

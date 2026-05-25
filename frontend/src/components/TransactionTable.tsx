@@ -38,7 +38,7 @@ export default function TransactionTable({
 }: TransactionTableProps) {
   const transactionFilters = React.useContext(TransactionFiltersContext);
   const dispatchTransactionFilters = React.useContext(
-    TransactionFiltersDispatchContext
+    TransactionFiltersDispatchContext,
   );
   const [page, setPage] = React.useState(1);
   const [response, setResponse] = React.useState<Response<Transaction[]>>();
@@ -55,9 +55,9 @@ export default function TransactionTable({
       accountId,
       uploadId,
       categoryId,
-      ignoreDateRange
+      ignoreDateRange,
     ),
-    TransactionsFetcher
+    TransactionsFetcher,
   );
 
   const updateTransaction = React.useCallback(
@@ -66,11 +66,11 @@ export default function TransactionTable({
       mutate({
         ...data!,
         data: data!.data.map((t) =>
-          t.id === updatedTransaction.data.id ? updatedTransaction.data : t
+          t.id === updatedTransaction.data.id ? updatedTransaction.data : t,
         ),
       });
     },
-    [mutate, data]
+    [mutate, data],
   );
 
   React.useEffect(() => {
