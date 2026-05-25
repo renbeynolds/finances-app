@@ -1,3 +1,5 @@
+import { AccountType } from "../data/InvestmentAccounts/types";
+
 /**
  * Generates a normally distributed random number using the Box-Muller transform.
  *
@@ -19,6 +21,7 @@ export type AccountState = {
   annualContribution: number;
   expectedAnnualReturn: number;
   annualVolatility?: number; // e.g., 0.15 for 15%
+  accountType: AccountType;
 };
 
 export type SimulationResult = {
@@ -26,6 +29,8 @@ export type SimulationResult = {
   // Outer array: one entry per account. Inner array: one balance per iteration.
   accountBalances: number[][];
 };
+
+const withdrawalOrder: AccountType[] = ["TAXABLE", "PRE_TAX", "ROTH"];
 
 /**
  * Runs a Monte Carlo simulation for portfolio growth and decumulation,
@@ -46,6 +51,14 @@ export function runMonteCarloSimulation(
   annualWithdrawalCents: number,
   iterations: number = 1000,
 ): SimulationResult[] {
+
+  // Sort accounts by prefered withdrawl order
+  const sortedAccounts = accounts.sort((a, b) => {
+      const typePriority = withdrawalOrder.indexOf(a.accountType) - withdrawalOrder.indexOf(b.accountType);
+      if (typePriority !== 0) return typePriority;
+      return a.balance - b.balance;
+    });
+
   const years = Math.max(0, 100 - currentAge);
   const results: SimulationResult[] = [];
 
@@ -58,7 +71,7 @@ export function runMonteCarloSimulation(
   }
 
   for (let i = 0; i < iterations; i++) {
-    let currentAccounts = accounts.map((a) => ({ ...a }));
+    let currentAccounts = sortedAccounts.map((a) => ({ ...a }))
 
     for (let y = 0; y <= years; y++) {
       const age = currentAge + y;
@@ -76,7 +89,7 @@ export function runMonteCarloSimulation(
         }
       }
 
-      // --- Withdrawal phase (sequential across accounts) ---
+      // --- Withdrawal phase (sequential across accounts, by type then balance) ---
       if (age >= retirementAge) {
         let remainingWithdrawal = annualWithdrawalCents;
 

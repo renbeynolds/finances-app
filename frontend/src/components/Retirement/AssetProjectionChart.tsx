@@ -44,7 +44,7 @@ export default function AssetProjectionChart({
       }
       return point;
     });
-  }, []);
+  }, [accounts, currentAge, retirementAge, monthlyWithdrawlCents]);
 
   const chartSeries = accounts.map((account, index) => ({
     name: String(account.id),
