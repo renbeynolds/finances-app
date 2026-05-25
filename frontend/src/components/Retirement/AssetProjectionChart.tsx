@@ -1,8 +1,10 @@
 import { AreaChart } from "@mantine/charts";
 import { Paper, Title, useMantineTheme } from "@mantine/core";
+import { useMemo } from "react";
 import { InvestmentAccount } from "../../data/InvestmentAccounts/types";
 import { FormatMoney, FormatMoneyDynamic } from "../../utils";
 import { getChartColors } from "../../utils/chartcolors";
+import { runMonteCarloSimulation } from "../../utils/monteCarlo";
 
 type AssetProjectionChartProps = {
   currentAge: number;
@@ -17,42 +19,32 @@ export default function AssetProjectionChart({
   monthlyWithdrawlCents,
   accounts,
 }: AssetProjectionChartProps) {
-
   const theme = useMantineTheme();
   const chartColors = getChartColors(theme);
 
-  const points: any[] = [];
+  const chartData = useMemo(() => {
+    const simulation = runMonteCarloSimulation(
+      accounts,
+      currentAge,
+      retirementAge,
+      monthlyWithdrawlCents * 12,
+    );
 
-  const annualWithdrawalCents = monthlyWithdrawlCents * 12;
+    return simulation.map((simulationYear, index) => {
+      const point: any = {
+        date: String(simulationYear.year),
+      };
 
-  for (let age = currentAge; age <= 100; age++) {
-    let yearTotal = 0;
-
-    for (const a of accounts) {
-      a.balance = a.balance * (1 + a.expectedAnnualReturn);
-      if (age < retirementAge) {
-        a.balance += a.annualContribution;
+      for (let i = 0; i < simulationYear.accountBalances.length; i++) {
+        const sortedBalances = [...simulationYear.accountBalances[i]].sort(
+          (a, b) => a - b,
+        );
+        const p50 = sortedBalances[Math.floor(sortedBalances.length * 0.5)];
+        point[accounts[i].id] = p50;
       }
-      yearTotal += a.balance;
-    }
-
-    if (age >= retirementAge) {
-      if (yearTotal > 0) {
-        for (const a of accounts) {
-          a.balance -= annualWithdrawalCents * (a.balance / yearTotal);
-        }
-      }
-      yearTotal -= annualWithdrawalCents;
-    }
-
-    const point: any = {
-      date: String(age),
-    };
-    for (const a of accounts) {
-      point[a.id] = Math.max(0, Math.round(a.balance));
-    }
-    points.push(point);
-  }
+      return point;
+    });
+  }, []);
 
   const chartSeries = accounts.map((account, index) => ({
     name: String(account.id),
@@ -65,7 +57,7 @@ export default function AssetProjectionChart({
       <Title order={3}>Asset Projection</Title>
       <AreaChart
         h={500}
-        data={points}
+        data={chartData}
         dataKey="date"
         series={chartSeries}
         type="stacked"
@@ -84,9 +76,7 @@ export default function AssetProjectionChart({
           tickFormatter: (value: number) => FormatMoneyDynamic(value),
         }}
         valueFormatter={(value: number) => FormatMoney(value)}
-        referenceLines={[
-          { x: String(retirementAge), color: 'red.6', },
-        ]}
+        referenceLines={[{ x: String(retirementAge), color: "red.6" }]}
       />
     </Paper>
   );

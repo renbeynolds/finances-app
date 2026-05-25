@@ -6,7 +6,8 @@
  * @returns A randomly generated number from the normal distribution
  */
 export function generateNormalRandom(mean: number, stdDev: number): number {
-  let u = 0, v = 0;
+  let u = 0,
+    v = 0;
   while (u === 0) u = Math.random();
   while (v === 0) v = Math.random();
   const z = Math.sqrt(-2.0 * Math.log(u)) * Math.cos(2.0 * Math.PI * v);
@@ -65,7 +66,10 @@ export function runMonteCarloSimulation(
       // --- Growth & contribution phase ---
       for (const a of currentAccounts) {
         const volatility = a.annualVolatility ?? 0.15;
-        const randomReturn = generateNormalRandom(a.expectedAnnualReturn, volatility);
+        const randomReturn = generateNormalRandom(
+          a.expectedAnnualReturn,
+          volatility,
+        );
         a.balance = a.balance * (1 + randomReturn);
         if (age < retirementAge) {
           a.balance += a.annualContribution;
@@ -91,7 +95,10 @@ export function runMonteCarloSimulation(
 
       // --- Record each account's balance for this iteration ---
       for (let a = 0; a < currentAccounts.length; a++) {
-        results[y].accountBalances[a][i] = Math.max(0, Math.round(currentAccounts[a].balance));
+        results[y].accountBalances[a][i] = Math.max(
+          0,
+          Math.round(currentAccounts[a].balance),
+        );
       }
     }
   }

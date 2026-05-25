@@ -93,8 +93,6 @@ export default function ExpensesOverTimeChart() {
     prevMonth3Response.data.data.length,
   );
 
-  console.log("Max Days:", maxDays);
-
   let chartData = [];
   for (let i = 0; i < maxDays; i++) {
     chartData.push({
