@@ -52,13 +52,14 @@ export function runMonteCarloSimulation(
   annualWithdrawalCents: number,
   iterations: number = 1000,
 ): SimulationResult[] {
-
   // Sort accounts by prefered withdrawl order
   const sortedAccounts = accounts.sort((a, b) => {
-      const typePriority = withdrawalOrder.indexOf(a.accountType) - withdrawalOrder.indexOf(b.accountType);
-      if (typePriority !== 0) return typePriority;
-      return a.balance - b.balance;
-    });
+    const typePriority =
+      withdrawalOrder.indexOf(a.accountType) -
+      withdrawalOrder.indexOf(b.accountType);
+    if (typePriority !== 0) return typePriority;
+    return a.balance - b.balance;
+  });
 
   const years = Math.max(0, deathAge - currentAge);
   const results: SimulationResult[] = [];
@@ -72,7 +73,7 @@ export function runMonteCarloSimulation(
   }
 
   for (let i = 0; i < iterations; i++) {
-    let currentAccounts = sortedAccounts.map((a) => ({ ...a }))
+    let currentAccounts = sortedAccounts.map((a) => ({ ...a }));
 
     for (let y = 0; y <= years; y++) {
       const age = currentAge + y;

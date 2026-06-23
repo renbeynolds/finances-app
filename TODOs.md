@@ -1,20 +1,8 @@
-Based on an inspection of frontend/src/components/Retirement.tsx and frontend/src/components/Accounts/FutureValueChart.tsx, here is a comprehensive critique of the current financial models along with recommendations for improvement.
-
-1. Deterministic vs. Stochastic Returns (Sequence of Returns Risk)
-   Critique: Both models rely on a single, static expectedAnnualReturn (e.g., a straight 7% every year for decades). While useful for a basic benchmark, this ignores market volatility. In financial planning, the "sequence of returns risk" is critical: if a retiree experiences a market downturn in the first few years of retirement, the portfolio depletes much faster than a straight-line average would suggest, leading to a drastically higher risk of ruin. Improvement: Implement a Monte Carlo simulation. Instead of straight-line growth, run hundreds of randomized simulations based on historical market volatility (standard deviation) and expected mean returns. The output could show a "Probability of Success" (e.g., an 85% chance of the portfolio surviving to age 95) or a confidence band (10th, 50th, 90th percentiles).
-
 2. Inflation & Purchasing Power
    Critique: The models currently calculate strictly in nominal dollars. The user inputs a fixed "Monthly Withdrawal" (e.g., $25,000), and the script subtracts that exact amount every year until age 100. However, due to inflation, $25,000 thirty years from now will have significantly less purchasing power than it does today. Improvement: Allow users to factor in an inflation rate (e.g., 2.5% to 3%).
 
 Method A: Automatically increase the withdrawal amount every year by the inflation rate to maintain purchasing power.
 Method B: Ask the user for a "Real Return Rate" (Nominal Return - Inflation) so that the chart's output is presented in today's purchasing power.
-
-3. Tax Efficiency and Withdrawal Sequencing
-Critique: In Retirement.tsx, when the user reaches retirement age, the model fulfills the withdrawal requirement by taking money proportionally across all investment accounts (a.balance -= annualWithdrawalCents \* (a.balance / yearTotal);). This is financially inefficient. Furthermore, it assumes $1 withdrawn equals $1 in the user's pocket. If an account is tax-deferred (like a Traditional 401k), the user must withdraw a larger gross amount to yield the desired net spendable cash after taxes. Improvement: Add an "Account Tax Type" flag (Taxable Brokerage, Pre-Tax/Traditional, Tax-Free/Roth). Implement withdrawal sequencing logic:
-
-Deplete taxable accounts first (to allow tax-advantaged accounts to grow longer).
-Deplete tax-deferred accounts next.
-Deplete tax-free (Roth) accounts last. Include an estimated effective tax rate to calculate the required gross withdrawal for pre-tax accounts.
 
 4. Cash Flow Timing (Intra-Year Compounding)
 Critique: In both scripts, the math calculates the annual return on the starting balance, and then adds the contribution or subtracts the withdrawal at the end of the year.
@@ -29,9 +17,6 @@ In reality, users contribute to and withdraw from their portfolios on a monthly 
 
 6. Static Asset Allocation (Glide Paths)
    Critique: The model assumes the expectedAnnualReturn will remain exactly the same from the user's current age until age 100. Improvement: Realistically, investors transition to more conservative portfolios (heavier in bonds) as they approach and enter retirement, which lowers their expected returns but also lowers volatility. Allow the model to automatically step down the expected return rate over time, simulating a Target Date Fund "glide path".
-
-7. Code Bug: Negative Compounding
-   Critique: In Retirement.tsx, if the portfolio runs out of money (yearTotal is less than annualWithdrawalCents), the model subtracts the full withdrawal anyway, sending account balances into the negative. In subsequent years, the script applies the expectedAnnualReturn to these negative balances (a.balance = a.balance \* (1 + a.expectedAnnualReturn)), simulating mounting margin debt. Improvement: Add a floor constraint. If yearTotal cannot support the withdrawal, the balances should bottom out at exactly 0 and stop compounding negatively.
 
 8. Add "Tax Treatment" to Account Models
    You should add a property to the InvestmentAccount model to designate its tax status. There are three primary buckets:

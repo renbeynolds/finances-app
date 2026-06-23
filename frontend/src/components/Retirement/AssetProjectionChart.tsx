@@ -4,38 +4,26 @@ import { useMemo } from "react";
 import { InvestmentAccount } from "../../data/InvestmentAccounts/types";
 import { FormatMoney, FormatMoneyDynamic } from "../../utils";
 import { getChartColors } from "../../utils/chartcolors";
-import { runMonteCarloSimulation } from "../../utils/monteCarlo";
+import { SimulationResult } from "../../utils/monteCarlo";
 
 type AssetProjectionChartProps = {
-  currentAge: number;
   retirementAge: number;
-  deathAge: number;
-  monthlyWithdrawlCents: number;
   performancePercentile: number;
   accounts: InvestmentAccount[];
+  simulationResults: SimulationResult[];
 };
 
 export default function AssetProjectionChart({
-  currentAge,
-  retirementAge,
-  deathAge,
-  monthlyWithdrawlCents,
   performancePercentile,
+  retirementAge,
   accounts,
+  simulationResults,
 }: AssetProjectionChartProps) {
   const theme = useMantineTheme();
   const chartColors = getChartColors(theme);
 
   const chartData = useMemo(() => {
-    const simulation = runMonteCarloSimulation(
-      accounts,
-      currentAge,
-      retirementAge,
-      deathAge,
-      monthlyWithdrawlCents * 12,
-    );
-
-    return simulation.map((simulationYear, index) => {
+    return simulationResults.map((simulationYear, index) => {
       const point: any = {
         date: String(simulationYear.year),
       };
@@ -45,12 +33,15 @@ export default function AssetProjectionChart({
           (a, b) => a - b,
         );
 
-        const balance = sortedBalances[Math.floor(sortedBalances.length * (performancePercentile / 100))];
+        const balance =
+          sortedBalances[
+            Math.floor(sortedBalances.length * (performancePercentile / 100))
+          ];
         point[accounts[i].id] = balance;
       }
       return point;
     });
-  }, [accounts, currentAge, retirementAge, monthlyWithdrawlCents, performancePercentile]);
+  }, [simulationResults, accounts, performancePercentile]);
 
   const chartSeries = accounts.map((account, index) => ({
     name: String(account.id),
