@@ -50,16 +50,23 @@ export function runMonteCarloSimulation(
   retirementAge: number,
   deathAge: number,
   annualWithdrawalCents: number,
+  inflationRatePercent: number,
   iterations: number = 1000,
 ): SimulationResult[] {
   // Sort accounts by prefered withdrawl order
-  const sortedAccounts = accounts.sort((a, b) => {
-    const typePriority =
-      withdrawalOrder.indexOf(a.accountType) -
-      withdrawalOrder.indexOf(b.accountType);
-    if (typePriority !== 0) return typePriority;
-    return a.balance - b.balance;
-  });
+  const sortedAccounts = accounts
+    .sort((a, b) => {
+      const typePriority =
+        withdrawalOrder.indexOf(a.accountType) -
+        withdrawalOrder.indexOf(b.accountType);
+      if (typePriority !== 0) return typePriority;
+      return a.balance - b.balance;
+    })
+    .map((a) => {
+      const realReturn =
+        (1 + a.expectedAnnualReturn) / (1 + inflationRatePercent / 100) - 1;
+      return { ...a, expectedRealReturn: realReturn };
+    });
 
   const years = Math.max(0, deathAge - currentAge);
   const results: SimulationResult[] = [];
@@ -82,7 +89,7 @@ export function runMonteCarloSimulation(
       for (const a of currentAccounts) {
         const volatility = a.annualVolatility ?? 0.15;
         const randomReturn = generateNormalRandom(
-          a.expectedAnnualReturn,
+          a.expectedRealReturn,
           volatility,
         );
         a.balance = a.balance * (1 + randomReturn);

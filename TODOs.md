@@ -1,9 +1,3 @@
-2. Inflation & Purchasing Power
-   Critique: The models currently calculate strictly in nominal dollars. The user inputs a fixed "Monthly Withdrawal" (e.g., $25,000), and the script subtracts that exact amount every year until age 100. However, due to inflation, $25,000 thirty years from now will have significantly less purchasing power than it does today. Improvement: Allow users to factor in an inflation rate (e.g., 2.5% to 3%).
-
-Method A: Automatically increase the withdrawal amount every year by the inflation rate to maintain purchasing power.
-Method B: Ask the user for a "Real Return Rate" (Nominal Return - Inflation) so that the chart's output is presented in today's purchasing power.
-
 4. Cash Flow Timing (Intra-Year Compounding)
 Critique: In both scripts, the math calculates the annual return on the starting balance, and then adds the contribution or subtracts the withdrawal at the end of the year.
 
@@ -27,7 +21,9 @@ Taxable (e.g., Standard Brokerage Account) 2. The Accumulation Phase (Tax Drag)
 During the years leading up to retirement, taxes impact how fast these accounts grow.
 
 Tax-Advantaged (Pre-Tax & Roth): These grow completely tax-free. If the expected return is 7%, the account grows at 7%.
-Taxable Accounts: These suffer from "tax drag." Every year, dividends, interest, and realized capital gains are taxed, which reduces the effective compound growth rate. If the gross return is 7%, the net return might be 5.5% or 6% after taxes. Your model should ideally allow a lower expectedAnnualReturn for taxable accounts, or automatically apply an estimated annual "tax drag" percentage to them. 3. The Decumulation Phase (Gross vs. Net Withdrawals)
+Taxable Accounts: These suffer from "tax drag." Every year, dividends, interest, and realized capital gains are taxed, which reduces the effective compound growth rate. If the gross return is 7%, the net return might be 5.5% or 6% after taxes. Your model should ideally allow a lower expectedAnnualReturn for taxable accounts, or automatically apply an estimated annual "tax drag" percentage to them.
+
+9. The Decumulation Phase (Gross vs. Net Withdrawals)
 This is where the biggest changes to your Retirement.tsx logic need to happen. Right now, your model assumes a $1 withdrawal reduces the account by $1 and puts $1 in the user's pocket. If a user wants $25,000/month to spend (Net), the model needs to calculate the Gross withdrawal based on the account type:
 
 Roth (Tax-Free): Withdrawing $25,000 net requires exactly a $25,000 gross withdrawal. $0 in taxes.
@@ -40,7 +36,7 @@ Drain Pre-Tax Accounts Second: Tap into the 401k/IRA funds and pay the ordinary 
 Drain Roth Accounts Last: Because these grow completely tax-free, you want to leave them alone for as long as possible. They also make the best inheritance for heirs.
 (Note: Advanced planners sometimes use a proportional strategy or fill up low tax brackets with pre-tax money and supplement with Roth money, but sequential depletion is the standard baseline model).
 
-9. Required Minimum Distributions (RMDs)
+10. Required Minimum Distributions (RMDs)
    For highly accurate modeling, you must eventually account for RMDs. The IRS forces retirees to start taking withdrawals from Pre-Tax accounts at a certain age (currently 73-75, depending on birth year).
 
 Even if the user's "Monthly Withdrawal" is covered by their Taxable or Roth accounts, the model must force a withdrawal from the Pre-Tax accounts based on IRS life expectancy tables.

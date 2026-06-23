@@ -13,30 +13,30 @@ import {
   InvestmentAccountsEndpoint,
   InvestmentAccountsFetcher,
 } from "../../data/InvestmentAccounts/fetchers";
-import { InvestmentAccount } from "../../data/InvestmentAccounts/types";
+import { GetAge } from "../../utils";
 import { runMonteCarloSimulation } from "../../utils/monteCarlo";
 import AccountsTable from "./AccountsTable";
 import AssetProjectionChart from "./AssetProjectionChart";
 
 export default function Retirement() {
-  const [currentAge, setCurrentAge] = useState<number>(30);
+  const [currentAge, setCurrentAge] = useState<number>(GetAge("1995-06-18"));
   const [retirementAge, setRetirementAge] = useState<number>(60);
   const [deathAge, setDeathAge] = useState<number>(100);
   const [monthlyWithdrawalCents, setMonthlyWithdrawalCents] =
     useState<number>(2500000);
   const [performancePercentile, setPerformancePercentile] =
     useState<number>(50);
+  const [inflationRatePercent, setInflationRatePercent] = useState<number>(3);
 
   const { data, mutate } = useSWR(
     InvestmentAccountsEndpoint,
     InvestmentAccountsFetcher,
   );
 
-  let includedAccounts: InvestmentAccount[] = [];
-
-  if (data?.data) {
-    includedAccounts = data.data.filter((a) => a.includeInRetirement);
-  }
+  const includedAccounts = useMemo(() => {
+    if (!data?.data) return [];
+    return data.data.filter((a) => a.includeInRetirement);
+  }, [data?.data]);
 
   const simulationResults = useMemo(
     () =>
@@ -46,6 +46,7 @@ export default function Retirement() {
         retirementAge,
         deathAge,
         monthlyWithdrawalCents * 12,
+        inflationRatePercent,
       ),
     [
       includedAccounts,
@@ -53,6 +54,7 @@ export default function Retirement() {
       retirementAge,
       deathAge,
       monthlyWithdrawalCents,
+      inflationRatePercent,
     ],
   );
 
@@ -79,7 +81,7 @@ export default function Retirement() {
   return (
     <Stack>
       <Title order={2}>Retirement</Title>
-      <Paper shadow="sm" p="lg">
+      <Paper shadow="sm" p="md">
         <Group justify="space-between" align="center" wrap="wrap">
           <Group align="flex-end">
             <NumberInput
@@ -107,12 +109,13 @@ export default function Retirement() {
               allowNegative={false}
             />
             <NumberInput
-              label="Performance Percentile"
-              value={performancePercentile}
-              onChange={(value) => setPerformancePercentile(Number(value))}
+              label="Inflation Rate"
+              value={inflationRatePercent}
+              onChange={(value) => setInflationRatePercent(Number(value))}
               min={0}
-              max={100}
+              max={20}
               allowNegative={false}
+              suffix="%"
             />
             <NumberInput
               label="Monthly Withdrawal"
@@ -146,6 +149,18 @@ export default function Retirement() {
               {successProbability.toFixed(1)}%
             </Text>
           </Stack>
+        </Group>
+      </Paper>
+      <Paper shadow="sm" p="md">
+        <Group justify="space-between" align="center" wrap="wrap">
+          <NumberInput
+            label="Performance Percentile"
+            value={performancePercentile}
+            onChange={(value) => setPerformancePercentile(Number(value))}
+            min={0}
+            max={100}
+            allowNegative={false}
+          />
         </Group>
       </Paper>
       <SimpleGrid cols={1}>
