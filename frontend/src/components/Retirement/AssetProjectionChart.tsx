@@ -9,6 +9,7 @@ import { runMonteCarloSimulation } from "../../utils/monteCarlo";
 type AssetProjectionChartProps = {
   currentAge: number;
   retirementAge: number;
+  deathAge: number;
   monthlyWithdrawlCents: number;
   performancePercentile: number;
   accounts: InvestmentAccount[];
@@ -17,6 +18,7 @@ type AssetProjectionChartProps = {
 export default function AssetProjectionChart({
   currentAge,
   retirementAge,
+  deathAge,
   monthlyWithdrawlCents,
   performancePercentile,
   accounts,
@@ -29,6 +31,7 @@ export default function AssetProjectionChart({
       accounts,
       currentAge,
       retirementAge,
+      deathAge,
       monthlyWithdrawlCents * 12,
     );
 

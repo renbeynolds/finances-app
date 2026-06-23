@@ -48,6 +48,7 @@ export function runMonteCarloSimulation(
   accounts: AccountState[],
   currentAge: number,
   retirementAge: number,
+  deathAge: number,
   annualWithdrawalCents: number,
   iterations: number = 1000,
 ): SimulationResult[] {
@@ -59,7 +60,7 @@ export function runMonteCarloSimulation(
       return a.balance - b.balance;
     });
 
-  const years = Math.max(0, 100 - currentAge);
+  const years = Math.max(0, deathAge - currentAge);
   const results: SimulationResult[] = [];
 
   for (let y = 0; y <= years; y++) {

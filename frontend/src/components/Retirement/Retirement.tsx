@@ -19,6 +19,7 @@ import AssetProjectionChart from "./AssetProjectionChart";
 export default function Retirement() {
   const [currentAge, setCurrentAge] = useState<number>(30);
   const [retirementAge, setRetirementAge] = useState<number>(60);
+  const [deathAge, setDeathAge] = useState<number>(100);
   const [monthlyWithdrawal, setMonthlyWithdrawal] = useState<number>(2500000);
   const [performancePercentile, setPerformancePercentile] = useState<number>(50);
 
@@ -55,6 +56,14 @@ export default function Retirement() {
             allowNegative={false}
           />
           <NumberInput
+            label="Death Age"
+            value={deathAge}
+            onChange={(value) => setDeathAge(Number(value))}
+            min={0}
+            max={120}
+            allowNegative={false}
+          />
+          <NumberInput
             label="Performance Percentile"
             value={performancePercentile}
             onChange={(value) => setPerformancePercentile(Number(value))}
@@ -80,6 +89,7 @@ export default function Retirement() {
           accounts={includedAccounts}
           currentAge={currentAge}
           retirementAge={retirementAge}
+          deathAge={deathAge}
           monthlyWithdrawlCents={monthlyWithdrawal}
           performancePercentile={performancePercentile}
         />
