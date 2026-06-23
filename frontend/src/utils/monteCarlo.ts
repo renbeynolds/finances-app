@@ -31,6 +31,7 @@ export type SimulationResult = {
 };
 
 const withdrawalOrder: AccountType[] = ["TAXABLE", "PRE_TAX", "ROTH"];
+export const socialSecurityFullRetirementAge = 67;
 
 /**
  * Runs a Monte Carlo simulation for portfolio growth and decumulation,
@@ -50,6 +51,7 @@ export function runMonteCarloSimulation(
   retirementAge: number,
   deathAge: number,
   annualWithdrawalCents: number,
+  annualSocialSecurityCents: number,
   inflationRatePercent: number,
   iterations: number = 1000,
 ): SimulationResult[] {
@@ -63,6 +65,8 @@ export function runMonteCarloSimulation(
       return a.balance - b.balance;
     })
     .map((a) => {
+      // Fisher Equation to adjust nominal returns to real returns (inflation adjusted).
+      // This allows the whole simulation to be run in today's dollars.
       const realReturn =
         (1 + a.expectedAnnualReturn) / (1 + inflationRatePercent / 100) - 1;
       return { ...a, expectedRealReturn: realReturn };
@@ -101,6 +105,10 @@ export function runMonteCarloSimulation(
       // --- Withdrawal phase (sequential across accounts, by type then balance) ---
       if (age >= retirementAge) {
         let remainingWithdrawal = annualWithdrawalCents;
+
+        if (age >= socialSecurityFullRetirementAge) {
+          remainingWithdrawal -= annualSocialSecurityCents;
+        }
 
         for (const a of currentAccounts) {
           if (remainingWithdrawal <= 0) break;

@@ -1,4 +1,5 @@
 import {
+  Anchor,
   Group,
   NumberInput,
   Paper,
@@ -6,7 +7,9 @@ import {
   Stack,
   Text,
   Title,
+  Tooltip,
 } from "@mantine/core";
+import { IconInfoCircle } from "@tabler/icons-react";
 import { useMemo, useState } from "react";
 import useSWR from "swr";
 import {
@@ -14,7 +17,7 @@ import {
   InvestmentAccountsFetcher,
 } from "../../data/InvestmentAccounts/fetchers";
 import { GetAge } from "../../utils";
-import { runMonteCarloSimulation } from "../../utils/monteCarlo";
+import { runMonteCarloSimulation, socialSecurityFullRetirementAge } from "../../utils/monteCarlo";
 import AccountsTable from "./AccountsTable";
 import AssetProjectionChart from "./AssetProjectionChart";
 
@@ -24,6 +27,7 @@ export default function Retirement() {
   const [deathAge, setDeathAge] = useState<number>(100);
   const [monthlyWithdrawalCents, setMonthlyWithdrawalCents] =
     useState<number>(2500000);
+  const [monthlySocialSecurityCents, setMonthlySocialSecurityCents] = useState<number>(425000 + 375000)
   const [performancePercentile, setPerformancePercentile] =
     useState<number>(50);
   const [inflationRatePercent, setInflationRatePercent] = useState<number>(3);
@@ -46,6 +50,7 @@ export default function Retirement() {
         retirementAge,
         deathAge,
         monthlyWithdrawalCents * 12,
+        monthlySocialSecurityCents * 12,
         inflationRatePercent,
       ),
     [
@@ -54,6 +59,7 @@ export default function Retirement() {
       retirementAge,
       deathAge,
       monthlyWithdrawalCents,
+      monthlySocialSecurityCents,
       inflationRatePercent,
     ],
   );
@@ -116,6 +122,38 @@ export default function Retirement() {
               max={20}
               allowNegative={false}
               suffix="%"
+            />
+            <NumberInput
+              label={
+                <Group gap={4} align="center" style={{ display: "inline-flex" }}>
+                  <span>Social Security Income</span>
+                  <Tooltip
+                    label={`Estimate your benefits at ssa.gov. Enter the monthly benefit in today's dollars assuming withdrawls starting at age ${socialSecurityFullRetirementAge}`}
+                    withArrow
+                  >
+                    <Anchor
+                      href="https://www.ssa.gov/OACT/quickcalc/index.html"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      c="dimmed"
+                      onClick={(e) => e.stopPropagation()}
+                      style={{ display: "inline-flex", alignItems: "center" }}
+                    >
+                      <IconInfoCircle size={14} />
+                    </Anchor>
+                  </Tooltip>
+                </Group>
+              }
+              value={monthlySocialSecurityCents / 100}
+              onChange={(value) =>
+                setMonthlySocialSecurityCents(Number(value) * 100)
+              }
+              min={0}
+              allowNegative={false}
+              prefix="$"
+              decimalScale={2}
+              fixedDecimalScale
+              hideControls
             />
             <NumberInput
               label="Monthly Withdrawal"

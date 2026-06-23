@@ -6,8 +6,7 @@ typescript
 balance = balance \* (1 + annualReturnRate) + annualContributionCents;
 In reality, users contribute to and withdraw from their portfolios on a monthly or bi-weekly basis. Improvement: Adjust the compounding math to reflect monthly cash flows. Because contributions don't wait until December 31st to be invested, they should benefit from intra-year compounding. Conversely, monthly withdrawals will reduce the capital base earlier in the year, slightly reducing the total interest earned.
 
-5. Missing External Income Sources
-   Critique: The model assumes the portfolio must fund 100% of the user's retirement expenses. Improvement: Allow users to input fixed income streams such as Social Security, pensions, or rental income, including a start age for each. If a user needs $10,000/month but receives $3,000/month from Social Security starting at age 67, the portfolio only needs to cover the $7,000 gap, which drastically extends the life of the portfolio.
+5. Reflect the fact that social security benefits are taxable
 
 6. Static Asset Allocation (Glide Paths)
    Critique: The model assumes the expectedAnnualReturn will remain exactly the same from the user's current age until age 100. Improvement: Realistically, investors transition to more conservative portfolios (heavier in bonds) as they approach and enter retirement, which lowers their expected returns but also lowers volatility. Allow the model to automatically step down the expected return rate over time, simulating a Target Date Fund "glide path".
