@@ -23,7 +23,7 @@ export default function AssetProjectionChart({
   const chartColors = getChartColors(theme);
 
   const chartData = useMemo(() => {
-    return simulationResults.map((simulationYear, index) => {
+    return simulationResults.map((simulationYear) => {
       const point: any = {
         date: String(simulationYear.year),
       };

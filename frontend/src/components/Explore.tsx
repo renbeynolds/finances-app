@@ -12,7 +12,7 @@ import TransactionTable from "./TransactionTable";
 export default function Explore() {
   const transactionFilters = React.useContext(TransactionFiltersContext);
 
-  const { data, error, isLoading } = useSWR(
+  const { data, isLoading } = useSWR(
     FilteredTransactionsTotalEndpoint(transactionFilters),
     TransactionsTotalFetcher,
   );

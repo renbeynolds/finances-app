@@ -12,6 +12,7 @@ func RegisterRoutes(server *gin.Engine, injector do.Injector) {
 	uploadRoutes := server.Group("/api/uploads")
 	{
 		uploadRoutes.POST("", uploadController.CreateUpload)
+		uploadRoutes.POST("/preview", uploadController.PreviewUpload)
 		uploadRoutes.GET("", uploadController.GetAllUploads)
 	}
 }

@@ -2,7 +2,7 @@ import { Button, FileInput, Stack } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useNavigate } from "react-router";
 import { Response } from "../../data/Response";
-import { Upload } from "../../data/Upload";
+import { PreviewUploadResponse } from "../../data/Upload";
 
 interface UploadFormValues {
   csv: File;
@@ -27,14 +27,14 @@ export default function UploadForm({ bankAccountId, close }: UploadFormProps) {
     formData.append("csv", values.csv);
     formData.append("bankAccountId", bankAccountId);
 
-    const response: Response<Upload> = await fetch("/api/uploads", {
+    const response: Response<PreviewUploadResponse> = await fetch("/api/uploads/preview", {
       method: "POST",
       body: formData,
     }).then((res) => res.json());
 
     if (response.success) {
       close();
-      navigate(`/uploads/${response.data.id}`);
+      navigate(`/uploads/preview`, { state: { previewData: response.data, file: values.csv, bankAccountId } });
     }
   };
 

@@ -27,13 +27,7 @@ This is where the biggest changes to your Retirement.tsx logic need to happen. R
 
 Roth (Tax-Free): Withdrawing $25,000 net requires exactly a $25,000 gross withdrawal. $0 in taxes.
 Pre-Tax (Ordinary Income): Every dollar withdrawn is taxed at standard income tax brackets. If their estimated effective tax rate in retirement is 20%, they must withdraw $31,250 gross to net $25,000 (25,000 / (1 - 0.20)). This depletes the account much faster than a Roth account!
-Taxable (Capital Gains): Only the growth is taxed, and it's taxed at preferred Long-Term Capital Gains rates (usually 0%, 15%, or 20%). To accurately model this, the app would need to track the "cost basis" (the principal contributed) separately from the "unrealized gains." 4. Implementation: Withdrawal Sequencing Logic
-Instead of draining all accounts proportionally (your current a.balance / yearTotal logic), a standard financial planning model uses sequential depletion to maximize tax efficiency. A common sequence is:
-
-Drain Taxable Accounts First: This allows the tax-advantaged accounts to compound undisturbed for longer.
-Drain Pre-Tax Accounts Second: Tap into the 401k/IRA funds and pay the ordinary income taxes.
-Drain Roth Accounts Last: Because these grow completely tax-free, you want to leave them alone for as long as possible. They also make the best inheritance for heirs.
-(Note: Advanced planners sometimes use a proportional strategy or fill up low tax brackets with pre-tax money and supplement with Roth money, but sequential depletion is the standard baseline model).
+Taxable (Capital Gains): Only the growth is taxed, and it's taxed at preferred Long-Term Capital Gains rates (usually 0%, 15%, or 20%). To accurately model this, the app would need to track the "cost basis" (the principal contributed) separately from the "unrealized gains."
 
 10. Required Minimum Distributions (RMDs)
    For highly accurate modeling, you must eventually account for RMDs. The IRS forces retirees to start taking withdrawals from Pre-Tax accounts at a certain age (currently 73-75, depending on birth year).

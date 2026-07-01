@@ -7,6 +7,7 @@ import Explore from "./Explore";
 import Retirement from "./Retirement/Retirement";
 import Snapshot from "./Snapshot";
 import Trends from "./Trends";
+import UploadPreviewPage from "./Uploads/UploadPreviewPage";
 import UploadView from "./Uploads/UploadView";
 
 export default function MainContent() {
@@ -21,6 +22,7 @@ export default function MainContent() {
         path="/accounts/investment/:accountId"
         element={<InvestmentAccountView />}
       />
+      <Route path="/uploads/preview" element={<UploadPreviewPage />} />
       <Route path="/uploads/:uploadId" element={<UploadView />} />
       <Route path="/categories/:categoryId" element={<CategoryView />} />
       <Route path="/budgeting" element={<BudgetsView />} />

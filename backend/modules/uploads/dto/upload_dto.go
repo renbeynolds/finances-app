@@ -12,12 +12,26 @@ const (
 
 type (
 	CreateUploadRequest struct {
-		BankAccountID uint                  `form:"bankAccountId" validate:"required"`
-		CSV           *multipart.FileHeader `form:"csv" validate:"required"`
+		BankAccountID   uint                  `form:"bankAccountId" validate:"required"`
+		CSV             *multipart.FileHeader `form:"csv" validate:"required"`
+		ExcludedIndices string                `form:"excludedIndices"`
 	}
 
 	UploadResponse struct {
 		ID        uint   `json:"id"`
 		CreatedAt string `json:"createdAt"`
+	}
+
+	ParsedTransaction struct {
+		Index       int    `json:"index"`
+		Date        string `json:"date"`
+		Description string `json:"description"`
+		Amount      int64  `json:"amount"`
+		IsDuplicate bool   `json:"isDuplicate"`
+		CategoryID  *uint  `json:"categoryId"`
+	}
+
+	PreviewUploadResponse struct {
+		ParsedTransactions []ParsedTransaction `json:"parsedTransactions"`
 	}
 )

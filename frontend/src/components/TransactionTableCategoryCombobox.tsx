@@ -30,17 +30,17 @@ export default function TransactionTableCategoryCombobox({
     transaction.categoryId ? [`${transaction.categoryId}`] : [],
   );
 
-  const handleValueSelect = (val: string) => {
+  const handleValueSelect = (_: string) => {
     combobox.closeDropdown();
     updateTransaction({
       ...transaction,
-      categoryId: parseInt(val),
+      categoryId: parseInt(_),
     });
     setSearch("");
-    setValue([val]);
+    setValue([_]);
   };
 
-  const handleValueRemove = (val: string) => {
+  const handleValueRemove = (_: string) => {
     updateTransaction({
       ...transaction,
       categoryId: undefined,

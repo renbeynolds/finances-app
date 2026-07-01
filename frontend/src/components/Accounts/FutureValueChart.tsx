@@ -31,11 +31,15 @@ export default function FutureValueChart({
           annualContribution,
           expectedAnnualReturn,
           annualVolatility,
+          accountType: "TAXABLE",
         },
       ],
       0, // currentAge
       999, // retirementAge (never withdraw)
+      999, // deathAge
       0, // withdrawal amount
+      0, // social security amount
+      0, // inflationRatePercent
     );
 
     const startYear = dayjs().year();

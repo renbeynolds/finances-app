@@ -17,6 +17,7 @@ import (
 type (
 	UploadController interface {
 		CreateUpload(ctx *gin.Context)
+		PreviewUpload(ctx *gin.Context)
 		GetAllUploads(ctx *gin.Context)
 	}
 
@@ -59,6 +60,31 @@ func (c *uploadController) CreateUpload(ctx *gin.Context) {
 	}
 
 	res := utils.BuildResponseSuccess(dto.MESSAGE_SUCCESS_CREATE_UPLOAD, upload, nil)
+	ctx.JSON(http.StatusOK, res)
+}
+
+func (c *uploadController) PreviewUpload(ctx *gin.Context) {
+	var req dto.CreateUploadRequest
+	if err := ctx.ShouldBind(&req); err != nil {
+		res := utils.BuildResponseFailed("failed preview upload", err.Error())
+		ctx.JSON(http.StatusBadRequest, res)
+		return
+	}
+
+	if err := c.uploadValidation.ValidateCreateUpload(req); err != nil {
+		res := utils.BuildResponseFailed("failed preview upload", err.Error())
+		ctx.JSON(http.StatusBadRequest, res)
+		return
+	}
+
+	previewData, err := c.uploadService.PreviewUpload(ctx.Request.Context(), req)
+	if err != nil {
+		res := utils.BuildResponseFailed("failed preview upload", err.Error())
+		ctx.JSON(http.StatusBadRequest, res)
+		return
+	}
+
+	res := utils.BuildResponseSuccess("success preview upload", previewData, nil)
 	ctx.JSON(http.StatusOK, res)
 }
 
