@@ -32,6 +32,9 @@ export type SimulationResult = {
 
 const withdrawalOrder: AccountType[] = ["TAXABLE", "PRE_TAX", "ROTH"];
 export const socialSecurityFullRetirementAge = 67;
+const socialSecurityTaxablePortionPercent = 0.85; // The percentage of SSI which is subject to income tax
+const longTermCapitalGainsTaxRate = 0.15;         // Assuming long term capital gains rate for taxable accounts
+const taxableAccountGainRatio = 0.75;             // Assuming 25% basis and 75% capital gains for taxable accounts
 
 /**
  * Runs a Monte Carlo simulation for portfolio growth and decumulation,
@@ -42,7 +45,7 @@ export const socialSecurityFullRetirementAge = 67;
  * @param accounts The initial state of the investment accounts
  * @param currentAge The user's current age
  * @param retirementAge The user's target retirement age
- * @param annualWithdrawalCents The annual withdrawal amount during retirement (in cents)
+ * @param annualNetIncomeCents The annual net income amount needed during retirement (in cents)
  * @param iterations The number of simulation paths to run (default 1000)
  */
 export function runMonteCarloSimulation(
@@ -50,9 +53,10 @@ export function runMonteCarloSimulation(
   currentAge: number,
   retirementAge: number,
   deathAge: number,
-  annualWithdrawalCents: number,
+  annualNetIncomeCents: number,
   annualSocialSecurityCents: number,
   inflationRatePercent: number,
+  estimatedRetirementTaxRatePercent: number = 15,
   iterations: number = 1000,
 ): SimulationResult[] {
   // Sort accounts by prefered withdrawl order
@@ -104,20 +108,38 @@ export function runMonteCarloSimulation(
 
       // --- Withdrawal phase (sequential across accounts, by type then balance) ---
       if (age >= retirementAge) {
-        let remainingWithdrawal = annualWithdrawalCents;
+        let remainingNetWithdrawal = annualNetIncomeCents;
 
         if (age >= socialSecurityFullRetirementAge) {
-          remainingWithdrawal -= annualSocialSecurityCents;
+          const ssTaxablePortion = annualSocialSecurityCents * socialSecurityTaxablePortionPercent;
+          const ssTaxes = ssTaxablePortion * (estimatedRetirementTaxRatePercent / 100);
+          const netSocialSecurity = annualSocialSecurityCents - ssTaxes;
+          
+          remainingNetWithdrawal -= netSocialSecurity;
         }
 
         for (const a of currentAccounts) {
-          if (remainingWithdrawal <= 0) break;
+          if (remainingNetWithdrawal <= 0) break;
 
-          if (a.balance >= remainingWithdrawal) {
-            a.balance -= remainingWithdrawal;
-            remainingWithdrawal = 0;
+          let taxRate = 0;
+          let gainRatio = 1;
+
+          if (a.accountType === "PRE_TAX") {
+            taxRate = estimatedRetirementTaxRatePercent / 100;
+          } else if (a.accountType === "TAXABLE") {
+            taxRate = longTermCapitalGainsTaxRate;
+            gainRatio = taxableAccountGainRatio;
+          }
+
+          const effectiveTaxRate = Math.min(0.99, taxRate * gainRatio);
+          const maxNetFromAccount = a.balance * (1 - effectiveTaxRate);
+
+          if (maxNetFromAccount >= remainingNetWithdrawal) {
+            const grossWithdrawal = remainingNetWithdrawal / (1 - effectiveTaxRate);
+            a.balance -= grossWithdrawal;
+            remainingNetWithdrawal = 0;
           } else {
-            remainingWithdrawal -= a.balance;
+            remainingNetWithdrawal -= maxNetFromAccount;
             a.balance = 0;
           }
         }

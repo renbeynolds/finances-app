@@ -25,12 +25,13 @@ export default function Retirement() {
   const [currentAge, setCurrentAge] = useState<number>(GetAge("1995-06-18"));
   const [retirementAge, setRetirementAge] = useState<number>(60);
   const [deathAge, setDeathAge] = useState<number>(100);
-  const [monthlyWithdrawalCents, setMonthlyWithdrawalCents] =
-    useState<number>(2500000);
+  const [monthlyNetIncomeCents, setMonthlyNetIncomeCents] =
+    useState<number>(1500000);
   const [monthlySocialSecurityCents, setMonthlySocialSecurityCents] = useState<number>(425000 + 375000)
   const [performancePercentile, setPerformancePercentile] =
     useState<number>(50);
   const [inflationRatePercent, setInflationRatePercent] = useState<number>(3);
+  const [estimatedRetirementTaxRate, setEstimatedRetirementTaxRate] = useState<number>(15);
 
   const { data, mutate } = useSWR(
     InvestmentAccountsEndpoint,
@@ -49,18 +50,20 @@ export default function Retirement() {
         currentAge,
         retirementAge,
         deathAge,
-        monthlyWithdrawalCents * 12,
+        monthlyNetIncomeCents * 12,
         monthlySocialSecurityCents * 12,
         inflationRatePercent,
+        estimatedRetirementTaxRate,
       ),
     [
       includedAccounts,
       currentAge,
       retirementAge,
       deathAge,
-      monthlyWithdrawalCents,
+      monthlyNetIncomeCents,
       monthlySocialSecurityCents,
       inflationRatePercent,
+      estimatedRetirementTaxRate,
     ],
   );
 
@@ -124,6 +127,15 @@ export default function Retirement() {
               suffix="%"
             />
             <NumberInput
+              label="Retirement Tax Rate"
+              value={estimatedRetirementTaxRate}
+              onChange={(value) => setEstimatedRetirementTaxRate(Number(value))}
+              min={0}
+              max={100}
+              allowNegative={false}
+              suffix="%"
+            />
+            <NumberInput
               label={
                 <Group gap={4} align="center" style={{ display: "inline-flex" }}>
                   <span>Social Security Income</span>
@@ -156,10 +168,10 @@ export default function Retirement() {
               hideControls
             />
             <NumberInput
-              label="Monthly Withdrawal"
-              value={monthlyWithdrawalCents / 100}
+              label="Net Monthly Retirement Income"
+              value={monthlyNetIncomeCents / 100}
               onChange={(value) =>
-                setMonthlyWithdrawalCents(Number(value) * 100)
+                setMonthlyNetIncomeCents(Number(value) * 100)
               }
               min={0}
               allowNegative={false}
