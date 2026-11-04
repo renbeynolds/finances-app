@@ -146,6 +146,11 @@ func (s *uploadService) PreviewUpload(ctx context.Context, req dto.CreateUploadR
 	}
 
 	var previewResponse dto.PreviewUploadResponse
+
+	// Make sure the preview starts from the correct account balance
+	// instead of using the balance on the "most recent" transaction
+	previewResponse.StartingBalance = account.Balance
+
 	for _, row := range parsedRows {
 		isDup := false
 		for _, rtx := range recentTx {

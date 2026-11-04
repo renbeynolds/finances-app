@@ -33,5 +33,6 @@ type (
 
 	PreviewUploadResponse struct {
 		ParsedTransactions []ParsedTransaction `json:"parsedTransactions"`
+		StartingBalance    int64               `json:"startingBalance"`
 	}
 )

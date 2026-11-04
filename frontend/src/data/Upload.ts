@@ -14,4 +14,5 @@ export type ParsedTransaction = {
 
 export type PreviewUploadResponse = {
   parsedTransactions: ParsedTransaction[];
+  startingBalance: number;
 };
